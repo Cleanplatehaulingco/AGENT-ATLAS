@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Atlas — Autonomous Operator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-theme="dark">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">AA</div>
+          <div>
+            <h1>Agent Atlas</h1>
+            <p>AI Operator Console</p>
+          </div>
+        </div>
+        <nav id="main-nav"></nav>
+        <button id="theme-toggle" class="ghost-btn">Toggle Theme</button>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <h2 id="view-title">Command Dashboard</h2>
+            <p>Autonomous Etsy digital-products operations.</p>
+          </div>
+          <div class="topbar-badge">Owner Approval: Strict</div>
+        </header>
+
+        <section id="dashboard-view" class="view active"></section>
+        <section id="opportunity-view" class="view"></section>
+        <section id="listing-view" class="view"></section>
+        <section id="approval-view" class="view"></section>
+        <section id="revenue-view" class="view"></section>
+      </main>
+    </div>
+
+    <aside id="side-panel" class="side-panel">
+      <button id="close-panel" class="ghost-btn">Close</button>
+      <div id="panel-content"></div>
+    </aside>
+
+    <script src="app.js"></script>
+  </body>
+</html>
