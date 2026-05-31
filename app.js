@@ -385,6 +385,8 @@ const NAV_ITEMS = [
   { id:'listing',     label:'Listings',      icon:'▦' },
   { id:'approval',    label:'Approvals',     icon:'◉' },
   { id:'revenue',     label:'Revenue',       icon:'◎' },
+  { id:'postclose',   label:'Post-Close',    icon:'◆' },
+  { id:'compliance',  label:'Compliance',    icon:'◇' },
 ];
 
 function renderNav() {
@@ -411,10 +413,14 @@ function switchView(id) {
   const item = NAV_ITEMS.find(n => n.id === id);
   document.getElementById('view-eyebrow').textContent = item?.label || id;
   document.getElementById('view-title').textContent =
-    id === 'dashboard' ? 'Autonomous Operator Console' :
+    id === 'dashboard'   ? 'Autonomous Operator Console' :
     id === 'opportunity' ? 'Opportunity Backlog' :
-    id === 'listing' ? 'Listing Pipeline' :
-    id === 'approval' ? 'Approval Queue' : 'Revenue Tracker';
+    id === 'listing'     ? 'Listing Pipeline' :
+    id === 'approval'    ? 'Approval Queue' :
+    id === 'postclose'   ? 'Post-Close Conversion Agent' :
+    id === 'compliance'  ? 'Compliance & Copyright Center' : 'Revenue Tracker';
+  if (id === 'postclose')  renderPostClose();
+  if (id === 'compliance') renderComplianceView();
 }
 
 function updateSidebarStatus() {
@@ -900,7 +906,7 @@ function renderListings() {
       <div class="table-wrap">
         <table class="table">
           <thead><tr>
-            <th>Product</th><th>Price</th><th>7d Views</th><th>CVR</th><th>7d Revenue</th><th>Performance</th><th>Status</th><th>Template</th><th></th>
+            <th>Product</th><th>Price</th><th>7d Views</th><th>CVR</th><th>7d Revenue</th><th>Perf</th><th>Status</th><th>Files</th><th></th>
           </tr></thead>
           <tbody>
             ${active.map(l => {
@@ -914,7 +920,11 @@ function renderListings() {
                 <td class="mono ${(l.revenue||0) > 30 ? 'text-success' : ''}">$${(l.revenue||0).toFixed(2)}</td>
                 <td><span class="badge ${l.perf==='Winner'?'live':''}">${l.perf}</span></td>
                 <td><span class="badge ${statusBadgeClass(l.status)}">${l.status}</span></td>
-                <td><button class="pill preview-template" data-id="${l.id}" title="Preview printable form">⬡ Preview</button></td>
+                <td style="display:flex;gap:5px;flex-wrap:wrap">
+                  <button class="pill preview-template" data-id="${l.id}" title="Preview printable form" style="font-size:.68rem;padding:4px 8px">⬡ Form</button>
+                  <button class="pill dl-product" data-id="${l.id}" title="Download product bundle" style="font-size:.68rem;padding:4px 8px">↓ Bundle</button>
+                  <button class="pill gen-image" data-id="${l.id}" title="Generate mockup image" style="font-size:.68rem;padding:4px 8px">${typeof ImageGen !== 'undefined' && ImageGen.cache[l.id] ? '✓ Img' : '⬡ Image'}</button>
+                </td>
                 <td style="display:flex;gap:6px">
                   ${canAdvance ? `<button class="btn approve advance-listing" data-id="${l.id}" style="padding:5px 10px;font-size:.72rem">→ Submit</button>` : ''}
                   <button class="pill edit-listing" data-id="${l.id}">Edit</button>
@@ -957,6 +967,16 @@ ${copy.imagePrompt}</div>
   view.querySelectorAll('.edit-listing').forEach(b => b.onclick = e => { e.stopPropagation(); openListingEditor(b.dataset.id); });
   view.querySelectorAll('.advance-listing').forEach(b => b.onclick = e => { e.stopPropagation(); advanceListing(b.dataset.id); });
   view.querySelectorAll('.preview-template').forEach(b => b.onclick = e => { e.stopPropagation(); if (typeof openTemplate === 'function') openTemplate(b.dataset.id); else toast('Template engine loading…', 'info'); });
+  view.querySelectorAll('.dl-product').forEach(b => b.onclick = e => { e.stopPropagation(); if (typeof Products !== 'undefined') Products.download(b.dataset.id); else toast('Product engine loading…', 'info'); });
+  view.querySelectorAll('.gen-image').forEach(b => b.onclick = async e => {
+    e.stopPropagation();
+    if (typeof ImageGen === 'undefined') { toast('Image engine loading…', 'info'); return; }
+    if (!ImageGen.config.apiKey) { openImageSettings(); return; }
+    toast(`Generating mockup for ${b.dataset.id}…`, 'info');
+    const result = await ImageGen.generate(b.dataset.id);
+    if (result.url) { toast('Mockup image generated!', 'success'); renderListings(); }
+    else toast('Image generation failed — check API key in settings.', 'warn');
+  });
 }
 
 function advanceListing(id) {
@@ -1117,6 +1137,15 @@ function handleApproval(id, action) {
   const listing = item.listingId ? state.listings.find(l => l.id === item.listingId) : null;
 
   if (action === 'approve') {
+    // Run compliance gate before approving publish actions
+    if (item.type === 'Publish Listing' && listing && typeof Compliance !== 'undefined') {
+      const gate = Compliance.prePublishCheck(listing);
+      if (!gate.approved) {
+        toast(`Compliance blocked: ${gate.blockers[0]}`, 'warn');
+        logAction(`Compliance Agent blocked publish for ${listing.name}: ${gate.blockers[0]}`);
+        return;
+      }
+    }
     item.status = 'approved';
     if (listing) {
       listing.status = item.type === 'Publish Listing' ? 'live' : 'ready to upload';
@@ -1131,6 +1160,10 @@ function handleApproval(id, action) {
     pushHistory(item, 'approved by owner');
     logAction(`Owner approved ${item.type} for "${item.item}" — ${listing?.status === 'live' ? 'listing is now live' : 'status updated'}.`);
     toast(listing?.status === 'live' ? `${item.item} is now LIVE on Etsy!` : `Approved: ${item.item}`, 'success');
+    // Seed post-close agent with demo order when listing goes live
+    if (listing?.status === 'live' && typeof PostCloseAgent !== 'undefined') {
+      PostCloseAgent.addOrder({ id:`ORD-${Date.now()}`, listingId:listing.id, listingName:listing.name, buyerName:'New Buyer', category:listing.category, orderedAt:Date.now() });
+    }
   }
   if (action === 'sendback') {
     item.status = 'revise'; item.revisedAt = nowTs();
@@ -1296,6 +1329,172 @@ function openPanel(title, html) {
 function closePanel() {
   document.getElementById('side-panel').classList.remove('open');
   document.getElementById('overlay').classList.remove('active');
+}
+
+/* ─── Post-Close view ──────────────────────────────────────────────── */
+function renderPostClose() {
+  const view = document.getElementById('postclose-view');
+  if (typeof PostCloseAgent === 'undefined') {
+    view.innerHTML = `<div class="card"><p class="text-muted">Post-Close Agent loading…</p></div>`; return;
+  }
+  const stats  = PostCloseAgent.getStats();
+  const queue  = PostCloseAgent.processQueue();
+  const allQ   = PostCloseAgent.queue || [];
+  view.innerHTML = `
+    <div class="kpi-grid">
+      ${kpiCard('Total Orders',      stats.totalOrders,        'processed by agent',     'blue')}
+      ${kpiCard('Review Requests',   stats.reviewsRequested,   'touches sent',           'green')}
+      ${kpiCard('Reviews Received',  stats.reviewsReceived,    `${(stats.estimatedReviewRate*100).toFixed(0)}% rate`, stats.estimatedReviewRate >= 0.2 ? 'green' : 'warn')}
+      ${kpiCard('Upsells Sent',      stats.upsellsSent,        `${stats.upsellsConverted} converted`, 'blue')}
+    </div>
+
+    <div class="card">
+      <div class="section-header">
+        <span class="section-title">Review Rate Progress</span>
+        <span class="text-muted" style="font-size:.78rem">Target: 25%+ (Etsy top sellers)</span>
+      </div>
+      <div class="progress success thick mt-8"><div style="width:${Math.min(stats.estimatedReviewRate*400,100)}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-top:4px">
+        <span>0%</span><span style="color:var(--success)">25% target</span><span>100%</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-header">
+        <span class="section-title">Actions Due Now</span>
+        <button class="btn primary" id="btn-seed-orders">Add Demo Orders</button>
+      </div>
+      ${queue.length ? `<div class="success-list mt-8">${queue.map(a => `
+        <div class="success-item">
+          <div style="flex:1">
+            <div class="si-title">${a.type} — ${a.buyerName || 'Buyer'}</div>
+            <div class="si-meta">${a.listingId || ''} &nbsp;·&nbsp; Due: ${new Date(a.scheduledAt).toLocaleDateString()}</div>
+            <div class="copy-block" style="font-size:.76rem;margin-top:6px;white-space:pre-wrap">${esc(a.message || PostCloseAgent.getMessageCopy?.(a.id) || 'Message ready')}</div>
+          </div>
+          <button class="pill" onclick="if(typeof PostCloseAgent!=='undefined')PostCloseAgent.markComplete('${a.id}','sent');renderPostClose();toast('Marked sent','success')">Mark Sent</button>
+        </div>`).join('')}</div>` : `<p class="text-muted mt-8">No actions due right now. ${allQ.length} scheduled for future delivery.</p>`}
+    </div>
+
+    <div class="card">
+      <div class="section-header"><span class="section-title">Full Queue</span></div>
+      <div class="table-wrap mt-8">
+        <table class="table">
+          <thead><tr><th>Type</th><th>Buyer</th><th>Listing</th><th>Scheduled</th><th>Status</th><th>Message</th></tr></thead>
+          <tbody>${allQ.slice(0,20).map(a => `<tr>
+            <td>${a.type}</td>
+            <td>${a.buyerName || '—'}</td>
+            <td class="mono">${a.listingId || '—'}</td>
+            <td class="mono">${new Date(a.scheduledAt).toLocaleDateString()}</td>
+            <td><span class="badge ${a.status==='complete'?'live':a.status==='due'?'review':'draft'}">${a.status}</span></td>
+            <td><button class="pill" onclick="openPostCloseMessage('${a.id}')">View</button></td>
+          </tr>`).join('') || '<tr><td colspan="6" class="text-muted" style="text-align:center">No orders yet — click Add Demo Orders</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-header"><span class="section-title">Delivery Message Template</span></div>
+      <p class="text-muted mt-4">Sent immediately after every purchase. Warm, confirms delivery, sets up future review ask.</p>
+      <div class="copy-block mt-8" id="delivery-msg">${esc(PostCloseAgent.deliveryMessage?.('LS-001','[Buyer Name]') || 'Post-Close Agent initializing…')}<button class="copy-btn" onclick="copyText('delivery-msg')">Copy</button></div>
+    </div>`;
+
+  view.querySelector('#btn-seed-orders').onclick = () => {
+    if (typeof PostCloseAgent !== 'undefined') { PostCloseAgent.seedDemoOrders?.(); renderPostClose(); toast('Demo orders added.', 'success'); }
+  };
+}
+
+function openPostCloseMessage(actionId) {
+  if (typeof PostCloseAgent === 'undefined') return;
+  const a = PostCloseAgent.queue?.find(x => x.id === actionId); if (!a) return;
+  const msg = PostCloseAgent.getMessageCopy?.(actionId) || a.message || 'No message generated.';
+  openPanel('Post-Close Message', `
+    <div class="text-muted">${a.type} &nbsp;·&nbsp; ${a.buyerName} &nbsp;·&nbsp; <span class="badge">${a.status}</span></div>
+    <div style="font-size:.8rem;color:var(--text2)">Scheduled: ${new Date(a.scheduledAt).toLocaleDateString()}</div>
+    <div class="copy-block" id="pc-msg-${a.id}">${esc(msg)}<button class="copy-btn" onclick="copyText('pc-msg-${a.id}')">Copy</button></div>
+    <div class="actions mt-8">
+      <button class="btn approve" onclick="if(typeof PostCloseAgent!=='undefined')PostCloseAgent.markComplete('${a.id}','sent');renderPostClose();closePanel();toast('Marked sent','success')">Mark Sent</button>
+    </div>`);
+}
+
+/* ─── Compliance view ──────────────────────────────────────────────── */
+function renderComplianceView() {
+  const view = document.getElementById('compliance-view');
+  if (typeof Compliance === 'undefined') {
+    view.innerHTML = `<div class="card"><p class="text-muted">Compliance engine loading…</p></div>`; return;
+  }
+  const results = state.listings.filter(l => l.status !== 'archived').map(l => {
+    const check = Compliance.checkListing({ ...l, description: getEtsyCopy(l.id, l).desc, tags: getEtsyCopy(l.id, l).tags });
+    return { ...l, compliance: check };
+  });
+  const allPass = results.every(r => r.compliance.passed);
+
+  view.innerHTML = `
+    <div class="card ${allPass ? '' : 'launch-card'}">
+      <div class="section-header">
+        <div>
+          <div class="eyebrow">IP & Marketplace Compliance</div>
+          <div class="section-title" style="font-size:1.1rem">${allPass ? '✓ All Listings Compliant' : '⚠ Issues Found — Review Below'}</div>
+        </div>
+        <span class="badge ${allPass ? 'live' : 'review'}">${allPass ? 'Clear for Launch' : `${results.filter(r=>!r.compliance.passed).length} flagged`}</span>
+      </div>
+      <p class="text-muted mt-4">${Compliance.copyrightNotice}</p>
+    </div>
+
+    <div class="card">
+      <div class="section-header"><span class="section-title">Etsy Policy Gates</span></div>
+      <div class="launch-grid mt-8">
+        ${Compliance.etsyRules.map(r => `
+          <div class="launch-check passed">
+            <div class="launch-icon">✓</div>
+            <div><div class="launch-check-label">${r.rule.replace(/_/g,' ')}</div><div class="launch-check-val">${r.check}</div></div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-header"><span class="section-title">Listing Compliance Scores</span></div>
+      <div class="table-wrap mt-8">
+        <table class="table">
+          <thead><tr><th>Listing</th><th>Score</th><th>Status</th><th>Flags</th></tr></thead>
+          <tbody>${results.map(r => `<tr>
+            <td><strong>${r.name}</strong></td>
+            <td class="mono ${r.compliance.score >= 80 ? 'text-success' : r.compliance.score >= 60 ? 'text-warn' : 'text-danger'}">${r.compliance.score}/100</td>
+            <td><span class="badge ${r.compliance.passed ? 'live' : 'review'}">${r.compliance.passed ? 'Pass' : 'Review'}</span></td>
+            <td style="font-size:.76rem;color:var(--muted)">${r.compliance.warnings?.join(', ') || '—'}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-header"><span class="section-title">Required Disclaimers</span></div>
+      <div class="success-list mt-8">
+        ${Object.entries(Compliance.disclaimers).filter(([,v])=>v).map(([k,v]) => `
+          <div class="success-item active">
+            <div style="flex:1">
+              <div class="si-title">${k.charAt(0).toUpperCase()+k.slice(1)} Disclaimer</div>
+              <div class="si-action">${v}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-header">
+        <span class="section-title">Copyright Block</span>
+        <button class="pill" onclick="copyText('copyright-block')">Copy</button>
+      </div>
+      <div class="copy-block" id="copyright-block">${Compliance.copyrightBlock()}</div>
+    </div>`;
+}
+
+/* ─── Image settings panel ─────────────────────────────────────────── */
+function openImageSettings() {
+  openPanel('Image Generator Settings', `
+    ${typeof ImageGen !== 'undefined' ? ImageGen.settingsHTML() : '<p class="text-muted">Image engine loading…</p>'}
+    <div class="divider mt-8"></div>
+    <p class="text-muted" style="font-size:.76rem">Requires an OpenAI API key with DALL-E 3 access. Images are generated at $0.04 each (standard quality). Keys are stored locally in your browser only.</p>`);
 }
 
 /* ─── Render all ───────────────────────────────────────────────────── */
