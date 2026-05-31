@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Atlas — Autonomous Operator</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  </head>
+  <body data-theme="dark">
+    <!-- Toast container -->
+    <div id="toast-root"></div>
+
+    <div class="app-shell">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">
+            <span>AA</span>
+            <div class="brand-pulse"></div>
+          </div>
+          <div>
+            <h1>Agent Atlas</h1>
+            <p class="brand-sub">Autonomous Operator</p>
+          </div>
+        </div>
+
+        <div class="sidebar-status">
+          <div class="status-dot live"></div>
+          <span>System Active</span>
+        </div>
+
+        <nav id="main-nav"></nav>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-goal">
+            <div class="goal-label">45-Day Goal</div>
+            <div class="goal-val" id="sidebar-rev">$0 / $500</div>
+            <div class="progress slim" id="sidebar-prog"><div></div></div>
+          </div>
+          <button id="theme-toggle" class="ghost-btn">
+            <span id="theme-icon">☀</span> Toggle Theme
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <div class="topbar-eyebrow" id="view-eyebrow">Command Dashboard</div>
+            <h2 id="view-title">Autonomous Operator Console</h2>
+          </div>
+          <div class="topbar-right">
+            <div class="approval-badge" id="topbar-pending">
+              <span class="dot warn"></span>
+              <span id="pending-count">0</span> pending
+            </div>
+            <div class="owner-badge">Owner Mode: Strict</div>
+          </div>
+        </header>
+
+        <section id="dashboard-view"  class="view active"></section>
+        <section id="opportunity-view" class="view"></section>
+        <section id="listing-view"    class="view"></section>
+        <section id="approval-view"   class="view"></section>
+        <section id="revenue-view"    class="view"></section>
+      </main>
+    </div>
+
+    <!-- Side panel -->
+    <aside id="side-panel" class="side-panel">
+      <div class="side-panel-header">
+        <span id="panel-title">Detail</span>
+        <button id="close-panel" class="icon-btn">✕</button>
+      </div>
+      <div id="panel-content"></div>
+    </aside>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
