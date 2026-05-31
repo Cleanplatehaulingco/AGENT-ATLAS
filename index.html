@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="theme-color" content="#080c14" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Agent Atlas — Autonomous Operator</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  </head>
+  <body data-theme="dark">
+    <!-- Toast container -->
+    <div id="toast-root"></div>
+
+    <!-- Mobile top bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+      <div class="mobile-brand">
+        <div class="brand-mark-sm">AA</div>
+        <span>Agent Atlas</span>
+      </div>
+      <div class="mobile-topbar-right">
+        <span class="autopilot-badge off" id="mobile-ap-badge">◼ OFF</span>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="app-shell">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <div class="brand-mark">
+            <span>AA</span>
+            <div class="brand-pulse"></div>
+          </div>
+          <div>
+            <h1>Agent Atlas</h1>
+            <p class="brand-sub">Autonomous Operator</p>
+          </div>
+        </div>
+
+        <div class="sidebar-status">
+          <div class="status-dot live"></div>
+          <span>System Active</span>
+        </div>
+
+        <nav id="main-nav"></nav>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-goal">
+            <div class="goal-label">45-Day Goal</div>
+            <div class="goal-val" id="sidebar-rev">$0 / $500</div>
+            <div class="progress slim" id="sidebar-prog"><div></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px">
+              <span id="days-rem" style="font-size:.7rem;color:var(--muted)">45d left</span>
+              <span id="autopilot-status" class="autopilot-badge off">◼ Auto-Pilot OFF</span>
+            </div>
+          </div>
+          <button id="theme-toggle" class="ghost-btn">
+            <span id="theme-icon">☀</span> Toggle Theme
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <div class="topbar-eyebrow" id="view-eyebrow">Command Dashboard</div>
+            <h2 id="view-title">Autonomous Operator Console</h2>
+          </div>
+          <div class="topbar-right">
+            <div class="approval-badge" id="topbar-pending">
+              <span class="dot warn"></span>
+              <span id="pending-count">0</span> pending
+            </div>
+            <div class="owner-badge">Owner Mode: Strict</div>
+          </div>
+        </header>
+
+        <section id="dashboard-view"   class="view active"></section>
+        <section id="opportunity-view" class="view"></section>
+        <section id="listing-view"     class="view"></section>
+        <section id="approval-view"    class="view"></section>
+        <section id="revenue-view"     class="view"></section>
+        <section id="postclose-view"   class="view"></section>
+        <section id="compliance-view"  class="view"></section>
+        <section id="settings-view"    class="view"></section>
+      </main>
+    </div>
+
+    <!-- Side panel -->
+    <aside id="side-panel" class="side-panel">
+      <div class="side-panel-header">
+        <span id="panel-title">Detail</span>
+        <button id="close-panel" class="icon-btn">✕</button>
+      </div>
+      <div id="panel-content"></div>
+    </aside>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <script src="etsy.js"></script>
+    <script src="templates.js"></script>
+    <script src="products.js"></script>
+    <script src="images.js"></script>
+    <script src="compliance.js"></script>
+    <script src="post-close-agent.js"></script>
+    <script src="app.js"></script>
+    <script>
+      // Mobile nav drawer
+      const ham = document.getElementById('hamburger');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      ham.addEventListener('click', () => {
+        sidebar.classList.toggle('mobile-open');
+        overlay.classList.toggle('active');
+      });
+      // Sync mobile AP badge
+      setInterval(() => {
+        const apBadge = document.getElementById('mobile-ap-badge');
+        const mainBadge = document.getElementById('autopilot-status');
+        if (apBadge && mainBadge) {
+          apBadge.className = mainBadge.className;
+          apBadge.textContent = mainBadge.textContent.replace('Auto-Pilot ', '');
+        }
+      }, 2000);
+      // Close sidebar on nav click (mobile)
+      document.getElementById('main-nav').addEventListener('click', () => {
+        if (window.innerWidth <= 900) {
+          sidebar.classList.remove('mobile-open');
+          overlay.classList.remove('active');
+        }
+      });
+    </script>
+  </body>
+</html>
