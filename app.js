@@ -387,6 +387,7 @@ const NAV_ITEMS = [
   { id:'revenue',     label:'Revenue',       icon:'◎' },
   { id:'postclose',   label:'Post-Close',    icon:'◆' },
   { id:'compliance',  label:'Compliance',    icon:'◇' },
+  { id:'settings',    label:'Settings',      icon:'⚙' },
 ];
 
 function renderNav() {
@@ -418,9 +419,11 @@ function switchView(id) {
     id === 'listing'     ? 'Listing Pipeline' :
     id === 'approval'    ? 'Approval Queue' :
     id === 'postclose'   ? 'Post-Close Conversion Agent' :
-    id === 'compliance'  ? 'Compliance & Copyright Center' : 'Revenue Tracker';
+    id === 'compliance'  ? 'Compliance & Copyright Center' :
+    id === 'settings'    ? 'System Settings' : 'Revenue Tracker';
   if (id === 'postclose')  renderPostClose();
   if (id === 'compliance') renderComplianceView();
+  if (id === 'settings')   renderSettingsView();
 }
 
 function updateSidebarStatus() {
@@ -1497,6 +1500,253 @@ function openImageSettings() {
     <p class="text-muted" style="font-size:.76rem">Requires an OpenAI API key with DALL-E 3 access. Images are generated at $0.04 each (standard quality). Keys are stored locally in your browser only.</p>`);
 }
 
+/* ─── Setup config helpers ─────────────────────────────────────────── */
+const CFG_KEY = 'atlasConfig';
+function loadConfig() {
+  try { return JSON.parse(localStorage.getItem(CFG_KEY) || '{}'); } catch { return {}; }
+}
+function saveConfig(patch) {
+  const cfg = { ...loadConfig(), ...patch };
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  applyConfig(cfg);
+  return cfg;
+}
+function applyConfig(cfg) {
+  if (!cfg) cfg = loadConfig();
+  // Wire Etsy credentials at runtime
+  if (typeof ETSY_CONFIG !== 'undefined') {
+    if (cfg.etsyClientId) ETSY_CONFIG.clientId = cfg.etsyClientId;
+    if (cfg.etsyShopId)   ETSY_CONFIG.shopId   = cfg.etsyShopId;
+  }
+  // Wire OpenAI key for image gen
+  if (typeof ImageGen !== 'undefined' && cfg.openaiKey) {
+    ImageGen.setApiKey(cfg.openaiKey);
+  }
+  // Wire company name for product bundles
+  if (typeof Products !== 'undefined' && cfg.shopName) {
+    Products.setCompany(cfg.shopName);
+  }
+}
+
+/* ─── Setup wizard ─────────────────────────────────────────────────── */
+function needsSetup() {
+  const cfg = loadConfig();
+  return !cfg.setupDone;
+}
+
+function openSetupWizard() {
+  const cfg = loadConfig();
+  const overlay = document.getElementById('overlay');
+  const existing = document.getElementById('setup-wizard');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'setup-wizard';
+  modal.style.cssText = `
+    position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+    background:rgba(8,12,20,0.92);backdrop-filter:blur(6px);padding:16px;
+  `;
+  modal.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px 36px;max-width:540px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.6);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+        <div style="background:var(--accent);color:#000;border-radius:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;">AA</div>
+        <div>
+          <div style="font-size:1.25rem;font-weight:800;color:var(--text);">Welcome to Agent Atlas</div>
+          <div style="font-size:.8rem;color:var(--muted);">Let's connect your accounts — takes 2 minutes</div>
+        </div>
+      </div>
+
+      <div style="margin:28px 0 0;display:flex;flex-direction:column;gap:20px;">
+
+        <div class="setup-section">
+          <div class="setup-section-label">Your Shop</div>
+          <label class="setup-label">Shop / Business Name
+            <input id="sw-shop-name" class="setup-input" type="text" placeholder="e.g. Clean Plate Hauling Templates" value="${cfg.shopName || ''}">
+          </label>
+          <label class="setup-label" style="margin-top:10px;">Etsy Shop URL (optional)
+            <input id="sw-etsy-url" class="setup-input" type="text" placeholder="https://www.etsy.com/shop/yourshopname" value="${cfg.etsyShopUrl || ''}">
+          </label>
+        </div>
+
+        <div class="setup-section">
+          <div class="setup-section-label">Etsy API <span style="color:var(--muted);font-weight:400;font-size:.75rem;">— needed to auto-publish listings</span></div>
+          <p style="font-size:.76rem;color:var(--muted);margin:0 0 10px;">
+            Get your keys free at <strong style="color:var(--accent);">etsy.com/developers</strong> → Create App → copy the Keystring and your numeric Shop ID.
+          </p>
+          <label class="setup-label">Etsy App Keystring (Client ID)
+            <input id="sw-etsy-client" class="setup-input" type="text" placeholder="Paste your Etsy app keystring here" value="${cfg.etsyClientId || ''}">
+          </label>
+          <label class="setup-label" style="margin-top:10px;">Etsy Shop ID (numeric)
+            <input id="sw-etsy-shop" class="setup-input" type="text" placeholder="e.g. 12345678" value="${cfg.etsyShopId || ''}">
+          </label>
+        </div>
+
+        <div class="setup-section">
+          <div class="setup-section-label">OpenAI API Key <span style="color:var(--muted);font-weight:400;font-size:.75rem;">— needed for mockup image generation (~$0.04/image)</span></div>
+          <p style="font-size:.76rem;color:var(--muted);margin:0 0 10px;">
+            Get your key at <strong style="color:var(--accent);">platform.openai.com/api-keys</strong>. You need DALL-E 3 access (any paid plan).
+          </p>
+          <label class="setup-label">OpenAI Secret Key
+            <input id="sw-openai" class="setup-input" type="password" placeholder="sk-..." value="${cfg.openaiKey || ''}">
+          </label>
+        </div>
+
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:28px;justify-content:flex-end;">
+        ${cfg.setupDone ? `<button onclick="document.getElementById('setup-wizard').remove()" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:10px 20px;border-radius:8px;cursor:pointer;font-size:.85rem;">Cancel</button>` : ''}
+        <button onclick="saveSetupWizard()" style="background:var(--accent);color:#000;border:none;padding:10px 28px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:700;">Save & Launch →</button>
+      </div>
+      <p style="font-size:.72rem;color:var(--muted);margin:14px 0 0;text-align:center;">All credentials are stored only in your browser's localStorage — never sent to any server.</p>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function saveSetupWizard() {
+  const shopName    = document.getElementById('sw-shop-name')?.value.trim() || '';
+  const etsyUrl     = document.getElementById('sw-etsy-url')?.value.trim()  || '';
+  const etsyClientId= document.getElementById('sw-etsy-client')?.value.trim() || '';
+  const etsyShopId  = document.getElementById('sw-etsy-shop')?.value.trim()   || '';
+  const openaiKey   = document.getElementById('sw-openai')?.value.trim()      || '';
+
+  const cfg = saveConfig({ shopName, etsyUrl, etsyClientId, etsyShopId, openaiKey, setupDone: true });
+  document.getElementById('setup-wizard')?.remove();
+
+  const parts = [];
+  if (shopName)     parts.push('shop name');
+  if (etsyClientId) parts.push('Etsy API');
+  if (openaiKey)    parts.push('OpenAI');
+  toast(`Saved: ${parts.length ? parts.join(', ') : 'settings'} configured.`, 'success');
+  logAction(`Owner completed setup — ${parts.join(', ')||'config'} saved.`);
+  rerenderAll();
+  if (_currentView === 'settings') renderSettingsView();
+}
+
+/* ─── Settings view ────────────────────────────────────────────────── */
+function renderSettingsView() {
+  const view = document.getElementById('settings-view');
+  if (!view) return;
+  const cfg = loadConfig();
+
+  const statusBadge = (val, label) => val
+    ? `<span style="color:var(--success);font-weight:600;">✓ ${label}</span>`
+    : `<span style="color:var(--warn);font-weight:600;">⚠ Not set</span>`;
+
+  view.innerHTML = `
+    <div style="max-width:680px;display:flex;flex-direction:column;gap:24px;">
+
+      <div class="card">
+        <div class="card-title">Account Setup</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
+          <div class="settings-stat">
+            <div class="settings-stat-label">Shop Name</div>
+            <div>${cfg.shopName ? `<strong>${cfg.shopName}</strong>` : '<span style="color:var(--muted)">Not set</span>'}</div>
+          </div>
+          <div class="settings-stat">
+            <div class="settings-stat-label">Etsy Shop URL</div>
+            <div>${cfg.etsyUrl ? `<a href="${cfg.etsyUrl}" target="_blank" style="color:var(--accent);font-size:.8rem;">View Shop ↗</a>` : '<span style="color:var(--muted);font-size:.85rem">Not set</span>'}</div>
+          </div>
+          <div class="settings-stat">
+            <div class="settings-stat-label">Etsy API</div>
+            <div>${statusBadge(cfg.etsyClientId, `ClientID: ${cfg.etsyClientId ? '••••'+cfg.etsyClientId.slice(-4) : ''}`)}</div>
+          </div>
+          <div class="settings-stat">
+            <div class="settings-stat-label">Etsy Shop ID</div>
+            <div>${statusBadge(cfg.etsyShopId, cfg.etsyShopId || '')}</div>
+          </div>
+          <div class="settings-stat">
+            <div class="settings-stat-label">OpenAI Key</div>
+            <div>${statusBadge(cfg.openaiKey, `sk-••••${cfg.openaiKey ? cfg.openaiKey.slice(-4) : ''}`)}</div>
+          </div>
+          <div class="settings-stat">
+            <div class="settings-stat-label">Setup Status</div>
+            <div>${cfg.setupDone ? '<span style="color:var(--success);font-weight:600;">✓ Complete</span>' : '<span style="color:var(--warn);">Incomplete</span>'}</div>
+          </div>
+        </div>
+        <button class="btn approve" onclick="openSetupWizard()" style="width:100%;">Edit Credentials & Settings</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Etsy Connection</div>
+        <p style="color:var(--muted);font-size:.85rem;margin:0 0 12px;">
+          Connect your Etsy account via OAuth to enable auto-publishing. Requires your App Keystring above.
+        </p>
+        ${cfg.etsyClientId ? `
+          <button class="btn approve" onclick="startEtsyAuth()">Connect Etsy Account (OAuth)</button>
+          <p style="font-size:.75rem;color:var(--muted);margin:8px 0 0;">You'll be redirected to Etsy to approve access, then returned here.</p>
+        ` : `
+          <div style="background:var(--surface-raised);border-radius:8px;padding:12px;color:var(--muted);font-size:.85rem;">
+            Enter your Etsy App Keystring in setup first, then connect here.
+          </div>
+        `}
+      </div>
+
+      <div class="card">
+        <div class="card-title">How to Get Your Etsy API Keys</div>
+        <ol style="color:var(--muted);font-size:.84rem;line-height:1.9;padding-left:18px;margin:12px 0;">
+          <li>Go to <strong style="color:var(--text);">etsy.com/developers</strong> and sign in with your Etsy account</li>
+          <li>Click <strong style="color:var(--text);">Create a New App</strong></li>
+          <li>Name it anything (e.g. "Agent Atlas"), accept terms</li>
+          <li>Copy the <strong style="color:var(--text);">Keystring</strong> — that's your Client ID</li>
+          <li>Add <code style="background:var(--surface-raised);padding:1px 5px;border-radius:4px;">${window.location.origin}/etsy-callback</code> to your app's Callback URLs</li>
+          <li>Find your Shop ID: go to your Etsy shop page — the number in the URL is your Shop ID</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-title">How to Get Your OpenAI API Key</div>
+        <ol style="color:var(--muted);font-size:.84rem;line-height:1.9;padding-left:18px;margin:12px 0;">
+          <li>Go to <strong style="color:var(--text);">platform.openai.com</strong> and sign in</li>
+          <li>Click your name → <strong style="color:var(--text);">API Keys</strong> → Create new secret key</li>
+          <li>Copy the key (starts with <code style="background:var(--surface-raised);padding:1px 5px;border-radius:4px;">sk-</code>) and paste it above</li>
+          <li>Make sure you have a paid plan — DALL-E 3 costs ~$0.04 per mockup image generated</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Data & Reset</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn" onclick="exportConfig()" style="background:var(--surface-raised);color:var(--text);border:1px solid var(--border);">Export Config Backup</button>
+          <button class="btn" onclick="confirmReset()" style="background:var(--danger-soft);color:var(--danger);border:1px solid var(--danger);">Reset All State</button>
+        </div>
+        <p style="color:var(--muted);font-size:.76rem;margin:10px 0 0;">Reset clears all listings, approvals, and revenue data. Credentials are preserved. Use export first.</p>
+      </div>
+
+    </div>
+  `;
+}
+
+function startEtsyAuth() {
+  if (typeof EtsyAPI === 'undefined') { toast('Etsy module not loaded', 'warn'); return; }
+  EtsyAPI.startAuth();
+  toast('Redirecting to Etsy for authorization…', 'info');
+}
+
+function exportConfig() {
+  const data = {
+    config:  loadConfig(),
+    state:   JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'),
+    exported: new Date().toISOString(),
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `agent-atlas-backup-${Date.now()}.json`;
+  a.click();
+  toast('Config exported.', 'success');
+}
+
+function confirmReset() {
+  if (!confirm('Reset all listing and revenue data? Credentials will be kept. This cannot be undone.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = loadState();
+  ensureShape();
+  applyConfig();
+  toast('State reset. Reload the page to start fresh.', 'warn');
+  setTimeout(() => location.reload(), 1500);
+}
+
 /* ─── Render all ───────────────────────────────────────────────────── */
 function rerenderAll() {
   renderNav();
@@ -1517,6 +1767,8 @@ document.getElementById('theme-toggle').onclick = () => {
   document.getElementById('theme-icon').textContent = next === 'dark' ? '☀' : '☾';
 };
 
+applyConfig();
 if (state.autoPilot) startAutoPilot();
 rerenderAll();
 persist();
+if (needsSetup()) setTimeout(openSetupWizard, 600);
