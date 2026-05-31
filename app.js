@@ -39,6 +39,97 @@ const ETSY_COPY = {
     faq:   'Q: Is the waiver language legally binding?\nA: It is written to be used as a starting point. We recommend having a local attorney review before use.\n\nQ: Can I add a price list to the intake form?\nA: Yes — there is an open section in Canva for service menu customization.',
     imagePrompt: 'Luxury auto detailing: intake form and waiver kit on dark leather surface, subtle high-end car interior background, warm premium lighting.'
   },
+  'LS-008': {
+    title: 'Pressure Washing Route Sheet – Daily Job Tracker for Wash Crews | Instant Download',
+    tags:  'pressure washing template,route sheet,wash crew tracker,pressure washing business,job log,daily planner,exterior cleaning form,power washing,service route,small business,contractor form,job tracker,field service form',
+    desc:  `Run tighter routes and never miss a stop.\n\nBuilt for solo pressure washers and small crews, this route sheet tracks every job in one place — address, surface type, PSI settings, chemicals used, time on site, and customer sign-off.\n\n✅ Print one sheet per day or per truck\n✅ Fully editable in Canva (free)\n✅ Works for residential, commercial, and fleet washing\n✅ Instant download\n\nStop running jobs from memory. One sheet handles the whole day.`,
+    faq:   'Q: Can I add my logo?\nA: Yes — there is a logo placeholder in Canva.\n\nQ: Does this work for both surface and fleet washing?\nA: Yes — the fields are broad enough for any exterior cleaning job.',
+    imagePrompt: 'Exterior cleaning operations: route sheet on clipboard, subtle pressure washer background, clean blue-toned professional flatlay.'
+  },
+  'LS-009': {
+    title: 'Appliance Repair Parts Tracker – Editable Log for Repair Technicians | Instant Download',
+    tags:  'appliance repair template,parts tracker,repair log,appliance technician,parts inventory,service form,repair business,appliance service,small business form,contractor template,technician log,job tracker,parts order',
+    desc:  `Stop losing track of parts between the shop and the job.\n\nThis parts tracker gives appliance repair techs a clean record of every component ordered, installed, or returned — model numbers, part numbers, costs, and supplier info all in one place.\n\n✅ Editable in Canva (free)\n✅ Works for in-shop and in-home repair\n✅ Track parts across multiple jobs simultaneously\n✅ Instant download, unlimited use\n\nRun a tighter operation and stop eating parts costs from poor tracking.`,
+    faq:   'Q: Can I track multiple jobs on one sheet?\nA: Yes — there are rows for up to 10 jobs per page.\n\nQ: Is there a supplier contact section?\nA: Yes — each parts row includes supplier and order number fields.',
+    imagePrompt: 'Appliance repair shop aesthetic: parts log on workbench clipboard, subtle tool and parts background, warm professional lighting.'
+  },
+  'LS-010': {
+    title: 'Handyman Materials Reimbursement Sheet – Editable Expense Form | Instant Download',
+    tags:  'handyman template,materials reimbursement,expense form,handyman business,job materials log,reimbursement sheet,contractor expense,small business form,handyman paperwork,job cost tracker,materials invoice,field service form,home repair',
+    desc:  `Get reimbursed for every nail, screw, and supply run.\n\nThis simple reimbursement sheet lets handymen document every material purchased for a job — item, quantity, store, receipt amount — so clients pay for what was used, not what you guess at.\n\n✅ Easy to fill out on a phone or printed\n✅ Editable in Canva (free)\n✅ Works for any handyman or home repair job\n✅ Instant download\n\nStop leaving material costs on the table. One page pays for itself on the first job.`,
+    faq:   'Q: Does this work for jobs with multiple supply runs?\nA: Yes — there are rows for up to 20 individual items.\n\nQ: Can clients sign to approve the expenses?\nA: Yes — there is a client sign-off field at the bottom.',
+    imagePrompt: 'Handyman workspace: reimbursement form on clipboard with receipts, warm natural light, clean professional composition, no clutter.'
+  },
+  'LS-011': {
+    title: 'Mobile Mechanic Service Summary Form – Editable Template for Mobile Auto Repair | Instant Download',
+    tags:  'mobile mechanic template,service summary,auto repair form,mobile mechanic paperwork,mechanic invoice,vehicle service form,auto service,small business,mechanic template,field service,car repair form,service record,job summary',
+    desc:  `Leave every customer with a professional record of what was done.\n\nThis service summary form captures vehicle info, work performed, parts replaced, mileage, labor time, and customer signature — everything you need for a clean job close-out and a repeat-customer relationship.\n\n✅ Editable in Canva (free)\n✅ Print-ready PDF\n✅ Works for any mobile or roadside repair\n✅ Instant download\n\nLook like the most professional mechanic at the jobsite. Every. Single. Time.`,
+    faq:   'Q: Is there a parts cost section?\nA: Yes — includes parts, labor, and total fields.\n\nQ: Can I use this for roadside assistance calls too?\nA: Yes — the form is general enough for any mobile auto service.',
+    imagePrompt: 'Mobile mechanic aesthetic: service summary form on clipboard, tool bag background, warm garage lighting, professional composition.'
+  },
+  'LS-012': {
+    title: 'Locksmith Job Authorization Form – Editable Service Template | Instant Download',
+    tags:  'locksmith template,job authorization,locksmith form,locksmith business,service authorization,client authorization,locksmith paperwork,small business form,service form,locksmith invoice,lock service,field service template,contractor form',
+    desc:  `Document authorization before you touch the lock.\n\nEvery locksmith job requires proof the client authorized the work — this form captures ID verification, property address, proof of authorization, service description, and customer signature before any work begins.\n\n✅ Covers residential, commercial, and vehicle lockouts\n✅ Editable in Canva (free)\n✅ CYA language built in (not legal advice — have an attorney review)\n✅ Instant download\n\nProtect your license and your business on every call.`,
+    faq:   'Q: Does this include ID verification fields?\nA: Yes — there is a section for ID type and number documentation.\n\nQ: Can I use this for auto lockouts?\nA: Yes — the vehicle section covers VIN, plate, and owner documentation.',
+    imagePrompt: 'Locksmith professional aesthetic: authorization form on dark clipboard, subtle lock and key background elements, clean low-light composition.'
+  },
+  'LS-013': {
+    title: 'Painting Prep & Final Punch List – Editable Template for Painters | Instant Download',
+    tags:  'painting template,prep checklist,punch list,painting business,painter form,painting contractor,surface prep,final walkthrough,painting checklist,small business,contractor template,job checklist,painting paperwork',
+    desc:  `Don't leave money on the table because of a missed punch-list item.\n\nThis two-part template gives painting contractors a structured prep checklist (surface condition, repairs, masking, primer) and a final punch list (missed spots, touch-ups, client walkthrough) so every job closes clean.\n\n✅ Works for interior, exterior, and commercial painting\n✅ Editable in Canva (free)\n✅ Instant download\n✅ Reduces callbacks by catching issues before the customer does\n\nClose every job with confidence. Stop re-driving for $20 touch-ups.`,
+    faq:   'Q: Does it cover both interior and exterior jobs?\nA: Yes — the checklist fields work for both.\n\nQ: Is there a customer sign-off section?\nA: Yes — both the prep and punch list have signature fields.',
+    imagePrompt: 'Painting contractor aesthetic: prep checklist on clipboard, subtle paint swatches and roller background, clean professional flatlay, warm tones.'
+  },
+  'LS-014': {
+    title: 'Snow Removal Service Trigger Checklist – Editable Template for Snow Contractors | Instant Download',
+    tags:  'snow removal template,service trigger,snow contractor,snow plowing form,snow removal business,trigger checklist,winter service,snowplowing template,snow plow form,contractor checklist,small business form,seasonal service,snow contract',
+    desc:  `Know exactly when to roll the trucks — every time.\n\nThis trigger checklist documents the service activation criteria for each property: snowfall threshold, ice trigger, client preferences, route order, and materials used. Perfect for multi-property snow accounts.\n\n✅ Set up once per property, use all season\n✅ Editable in Canva (free)\n✅ Keeps your crew consistent when conditions change fast\n✅ Instant download\n\nStop making trigger calls by feel. This is what real snow operators use.`,
+    faq:   'Q: Does this work for multiple properties?\nA: Yes — print one sheet per property and keep them in a binder or folder.\n\nQ: Is there space for special client instructions?\nA: Yes — there is an open notes section for per-property customization.',
+    imagePrompt: 'Snow removal operations: service trigger checklist on clipboard, subtle snow and equipment background, cold blue-white professional tones, clean flatlay.'
+  },
+  'LS-015': {
+    title: 'Window Cleaning Client Packet – Service Checklist & Job Record | Instant Download',
+    tags:  'window cleaning template,client packet,window cleaning business,job checklist,window washing form,cleaning contractor,service record,small business form,window cleaning paperwork,job log,cleaning business template,field service,client form',
+    desc:  `Look professional from the first quote to the final wipe.\n\nThis client packet includes a job checklist (access points, glass type, special instructions), a service record (windows cleaned, condition notes, time on site), and a client sign-off — everything to close a window cleaning job professionally.\n\n✅ Works for residential and commercial window cleaning\n✅ Editable in Canva (free)\n✅ Instant download\n✅ Helps with recurring client accounts and route scheduling\n\nStop showing up with nothing to hand the customer.`,
+    faq:   'Q: Does this work for high-rise or commercial jobs?\nA: Yes — the access and safety notes sections cover elevated work too.\n\nQ: Is there a recurring service section?\nA: Yes — includes a next service date and frequency field.',
+    imagePrompt: 'Window cleaning professional aesthetic: client packet on clipboard, clean glass background, bright natural light, modern professional flatlay.'
+  },
+  'LS-016': {
+    title: 'Pool Service Chemical Log – Weekly Treatment Tracker for Pool Operators | Instant Download',
+    tags:  'pool service template,chemical log,pool treatment tracker,pool operator form,pool maintenance,pool service business,chemical tracker,pool log,swimming pool form,small business,service record,pool tech,water treatment log',
+    desc:  `Track every chemical, every reading, every visit — automatically.\n\nThis weekly chemical log gives pool service technicians a clean record of pH, chlorine, alkalinity, and chemical additions for every pool on their route. Protect yourself and your clients with documented water chemistry.\n\n✅ One page per pool per month\n✅ Editable in Canva (free)\n✅ Works for residential and commercial pools\n✅ Instant download\n\nWhen something goes wrong, you have the paper trail. When it goes right, you have the proof.`,
+    faq:   'Q: How many readings fit on one sheet?\nA: Each sheet covers 4 weekly visits with full chemical readings.\n\nQ: Is there space for notes about equipment issues?\nA: Yes — each visit row includes an equipment/notes field.',
+    imagePrompt: 'Pool service aesthetic: chemical log on clipboard near pool edge, clear water background, clean outdoor professional lighting, summer tones.'
+  },
+  'LS-017': {
+    title: 'Flooring Estimate Scope Matrix – Editable Quote Template for Flooring Contractors | Instant Download',
+    tags:  'flooring estimate template,scope matrix,flooring contractor,flooring quote,flooring business,estimate form,contractor estimate,flooring paperwork,flooring template,scope of work,small business,quote template,contractor form',
+    desc:  `Stop underquoting flooring jobs because of unclear scope.\n\nThis estimate scope matrix breaks every flooring job into clear line items — rooms, square footage, material type, labor rate, subfloor prep, transitions, and totals — so clients understand what they\'re paying for and you protect your margin.\n\n✅ Works for LVP, hardwood, tile, carpet, and mixed jobs\n✅ Editable in Canva (free)\n✅ Instant download\n✅ Professional enough to send as a PDF quote\n\nClose bigger jobs with a quote that looks like a contractor, not a handyman.`,
+    faq:   'Q: Can I add my company logo to the quote?\nA: Yes — there is a logo and company info section at the top.\n\nQ: Does it calculate totals automatically?\nA: The Canva version does not calculate automatically, but the layout makes manual entry fast.',
+    imagePrompt: 'Flooring contractor aesthetic: estimate matrix on clipboard, subtle flooring samples background, warm professional indoor lighting, clean composition.'
+  },
+  'LS-018': {
+    title: 'Contractor Daily Site Report – Editable Field Log for General Contractors | Instant Download',
+    tags:  'contractor daily report,site report,general contractor form,daily log,construction template,site documentation,contractor template,field report,job site log,small business,construction form,daily site log,project documentation',
+    desc:  `Document every day on the job — protect yourself and your client.\n\nThis daily site report captures weather, crew on site, work completed, materials delivered, subcontractors present, inspections, delays, and photos reference — everything needed to track job progress and defend against disputes.\n\n✅ One page per day keeps the project record clean\n✅ Editable in Canva (free)\n✅ Works for residential remodel, new construction, and commercial\n✅ Instant download\n\nThe job that has documentation wins every dispute. The one that doesn\'t, loses.`,
+    faq:   'Q: Is there a photo log section?\nA: Yes — there is a section to reference photo file names or timestamps.\n\nQ: Can I use this for subcontractor coordination?\nA: Yes — there is a subcontractor attendance section on the form.',
+    imagePrompt: 'General contractor aesthetic: daily site report on aluminum clipboard, construction site background, professional outdoor lighting, clean composition.'
+  },
+  'LS-019': {
+    title: 'Septic Service Pump Log – Maintenance Record for Septic Technicians | Instant Download',
+    tags:  'septic service template,pump log,septic maintenance,septic technician form,septic business,service record,pump log template,septic pumping,small business form,field service,maintenance log,contractor template,septic paperwork',
+    desc:  `A clean service record every septic tech should have on their truck.\n\nThis pump log documents tank size, pump date, gallons removed, system condition, access location, recommended next service, and customer sign-off — the complete record for recurring septic accounts.\n\n✅ Editable in Canva (free)\n✅ Works for residential and commercial septic systems\n✅ Instant download, unlimited reprints\n✅ Keeps clients on a service schedule automatically\n\nGive every customer a copy. They\'ll call you back every time.`,
+    faq:   'Q: Does this cover inspection notes?\nA: Yes — there is a system condition and notes section.\n\nQ: Is there a next service reminder section?\nA: Yes — recommended next service date is a prominent field.',
+    imagePrompt: 'Septic service professional aesthetic: pump log on clipboard, clean outdoor setting, earth tones, straightforward professional composition.'
+  },
+  'LS-020': {
+    title: 'Service Business Fee Transparency Addendum – Editable Client Disclosure | Instant Download',
+    tags:  'service fee addendum,fee disclosure,contractor addendum,service business template,fee transparency,client disclosure,small business form,contractor form,service agreement,fee schedule,business template,client agreement,service contract',
+    desc:  `Stop getting pushback on your invoices — be transparent upfront.\n\nThis fee transparency addendum works as an add-on to any service agreement — it documents fuel charges, material markups, after-hours rates, cancellation fees, and payment terms so clients know what to expect before the job starts.\n\n✅ Works for any service trade or contractor\n✅ Editable in Canva (free)\n✅ Instant download\n✅ Reduces invoice disputes before they start\n\nGet paid what you quoted. Every time.`,
+    faq:   'Q: Can I customize the fee categories?\nA: Yes — all fee line items are editable in Canva.\n\nQ: Does this work as a standalone document or add-on?\nA: Either — it can be a standalone disclosure or attached to an existing service agreement.',
+    imagePrompt: 'Professional service business aesthetic: fee addendum on clean desk, neutral professional tones, modern flatlay, no clutter, slight warm lighting.'
+  },
 };
 
 function getEtsyCopy(listingId, listing) {
@@ -127,8 +218,21 @@ const SEED = {
     { id:'LS-003', name:'Electrician Jobsite Inspection Form Pack',price:9.99,  buyer:'Solo Electricians',          bundle:'Electrical Admin Bundle',perf:'Stable', status:'live',            category:'Electrical',     views:98,  cvr:2.0, revenue:19.98 },
     { id:'LS-004', name:'Lawn Care Weekly Crew Planner',           price:6.99,  buyer:'Lawn Route Managers',        bundle:'Lawn Backoffice Kit',    perf:'Winner', status:'live',            category:'Lawn Care',      views:171, cvr:4.1, revenue:48.93 },
     { id:'LS-005', name:'Auto Detail Intake + Waiver Kit',         price:12.99, buyer:'Mobile Detail Owners',       bundle:'Detailing Client Ops',   perf:'Stable', status:'live',            category:'Auto Detailing', views:84,  cvr:2.4, revenue:25.98 },
-    { id:'LS-006', name:'Pest Control Follow-Up Card Templates',   price:5.99,  buyer:'Pest Control Teams',         bundle:'Pest Retention Pack',    perf:'N/A',    status:'draft',           category:'Pest Control',   views:0,   cvr:0,   revenue:0 },
-    { id:'LS-007', name:'Roofing Change Order + Approval Form',    price:14.99, buyer:'Roofing Contractors',        bundle:'Roofing Scope Pack',     perf:'N/A',    status:'ready to upload', category:'Roofing',        views:0,   cvr:0,   revenue:0 },
+    { id:'LS-006', name:'Pest Control Follow-Up Card Templates',    price:5.99,  buyer:'Pest Control Teams',         bundle:'Pest Retention Pack',       perf:'N/A', status:'draft',           category:'Pest Control',    views:0, cvr:0, revenue:0 },
+    { id:'LS-007', name:'Roofing Change Order + Approval Form',    price:14.99, buyer:'Roofing Contractors',        bundle:'Roofing Scope Pack',         perf:'N/A', status:'ready to upload', category:'Roofing',         views:0, cvr:0, revenue:0 },
+    { id:'LS-008', name:'Pressure Washing Route Sheet',            price:6.99,  buyer:'Pressure Washing Operators', bundle:'Exterior Cleaning Pack',     perf:'N/A', status:'draft',           category:'Exterior Cleaning',views:0, cvr:0, revenue:0 },
+    { id:'LS-009', name:'Appliance Repair Parts Tracker',          price:8.99,  buyer:'Appliance Repair Techs',     bundle:'Appliance Service Kit',      perf:'N/A', status:'draft',           category:'Appliance',       views:0, cvr:0, revenue:0 },
+    { id:'LS-010', name:'Handyman Materials Reimbursement Sheet',  price:4.99,  buyer:'Solo Handymen',              bundle:'Handyman Back-Office Pack',  perf:'N/A', status:'draft',           category:'Handyman',        views:0, cvr:0, revenue:0 },
+    { id:'LS-011', name:'Mobile Mechanic Service Summary Form',    price:9.99,  buyer:'Mobile Auto Repair Techs',   bundle:'Mobile Mechanic Ops Kit',    perf:'N/A', status:'draft',           category:'Mobile Mechanic', views:0, cvr:0, revenue:0 },
+    { id:'LS-012', name:'Locksmith Job Authorization Form',        price:7.99,  buyer:'Locksmith Operators',        bundle:'Locksmith Field Pack',       perf:'N/A', status:'draft',           category:'Locksmith',       views:0, cvr:0, revenue:0 },
+    { id:'LS-013', name:'Painting Prep & Final Punch List',        price:8.99,  buyer:'Painting Contractors',       bundle:'Painter Admin Bundle',       perf:'N/A', status:'draft',           category:'Painting',        views:0, cvr:0, revenue:0 },
+    { id:'LS-014', name:'Snow Removal Service Trigger Checklist',  price:6.99,  buyer:'Snow Removal Contractors',   bundle:'Snow Ops Starter Pack',      perf:'N/A', status:'draft',           category:'Snow Removal',    views:0, cvr:0, revenue:0 },
+    { id:'LS-015', name:'Window Cleaning Client Packet',           price:7.99,  buyer:'Window Cleaning Operators',  bundle:'Window Cleaning Pro Pack',   perf:'N/A', status:'draft',           category:'Window Cleaning', views:0, cvr:0, revenue:0 },
+    { id:'LS-016', name:'Pool Service Chemical Log',               price:7.99,  buyer:'Pool Service Technicians',   bundle:'Pool Tech Operations Kit',   perf:'N/A', status:'draft',           category:'Pool Service',    views:0, cvr:0, revenue:0 },
+    { id:'LS-017', name:'Flooring Estimate Scope Matrix',          price:9.99,  buyer:'Flooring Contractors',       bundle:'Flooring Contractor Bundle', perf:'N/A', status:'draft',           category:'Flooring',        views:0, cvr:0, revenue:0 },
+    { id:'LS-018', name:'Contractor Daily Site Report',            price:11.99, buyer:'General Contractors',        bundle:'GC Field Documentation Pack',perf:'N/A', status:'draft',           category:'Contracting',     views:0, cvr:0, revenue:0 },
+    { id:'LS-019', name:'Septic Service Pump Log',                 price:6.99,  buyer:'Septic Service Techs',       bundle:'Septic Ops Kit',             perf:'N/A', status:'draft',           category:'Septic',          views:0, cvr:0, revenue:0 },
+    { id:'LS-020', name:'Service Business Fee Transparency Addendum', price:5.99, buyer:'Any Service Trade Owner',  bundle:'Multi-Trade Admin Vault',    perf:'N/A', status:'draft',           category:'Multi-Trade',     views:0, cvr:0, revenue:0 },
   ],
   approvals: [
     { id:'AP-001', type:'Publish Listing', item:'Roofing Change Order + Approval Form', listingId:'LS-007', why:'Strong bundle lift projected at +22%. Confidence based on comparable roofing templates ranking in top 50 Etsy results.', conf:0.84, agent:'Approval Agent', important:true, status:'pending', archived:false, createdAt:'09:10', history:[] },
@@ -512,6 +616,22 @@ function renderDashboard() {
       </div>
     </div>
 
+    <!-- Etsy connection -->
+    <div class="card etsy-card">
+      <div class="section-header">
+        <div><div class="eyebrow">Marketplace</div><span class="section-title">Etsy Integration</span></div>
+        <div id="etsy-status-badge">${typeof EtsyAPI !== 'undefined' ? EtsyAPI.statusBadgeHTML() : '<span class="autopilot-badge off">Loading…</span>'}</div>
+      </div>
+      <p class="text-muted mt-4">Connect your Etsy shop to pull live listing stats, sync transactions, and let Performance Agent compare projected vs actual revenue automatically.</p>
+      <div class="etsy-features mt-8">
+        <div class="etsy-feat"><span class="text-success">↓</span> Pull live view & CVR data</div>
+        <div class="etsy-feat"><span class="text-success">↓</span> Sync real transaction revenue</div>
+        <div class="etsy-feat"><span class="text-success">↑</span> Push approved listings directly</div>
+        <div class="etsy-feat"><span class="text-accent">⬡</span> Auto-detect winner/loser status</div>
+      </div>
+      ${typeof EtsyAPI !== 'undefined' && EtsyAPI.isConnected() ? `<button class="btn primary mt-12" id="btn-etsy-sync">Sync Now</button>` : ''}
+    </div>
+
     <!-- Activity feed -->
     <div class="card">
       <div class="section-header"><span class="section-title">Agent Activity Log</span></div>
@@ -537,6 +657,27 @@ function renderDashboard() {
   if (prepBtn) prepBtn.onclick = prepareLaunchPack;
   const briefBtn = view.querySelector('#btn-open-brief');
   if (briefBtn) briefBtn.onclick = openLaunchBrief;
+  const syncBtn = view.querySelector('#btn-etsy-sync');
+  if (syncBtn) syncBtn.onclick = runEtsySync;
+}
+
+async function runEtsySync() {
+  if (typeof EtsyAPI === 'undefined' || !EtsyAPI.isConnected()) {
+    toast('Connect your Etsy shop first.', 'warn'); return;
+  }
+  toast('Syncing with Etsy…', 'info');
+  try {
+    const patch = await EtsyAPI.syncToAtlas(state);
+    if (patch.listings?.length) {
+      patch.listings.forEach(el => {
+        const local = state.listings.find(l => l.id === el.id || l.name === el.title);
+        if (local) { local.views = el.views || local.views; local.cvr = el.cvr || local.cvr; local.revenue = el.revenue || local.revenue; }
+      });
+    }
+    if (patch.activity?.length) logAction(patch.activity[0].msg);
+    persist(); rerenderAll();
+    toast('Etsy sync complete — metrics updated.', 'success');
+  } catch(e) { toast('Etsy sync failed: ' + e.message, 'warn'); }
 }
 
 function kpiCard(label, val, sub, color, extra = '') {
@@ -759,7 +900,7 @@ function renderListings() {
       <div class="table-wrap">
         <table class="table">
           <thead><tr>
-            <th>Product</th><th>Price</th><th>7d Views</th><th>CVR</th><th>7d Revenue</th><th>Performance</th><th>Status</th><th></th>
+            <th>Product</th><th>Price</th><th>7d Views</th><th>CVR</th><th>7d Revenue</th><th>Performance</th><th>Status</th><th>Template</th><th></th>
           </tr></thead>
           <tbody>
             ${active.map(l => {
@@ -773,6 +914,7 @@ function renderListings() {
                 <td class="mono ${(l.revenue||0) > 30 ? 'text-success' : ''}">$${(l.revenue||0).toFixed(2)}</td>
                 <td><span class="badge ${l.perf==='Winner'?'live':''}">${l.perf}</span></td>
                 <td><span class="badge ${statusBadgeClass(l.status)}">${l.status}</span></td>
+                <td><button class="pill preview-template" data-id="${l.id}" title="Preview printable form">⬡ Preview</button></td>
                 <td style="display:flex;gap:6px">
                   ${canAdvance ? `<button class="btn approve advance-listing" data-id="${l.id}" style="padding:5px 10px;font-size:.72rem">→ Submit</button>` : ''}
                   <button class="pill edit-listing" data-id="${l.id}">Edit</button>
@@ -814,6 +956,7 @@ ${copy.imagePrompt}</div>
   view.querySelectorAll('tr[data-select]').forEach(r => r.onclick = () => { state.selectedListingId = r.dataset.select; persist(); renderListings(); });
   view.querySelectorAll('.edit-listing').forEach(b => b.onclick = e => { e.stopPropagation(); openListingEditor(b.dataset.id); });
   view.querySelectorAll('.advance-listing').forEach(b => b.onclick = e => { e.stopPropagation(); advanceListing(b.dataset.id); });
+  view.querySelectorAll('.preview-template').forEach(b => b.onclick = e => { e.stopPropagation(); if (typeof openTemplate === 'function') openTemplate(b.dataset.id); else toast('Template engine loading…', 'info'); });
 }
 
 function advanceListing(id) {
