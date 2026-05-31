@@ -788,6 +788,102 @@ ul { list-style: none; }
 ::-webkit-scrollbar-thumb { background: var(--panel3); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
+/* ─── Next Best Action ────────────────────────────────────────────── */
+.nba-card {
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.nba-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--accent-soft) 0%, transparent 60%);
+}
+.nba-card.nba-critical { border-color: rgba(255,187,69,.4); background: linear-gradient(135deg, rgba(255,187,69,.08), var(--panel)); }
+.nba-card.nba-critical::before { background: linear-gradient(135deg, rgba(255,187,69,.06), transparent); }
+.nba-card.nba-high     { border-color: rgba(79,124,255,.4);  background: linear-gradient(135deg, var(--accent-soft), var(--panel)); }
+.nba-card.nba-medium   { border-color: var(--border2);        background: var(--panel); }
+.nba-card.nba-low      { border-color: rgba(46,216,138,.3);  background: linear-gradient(135deg, var(--success-soft), var(--panel)); }
+.nba-left { position: relative; flex: 1; }
+.nba-eyebrow { font-size:.68rem; text-transform:uppercase; letter-spacing:.15em; font-weight:900; color:var(--accent); margin-bottom:4px; }
+.nba-label  { font-size:1.15rem; font-weight:800; color:var(--text); margin-bottom:4px; }
+.nba-card.nba-critical .nba-label { color: var(--warn); }
+.nba-action { font-size:.84rem; color:var(--text2); line-height:1.5; }
+.nba-cta { flex-shrink: 0; white-space: nowrap; }
+
+/* ─── Auto-pilot ──────────────────────────────────────────────────── */
+.autopilot-card { border-color: rgba(79,124,255,.2); }
+.autopilot-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px; font-size:.7rem; font-weight:800;
+  letter-spacing:.05em; text-transform:uppercase; white-space:nowrap;
+}
+.autopilot-badge.on  { background:rgba(46,216,138,.15); border:1px solid rgba(46,216,138,.4); color:var(--success); }
+.autopilot-badge.off { background:var(--panel2); border:1px solid var(--border2); color:var(--muted); }
+.ap-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.ap-stat { background:var(--panel3); border-radius:var(--radius-sm); padding:10px; text-align:center; }
+.ap-val { font-size:1.3rem; font-weight:800; color:var(--text); font-variant-numeric:tabular-nums; }
+.ap-label { font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-top:2px; }
+
+/* ─── Pipeline strip ──────────────────────────────────────────────── */
+.pipeline-strip {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+}
+.pipeline-stage { text-align: center; }
+.ps-count { font-size:1.5rem; font-weight:900; color:var(--muted); line-height:1; }
+.ps-count.live  { color: var(--success); }
+.ps-count.ready { color: var(--accent2); }
+.ps-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.09em; font-weight:700; color:var(--muted); margin-top:3px; }
+.pipeline-arrow { font-size:1.1rem; color:var(--border2); }
+
+/* ─── Copy meta row ───────────────────────────────────────────────── */
+.copy-meta {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  font-size: .76rem; color: var(--muted);
+  margin-bottom: 8px;
+}
+.copy-meta strong { color: var(--text); }
+
+/* ─── Revenue stats ───────────────────────────────────────────────── */
+.rev-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+.rev-stat { background: var(--panel2); border-radius: var(--radius-sm); padding: 10px; text-align: center; }
+.rev-val { font-size: 1.1rem; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+.rev-label { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 2px; }
+
+/* ─── 45-day projection chart ─────────────────────────────────────── */
+.proj-chart {
+  position: relative;
+  display: flex; align-items: flex-end; gap: 2px;
+  height: 64px;
+  background: var(--panel2);
+  border-radius: var(--radius-sm);
+  padding: 0 4px 0;
+  overflow: hidden;
+}
+.proj-bar {
+  flex: 1; min-width: 2px;
+  background: var(--accent-soft);
+  border-radius: 2px 2px 0 0;
+  transition: height .5s cubic-bezier(.4,0,.2,1);
+}
+.proj-bar.goal { background: var(--success-soft); }
+.proj-goal-line {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 100%;
+  pointer-events: none;
+}
+.proj-labels {
+  display: flex; justify-content: space-between;
+  font-size: .66rem; color: var(--muted);
+  margin-top: 4px;
+}
+
 /* ─── Utilities ───────────────────────────────────────────────────── */
 .divider { height: 1px; background: var(--border); margin: 4px 0; }
 .section-header {
