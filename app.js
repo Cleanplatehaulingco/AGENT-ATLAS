@@ -492,8 +492,24 @@ function renderDashboard() {
   const pace      = dailyPaceNeeded();
   const onPace    = isOnPace();
 
+  const adSpent = totalAdSpend();
+  const adCap   = loadAds().budgetCap || 100;
+  const adPct   = adSpent / adCap;
+  const budgetBanner = adPct >= 1.0
+    ? `<div style="background:var(--danger-soft);border:1px solid var(--danger);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span style="color:var(--danger);font-weight:700;">⛔ Ad budget cap hit — $${adSpent.toFixed(2)} of $${adCap} spent. Turn off Etsy Ads now.</span>
+        <button onclick="switchView('ads')" style="background:var(--danger);color:#fff;border:none;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.8rem;font-weight:700;">View Ads</button>
+       </div>`
+    : adPct >= 0.75
+    ? `<div style="background:var(--warn-soft);border:1px solid var(--warn);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span style="color:var(--warn);font-weight:700;">⚠ Ad budget ${(adPct*100).toFixed(0)}% used — $${adSpent.toFixed(2)} of $${adCap}. $${(adCap-adSpent).toFixed(2)} remaining.</span>
+        <button onclick="switchView('ads')" style="background:var(--warn);color:#000;border:none;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.8rem;font-weight:700;">View Ads</button>
+       </div>`
+    : '';
+
   const view = document.getElementById('dashboard-view');
   view.innerHTML = `
+    ${budgetBanner}
     <!-- Next Best Action -->
     <div class="nba-card nba-${nba.priority}">
       <div class="nba-left">
@@ -1773,6 +1789,114 @@ function adsROAS(dailyBudget, avgPrice, cvr) {
   return { clicks: Math.round(clicks), sales: +sales.toFixed(2), revenue: +revenue.toFixed(2), roas: +roas.toFixed(2) };
 }
 
+/* ─── Budget Guard ─────────────────────────────────────────────────── */
+function logAdSpend(amount) {
+  const ads = loadAds();
+  const today = new Date().toISOString().slice(0,10);
+  const log = ads.spendLog || [];
+  const existing = log.find(e => e.date === today);
+  if (existing) existing.amount = +(existing.amount + amount).toFixed(2);
+  else log.push({ date: today, amount: +amount.toFixed(2) });
+  const totalSpent = log.reduce((s,e) => s + e.amount, 0);
+  saveAds({ spendLog: log, totalSpent: +totalSpent.toFixed(2) });
+  checkBudgetCap();
+  if (_currentView === 'ads') renderAdsView();
+  renderDashboard();
+}
+
+function totalAdSpend() {
+  return +(loadAds().totalSpent || 0).toFixed(2);
+}
+
+function checkBudgetCap() {
+  const ads   = loadAds();
+  const cap   = ads.budgetCap || 100;
+  const spent = totalAdSpend();
+  const pct   = spent / cap;
+  if (pct >= 1.0) {
+    toast(`BUDGET CAP HIT — $${spent.toFixed(2)} spent of $${cap} limit. STOP all ads now.`, 'warn');
+    logAction(`Budget Guard: $${cap} cap reached. Ad spend halted.`);
+  } else if (pct >= 0.90) {
+    toast(`Budget warning: $${spent.toFixed(2)} of $${cap} — 90% used. Slow down.`, 'warn');
+    logAction(`Budget Guard: 90% of $${cap} cap used ($${spent.toFixed(2)} spent).`);
+  } else if (pct >= 0.75) {
+    toast(`Budget alert: $${spent.toFixed(2)} of $${cap} spent (75%).`, 'info');
+  }
+}
+
+function budgetGuardHTML() {
+  const ads    = loadAds();
+  const cap    = ads.budgetCap || 100;
+  const spent  = totalAdSpend();
+  const left   = Math.max(0, cap - spent);
+  const pct    = Math.min(100, (spent / cap) * 100);
+  const barColor = pct >= 90 ? 'var(--danger)' : pct >= 75 ? 'var(--warn)' : 'var(--success)';
+  const log    = (ads.spendLog || []).slice().sort((a,b) => b.date.localeCompare(a.date)).slice(0,7);
+  const daysLeft = Math.max(0, 30 - (ads.spendLog||[]).length);
+
+  return `
+    <div class="card" style="${pct >= 90 ? 'border-color:var(--danger);' : pct >= 75 ? 'border-color:var(--warn);' : ''}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div class="card-title" style="margin:0;">Budget Guard — 30-Day Cap</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span style="font-size:.78rem;color:var(--muted);">Cap: $</span>
+          <input id="budget-cap-input" type="number" min="10" max="500" value="${cap}"
+            style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.88rem;padding:5px 8px;width:70px;outline:none;"
+            onchange="saveAds({budgetCap:+this.value});renderAdsView();toast('Budget cap updated to $'+this.value,'success');">
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+        <div style="background:var(--panel2);border-radius:8px;padding:12px 14px;">
+          <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Spent</div>
+          <div style="font-size:1.5rem;font-weight:800;color:${barColor};">$${spent.toFixed(2)}</div>
+        </div>
+        <div style="background:var(--panel2);border-radius:8px;padding:12px 14px;">
+          <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Remaining</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--text);">$${left.toFixed(2)}</div>
+        </div>
+        <div style="background:var(--panel2);border-radius:8px;padding:12px 14px;">
+          <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Safe Daily Budget</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--accent2);">$${daysLeft > 0 ? (left/daysLeft).toFixed(2) : '0.00'}</div>
+        </div>
+      </div>
+
+      <div style="background:var(--panel2);border-radius:8px;padding:3px;margin-bottom:16px;">
+        <div style="height:14px;border-radius:6px;background:${barColor};width:${pct.toFixed(1)}%;transition:width .4s;min-width:${pct>0?'4px':'0'};"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:16px;">
+        <span>$0</span>
+        <span style="color:${barColor};font-weight:700;">${pct.toFixed(0)}% used</span>
+        <span>$${cap} cap</span>
+      </div>
+
+      ${pct >= 100 ? `<div style="background:var(--danger-soft);border:1px solid var(--danger);border-radius:8px;padding:12px 14px;color:var(--danger);font-weight:700;font-size:.88rem;margin-bottom:16px;">⛔ CAP REACHED — Turn off Etsy Ads now in your Etsy account to avoid overspend.</div>` :
+        pct >= 90  ? `<div style="background:var(--warn-soft);border:1px solid var(--warn);border-radius:8px;padding:12px 14px;color:var(--warn);font-weight:700;font-size:.88rem;margin-bottom:16px;">⚠ 90% of budget used — consider pausing lower-performing listings.</div>` : ''}
+
+      <div style="margin-bottom:10px;">
+        <div style="font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:8px;">Log Today's Spend</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          ${[1,2,3,5].map(a => `<button onclick="logAdSpend(${a})" style="background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.82rem;">+$${a}</button>`).join('')}
+          <span style="color:var(--muted);font-size:.8rem;">or</span>
+          <input id="custom-spend" type="number" min="0.01" step="0.01" placeholder="custom $"
+            style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:6px 10px;width:90px;font-size:.82rem;outline:none;">
+          <button onclick="const v=parseFloat(document.getElementById('custom-spend').value);if(v>0){logAdSpend(v);document.getElementById('custom-spend').value='';}" style="background:var(--accent);color:#000;border:none;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.82rem;font-weight:700;">Log</button>
+        </div>
+      </div>
+
+      ${log.length > 0 ? `
+        <div style="margin-top:12px;">
+          <div style="font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:6px;">Recent Spend Log</div>
+          ${log.map(e => `
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:.8rem;">
+              <span style="color:var(--muted);">${e.date}</span>
+              <span style="color:var(--text);font-weight:600;">$${e.amount.toFixed(2)}</span>
+            </div>`).join('')}
+        </div>` : `<p style="font-size:.8rem;color:var(--muted);margin:8px 0 0;">No spend logged yet. Log your first day's Etsy ad spend above.</p>`}
+    </div>
+  `;
+}
+
 function renderAdsView() {
   const view = document.getElementById('ads-view');
   if (!view) return;
@@ -1807,6 +1931,9 @@ function renderAdsView() {
 
   view.innerHTML = `
     <div style="max-width:860px;display:flex;flex-direction:column;gap:24px;">
+
+      <!-- Budget Guard -->
+      ${budgetGuardHTML()}
 
       <!-- Budget calculator -->
       <div class="card">
