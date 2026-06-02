@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Raven's Business Hub</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  body { background: #0d0520; font-family: 'Segoe UI', sans-serif; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #1a0a2e; }
+  ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 3px; }
+  .gem-logo { background: linear-gradient(135deg, #7c3aed, #a855f7, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .sidebar-gradient { background: linear-gradient(180deg, #1a0a2e 0%, #0d0520 100%); }
+  .card-glass { background: rgba(26,10,46,0.85); border: 1px solid rgba(124,58,237,0.35); }
+  .tab-active { background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; }
+  .tab-inactive { color: #c4b5fd; }
+  .tab-inactive:hover { background: rgba(124,58,237,0.2); color: white; }
+  .btn-gold { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #0d0520; font-weight: 700; }
+  .btn-gold:hover { background: linear-gradient(135deg, #fbbf24, #fde68a); }
+  .btn-purple { background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; }
+  .btn-purple:hover { background: linear-gradient(135deg, #6d28d9, #9333ea); }
+  .modal-overlay { background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); }
+  .etsy-badge { background: #e47911; color: white; }
+  .market-badge { background: #7c3aed; color: white; }
+  .marketplace-badge { background: #2563eb; color: white; }
+  .vip-badge { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #0d0520; }
+  .repeat-badge { background: rgba(124,58,237,0.4); color: #c4b5fd; border: 1px solid #7c3aed; }
+  .wholesale-badge { background: rgba(37,99,235,0.4); color: #93c5fd; border: 1px solid #2563eb; }
+  .overdue-badge { background: rgba(239,68,68,0.3); color: #fca5a5; border: 1px solid #ef4444; }
+  .animate-fade { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  .chat-bubble-ai { background: rgba(124,58,237,0.25); border: 1px solid rgba(124,58,237,0.4); border-radius: 18px 18px 18px 4px; }
+  .chat-bubble-user { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.35); border-radius: 18px 18px 4px 18px; }
+  .product-card { background: rgba(26,10,46,0.9); border: 1px solid rgba(124,58,237,0.3); transition: border-color 0.2s, transform 0.2s; }
+  .product-card:hover { border-color: #a855f7; transform: translateY(-2px); }
+  .progress-bar { background: rgba(124,58,237,0.2); border-radius: 4px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, #7c3aed, #a855f7); border-radius: 4px; }
+  input, select, textarea { background: rgba(26,10,46,0.8) !important; border: 1px solid rgba(124,58,237,0.4) !important; color: #e9d5ff !important; }
+  input:focus, select:focus, textarea:focus { outline: none !important; border-color: #a855f7 !important; box-shadow: 0 0 0 2px rgba(168,85,247,0.2) !important; }
+  input::placeholder, textarea::placeholder { color: #7c3aed !important; }
+  option { background: #1a0a2e; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useMemo } = React;
+const { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, ResponsiveContainer } = Recharts;
+
+// ── Mock Data ──────────────────────────────────────────────────────────────────
+const CLIENTS = [
+  { id:1, name:"Jennifer M.", email:"jennifer.m@email.com", tags:["VIP","Repeat"], lastContact:"2026-05-10", purchases:[{date:"2026-05-10",item:"Purple Amethyst Bracelet",total:48},{date:"2026-03-22",item:"Moon Phase Necklace",total:38},{date:"2026-01-14",item:"Celestial Charm Bracelet",total:42}], phone:"(734)555-0101", notes:"Loves purple and celestial themes. Birthday in July." },
+  { id:2, name:"Sarah K.", email:"sarahk@gmail.com", tags:["VIP"], lastContact:"2026-05-28", purchases:[{date:"2026-05-28",item:"Moonstone Ring Set",total:65},{date:"2026-04-01",item:"Moon Phase Necklace",total:38}], phone:"(734)555-0202", notes:"Prefers delicate styles. Repeat buyer for gifts." },
+  { id:3, name:"Lisa T.", email:"lisa.t@work.com", tags:["Wholesale"], lastContact:"2026-04-15", purchases:[{date:"2026-04-15",item:"Boho Stacking Set x3",total:120},{date:"2026-02-10",item:"Raven Feather Earrings x5",total:95}], phone:"(734)555-0303", notes:"Boutique owner — orders in bulk. Net-30 terms." },
+  { id:4, name:"Amanda R.", email:"amanda.r@email.com", tags:["Repeat"], lastContact:"2026-03-18", purchases:[{date:"2026-03-18",item:"Black Crystal Choker",total:55},{date:"2025-12-20",item:"Gothic Lace Bracelet",total:44}], phone:"(734)555-0404", notes:"Gothic style enthusiast. Holiday shopper." },
+  { id:5, name:"Crystal B.", email:"crystalb@gmail.com", tags:["VIP","Repeat"], lastContact:"2026-05-30", purchases:[{date:"2026-05-30",item:"Celestial Charm Bracelet",total:42},{date:"2026-05-01",item:"Purple Amethyst Bracelet",total:48},{date:"2026-04-10",item:"Moon Phase Necklace",total:38}], phone:"(734)555-0505", notes:"Best customer! Always leaves 5-star reviews." },
+  { id:6, name:"Michelle W.", email:"michelle.w@email.com", tags:["Repeat"], lastContact:"2026-02-14", purchases:[{date:"2026-02-14",item:"Moonstone Ring Set",total:65}], phone:"(734)555-0606", notes:"Valentine's Day purchase. May need follow-up for Mother's Day." },
+  { id:7, name:"Donna P.", email:"donnap@gmail.com", tags:[], lastContact:"2026-04-20", purchases:[{date:"2026-04-20",item:"Boho Stacking Set",total:40}], phone:"(734)555-0707", notes:"New customer from South Lyon Market." },
+  { id:8, name:"Karen S.", email:"karen.s@email.com", tags:["VIP"], lastContact:"2026-05-05", purchases:[{date:"2026-05-05",item:"Raven Feather Earrings",total:32},{date:"2026-03-08",item:"Gothic Lace Bracelet",total:44},{date:"2026-01-28",item:"Black Crystal Choker",total:55}], phone:"(734)555-0808", notes:"Interior designer — buys for clients as gifts." },
+];
+
+const SALES = [
+  { id:1, date:"2026-06-01", customer:"Crystal B.", items:"Celestial Charm Bracelet", total:42, platform:"Etsy" },
+  { id:2, date:"2026-06-01", customer:"Sarah K.", items:"Moon Phase Necklace", total:38, platform:"Etsy" },
+  { id:3, date:"2026-05-31", customer:"Jennifer M.", items:"Purple Amethyst Bracelet", total:48, platform:"Market" },
+  { id:4, date:"2026-05-31", customer:"Karen S.", items:"Raven Feather Earrings", total:32, platform:"Market" },
+  { id:5, date:"2026-05-30", customer:"Amanda R.", items:"Black Crystal Choker", total:55, platform:"Marketplace" },
+  { id:6, date:"2026-05-29", customer:"Donna P.", items:"Boho Stacking Set", total:40, platform:"Etsy" },
+  { id:7, date:"2026-05-28", customer:"Sarah K.", items:"Moonstone Ring Set", total:65, platform:"Etsy" },
+  { id:8, date:"2026-05-27", customer:"Michelle W.", items:"Gothic Lace Bracelet", total:44, platform:"Marketplace" },
+  { id:9, date:"2026-05-26", customer:"Lisa T.", items:"Boho Stacking Set x3", total:120, platform:"Market" },
+  { id:10, date:"2026-05-25", customer:"Jennifer M.", items:"Celestial Charm Bracelet", total:42, platform:"Etsy" },
+];
+
+const PRODUCTS = [
+  { id:1, name:"Purple Amethyst Beaded Bracelet", category:"Bracelet", color:"Purple", material:"Amethyst, Elastic Cord", style:"Witchy", cost:8.50, price:48, description:"Hand-knotted amethyst beads with sterling silver spacers" },
+  { id:2, name:"Moon Phase Necklace", category:"Necklace", color:"Silver", material:"Sterling Silver, Crystal", style:"Celestial", cost:12, price:38, description:"Crescent to full moon charm necklace on 18\" sterling chain" },
+  { id:3, name:"Raven Feather Earrings", category:"Earrings", color:"Black", material:"Black Onyx, Sterling Silver", style:"Gothic", cost:7, price:32, description:"Dangling raven feather design with onyx drops" },
+  { id:4, name:"Black Crystal Choker", category:"Necklace", color:"Black", material:"Jet Crystal, Black Ribbon", style:"Gothic", cost:11, price:55, description:"Dramatic black crystal choker with velvet ribbon ties" },
+  { id:5, name:"Celestial Charm Bracelet", category:"Bracelet", color:"Gold", material:"Gold-Fill, Moonstone", style:"Celestial", cost:9, price:42, description:"Gold-fill chain with sun, moon and star charms" },
+  { id:6, name:"Moonstone Ring Set", category:"Ring", color:"Multi", material:"Moonstone, Sterling Silver", style:"Boho", cost:18, price:65, description:"Stackable set of 3 moonstone rings in varying sizes" },
+  { id:7, name:"Gothic Lace Bracelet", category:"Bracelet", color:"Black", material:"Jet Black Seed Beads, Lace", style:"Gothic", cost:6, price:44, description:"Intricate lace-style beadwork in matte black" },
+  { id:8, name:"Boho Stacking Set", category:"Bracelet", color:"Multi", material:"Mixed Gemstones, Hemp", style:"Boho", cost:10, price:40, description:"Set of 5 mixed gemstone and hemp stacking bracelets" },
+];
+
+const REVENUE_DATA = [
+  { month:"Jan", Etsy:820, Market:340, Marketplace:180 },
+  { month:"Feb", Etsy:950, Market:280, Marketplace:210 },
+  { month:"Mar", Etsy:1100, Market:420, Marketplace:190 },
+  { month:"Apr", Etsy:880, Market:510, Marketplace:240 },
+  { month:"May", Etsy:1240, Market:680, Marketplace:310 },
+  { month:"Jun", Etsy:480, Market:320, Marketplace:80 },
+];
+
+const EXPENSES = [
+  { name:"South Lyon Market Booth Fee (May)", amount:45 },
+  { name:"Bead Supplies — Fire Mountain", amount:127 },
+  { name:"Sterling Silver Wire", amount:68 },
+  { name:"Etsy Listing Fees (May)", amount:18 },
+  { name:"Packaging & Tissue Paper", amount:34 },
+  { name:"Etsy Transaction Fees (May)", amount:62 },
+];
+
+const HOLIDAYS = [
+  { name:"Father's Day", date:"Jun 15", daysLeft:13, tip:"Men's jewelry is underrated! Push leather-cord bracelets and cufflinks-style pieces. Bundle 2 for a 'dad & grad' deal.", icon:"👨" },
+  { name:"4th of July", date:"Jul 4", daysLeft:32, tip:"Red, white & blue bead combos. Patriotic charm bracelets. Great for market day impulse buys.", icon:"🎆" },
+  { name:"Back to School", date:"Aug 15", daysLeft:74, tip:"Friendship bracelet sets — teens love gifting these. Price point $15-25 for gifting budgets.", icon:"🎒" },
+  { name:"Halloween", date:"Oct 31", daysLeft:151, tip:"Your gothic & witchy styles are PERFECT. Start October 1. Push Black Crystal Choker and Raven Earrings.", icon:"🦇" },
+];
+
+const QUICK_PROMPTS = [
+  { label:"Find a box for 3×2\" piece", answer:`**Packaging Recommendation for a 3×2\" Jewelry Piece**\n\n**Best Option: Cotton-filled jewelry box**\n• Size: 3.5\" × 2.5\" × 1\" (classic ring/bracelet box)\n• Source: Uline S-7455 — $38.50/100 boxes (~$0.39 each)\n• Alternative: Amazon JDXJ Cotton-Fill 3.5×2.5 — $0.45 each with Prime\n\n**Presentation Tips:**\n• Line with black or deep purple tissue for brand cohesion\n• Add a small card: "Made with love by Raven — ravensbaublesngifts"\n• Tie with 1/4" gold ribbon for a luxe feel\n\n**For Shipping:** Nest the jewelry box inside a bubble mailer (6×9\") — fits USPS First Class (saves $$ vs Priority).` },
+  { label:"Write Etsy listing for Amethyst Bracelet", answer:`**Etsy Listing: Purple Amethyst Beaded Bracelet**\n\n**Title:** Purple Amethyst Beaded Bracelet • Handmade Healing Crystal Jewelry • Sterling Silver Spacers • Stretch Bracelet Gift for Her\n\n**Description:**\nWear the energy of amethyst every day ✨ This hand-knotted beaded bracelet features genuine amethyst gemstone beads paired with polished sterling silver spacers on a durable elastic cord.\n\n**Why you'll love it:**\n→ Genuine amethyst — calming, protective, intuitively healing\n→ Sterling silver spacers add elegant contrast\n→ Stretchy fit — one size fits most wrists\n→ Handcrafted in Michigan with intention\n\n**Details:** Bead size: 8mm | Fits 6.5–7.5\" wrists | Gift-ready packaging included\n\n**Tags:** amethyst bracelet, crystal jewelry, healing bracelet, purple bracelet, witchy jewelry, handmade bracelet, stretch bracelet, gemstone jewelry, gift for her, boho jewelry` },
+  { label:"What should I charge for this?", answer:`**Pricing Analysis: Purple Amethyst Bracelet**\n\n**Your Current Cost Breakdown:**\n• Materials (amethyst beads, wire, spacers): $6.00\n• Elastic cord + packaging: $1.50\n• Your labor (20 min @ $15/hr): $5.00\n• **Total Cost: $12.50**\n\n**Market Research:**\n• Similar on Etsy: $22–$65 (avg $38)\n• Your current price ($48) is well-positioned\n• Top-rated sellers charge $45–$65 for "healing crystal" positioning\n\n**Recommendation: Keep at $48, but...**\n✅ Add a "Healing Properties" section to justify premium\n✅ Offer a 2-for-$88 bundle (incentivizes volume)\n✅ Raise to $52 in October for holiday season\n\n**Your Margin: 62% — Healthy!** 🎉` },
+  { label:"Plan my Christmas campaign", answer:`**Christmas Campaign Plan — Raven's Baubles & Gifts**\n\n**Timeline:**\n📅 Oct 1 — Launch "Dark Enchantment" holiday collection\n📅 Oct 15 — List all holiday items on Etsy, update shop banner\n📅 Nov 1 — Start email/social push ("35 days to shop!")\n📅 Nov 15 — Last day for custom orders with guaranteed delivery\n📅 Dec 1 — Flash sale: 15% off stacking sets\n📅 Dec 10 — "Last chance" urgency messaging\n\n**Best Sellers to Stock Up On:**\n1. Purple Amethyst Bracelet (top gifted)\n2. Moon Phase Necklace (celestial = holiday)\n3. Gothic Lace Bracelet (holiday party season)\n4. Moonstone Ring Set (premium gift tier)\n\n**Gift Bundle Ideas:**\n• "Witchy Winter" set: Choker + Earrings ($79)\n• "Celestial Dreams": Necklace + Bracelet ($72)\n• "Crystal Queen": Full set ($125)` },
+  { label:"Restock recommendation", answer:`**Restock Alert — Based on Sales Velocity:**\n\n🔴 **Restock NOW:**\n• Purple Amethyst Bracelet — selling 4.2/week, est. stockout in 5 days\n• Moon Phase Necklace — 3.1/week, stockout in 8 days\n\n🟡 **Restock This Week:**\n• Celestial Charm Bracelet — 2.4/week\n• Moonstone Ring Set — 1.8/week (higher price, worth keeping 6+ in stock)\n\n🟢 **Well Stocked:**\n• Black Crystal Choker\n• Gothic Lace Bracelet\n• Raven Feather Earrings\n\n**Supplier Tip:** If ordering amethyst from Fire Mountain, hit $100 minimum for free shipping — combine your restock order with the Gothic Lace bead restock to save ~$12.` },
+  { label:"Write a thank-you note for Crystal B.", answer:`**Thank-You Note for Crystal B.:**\n\n---\nDear Crystal,\n\nThank you so much for your continued support — you are truly one of my favorite customers! Your Celestial Charm Bracelet is on its way and I can't wait for you to wear it. 🌙\n\nI packed it with a little extra care (and some rose petals!) because you've meant so much to this little shop.\n\nIf you ever want a custom piece or have something specific in mind, please reach out — I'd love to create something just for you.\n\nWith gratitude and sparkle,\nRaven\n🖤 ravensbaublesngifts.etsy.com\n---\n\n*Post this on Etsy or email it — it takes 30 seconds and increases review likelihood by ~40%.*` },
+  { label:"South Lyon Market prep checklist", answer:`**South Lyon Market Day Checklist 🧺**\n\n**Night Before:**\n☐ Charge Square reader + backup battery\n☐ Count cash drawer ($100 in small bills)\n☐ Print price tags for new items\n☐ Pack display: bust forms, risers, velvet trays\n☐ Load bins in car (heaviest first)\n\n**Morning Of:**\n☐ Extra price tags + Sharpie\n☐ Business cards (50+)\n☐ Gift bags + tissue (5 sizes)\n☐ Sanitizer & mirror for try-ons\n☐ Water + snacks (it's a long day!)\n\n**Best Sellers to Prioritize:**\n1. Purple Amethyst Bracelets (front-center)\n2. Boho Stacking Sets (impulse buy, visible)\n3. Earring display (eye-level)\n\n**Signage Tips:**\n• "Handmade in Michigan" sign drives local sales\n• Price everything clearly — no sticker = no sale\n• Add a "Meet Raven" photo card for connection` },
+  { label:"Suggest new product ideas", answer:`**New Product Ideas for Raven's Baubles 💡**\n\n**High Potential (based on your style + margins):**\n\n1. **Amethyst & Pyrite Bracelet** — "Protection & Prosperity" — $52\n   Pyrite is trending hard. Pairs perfectly with your amethyst brand.\n\n2. **Raven Skull Ring** (adjustable) — $38\n   Your "Raven" brand should have a signature ring. Gothic/witchy audiences will love it.\n\n3. **Sun & Moon Stud Earrings** — $24\n   Low materials cost, fast to make, high velocity at markets.\n\n4. **Custom Name Bracelet** — $35–$55\n   Letter beads on elastic. Customization = premium pricing + Etsy algorithm boost.\n\n5. **Crystal Intention Set** (3 mini bracelets in a gift box) — $44\n   Love, Protection, Clarity themes. Perfect holiday gift set.\n\n**Trend Insight:** "Tarot-themed" jewelry is spiking on Etsy right now. A tarot card charm necklace could be a breakout product.` },
+  { label:"Facebook post for Moon Phase Necklace", answer:`**Facebook Post — Moon Phase Necklace 🌙**\n\n---\n✨ She asked me what inspired this one...\n\nHonestly? I made it on a full moon with a cup of chamomile tea and a playlist of old Fleetwood Mac. 🌕\n\nThis Moon Phase Necklace follows the journey from new moon to full and back — a reminder that all cycles are beautiful, including yours.\n\nHandcrafted with sterling silver on an 18\" chain.\n💫 $38 | Link in bio or comment MOON and I'll DM you!\n\n#handmadejewelry #moonjewelry #celestialjewelry #etsyseller #handmadeingifts #ravensbaubles #supportsmallbusiness #moonphasenecklace #witchyjewelry #michiganmaker\n---\n\n*Post on Thursday evening for best Facebook reach. Include 2-3 photos: flat lay, worn shot, close-up detail.*` },
+  { label:"Analyze my best customers", answer:`**Top Customer Analysis 📊**\n\n**Tier 1 — VIP (Protect at all costs):**\n• **Crystal B.** — 3 purchases, $128 LTV, avg 30-day repurchase cycle\n• **Jennifer M.** — 3 purchases, $128 LTV, loves celestial + purple\n• **Karen S.** — 3 purchases, $131 LTV, buys gothic styles consistently\n\n**Key Insight:** Your VIPs buy every 45–60 days. A personal "new arrivals" email on the 40-day mark could trigger repeat purchases.\n\n**Tier 2 — High Potential:**\n• **Sarah K.** — 2 purchases, $103 LTV — show her Moonstone Ring Set\n• **Lisa T.** — Wholesale buyer! Nurture this relationship, offer a wholesale catalog\n\n**Win-Back Opportunity:**\n• **Michelle W.** — last purchase Feb 14 (Valentine's). She's due! Mother's Day passed — pitch a "just because" message.\n\n**Recommendation:** Start a simple loyalty program — "5th purchase = 20% off" — your VIPs will love it.` },
+  { label:"What are my best platforms?", answer:`**Platform Performance Analysis 📈**\n\n**Etsy** 🟠\n• 58% of total revenue\n• Best for: Necklaces, ring sets (search-driven buyers)\n• Avg order value: $43\n• Growth tip: Add 2-3 new listings/week to stay in the algorithm\n\n**South Lyon Market** 🟣\n• 31% of revenue, but HIGHEST avg transaction ($67)\n• Why: Customers touch-and-feel, buy multiples\n• Opportunity: Capture emails at checkout for repeat online sales\n\n**Facebook Marketplace** 🔵\n• 11% of revenue — lowest, but zero fees\n• Best for: Clearing older inventory, local sales\n• Tip: Post Friday evening for weekend buyers\n\n**Bottom Line:** Etsy drives volume, Market drives value. Focus Etsy energy on SEO + new listings. At Market, always have a bundle deal visible — it increases avg transaction by ~30%.` },
+  { label:"Help me with pricing strategy", answer:`**Pricing Strategy Guide for Raven's Baubles 💰**\n\n**Formula:** Cost × 3 = Minimum | Cost × 4-5 = Target (for handmade)\n\n**Your Current Pricing Grade: B+**\n• Moonstone Ring Set ($65) — slightly underpriced, could be $72\n• Raven Feather Earrings ($32) — good impulse price point\n• Black Crystal Choker ($55) — room to go to $62\n\n**Psychological Pricing Tips:**\n• $48 beats $50 (feels less) — you're already doing this! ✅\n• Offer a "premium" at $75+ to anchor lower prices\n• Bundle: "Buy 2, save $10" increases cart size\n\n**Seasonal Adjustments:**\n• Raise prices 10-15% Oct 15 – Dec 31 (demand is high, buyers expect it)\n• Post-holiday (Jan): add a "New Year, New You" sale at 20% off to clear inventory\n\n**Never apologize for your prices.** Your work is worth it. 🖤` },
+];
+
+const AI_REPORT = `# AI Intelligence Report — Raven's Business Hub
+*Generated for ravensbaublesngifts | June 2026*
+
+---
+
+## ✅ What's Working
+
+**Purple Amethyst Bracelet is your cash cow.** It's #1 in units and revenue, with a 62% margin and high search relevance on Etsy. Keep this stocked at all times — it's your brand anchor.
+
+**Etsy SEO is gaining traction.** May showed your highest Etsy month ($1,240). Listings with "healing crystal" and "witchy jewelry" in the title are outperforming generic descriptions.
+
+**South Lyon Market is punching above its weight.** Though only 31% of revenue, market transactions average $67 vs. Etsy's $43. Your in-person presence creates loyalty that converts to online repeat buyers.
+
+---
+
+## 🚀 Biggest Opportunities
+
+**1. Moonstone Ring Set is underperforming.** At $65 with 72% margin, it's your most profitable item per sale — but only 8 units sold YTD. Photography update + "stackable rings" keyword could 2-3x this.
+
+**2. Email capture at Market is a goldmine you're missing.** Lisa T. (wholesale) started at market. Capturing even 5 emails/market day could add $400-600/month in repeat online sales.
+
+**3. Gothic/Witchy style is 35% of your sales but Halloween is coming.** Start your October push September 15 — you have a 60-day window to 2x your gothic category.
+
+---
+
+## 🔧 Fix These First
+
+**Your "Boho" style is underperforming relative to trend data.** Boho is 22% of your catalog but only 14% of revenue. The issue: price point is too low ($40 for a set). Reframe as "Gemstone Collection" and reprice to $52.
+
+**Raven Feather Earrings need a refresh.** Despite a strong name, they're #6 on velocity. New photos, a "protection talisman" narrative in the listing, and a slight price raise to $36 could move them.
+
+---
+
+## 💎 What to Make More Of
+
+Based on velocity, margin, and search trends:
+1. Purple Amethyst Bracelet (variants: gold spacers, larger beads)
+2. Moon Phase items (matching earrings would complete a set)
+3. Crystal chokers (your gothic buyers want more options)
+
+**Bundle Opportunity:** "Witchy Night Out" set (Choker + Raven Earrings + Gothic Bracelet) at $118 — all three are in stock and the combo hasn't been offered.
+
+---
+
+## 🔮 Hidden Insight
+
+**Wednesday is your second-best Etsy day** (mid-week browse behavior). Scheduling new listings and social posts for Tuesday night 9pm captures peak Wednesday morning traffic — most Etsy sellers post Monday, so you'll stand out.
+
+**Your VIP customers (Crystal B., Jennifer M., Karen S.) all buy every 45-60 days.** You're 52 days since Crystal B.'s last pre-June purchase. She's statistically ready to buy again — a personal message today could close a $40-65 sale tonight.`;
+
+// ── Utility Components ─────────────────────────────────────────────────────────
+function Badge({ type, children }) {
+  const cls = { vip:"vip-badge", repeat:"repeat-badge", wholesale:"wholesale-badge", overdue:"overdue-badge", etsy:"etsy-badge", market:"market-badge", marketplace:"marketplace-badge" }[type] || "repeat-badge";
+  return <span className={`${cls} text-xs font-bold px-2 py-0.5 rounded-full`}>{children}</span>;
+}
+
+function StatCard({ icon, label, value, sub, color }) {
+  return (
+    <div className="card-glass rounded-xl p-5 flex items-start gap-4 animate-fade">
+      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${color}`}>{icon}</div>
+      <div>
+        <div className="text-violet-300 text-xs font-semibold uppercase tracking-wide mb-1">{label}</div>
+        <div className="text-white text-2xl font-bold">{value}</div>
+        {sub && <div className="text-violet-400 text-xs mt-1">{sub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function Modal({ open, onClose, title, children, wide }) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className={`card-glass rounded-2xl p-6 ${wide ? "w-full max-w-2xl" : "w-full max-w-md"} max-h-[90vh] overflow-y-auto animate-fade mx-4`}>
+        <div className="flex justify-between items-center mb-5">
+          <h3 className="text-white font-bold text-lg">{title}</h3>
+          <button onClick={onClose} className="text-violet-400 hover:text-white text-2xl leading-none">&times;</button>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function FormField({ label, type="text", value, onChange, options, placeholder, rows }) {
+  const base = "w-full rounded-lg px-3 py-2 text-sm";
+  if (type === "select") return (
+    <div className="mb-4">
+      <label className="block text-violet-300 text-xs font-semibold mb-1 uppercase tracking-wide">{label}</label>
+      <select className={base} value={value} onChange={e => onChange(e.target.value)}>
+        {options.map(o => <option key={o} value={o}>{o}</option>)}
+      </select>
+    </div>
+  );
+  if (type === "textarea") return (
+    <div className="mb-4">
+      <label className="block text-violet-300 text-xs font-semibold mb-1 uppercase tracking-wide">{label}</label>
+      <textarea className={base} rows={rows||3} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}></textarea>
+    </div>
+  );
+  return (
+    <div className="mb-4">
+      <label className="block text-violet-300 text-xs font-semibold mb-1 uppercase tracking-wide">{label}</label>
+      <input type={type} className={base} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} />
+    </div>
+  );
+}
+
+// ── Dashboard Page ─────────────────────────────────────────────────────────────
+function Dashboard() {
+  const aiTip = "📈 Based on this week's sales, your Purple Amethyst Bracelet is trending 40% above average. Consider listing 2-3 color variants (gold spacers, rose quartz mix) on Etsy before the weekend to capture similar buyers. Also — Jennifer M. hasn't purchased in 52 days. A quick 'just thinking of you' message could close a $40-60 sale today.";
+
+  return (
+    <div className="space-y-6 animate-fade">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard icon="💰" label="Revenue Today" value="$127" sub="+2 sales" color="bg-amber-900/40" />
+        <StatCard icon="📅" label="This Week" value="$843" sub="+12% vs last week" color="bg-violet-900/40" />
+        <StatCard icon="🗓️" label="This Month" value="$2,847" sub="On track for $3,100" color="bg-purple-900/40" />
+        <StatCard icon="🏆" label="This Year" value="$18,420" sub="↑ 31% vs 2025" color="bg-indigo-900/40" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2 card-glass rounded-xl p-5">
+          <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">🎁 Upcoming Holiday Campaigns</h3>
+          <div className="space-y-3">
+            {HOLIDAYS.map(h => (
+              <div key={h.name} className="flex gap-3 p-3 bg-violet-900/20 rounded-lg border border-violet-800/30">
+                <div className="text-2xl">{h.icon}</div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-white font-semibold">{h.name}</span>
+                    <span className="text-violet-400 text-xs">{h.date}</span>
+                    <span className="bg-amber-900/40 text-amber-400 text-xs px-2 py-0.5 rounded-full">{h.daysLeft}d away</span>
+                  </div>
+                  <p className="text-violet-300 text-xs leading-relaxed">{h.tip}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div className="card-glass rounded-xl p-5">
+            <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">🏅 Top Products</h3>
+            {[
+              { rank:1, name:"Purple Amethyst Bracelet", rev:"$1,248", icon:"👑" },
+              { rank:2, name:"Moon Phase Necklace", rev:"$874", icon:"🥈" },
+              { rank:3, name:"Raven Earrings", rev:"$612", icon:"🥉" },
+            ].map(p => (
+              <div key={p.rank} className="flex items-center gap-3 mb-3">
+                <span className="text-xl">{p.icon}</span>
+                <div className="flex-1">
+                  <div className="text-white text-sm font-medium">{p.name}</div>
+                  <div className="text-violet-400 text-xs">{p.rev} YTD</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="card-glass rounded-xl p-5">
+            <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">⏰ Follow-ups Due</h3>
+            {[
+              { name:"Michelle W.", due:"Jun 3", overdue:true },
+              { name:"Amanda R.", due:"Jun 7", overdue:false },
+            ].map(f => (
+              <div key={f.name} className="flex items-center justify-between mb-3">
+                <div>
+                  <div className="text-white text-sm">{f.name}</div>
+                  <div className="text-violet-400 text-xs">{f.due}</div>
+                </div>
+                {f.overdue ? <Badge type="overdue">Overdue</Badge> : <span className="text-xs text-violet-400">Upcoming</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="card-glass rounded-xl p-5 border-amber-700/40" style={{borderColor:"rgba(245,158,11,0.3)"}}>
+        <div className="flex items-start gap-3">
+          <span className="text-2xl">🤖</span>
+          <div>
+            <div className="text-amber-400 font-bold text-sm mb-2">AI Business Tip of the Day</div>
+            <p className="text-violet-200 text-sm leading-relaxed">{aiTip}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Clients Page ───────────────────────────────────────────────────────────────
+function Clients() {
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState(null);
+  const [showAdd, setShowAdd] = useState(false);
+  const [newClient, setNewClient] = useState({ name:"", email:"", phone:"", tags:"", notes:"" });
+  const [clients, setClients] = useState(CLIENTS);
+
+  const filtered = useMemo(() => clients.filter(c =>
+    c.name.toLowerCase().includes(search.toLowerCase()) ||
+    c.email.toLowerCase().includes(search.toLowerCase())
+  ), [clients, search]);
+
+  function isOverdue(dateStr) {
+    const d = new Date(dateStr);
+    const diff = (new Date() - d) / (1000*60*60*24);
+    return diff > 45;
+  }
+
+  function addClient() {
+    const c = { id: clients.length+1, name:newClient.name, email:newClient.email, phone:newClient.phone, tags:newClient.tags.split(",").map(t=>t.trim()).filter(Boolean), lastContact:"2026-06-02", purchases:[], notes:newClient.notes };
+    setClients([...clients, c]);
+    setShowAdd(false);
+    setNewClient({ name:"", email:"", phone:"", tags:"", notes:"" });
+  }
+
+  return (
+    <div className="animate-fade">
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex-1 max-w-sm">
+          <input type="text" placeholder="Search customers…" className="w-full rounded-lg px-4 py-2 text-sm" value={search} onChange={e => setSearch(e.target.value)} />
+        </div>
+        <button onClick={() => setShowAdd(true)} className="btn-gold px-4 py-2 rounded-lg text-sm ml-3">+ Add Client</button>
+      </div>
+
+      <div className="card-glass rounded-xl overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-violet-800/40">
+              <th className="text-left text-violet-400 text-xs uppercase tracking-wide px-4 py-3">Name</th>
+              <th className="text-left text-violet-400 text-xs uppercase tracking-wide px-4 py-3 hidden md:table-cell">Email</th>
+              <th className="text-left text-violet-400 text-xs uppercase tracking-wide px-4 py-3">Tags</th>
+              <th className="text-left text-violet-400 text-xs uppercase tracking-wide px-4 py-3 hidden sm:table-cell">Last Contact</th>
+              <th className="text-left text-violet-400 text-xs uppercase tracking-wide px-4 py-3">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((c, i) => (
+              <tr key={c.id} className={`border-b border-violet-900/30 cursor-pointer hover:bg-violet-900/20 transition-colors ${i%2===0?"":"bg-violet-950/20"}`} onClick={() => setSelected(c)}>
+                <td className="px-4 py-3">
+                  <div className="text-white font-medium text-sm">{c.name}</div>
+                  <div className="text-violet-400 text-xs">{c.purchases.length} purchase{c.purchases.length!==1?"s":""}</div>
+                </td>
+                <td className="px-4 py-3 hidden md:table-cell">
+                  <span className="text-violet-300 text-sm">{c.email}</span>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex gap-1 flex-wrap">
+                    {c.tags.map(t => <Badge key={t} type={t.toLowerCase()}>{t}</Badge>)}
+                  </div>
+                </td>
+                <td className="px-4 py-3 hidden sm:table-cell">
+                  <span className="text-violet-300 text-sm">{c.lastContact}</span>
+                </td>
+                <td className="px-4 py-3">
+                  {isOverdue(c.lastContact) ? <Badge type="overdue">Follow Up</Badge> : <span className="text-green-400 text-xs">✓ Current</span>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Side panel */}
+      {selected && (
+        <div className="fixed inset-y-0 right-0 w-80 z-40 card-glass border-l border-violet-700/40 p-6 overflow-y-auto animate-fade">
+          <div className="flex justify-between items-start mb-5">
+            <div>
+              <h3 className="text-white font-bold text-lg">{selected.name}</h3>
+              <div className="text-violet-400 text-sm">{selected.email}</div>
+            </div>
+            <button onClick={() => setSelected(null)} className="text-violet-400 hover:text-white text-2xl">&times;</button>
+          </div>
+          <div className="flex gap-1 flex-wrap mb-4">
+            {selected.tags.map(t => <Badge key={t} type={t.toLowerCase()}>{t}</Badge>)}
+          </div>
+          <div className="space-y-2 mb-5">
+            <div className="flex gap-2 text-sm"><span className="text-violet-400">📞</span><span className="text-violet-200">{selected.phone}</span></div>
+            <div className="text-violet-400 text-xs leading-relaxed">{selected.notes}</div>
+          </div>
+          <div>
+            <div className="text-amber-400 font-bold text-xs uppercase tracking-wide mb-3">Purchase History</div>
+            {selected.purchases.length === 0 ? (
+              <p className="text-violet-500 text-sm">No purchases yet.</p>
+            ) : (
+              <div className="space-y-2">
+                {selected.purchases.map((p, i) => (
+                  <div key={i} className="bg-violet-900/30 rounded-lg p-3">
+                    <div className="text-white text-sm font-medium">{p.item}</div>
+                    <div className="flex justify-between mt-1">
+                      <span className="text-violet-400 text-xs">{p.date}</span>
+                      <span className="text-amber-400 text-xs font-bold">${p.total}</span>
+                    </div>
+                  </div>
+                ))}
+                <div className="flex justify-between text-sm pt-2 border-t border-violet-800/40">
+                  <span className="text-violet-300">Total LTV</span>
+                  <span className="text-amber-400 font-bold">${selected.purchases.reduce((s,p)=>s+p.total,0)}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <Modal open={showAdd} onClose={() => setShowAdd(false)} title="Add New Client">
+        <FormField label="Full Name" value={newClient.name} onChange={v => setNewClient({...newClient, name:v})} placeholder="Jane Smith" />
+        <FormField label="Email" type="email" value={newClient.email} onChange={v => setNewClient({...newClient, email:v})} placeholder="jane@email.com" />
+        <FormField label="Phone" value={newClient.phone} onChange={v => setNewClient({...newClient, phone:v})} placeholder="(734) 555-0000" />
+        <FormField label="Tags (comma-separated)" value={newClient.tags} onChange={v => setNewClient({...newClient, tags:v})} placeholder="VIP, Repeat" />
+        <FormField label="Notes" type="textarea" value={newClient.notes} onChange={v => setNewClient({...newClient, notes:v})} placeholder="Style preferences, gifting notes…" />
+        <div className="flex gap-3 mt-2">
+          <button onClick={() => setShowAdd(false)} className="flex-1 py-2 rounded-lg text-violet-300 border border-violet-700 text-sm">Cancel</button>
+          <button onClick={addClient} className="flex-1 btn-purple py-2 rounded-lg text-sm font-bold">Add Client</button>
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+// ── Sales Log Page ─────────────────────────────────────────────────────────────
+function SalesLog() {
+  const [filter, setFilter] = useState("All");
+  const [sales, setSales] = useState(SALES);
+  const [showAdd, setShowAdd] = useState(false);
+  const [step, setStep] = useState(0);
+  const [newSale, setNewSale] = useState({ date:"", platform:"Etsy", customer:"", items:"", total:"" });
+
+  const filtered = filter === "All" ? sales : sales.filter(s => s.platform === filter);
+  const total = filtered.reduce((s, sale) => s + sale.total, 0);
+
+  const platformBadge = p => <Badge type={p.toLowerCase()==="etsy"?"etsy":p.toLowerCase()==="market"?"market":"marketplace"}>{p}</Badge>;
+
+  function addSale() {
+    setSales([{ id:sales.length+1, ...newSale, total:parseFloat(newSale.total)||0 }, ...sales]);
+    setShowAdd(false);
+    setStep(0);
+    setNewSale({ date:"", platform:"Etsy", customer:"", items:"", total:"" });
+  }
+
+  const stepTitles = ["Step 1: Date & Platform", "Step 2: Items & Customer", "Step 3: Review & Save"];
+
+  return (
+    <div className="animate-fade">
+      <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+        <div className="flex gap-2 flex-wrap">
+          {["All","Etsy","Market","Marketplace"].map(p => (
+            <button key={p} onClick={() => setFilter(p)} className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${filter===p?"btn-purple":"text-violet-300 border border-violet-700 hover:bg-violet-900/30"}`}>{p}</button>
+          ))}
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="text-right">
+            <div className="text-violet-400 text-xs">Running Total</div>
+            <div className="text-amber-400 font-bold text-xl">${total.toLocaleString()}</div>
+          </div>
+          <button onClick={() => setShowAdd(true)} className="btn-gold px-4 py-2 rounded-lg text-sm">+ Add Sale</button>
+        </div>
+      </div>
+
+      <div className="card-glass rounded-xl overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-violet-800/40">
+              <th className="text-left text-violet-400 text-xs uppercase tracking-wide px-4 py-3">Date</th>
+              <th className="text-left text-violet-400 text-xs uppercase tracking-wide px-4 py-3">Customer</th>
+              <th className="text-left text-violet-400 text-xs uppercase tracking-wide px-4 py-3 hidden md:table-cell">Items</th>
+              <th className="text-left text-violet-400 text-xs uppercase tracking-wide px-4 py-3">Platform</th>
+              <th className="text-right text-violet-400 text-xs uppercase tracking-wide px-4 py-3">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((s, i) => (
+              <tr key={s.id} className={`border-b border-violet-900/30 ${i%2===0?"":"bg-violet-950/20"}`}>
+                <td className="px-4 py-3 text-violet-300 text-sm">{s.date}</td>
+                <td className="px-4 py-3 text-white text-sm font-medium">{s.customer}</td>
+                <td className="px-4 py-3 text-violet-300 text-sm hidden md:table-cell">{s.items}</td>
+                <td className="px-4 py-3">{platformBadge(s.platform)}</td>
+                <td className="px-4 py-3 text-amber-400 font-bold text-sm text-right">${s.total}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Modal open={showAdd} onClose={() => { setShowAdd(false); setStep(0); }} title={stepTitles[step]} wide>
+        {step === 0 && <>
+          <FormField label="Sale Date" type="date" value={newSale.date} onChange={v => setNewSale({...newSale, date:v})} />
+          <FormField label="Platform" type="select" value={newSale.platform} onChange={v => setNewSale({...newSale, platform:v})} options={["Etsy","Market","Marketplace"]} />
+          <button onClick={() => setStep(1)} className="w-full btn-purple py-2 rounded-lg font-bold">Next →</button>
+        </>}
+        {step === 1 && <>
+          <FormField label="Customer Name" value={newSale.customer} onChange={v => setNewSale({...newSale, customer:v})} placeholder="Jennifer M." />
+          <FormField label="Items Sold" value={newSale.items} onChange={v => setNewSale({...newSale, items:v})} placeholder="Purple Amethyst Bracelet" />
+          <FormField label="Sale Total ($)" type="number" value={newSale.total} onChange={v => setNewSale({...newSale, total:v})} placeholder="48.00" />
+          <div className="flex gap-3">
+            <button onClick={() => setStep(0)} className="flex-1 py-2 rounded-lg text-violet-300 border border-violet-700 text-sm">← Back</button>
+            <button onClick={() => setStep(2)} className="flex-1 btn-purple py-2 rounded-lg font-bold">Review →</button>
+          </div>
+        </>}
+        {step === 2 && <>
+          <div className="space-y-3 mb-5">
+            {[["Date", newSale.date], ["Platform", newSale.platform], ["Customer", newSale.customer], ["Items", newSale.items], ["Total", `$${newSale.total}`]].map(([k,v]) => (
+              <div key={k} className="flex justify-between py-2 border-b border-violet-800/30">
+                <span className="text-violet-400 text-sm">{k}</span>
+                <span className="text-white text-sm font-medium">{v}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-3">
+            <button onClick={() => setStep(1)} className="flex-1 py-2 rounded-lg text-violet-300 border border-violet-700 text-sm">← Back</button>
+            <button onClick={addSale} className="flex-1 btn-gold py-2 rounded-lg font-bold">Save Sale ✓</button>
+          </div>
+        </>}
+      </Modal>
+    </div>
+  );
+}
+
+// ── Revenue Page ──────────────────────────────────────────────────────────────
+function Revenue() {
+  const totalRevenue = REVENUE_DATA.reduce((s,m) => s+m.Etsy+m.Market+m.Marketplace, 0);
+  const totalExpenses = EXPENSES.reduce((s,e) => s+e.amount, 0);
+  const profit = totalRevenue - totalExpenses;
+
+  const bestMonth = REVENUE_DATA.reduce((best, m) => {
+    const t = m.Etsy+m.Market+m.Marketplace;
+    return t > best.t ? { name:m.month, t } : best;
+  }, { name:"", t:0 });
+
+  const platformTotals = REVENUE_DATA.reduce((acc, m) => {
+    acc.Etsy += m.Etsy; acc.Market += m.Market; acc.Marketplace += m.Marketplace;
+    return acc;
+  }, { Etsy:0, Market:0, Marketplace:0 });
+
+  const bestPlatform = Object.entries(platformTotals).sort((a,b)=>b[1]-a[1])[0];
+
+  const pieData = Object.entries(platformTotals).map(([name, value]) => ({ name, value }));
+  const PIE_COLORS = ["#e47911","#7c3aed","#2563eb"];
+
+  function exportCSV() {
+    const rows = [["Month","Etsy","Market","Marketplace","Total"],...REVENUE_DATA.map(m=>[m.month,m.Etsy,m.Market,m.Marketplace,m.Etsy+m.Market+m.Marketplace])];
+    const csv = rows.map(r=>r.join(",")).join("\n");
+    const a = document.createElement("a");
+    a.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+    a.download = "ravens_revenue.csv";
+    a.click();
+  }
+
+  return (
+    <div className="space-y-6 animate-fade">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard icon="💵" label="Total Revenue" value={`$${totalRevenue.toLocaleString()}`} sub="Jan–Jun 2026" color="bg-green-900/40" />
+        <StatCard icon="📊" label="Total Profit" value={`$${profit.toLocaleString()}`} sub={`After $${totalExpenses} expenses`} color="bg-violet-900/40" />
+        <StatCard icon="🏆" label="Best Month" value={bestMonth.name} sub={`$${bestMonth.t.toLocaleString()}`} color="bg-amber-900/40" />
+        <StatCard icon="🥇" label="Best Platform" value={bestPlatform[0]} sub={`$${bestPlatform[1].toLocaleString()}`} color="bg-indigo-900/40" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2 card-glass rounded-xl p-5">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide">Monthly Revenue by Platform</h3>
+            <button onClick={exportCSV} className="btn-gold px-3 py-1.5 rounded-lg text-xs">⬇ Export CSV</button>
+          </div>
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={REVENUE_DATA} margin={{ top:5, right:10, left:0, bottom:5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(124,58,237,0.15)" />
+              <XAxis dataKey="month" tick={{ fill:"#c4b5fd", fontSize:12 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill:"#c4b5fd", fontSize:11 }} axisLine={false} tickLine={false} />
+              <Tooltip contentStyle={{ background:"#1a0a2e", border:"1px solid #7c3aed", borderRadius:8, color:"#e9d5ff" }} />
+              <Legend wrapperStyle={{ color:"#c4b5fd", fontSize:12 }} />
+              <Bar dataKey="Etsy" stackId="a" fill="#e47911" radius={[0,0,0,0]} />
+              <Bar dataKey="Market" stackId="a" fill="#7c3aed" />
+              <Bar dataKey="Marketplace" stackId="a" fill="#2563eb" radius={[4,4,0,0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="card-glass rounded-xl p-5">
+          <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">Platform Split</h3>
+          <ResponsiveContainer width="100%" height={180}>
+            <PieChart>
+              <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3} dataKey="value">
+                {pieData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i]} />)}
+              </Pie>
+              <Tooltip contentStyle={{ background:"#1a0a2e", border:"1px solid #7c3aed", borderRadius:8, color:"#e9d5ff" }} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="space-y-2 mt-2">
+            {pieData.map((p, i) => (
+              <div key={p.name} className="flex justify-between text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full" style={{background:PIE_COLORS[i]}}></div>
+                  <span className="text-violet-300">{p.name}</span>
+                </div>
+                <span className="text-white font-medium">${p.value.toLocaleString()}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="card-glass rounded-xl p-5">
+        <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">Expenses (YTD)</h3>
+        <div className="space-y-2">
+          {EXPENSES.map(e => (
+            <div key={e.name} className="flex justify-between items-center py-2 border-b border-violet-900/30">
+              <span className="text-violet-200 text-sm">{e.name}</span>
+              <span className="text-red-400 text-sm font-medium">-${e.amount}</span>
+            </div>
+          ))}
+          <div className="flex justify-between items-center pt-2">
+            <span className="text-white font-bold">Total Expenses</span>
+            <span className="text-red-400 font-bold">-${totalExpenses}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Products Page ─────────────────────────────────────────────────────────────
+function Products() {
+  const [products, setProducts] = useState(PRODUCTS);
+  const [aiResponse, setAiResponse] = useState(null);
+  const [showTrend, setShowTrend] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [newProduct, setNewProduct] = useState({ name:"", category:"Bracelet", color:"", material:"", style:"Witchy", cost:"", price:"", description:"" });
+
+  const trendText = `**What's Trending in Handmade Jewelry — June 2026** 🔥\n\n1. **Pyrite & Amethyst combos** — "Manifestation" jewelry is huge on TikTok. Add pyrite to your amethyst pieces for a premium twist.\n\n2. **Tarot card charms** — The Hermit, The Moon, The Star are the top sellers. Small pendant necklaces are performing well.\n\n3. **Chunky chain + delicate stone combos** — Mixed aesthetic (bold meets dainty) is the hot style on Etsy right now.\n\n4. **Black & gold everything** — Gothic with gold accents is outperforming pure black pieces. Great for your existing black crystal line.\n\n5. **Personalized celestial birthstone** — Layered necklaces with moon + birthstone are in the Etsy top 10 search trends.\n\n6. **Mushroom & moss agate** — Cottagecore adjacent, pairs well with your boho line.\n\n**Your Opportunity:** You're already positioned perfectly in celestial & gothic. A small pivot to "celestial birthstone" necklaces could tap the #5 trend with minimal retooling.`;
+
+  const aiAnalyses = {
+    "Purple Amethyst Beaded Bracelet": `**AI Price Analysis: Purple Amethyst Bracelet**\n\n✅ **Currently priced well at $48**\n\n**Market Position:** Your price sits at the 65th percentile on Etsy for amethyst bracelets. Top sellers charge $45-72.\n\n**Margin Analysis:** Cost $8.50, Price $48 = **82% margin** (excellent for handmade)\n\n**Recommendation:** Test $52 with new photography. Add "healing properties" to listing. If conversion holds, keep it. Likely won't drop — amethyst buyers are buying the story, not just the bead.\n\n**Bundle Opportunity:** Pair with Moon Phase Necklace at $78 (saves $8). Bundles increase avg order by 34%.`,
+    "Moon Phase Necklace": `**AI Price Analysis: Moon Phase Necklace**\n\n⚠️ **Slightly underpriced at $38**\n\n**Market Position:** Similar pieces on Etsy average $42-58. You're at the low end.\n\n**Margin Analysis:** Cost $12, Price $38 = **68% margin** (good, but room for more)\n\n**Recommendation:** Raise to $44. "Moon Phase" as a keyword has 28k monthly searches on Etsy — demand is high enough to support the increase.\n\n**Photo Tip:** A flat-lay with dried flowers and candles could position this in the $50+ tier.`,
+    "Moonstone Ring Set": `**AI Price Analysis: Moonstone Ring Set**\n\n⚠️ **Underpriced for its category**\n\n**Market Position:** Ring *sets* with genuine moonstone average $75-120 on Etsy. At $65 you're undercutting yourself.\n\n**Margin Analysis:** Cost $18, Price $65 = **72% margin** — but stackable ring sets can command more.\n\n**Recommendation:** Raise to $78. Position as "Stackable Boho Ring Set" — that keyword has premium buyer intent. You're leaving ~$13/sale on the table.\n\n**Opportunity:** Create a "deluxe" version at $95 with a ring dish gift box.`,
+  };
+
+  function getAI(product) {
+    const key = Object.keys(aiAnalyses).find(k => product.name.includes(k.split(" ")[0]));
+    setAiResponse(aiAnalyses[key] || `**AI Price Analysis: ${product.name}**\n\n✅ Your pricing looks competitive.\n\n**Cost:** $${product.cost} | **Price:** $${product.price} | **Margin:** ${Math.round((1-product.cost/product.price)*100)}%\n\nFor this category on Etsy, $${product.price} is within the normal range of $${Math.round(product.price*0.85)}–$${Math.round(product.price*1.25)}. Consider testing a 10% price increase with updated photos to see if conversion holds.`);
+  }
+
+  function addProduct() {
+    setProducts([...products, { id:products.length+1, ...newProduct, cost:parseFloat(newProduct.cost)||0, price:parseFloat(newProduct.price)||0 }]);
+    setShowAdd(false);
+    setNewProduct({ name:"", category:"Bracelet", color:"", material:"", style:"Witchy", cost:"", price:"", description:"" });
+  }
+
+  const colorClass = c => ({Purple:"bg-purple-700/30 text-purple-300",Black:"bg-gray-700/30 text-gray-300",Silver:"bg-slate-600/30 text-slate-300",Gold:"bg-amber-700/30 text-amber-300",Multi:"bg-pink-700/30 text-pink-300"}[c] || "bg-violet-700/30 text-violet-300");
+  const styleClass = s => ({Witchy:"bg-purple-900/50 text-purple-300 border border-purple-700/40",Celestial:"bg-blue-900/50 text-blue-300 border border-blue-700/40",Gothic:"bg-gray-900/50 text-gray-300 border border-gray-700/40",Boho:"bg-orange-900/50 text-orange-300 border border-orange-700/40"}[s] || "bg-violet-900/50 text-violet-300 border border-violet-700/40");
+
+  return (
+    <div className="animate-fade">
+      <div className="flex justify-between items-center mb-5 flex-wrap gap-3">
+        <div className="flex gap-2">
+          <button onClick={() => setShowTrend(true)} className="btn-purple px-4 py-2 rounded-lg text-sm font-bold">🔥 What's Trending</button>
+        </div>
+        <button onClick={() => setShowAdd(true)} className="btn-gold px-4 py-2 rounded-lg text-sm">+ Add Product</button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {products.map(p => {
+          const margin = Math.round((1 - p.cost/p.price)*100);
+          return (
+            <div key={p.id} className="product-card rounded-xl p-4">
+              <div className="flex justify-between items-start mb-2">
+                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${colorClass(p.color)}`}>{p.color}</span>
+                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${styleClass(p.style)}`}>{p.style}</span>
+              </div>
+              <h4 className="text-white font-bold text-sm mb-1 leading-tight">{p.name}</h4>
+              <div className="text-violet-400 text-xs mb-3">{p.category} · {p.material.split(",")[0]}</div>
+              <div className="grid grid-cols-3 gap-2 mb-3 text-center">
+                <div>
+                  <div className="text-violet-400 text-xs">Cost</div>
+                  <div className="text-violet-200 text-sm font-medium">${p.cost}</div>
+                </div>
+                <div>
+                  <div className="text-violet-400 text-xs">Price</div>
+                  <div className="text-amber-400 text-sm font-bold">${p.price}</div>
+                </div>
+                <div>
+                  <div className="text-violet-400 text-xs">Margin</div>
+                  <div className={`text-sm font-bold ${margin>70?"text-green-400":margin>50?"text-amber-400":"text-red-400"}`}>{margin}%</div>
+                </div>
+              </div>
+              <button onClick={() => getAI(p)} className="w-full py-1.5 rounded-lg text-xs font-bold border border-amber-700/50 text-amber-400 hover:bg-amber-900/20 transition-colors">🤖 AI Price Analysis</button>
+            </div>
+          );
+        })}
+      </div>
+
+      <Modal open={!!aiResponse} onClose={() => setAiResponse(null)} title="AI Price Analysis" wide>
+        <div className="text-violet-200 text-sm leading-relaxed whitespace-pre-line">{aiResponse}</div>
+      </Modal>
+
+      <Modal open={showTrend} onClose={() => setShowTrend(false)} title="🔥 What's Trending" wide>
+        <div className="text-violet-200 text-sm leading-relaxed whitespace-pre-line">{trendText}</div>
+      </Modal>
+
+      <Modal open={showAdd} onClose={() => setShowAdd(false)} title="Add New Product" wide>
+        <div className="grid grid-cols-2 gap-x-4">
+          <div className="col-span-2"><FormField label="Product Name" value={newProduct.name} onChange={v => setNewProduct({...newProduct,name:v})} placeholder="Moon Phase Necklace" /></div>
+          <FormField label="Category" type="select" value={newProduct.category} onChange={v => setNewProduct({...newProduct,category:v})} options={["Bracelet","Necklace","Earrings","Ring","Set"]} />
+          <FormField label="Design Style" type="select" value={newProduct.style} onChange={v => setNewProduct({...newProduct,style:v})} options={["Witchy","Celestial","Gothic","Boho"]} />
+          <FormField label="Color" value={newProduct.color} onChange={v => setNewProduct({...newProduct,color:v})} placeholder="Purple" />
+          <FormField label="Materials" value={newProduct.material} onChange={v => setNewProduct({...newProduct,material:v})} placeholder="Amethyst, Sterling Silver" />
+          <FormField label="Cost ($)" type="number" value={newProduct.cost} onChange={v => setNewProduct({...newProduct,cost:v})} placeholder="8.50" />
+          <FormField label="Price ($)" type="number" value={newProduct.price} onChange={v => setNewProduct({...newProduct,price:v})} placeholder="48.00" />
+          <div className="col-span-2"><FormField label="Description" type="textarea" value={newProduct.description} onChange={v => setNewProduct({...newProduct,description:v})} placeholder="Describe this piece…" /></div>
+        </div>
+        <div className="flex gap-3">
+          <button onClick={() => setShowAdd(false)} className="flex-1 py-2 rounded-lg text-violet-300 border border-violet-700 text-sm">Cancel</button>
+          <button onClick={addProduct} className="flex-1 btn-purple py-2 rounded-lg font-bold">Add Product</button>
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+// ── Intelligence Page ─────────────────────────────────────────────────────────
+function Intelligence() {
+  const [showReport, setShowReport] = useState(false);
+
+  const leaderboard = [
+    { rank:1, name:"Purple Amethyst Bracelet", revenue:1248, units:26, margin:82, velocity:"4.2/wk", badge:"hot" },
+    { rank:2, name:"Moon Phase Necklace", revenue:874, units:23, margin:68, velocity:"3.1/wk", badge:"hot" },
+    { rank:3, name:"Celestial Charm Bracelet", revenue:756, units:18, margin:79, velocity:"2.4/wk", badge:"active" },
+    { rank:4, name:"Black Crystal Choker", revenue:660, units:12, margin:80, velocity:"1.8/wk", badge:"active" },
+    { rank:5, name:"Moonstone Ring Set", revenue:585, units:9, margin:72, velocity:"1.2/wk", badge:"active" },
+    { rank:6, name:"Raven Feather Earrings", revenue:480, units:15, margin:78, velocity:"1.9/wk", badge:"active" },
+    { rank:7, name:"Gothic Lace Bracelet", revenue:396, units:9, margin:86, velocity:"1.0/wk", badge:null },
+    { rank:8, name:"Boho Stacking Set", revenue:320, units:8, margin:75, velocity:"0.9/wk", badge:null },
+  ];
+
+  const colorData = [
+    { name:"Purple", units:45 }, { name:"Black", units:32 }, { name:"Silver", units:28 }, { name:"Multi", units:21 }, { name:"Gold", units:18 }
+  ];
+
+  const materialData = [
+    { name:"Amethyst", units:38 }, { name:"Sterling Silver", units:31 }, { name:"Crystal", units:27 }, { name:"Moonstone", units:19 }
+  ];
+
+  const dayData = [
+    { day:"Mon", sales:8 }, { day:"Tue", sales:11 }, { day:"Wed", sales:18 }, { day:"Thu", sales:13 },
+    { day:"Fri", sales:15 }, { day:"Sat", sales:34 }, { day:"Sun", sales:9 }
+  ];
+
+  const styleData = [
+    { name:"Witchy", value:35 }, { name:"Celestial", value:28 }, { name:"Boho", value:22 }, { name:"Gothic", value:15 }
+  ];
+
+  const STYLE_COLORS = ["#a855f7","#3b82f6","#f97316","#6b7280"];
+
+  const platformData = [
+    { name:"Etsy", value:5470 }, { name:"Market", value:2550 }, { name:"Marketplace", value:1210 }
+  ];
+
+  return (
+    <div className="space-y-6 animate-fade">
+      <div className="flex justify-between items-center">
+        <h2 className="text-white font-bold text-lg">Analytics Intelligence</h2>
+        <button onClick={() => setShowReport(true)} className="btn-gold px-4 py-2 rounded-lg text-sm font-bold">🤖 AI Intelligence Report</button>
+      </div>
+
+      {/* Leaderboard */}
+      <div className="card-glass rounded-xl p-5">
+        <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">Product Leaderboard</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[600px]">
+            <thead>
+              <tr className="border-b border-violet-800/40">
+                {["Rank","Product","Revenue","Units","Margin","Velocity",""].map(h => (
+                  <th key={h} className="text-left text-violet-400 text-xs uppercase tracking-wide px-3 py-2">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {leaderboard.map((p, i) => (
+                <tr key={p.rank} className={`border-b border-violet-900/30 ${i%2===0?"":"bg-violet-950/20"}`}>
+                  <td className="px-3 py-3">
+                    {p.rank === 1 ? <span className="text-xl">👑</span> : <span className="text-violet-400 text-sm font-bold">#{p.rank}</span>}
+                  </td>
+                  <td className="px-3 py-3 text-white text-sm font-medium">{p.name}</td>
+                  <td className="px-3 py-3 text-amber-400 font-bold text-sm">${p.revenue}</td>
+                  <td className="px-3 py-3 text-violet-300 text-sm">{p.units}</td>
+                  <td className="px-3 py-3">
+                    <span className={`text-sm font-bold ${p.margin>80?"text-green-400":"text-amber-400"}`}>{p.margin}%</span>
+                  </td>
+                  <td className="px-3 py-3 text-violet-300 text-sm">{p.velocity}</td>
+                  <td className="px-3 py-3">
+                    {p.badge === "hot" && <span className="text-xs bg-red-900/40 text-red-300 border border-red-700/40 px-2 py-0.5 rounded-full">🔥 Hot</span>}
+                    {p.badge === "active" && <span className="text-xs bg-blue-900/40 text-blue-300 border border-blue-700/40 px-2 py-0.5 rounded-full">⚡ Active</span>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Color Performance */}
+        <div className="card-glass rounded-xl p-5">
+          <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">Color Performance (Units Sold)</h3>
+          <div className="space-y-3">
+            {colorData.map(c => (
+              <div key={c.name} className="flex items-center gap-3">
+                <div className="text-violet-300 text-sm w-16">{c.name}</div>
+                <div className="progress-bar flex-1 h-6">
+                  <div className="progress-fill h-full flex items-center px-2" style={{width:`${(c.units/45)*100}%`}}>
+                    <span className="text-white text-xs font-bold">{c.units}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Material Performance */}
+        <div className="card-glass rounded-xl p-5">
+          <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">Material Performance (Units Sold)</h3>
+          <div className="space-y-3">
+            {materialData.map(m => (
+              <div key={m.name} className="flex items-center gap-3">
+                <div className="text-violet-300 text-sm w-28">{m.name}</div>
+                <div className="progress-bar flex-1 h-6">
+                  <div className="h-full flex items-center px-2 rounded" style={{width:`${(m.units/38)*100}%`, background:"linear-gradient(90deg,#f59e0b,#fbbf24)"}}>
+                    <span className="text-gray-900 text-xs font-bold">{m.units}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Day of Week */}
+        <div className="card-glass rounded-xl p-5">
+          <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">Sales by Day of Week</h3>
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={dayData} margin={{ top:5, right:10, left:0, bottom:5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(124,58,237,0.15)" />
+              <XAxis dataKey="day" tick={{ fill:"#c4b5fd", fontSize:12 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill:"#c4b5fd", fontSize:11 }} axisLine={false} tickLine={false} />
+              <Tooltip contentStyle={{ background:"#1a0a2e", border:"1px solid #7c3aed", borderRadius:8, color:"#e9d5ff" }} />
+              <Bar dataKey="sales" fill="#a855f7" radius={[4,4,0,0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Design Style Pie */}
+        <div className="card-glass rounded-xl p-5">
+          <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">Design Style Breakdown</h3>
+          <ResponsiveContainer width="100%" height={180}>
+            <PieChart>
+              <Pie data={styleData} cx="50%" cy="50%" innerRadius={45} outerRadius={75} paddingAngle={3} dataKey="value" label={({name, value}) => `${name} ${value}%`} labelLine={false}>
+                {styleData.map((_, i) => <Cell key={i} fill={STYLE_COLORS[i]} />)}
+              </Pie>
+              <Tooltip contentStyle={{ background:"#1a0a2e", border:"1px solid #7c3aed", borderRadius:8, color:"#e9d5ff" }} formatter={(v) => `${v}%`} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Platform Bars */}
+      <div className="card-glass rounded-xl p-5">
+        <h3 className="text-amber-400 font-bold text-sm uppercase tracking-wide mb-4">Platform Revenue Breakdown</h3>
+        <div className="space-y-3">
+          {[{name:"Etsy",v:5470,color:"#e47911"},{name:"South Lyon Market",v:2550,color:"#7c3aed"},{name:"Facebook Marketplace",v:1210,color:"#2563eb"}].map(p => (
+            <div key={p.name} className="flex items-center gap-4">
+              <div className="text-violet-300 text-sm w-36">{p.name}</div>
+              <div className="progress-bar flex-1 h-7">
+                <div className="h-full flex items-center px-3 rounded" style={{width:`${(p.v/5470)*100}%`, background:p.color}}>
+                  <span className="text-white text-xs font-bold">${p.v.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Modal open={showReport} onClose={() => setShowReport(false)} title="🤖 AI Intelligence Report" wide>
+        <div className="text-violet-200 text-sm leading-relaxed whitespace-pre-line">{AI_REPORT}</div>
+      </Modal>
+    </div>
+  );
+}
+
+// ── AI Assistant Page ─────────────────────────────────────────────────────────
+function AIAssistant() {
+  const [messages, setMessages] = useState([
+    { role:"ai", text:"Hey Raven! 🌙 I'm your AI business assistant. I know your shop, your products, your customers, and your goals. Ask me anything — or tap one of the quick prompts below to get started!" },
+    { role:"user", text:"What were my top sellers last month?" },
+    { role:"ai", text:"In May 2026, your top sellers were:\n\n1. 🥇 Purple Amethyst Bracelet — 8 units, $384\n2. 🥈 Moon Phase Necklace — 6 units, $228\n3. 🥉 Moonstone Ring Set — 3 units, $195\n\nEtsy drove the most volume (58%). Your Saturday market on May 31 was your single best sales day of the month — $180 in one day! Consider adding more beaded bracelets to your market display since they sold out fastest." },
+    { role:"user", text:"How can I grow my Etsy shop?" },
+    { role:"ai", text:"Great question! Here are your top 3 Etsy growth levers right now:\n\n🔍 **SEO:** Add 'healing crystal bracelet' and 'witchy jewelry gift' to your titles — both have 20k+ monthly searches with moderate competition.\n\n📸 **Photos:** Your Black Crystal Choker listing has the lowest click-through. A lifestyle shot (worn on a dark sweater, dramatic lighting) could 2-3x saves.\n\n⭐ **Reviews:** You have 47 sales in 2026 but only 12 reviews. After each sale, send a personal follow-up note — review rates jump from ~8% to ~35% with just one friendly message.\n\nWant me to write that follow-up message for you?" },
+  ]);
+  const [input, setInput] = useState("");
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior:"smooth" });
+  }, [messages]);
+
+  function sendMessage(text) {
+    const q = text || input;
+    if (!q.trim()) return;
+    setMessages(m => [...m, { role:"user", text:q }]);
+    setInput("");
+    const prompt = QUICK_PROMPTS.find(p => p.label === q);
+    setTimeout(() => {
+      setMessages(m => [...m, { role:"ai", text: prompt ? prompt.answer : `I'm analyzing your question: "${q}"\n\nBased on your shop data at ravensbaublesngifts, here's what I found:\n\nYour business is performing well overall with $18,420 YTD revenue. The Purple Amethyst Bracelet continues to be your top performer. Would you like me to dive deeper into any specific area — pricing, marketing, inventory, or customer strategy?` }]);
+    }, 700);
+  }
+
+  return (
+    <div className="animate-fade flex flex-col h-full" style={{height:"calc(100vh - 140px)"}}>
+      <div className="flex-1 overflow-y-auto space-y-4 mb-4 min-h-0" style={{maxHeight:"calc(100vh - 340px)"}}>
+        {messages.map((m, i) => (
+          <div key={i} className={`flex ${m.role==="user"?"justify-end":"justify-start"} animate-fade`}>
+            <div className={`max-w-lg px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${m.role==="ai" ? "chat-bubble-ai text-violet-100" : "chat-bubble-user text-amber-100"}`}>
+              {m.role==="ai" && <div className="text-amber-400 text-xs font-bold mb-1">Raven's AI ✨</div>}
+              {m.text}
+            </div>
+          </div>
+        ))}
+        <div ref={bottomRef} />
+      </div>
+
+      <div className="card-glass rounded-xl p-4 flex-shrink-0">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-4">
+          {QUICK_PROMPTS.map(p => (
+            <button key={p.label} onClick={() => sendMessage(p.label)} className="text-left text-xs px-3 py-2 rounded-lg border border-violet-700/50 text-violet-300 hover:bg-violet-900/30 hover:text-white hover:border-violet-500 transition-all leading-tight">
+              {p.label}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            className="flex-1 rounded-lg px-4 py-2 text-sm"
+            placeholder="Ask anything about your shop…"
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && sendMessage()}
+          />
+          <button onClick={() => sendMessage()} className="btn-purple px-5 py-2 rounded-lg font-bold text-sm">Send</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── App Shell ──────────────────────────────────────────────────────────────────
+const TABS = [
+  { id:"dashboard", label:"Dashboard", icon:"🏠" },
+  { id:"clients", label:"Clients", icon:"👥" },
+  { id:"sales", label:"Sales Log", icon:"🛒" },
+  { id:"revenue", label:"Revenue", icon:"📈" },
+  { id:"products", label:"Products", icon:"💎" },
+  { id:"intelligence", label:"Intelligence", icon:"🔮" },
+  { id:"ai", label:"AI Assistant", icon:"🤖" },
+];
+
+function App() {
+  const [tab, setTab] = useState("dashboard");
+
+  const page = {
+    dashboard: <Dashboard />,
+    clients: <Clients />,
+    sales: <SalesLog />,
+    revenue: <Revenue />,
+    products: <Products />,
+    intelligence: <Intelligence />,
+    ai: <AIAssistant />,
+  }[tab];
+
+  return (
+    <div className="flex min-h-screen" style={{background:"#0d0520"}}>
+      {/* Sidebar */}
+      <div className="sidebar-gradient w-56 flex-shrink-0 border-r border-violet-900/40 flex flex-col hidden lg:flex">
+        <div className="p-5 border-b border-violet-900/40">
+          <div className="gem-logo text-xl font-black leading-tight">Raven's</div>
+          <div className="gem-logo text-xl font-black leading-tight">Business Hub</div>
+          <div className="text-violet-500 text-xs mt-1">ravensbaublesngifts</div>
+        </div>
+        <nav className="flex-1 p-3 space-y-1 mt-2">
+          {TABS.map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${tab===t.id ? "tab-active" : "tab-inactive"}`}>
+              <span className="text-base">{t.icon}</span>
+              {t.label}
+            </button>
+          ))}
+        </nav>
+        <div className="p-4 border-t border-violet-900/40">
+          <div className="text-violet-500 text-xs text-center">✨ Made for Raven</div>
+        </div>
+      </div>
+
+      {/* Main */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Top bar */}
+        <div className="border-b border-violet-900/40 px-4 lg:px-6 py-3 flex items-center justify-between flex-shrink-0" style={{background:"rgba(26,10,46,0.6)"}}>
+          <div className="lg:hidden">
+            <div className="gem-logo text-lg font-black">Raven's Hub</div>
+          </div>
+          <div className="hidden lg:block">
+            <h1 className="text-white font-bold text-lg">{TABS.find(t=>t.id===tab)?.icon} {TABS.find(t=>t.id===tab)?.label}</h1>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="text-right hidden sm:block">
+              <div className="text-amber-400 text-xs font-bold">Today: $127</div>
+              <div className="text-violet-400 text-xs">Jun 2, 2026</div>
+            </div>
+            <div className="w-8 h-8 rounded-full btn-purple flex items-center justify-center text-sm font-bold">R</div>
+          </div>
+        </div>
+
+        {/* Mobile nav */}
+        <div className="lg:hidden flex overflow-x-auto border-b border-violet-900/40 px-2 py-2 gap-1 flex-shrink-0">
+          {TABS.map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)} className={`flex-shrink-0 flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${tab===t.id ? "tab-active" : "tab-inactive"}`}>
+              <span>{t.icon}</span>
+              <span className="text-xs">{t.label.split(" ")[0]}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-4 lg:p-6">
+          {page}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
