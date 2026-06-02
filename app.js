@@ -386,6 +386,7 @@ const NAV_ITEMS = [
   { id:'approval',    label:'Approvals',     icon:'◉' },
   { id:'revenue',     label:'Revenue',       icon:'◎' },
   { id:'ads',         label:'Ads Strategy',  icon:'◐' },
+  { id:'design',      label:'Design Team',   icon:'✦' },
   { id:'postclose',   label:'Post-Close',    icon:'◆' },
   { id:'compliance',  label:'Compliance',    icon:'◇' },
   { id:'settings',    label:'Settings',      icon:'⚙' },
@@ -420,6 +421,7 @@ function switchView(id) {
     id === 'listing'     ? 'Listing Pipeline' :
     id === 'approval'    ? 'Approval Queue' :
     id === 'ads'         ? 'Etsy Ads Strategy Engine' :
+    id === 'design'      ? 'AI Design Team' :
     id === 'postclose'   ? 'Post-Close Conversion Agent' :
     id === 'compliance'  ? 'Compliance & Copyright Center' :
     id === 'settings'    ? 'System Settings' : 'Revenue Tracker';
@@ -427,6 +429,7 @@ function switchView(id) {
   if (id === 'compliance') renderComplianceView();
   if (id === 'settings')   renderSettingsView();
   if (id === 'ads')        renderAdsView();
+  if (id === 'design')     renderDesignView();
 }
 
 function updateSidebarStatus() {
@@ -1513,10 +1516,11 @@ function renderComplianceView() {
 
 /* ─── Image settings panel ─────────────────────────────────────────── */
 function openImageSettings() {
-  openPanel('Image Generator Settings', `
-    ${typeof ImageGen !== 'undefined' ? ImageGen.settingsHTML() : '<p class="text-muted">Image engine loading…</p>'}
+  openPanel('Design Team Settings', `
+    ${typeof DesignTeam !== 'undefined' ? DesignTeam.settingsHTML() : '<p class="text-muted">Design Team loading…</p>'}
     <div class="divider mt-8"></div>
-    <p class="text-muted" style="font-size:.76rem">Requires an OpenAI API key with DALL-E 3 access. Images are generated at $0.04 each (standard quality). Keys are stored locally in your browser only.</p>`);
+    <p class="text-muted" style="font-size:.76rem">5 shot types × 20 listings = 100 images at $0.04 each ($4 total). Keys stored locally in your browser only.</p>
+    <button onclick="switchView('design');closePanel();" style="margin-top:12px;background:var(--accent);color:#000;border:none;border-radius:7px;padding:9px 16px;cursor:pointer;font-size:.84rem;font-weight:700;width:100%;">Open Design Team →</button>`);
 }
 
 /* ─── Setup config helpers ─────────────────────────────────────────── */
@@ -1754,6 +1758,17 @@ function exportConfig() {
   a.download = `agent-atlas-backup-${Date.now()}.json`;
   a.click();
   toast('Config exported.', 'success');
+}
+
+/* ─── Design Team view ─────────────────────────────────────────────── */
+function renderDesignView() {
+  const view = document.getElementById('design-view');
+  if (!view) return;
+  if (typeof DesignTeam === 'undefined') {
+    view.innerHTML = '<p class="text-muted">Design Team loading…</p>';
+    return;
+  }
+  view.innerHTML = DesignTeam.designViewHTML();
 }
 
 /* ─── Ads Strategy Engine ──────────────────────────────────────────── */
