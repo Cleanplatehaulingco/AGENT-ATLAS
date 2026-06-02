@@ -383,8 +383,20 @@ var Compliance = (function () {
     var blockers = [];
     var warnings = [];
 
-    // Run full listing compliance check
-    var check = checkListing(listing);
+    // Hydrate title and description from ETSY_COPY if not on listing object
+    var hydratedListing = listing ? Object.assign({}, listing) : {};
+    if ((!hydratedListing.title || !hydratedListing.title.trim()) && listing && listing.id) {
+      if (typeof ETSY_COPY !== 'undefined' && ETSY_COPY[listing.id]) {
+        hydratedListing.title       = ETSY_COPY[listing.id].title       || hydratedListing.name || '';
+        hydratedListing.description = ETSY_COPY[listing.id].desc        || hydratedListing.description || '';
+        hydratedListing.tags        = ETSY_COPY[listing.id].tags        || hydratedListing.tags || '';
+      } else {
+        hydratedListing.title = hydratedListing.name || '';
+      }
+    }
+
+    // Run full listing compliance check using hydrated listing
+    var check = checkListing(hydratedListing);
     for (var i = 0; i < check.warnings.length; i++) {
       warnings.push(check.warnings[i]);
     }
@@ -393,15 +405,15 @@ var Compliance = (function () {
     var hardBlockerFlags = ["missing_title", "price_below_minimum", "invalid_input"];
     for (var f = 0; f < check.flags.length; f++) {
       if (hardBlockerFlags.indexOf(check.flags[f]) !== -1) {
-        blockers.push("Blocker [" + check.flags[f] + "]: " + check.warnings[f] || check.flags[f]);
+        blockers.push("Blocker [" + check.flags[f] + "]: " + (check.warnings[f] || check.flags[f]));
       }
     }
 
     // Ensure disclaimer present when description touches regulated territory
     if (
-      _descriptionNeedsDisclaimer(listing && listing.description) &&
-      typeof listing.description === "string" &&
-      listing.description.toLowerCase().indexOf("disclaimer") === -1
+      _descriptionNeedsDisclaimer(hydratedListing.description) &&
+      typeof hydratedListing.description === "string" &&
+      hydratedListing.description.toLowerCase().indexOf("disclaimer") === -1
     ) {
       blockers.push(
         "Listing description covers a regulated topic but contains no disclaimer. " +
