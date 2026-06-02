@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { anthropic, BUSINESS_CONTEXT } from '@/lib/anthropic';
+import { chat, type Message } from '@/lib/ai';
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,17 +8,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'messages array required' }, { status: 400 });
     }
 
-    const filtered = messages.filter((m: { role: string; content: string }) => m.role === 'user' || m.role === 'assistant');
+    const filtered: Message[] = messages.filter(
+      (m: Message) => m.role === 'user' || m.role === 'assistant'
+    );
 
-    const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1024,
-      system: BUSINESS_CONTEXT,
-      messages: filtered,
-    });
-
-    const text = response.content[0]?.type === 'text' ? response.content[0].text : '';
-    return NextResponse.json({ response: text });
+    const response = await chat(filtered);
+    return NextResponse.json({ response });
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : String(e);
     return NextResponse.json({ error: message }, { status: 500 });

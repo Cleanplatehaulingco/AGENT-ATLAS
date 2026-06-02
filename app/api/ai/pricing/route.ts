@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { anthropic, BUSINESS_CONTEXT } from '@/lib/anthropic';
+import { ask } from '@/lib/ai';
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,15 +24,8 @@ Please provide:
 
 Be specific with dollar amounts. Consider craft market expectations and competition.`;
 
-    const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1200,
-      system: BUSINESS_CONTEXT,
-      messages: [{ role: 'user', content: prompt }],
-    });
-
-    const text = response.content[0]?.type === 'text' ? response.content[0].text : '';
-    return NextResponse.json({ analysis: text });
+    const analysis = await ask(prompt);
+    return NextResponse.json({ analysis });
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : String(e);
     return NextResponse.json({ error: message }, { status: 500 });
@@ -41,17 +34,10 @@ Be specific with dollar amounts. Consider craft market expectations and competit
 
 export async function GET() {
   try {
-    const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 800,
-      system: BUSINESS_CONTEXT,
-      messages: [{
-        role: 'user',
-        content: `What handmade jewelry and gift products are trending right now for Etsy sellers and farmers market vendors? Give me 5-7 specific trending items with brief explanations of why they're popular and tips for making/selling them. Format as a clear list.`,
-      }],
-    });
-    const text = response.content[0]?.type === 'text' ? response.content[0].text : '';
-    return NextResponse.json({ trends: text });
+    const trends = await ask(
+      `What handmade jewelry and gift products are trending right now for Etsy sellers and farmers market vendors? Give me 5-7 specific trending items with brief explanations of why they're popular and tips for making/selling them. Format as a clear list.`
+    );
+    return NextResponse.json({ trends });
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : String(e);
     return NextResponse.json({ error: message }, { status: 500 });
