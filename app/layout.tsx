@@ -2,15 +2,15 @@
 
 import './globals.css';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 import AIChat from '@/components/AIChat';
+import SessionProvider from '@/components/SessionProvider';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useState(false);
+  const pathname = usePathname();
+  const isLoginPage = pathname === '/login';
 
   useEffect(() => {
     const stored = localStorage.getItem('theme');
@@ -34,15 +34,21 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <div className="flex h-screen overflow-hidden">
-          <Sidebar dark={dark} onToggleDark={() => setDark(d => !d)} />
-          <main className="flex-1 overflow-y-auto bg-[#fdf6f0] dark:bg-[#1e0f1e]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-              {children}
+        <SessionProvider>
+          {isLoginPage ? (
+            children
+          ) : (
+            <div className="flex h-screen overflow-hidden">
+              <Sidebar dark={dark} onToggleDark={() => setDark(d => !d)} />
+              <main className="flex-1 overflow-y-auto bg-[#fdf6f0] dark:bg-[#1e0f1e]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  {children}
+                </div>
+              </main>
             </div>
-          </main>
-        </div>
-        <AIChat />
+          )}
+          {!isLoginPage && <AIChat />}
+        </SessionProvider>
       </body>
     </html>
   );

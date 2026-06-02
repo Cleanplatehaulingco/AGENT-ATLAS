@@ -15,8 +15,10 @@ import {
   Menu,
   X,
   BarChart3,
+  LogOut,
 } from 'lucide-react';
 import { useState } from 'react';
+import { signOut } from 'next-auth/react';
 import { cn } from '@/lib/utils';
 
 const NAV_ITEMS = [
@@ -74,14 +76,21 @@ export default function Sidebar({ dark, onToggleDark }: SidebarProps) {
         })}
       </nav>
 
-      {/* Dark mode toggle */}
-      <div className="px-4 py-4 border-t border-warm-100 dark:border-warm-900/50">
+      {/* Dark mode + sign out */}
+      <div className="px-4 py-4 border-t border-warm-100 dark:border-warm-900/50 space-y-2">
         <button
           onClick={onToggleDark}
-          className="flex items-center gap-2 text-sm text-warm-600 dark:text-warm-400 hover:text-warm-900 dark:hover:text-warm-100 transition-colors"
+          className="flex items-center gap-2 text-sm text-warm-600 dark:text-warm-400 hover:text-warm-900 dark:hover:text-warm-100 transition-colors w-full"
         >
           {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           {dark ? 'Light Mode' : 'Dark Mode'}
+        </button>
+        <button
+          onClick={() => signOut({ callbackUrl: '/login' })}
+          className="flex items-center gap-2 text-sm text-warm-500 dark:text-warm-500 hover:text-red-500 dark:hover:text-red-400 transition-colors w-full"
+        >
+          <LogOut className="w-4 h-4" />
+          Sign Out
         </button>
       </div>
     </>
