@@ -385,6 +385,7 @@ const NAV_ITEMS = [
   { id:'listing',     label:'Listings',      icon:'▦' },
   { id:'approval',    label:'Approvals',     icon:'◉' },
   { id:'revenue',     label:'Revenue',       icon:'◎' },
+  { id:'ads',         label:'Ads Strategy',  icon:'◐' },
   { id:'postclose',   label:'Post-Close',    icon:'◆' },
   { id:'compliance',  label:'Compliance',    icon:'◇' },
   { id:'settings',    label:'Settings',      icon:'⚙' },
@@ -418,12 +419,14 @@ function switchView(id) {
     id === 'opportunity' ? 'Opportunity Backlog' :
     id === 'listing'     ? 'Listing Pipeline' :
     id === 'approval'    ? 'Approval Queue' :
+    id === 'ads'         ? 'Etsy Ads Strategy Engine' :
     id === 'postclose'   ? 'Post-Close Conversion Agent' :
     id === 'compliance'  ? 'Compliance & Copyright Center' :
     id === 'settings'    ? 'System Settings' : 'Revenue Tracker';
   if (id === 'postclose')  renderPostClose();
   if (id === 'compliance') renderComplianceView();
   if (id === 'settings')   renderSettingsView();
+  if (id === 'ads')        renderAdsView();
 }
 
 function updateSidebarStatus() {
@@ -1735,6 +1738,182 @@ function exportConfig() {
   a.download = `agent-atlas-backup-${Date.now()}.json`;
   a.click();
   toast('Config exported.', 'success');
+}
+
+/* ─── Ads Strategy Engine ──────────────────────────────────────────── */
+const ADS_KEY = 'atlasAds';
+function loadAds() {
+  try { return JSON.parse(localStorage.getItem(ADS_KEY) || '{}'); } catch { return {}; }
+}
+function saveAds(patch) {
+  const d = { ...loadAds(), ...patch };
+  localStorage.setItem(ADS_KEY, JSON.stringify(d));
+  return d;
+}
+
+// Per-listing ad recommendation based on price, category, CVR
+function adsRecommendation(listing) {
+  const price = listing.price || 0;
+  const cvr   = listing.cvr   || 0;
+  const live  = listing.status === 'live';
+  if (!live) return { run: false, reason: 'Not live yet — publish first' };
+  if (cvr >= 3.0) return { run: true,  priority: 'high',   bid: 0.35, reason: `CVR ${cvr}% is above average — strong candidate for ads` };
+  if (cvr >= 1.5) return { run: true,  priority: 'medium', bid: 0.25, reason: `CVR ${cvr}% is acceptable — test at low bid` };
+  if (cvr === 0)  return { run: true,  priority: 'test',   bid: 0.20, reason: 'No data yet — run at minimum bid to gather impressions' };
+  return         { run: false, priority: 'pause', bid: 0,    reason: `CVR ${cvr}% is below break-even — pause and fix title/images first` };
+}
+
+function adsROAS(dailyBudget, avgPrice, cvr) {
+  // Etsy avg CPC ~$0.25-0.40; estimate clicks per dollar
+  const cpc        = 0.30;
+  const clicks     = dailyBudget / cpc;
+  const sales      = clicks * (cvr / 100);
+  const revenue    = sales * avgPrice;
+  const roas       = dailyBudget > 0 ? revenue / dailyBudget : 0;
+  return { clicks: Math.round(clicks), sales: +sales.toFixed(2), revenue: +revenue.toFixed(2), roas: +roas.toFixed(2) };
+}
+
+function renderAdsView() {
+  const view = document.getElementById('ads-view');
+  if (!view) return;
+  const ads  = loadAds();
+  const daily = ads.dailyBudget || 5;
+  const live  = state.listings.filter(l => l.status === 'live');
+  const avgPrice = live.length ? live.reduce((s,l) => s + l.price, 0) / live.length : 8;
+  const avgCVR   = live.length ? live.reduce((s,l) => s + (l.cvr||0), 0) / live.length : 2.5;
+  const proj     = adsROAS(daily, avgPrice, avgCVR);
+  const proj10   = adsROAS(10,    avgPrice, avgCVR);
+  const proj20   = adsROAS(20,    avgPrice, avgCVR);
+
+  const phaseRows = [
+    { phase:'Week 1–2', budget:'$3–5/day', goal:'Gather impression & click data', action:'Run all live listings at $0.20 min bid. DO NOT optimize yet — just collect data.' },
+    { phase:'Week 3',   budget:'$5–8/day', goal:'Double down on winners',          action:'Raise bids to $0.30–0.35 on listings with CVR ≥ 2%. Pause listings with 0 clicks after 200 impressions.' },
+    { phase:'Week 4+',  budget:'$8–15/day',goal:'Scale what converts',             action:'Increase budget 20% per week on listings with ROAS > 2×. Kill anything below 1× after 2 weeks.' },
+  ];
+
+  const listingRows = state.listings.map(l => {
+    const rec = adsRecommendation(l);
+    const priorityColor = rec.priority === 'high' ? 'var(--success)' : rec.priority === 'medium' ? 'var(--accent2)' : rec.priority === 'test' ? 'var(--warn)' : 'var(--muted)';
+    return `
+      <tr>
+        <td><span style="font-size:.8rem;font-weight:600;">${l.name}</span></td>
+        <td style="text-align:center;">$${l.price}</td>
+        <td style="text-align:center;">${l.cvr || 0}%</td>
+        <td style="text-align:center;"><span style="color:${priorityColor};font-weight:700;font-size:.78rem;">${rec.run ? (rec.priority||'run').toUpperCase() : 'PAUSE'}</span></td>
+        <td style="text-align:center;">${rec.bid ? '$'+rec.bid.toFixed(2) : '—'}</td>
+        <td style="font-size:.76rem;color:var(--muted);">${rec.reason}</td>
+      </tr>`;
+  }).join('');
+
+  view.innerHTML = `
+    <div style="max-width:860px;display:flex;flex-direction:column;gap:24px;">
+
+      <!-- Budget calculator -->
+      <div class="card">
+        <div class="card-title">Daily Budget Calculator</div>
+        <div style="display:flex;align-items:center;gap:16px;margin:16px 0 8px;flex-wrap:wrap;">
+          <label style="display:flex;flex-direction:column;gap:5px;font-size:.82rem;color:var(--muted);font-weight:500;">
+            Daily Ad Spend
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="color:var(--text);">$</span>
+              <input id="ads-budget-input" type="number" min="1" max="100" value="${daily}"
+                style="background:var(--panel2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:1rem;padding:8px 10px;width:80px;outline:none;"
+                oninput="saveAds({dailyBudget:+this.value});renderAdsView();">
+              <span style="color:var(--muted);font-size:.8rem;">/ day</span>
+            </div>
+          </label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            ${[3,5,10,20].map(b => `<button onclick="saveAds({dailyBudget:${b}});renderAdsView()" style="background:${daily===b?'var(--accent)':'var(--panel2)'};color:${daily===b?'#000':'var(--text)'};border:1px solid var(--border);border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.82rem;font-weight:600;">$${b}</button>`).join('')}
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;">
+          ${[
+            { label:'Est. Daily Clicks',   val: proj.clicks,             unit:'' },
+            { label:'Est. Daily Sales',    val: proj.sales.toFixed(1),   unit:'' },
+            { label:'Est. Daily Revenue',  val: '$'+proj.revenue.toFixed(2), unit:'' },
+            { label:'ROAS',                val: proj.roas.toFixed(1)+'×', unit:'', color: proj.roas >= 2 ? 'var(--success)' : proj.roas >= 1 ? 'var(--warn)' : 'var(--danger)' },
+          ].map(s => `
+            <div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:14px;">
+              <div style="font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">${s.label}</div>
+              <div style="font-size:1.4rem;font-weight:800;color:${s.color||'var(--text)'};">${s.val}</div>
+            </div>`).join('')}
+        </div>
+        <p style="font-size:.74rem;color:var(--muted);margin:10px 0 0;">Based on avg Etsy CPC $0.30, avg listing price $${avgPrice.toFixed(2)}, avg CVR ${avgCVR.toFixed(1)}%. Estimates only — actual results vary.</p>
+      </div>
+
+      <!-- Budget comparison -->
+      <div class="card">
+        <div class="card-title">Budget Comparison — Monthly Projection</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;">
+          ${[
+            { label:'Starter',  spend:3,  p:adsROAS(3, avgPrice,avgCVR)  },
+            { label:'Growth',   spend:5,  p:adsROAS(5, avgPrice,avgCVR)  },
+            { label:'Aggressive',spend:10, p:adsROAS(10,avgPrice,avgCVR) },
+          ].map(t => {
+            const mo30rev  = t.p.revenue * 30;
+            const mo30cost = t.spend * 30;
+            const profit   = mo30rev - mo30cost;
+            return `
+              <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:18px;">
+                <div style="font-weight:800;font-size:.95rem;color:var(--accent2);margin-bottom:10px;">${t.label}</div>
+                <div style="font-size:.78rem;color:var(--muted);margin-bottom:2px;">$${t.spend}/day spend</div>
+                <div style="font-size:1.1rem;font-weight:700;color:var(--text);">~$${mo30rev.toFixed(0)}/mo revenue</div>
+                <div style="font-size:.82rem;color:${profit>0?'var(--success)':'var(--danger)'};margin-top:4px;">$${profit.toFixed(0)} profit after ad spend</div>
+                <div style="font-size:.76rem;color:var(--muted);margin-top:4px;">${t.p.roas.toFixed(1)}× ROAS</div>
+              </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Phase plan -->
+      <div class="card">
+        <div class="card-title">4-Week Launch Playbook</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
+          ${phaseRows.map((p,i) => `
+            <div style="display:grid;grid-template-columns:90px 90px 1fr;gap:12px;align-items:start;background:var(--panel2);border-radius:8px;padding:14px 16px;">
+              <div>
+                <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Phase</div>
+                <div style="font-weight:700;font-size:.85rem;color:var(--accent2);">${p.phase}</div>
+              </div>
+              <div>
+                <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Budget</div>
+                <div style="font-weight:700;font-size:.85rem;color:var(--text);">${p.budget}</div>
+              </div>
+              <div>
+                <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Action</div>
+                <div style="font-size:.83rem;color:var(--text);line-height:1.5;">${p.action}</div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Per-listing recommendations -->
+      <div class="card">
+        <div class="card-title">Per-Listing Ad Recommendations</div>
+        <div style="overflow-x:auto;margin-top:12px;">
+          <table class="data-table" style="width:100%;">
+            <thead><tr>
+              <th>Listing</th><th>Price</th><th>CVR</th><th>Status</th><th>Bid</th><th>Reason</th>
+            </tr></thead>
+            <tbody>${listingRows}</tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Rules -->
+      <div class="card">
+        <div class="card-title">The 5 Rules of Etsy Ads</div>
+        <ol style="color:var(--muted);font-size:.85rem;line-height:2;padding-left:18px;margin:12px 0;">
+          <li><strong style="color:var(--text);">Never optimize in week 1.</strong> You need at least 500 impressions per listing before any bid changes mean anything.</li>
+          <li><strong style="color:var(--text);">CVR below 1% = fix the listing, not the bid.</strong> Bad photos and weak titles kill CVR — ads amplify the problem, they don't fix it.</li>
+          <li><strong style="color:var(--text);">ROAS below 1.5× = pause and diagnose.</strong> You're burning cash. Fix the listing or kill the ad.</li>
+          <li><strong style="color:var(--text);">Reviews are the real multiplier.</strong> A listing with 10+ reviews converts 2–3× better with the same ad spend. Getting reviews is worth more than doubling your budget.</li>
+          <li><strong style="color:var(--text);">Scale winners only.</strong> When you find a listing with ROAS > 3×, increase budget by 20% every 7 days until it plateaus.</li>
+        </ol>
+      </div>
+
+    </div>
+  `;
 }
 
 function confirmReset() {
