@@ -2,2424 +2,2371 @@
 // No ES modules — plain browser script tag compatible
 // Usage: openTemplate('LS-001') to open in new tab, or generateTemplate('LS-001') to get HTML string
 
+const _CSS = `
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Arial', sans-serif; font-size: 10pt; color: #1a1a1a; background: #f0f0f0; padding: 20px; }
+.page { background: #fff; max-width: 850px; margin: 0 auto; box-shadow: 0 4px 24px rgba(0,0,0,0.18); }
+@media print { body { background: #fff; padding: 0; } .page { box-shadow: none; } .no-print { display: none !important; } }
+.header { background: #1a1a2e; color: #fff; padding: 20px 28px; display: flex; justify-content: space-between; align-items: center; }
+.header .logo-area { display: flex; flex-direction: column; gap: 2px; }
+.header .company-name { font-size: 18pt; font-weight: 900; letter-spacing: -0.5px; color: #fff; text-transform: uppercase; }
+.header .company-tagline { font-size: 8pt; color: #8899cc; letter-spacing: 1px; text-transform: uppercase; }
+.header .form-info { text-align: right; }
+.header .form-title { font-size: 14pt; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; }
+.header .form-id { font-size: 7.5pt; color: #8899cc; margin-top: 3px; letter-spacing: 1px; }
+.accent-bar { height: 4px; background: linear-gradient(90deg, #4f7cff, #2ed88a); }
+.info-strip { background: #f7f8fc; border-bottom: 1px solid #e0e4f0; padding: 12px 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.info-field { display: flex; flex-direction: column; gap: 3px; }
+.info-field label { font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #8899cc; }
+.info-field .field-line { border-bottom: 1.5px solid #ccd0e0; min-height: 20px; padding-bottom: 2px; font-size: 10pt; }
+.body { padding: 20px 28px; }
+.section { margin-bottom: 18px; }
+.section-header { background: #1a1a2e; color: #fff; padding: 6px 12px; font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0; border-radius: 3px 3px 0 0; }
+.section-body { border: 1.5px solid #ccd0e0; border-top: none; border-radius: 0 0 3px 3px; padding: 14px; }
+.field-grid { display: grid; gap: 12px; }
+.field-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.field-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.field-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #556; }
+.field .line { border-bottom: 1.5px solid #ccd0e0; min-height: 22px; }
+.field .box { border: 1.5px solid #ccd0e0; min-height: 64px; border-radius: 3px; }
+.form-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+.form-table th { background: #1a1a2e; color: #fff; padding: 7px 10px; text-align: left; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
+.form-table td { border-bottom: 1px solid #e8eaf0; padding: 8px 10px; min-height: 28px; }
+.form-table tr:nth-child(even) td { background: #f7f8fc; }
+.sig-block { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 16px; padding-top: 16px; border-top: 1.5px solid #ccd0e0; }
+.sig-field { display: flex; flex-direction: column; gap: 4px; }
+.sig-field label { font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #8899cc; }
+.sig-field .sig-line { border-bottom: 2px solid #1a1a2e; min-height: 36px; }
+.footer { background: #f7f8fc; border-top: 1px solid #e0e4f0; padding: 10px 28px; display: flex; justify-content: space-between; align-items: center; font-size: 7.5pt; color: #aab; }
+.footer .disclaimer { font-size: 6.5pt; color: #bbc; max-width: 60%; line-height: 1.4; }
+.checkbox-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 9.5pt; }
+.checkbox-row .cb { width: 14px; height: 14px; border: 1.5px solid #aab; display: inline-block; flex-shrink: 0; }
+.print-btn { display: inline-flex; align-items: center; gap: 8px; margin: 16px 28px; padding: 10px 24px; background: #4f7cff; color: #fff; border: none; border-radius: 6px; font-size: 10pt; font-weight: 700; cursor: pointer; }
+.print-btn:hover { background: #3a6ae8; }
+</style>`;
+
 const TEMPLATES = {
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // LS-001 — HVAC Service Call Notes
-  // ─────────────────────────────────────────────────────────────────────────
   'LS-001': {
     id: 'LS-001',
     title: 'HVAC Service Call Notes',
-    html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HVAC Service Call Notes — LS-001</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 11pt;
-    color: #111;
-    background: #fff;
-    padding: 24px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  .print-btn {
-    display: inline-block;
-    margin-bottom: 18px;
-    padding: 8px 22px;
-    background: #1a56db;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 11pt;
-    cursor: pointer;
-  }
-  .print-btn:hover { background: #1345b7; }
-  @media print { .print-btn { display: none !important; } }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    border-bottom: 2.5px solid #111;
-    padding-bottom: 10px;
-    margin-bottom: 18px;
-  }
-  .company-block .company-name {
-    font-size: 20pt;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: #111;
-    border: 2px dashed #bbb;
-    padding: 4px 12px;
-    display: inline-block;
-    min-width: 220px;
-    min-height: 34px;
-  }
-  .company-block .company-sub {
-    font-size: 8.5pt;
-    color: #555;
-    margin-top: 3px;
-  }
-  .form-title {
-    text-align: right;
-  }
-  .form-title h1 {
-    font-size: 15pt;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .form-title .form-id {
-    font-size: 8.5pt;
-    color: #666;
-    margin-top: 2px;
-  }
-
-  .row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 12px;
-  }
-  .field {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-  .field label {
-    font-size: 8pt;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    color: #444;
-  }
-  .field .line {
-    border-bottom: 1.5px solid #333;
-    min-height: 22px;
-    width: 100%;
-  }
-  .field .line-tall {
-    border: 1.5px solid #333;
-    min-height: 54px;
-    width: 100%;
-    padding: 3px;
-  }
-
-  .section-title {
-    font-size: 9pt;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    background: #f0f0f0;
-    border-left: 3px solid #333;
-    padding: 4px 8px;
-    margin: 16px 0 10px 0;
-  }
-
-  .readings-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-
-  table.parts-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 12px;
-    font-size: 10pt;
-  }
-  table.parts-table th {
-    background: #f0f0f0;
-    border: 1px solid #bbb;
-    padding: 5px 8px;
-    text-align: left;
-    font-size: 8pt;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-  }
-  table.parts-table td {
-    border: 1px solid #bbb;
-    padding: 4px 8px;
-    height: 24px;
-  }
-
-  .sig-row {
-    display: flex;
-    gap: 24px;
-    margin-top: 20px;
-  }
-  .sig-block {
-    flex: 1;
-    border-top: 1.5px solid #333;
-    padding-top: 5px;
-  }
-  .sig-block .sig-label {
-    font-size: 8pt;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    color: #444;
-  }
-  .sig-block .sig-name-line {
-    border-bottom: 1px solid #aaa;
-    margin-top: 28px;
-    min-height: 18px;
-  }
-  .sig-block .sig-sub {
-    font-size: 7.5pt;
-    color: #666;
-    margin-top: 2px;
-  }
-
-  .followup-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .followup-row label { font-size: 9pt; font-weight: 600; }
-  .check-option {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 9.5pt;
-  }
-  .check-box {
-    width: 14px;
-    height: 14px;
-    border: 1.5px solid #333;
-    display: inline-block;
-    flex-shrink: 0;
-  }
-
-  footer {
-    margin-top: 28px;
-    padding-top: 8px;
-    border-top: 1px solid #ccc;
-    text-align: center;
-    font-size: 7.5pt;
-    color: #999;
-  }
-  @media print {
-    body { padding: 16px; }
-    @page { margin: 0.6in; size: letter; }
-  }
-</style>
-</head>
-<body>
-
-<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
-
-<header>
-  <div class="company-block">
-    <div class="company-name">&nbsp;</div>
-    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; License #: _________________</div>
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>HVAC Service Call Notes — LS-001</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Heating · Cooling · Ventilation</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">HVAC Service Call Notes</div>
+      <div class="form-id">FORM LS-001 · REV 1.0</div>
+    </div>
   </div>
-  <div class="form-title">
-    <h1>HVAC Service Call Notes</h1>
-    <div class="form-id">Form LS-001 &nbsp;|&nbsp; Work Order #: _______________</div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Form #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Job #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
   </div>
-</header>
+  <div class="body">
 
-<div class="row">
-  <div class="field">
-    <label>Date</label>
-    <div class="line"></div>
+    <div class="section">
+      <div class="section-header">1 — Equipment Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Customer Name</label><div class="line"></div></div>
+          <div class="field"><label>Service Address</label><div class="line"></div></div>
+          <div class="field"><label>Phone / Contact</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4" style="margin-bottom:12px">
+          <div class="field"><label>Equipment Type</label><div class="line"></div></div>
+          <div class="field"><label>Make / Brand</label><div class="line"></div></div>
+          <div class="field"><label>Model #</label><div class="line"></div></div>
+          <div class="field"><label>Serial #</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Install Year</label><div class="line"></div></div>
+          <div class="field"><label>Filter Size</label><div class="line"></div></div>
+          <div class="field"><label>Refrigerant Type</label><div class="line"></div></div>
+          <div class="field"><label>Warranty Status</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Readings &amp; Diagnostics</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:12px">
+          <div class="field"><label>Supply Temp (°F)</label><div class="line"></div></div>
+          <div class="field"><label>Return Temp (°F)</label><div class="line"></div></div>
+          <div class="field"><label>Delta T</label><div class="line"></div></div>
+          <div class="field"><label>Static Pressure (in. WC)</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4" style="margin-bottom:12px">
+          <div class="field"><label>Suction Pressure (psig)</label><div class="line"></div></div>
+          <div class="field"><label>Discharge Pressure (psig)</label><div class="line"></div></div>
+          <div class="field"><label>Superheat</label><div class="line"></div></div>
+          <div class="field"><label>Subcooling</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Amp Draw (Comp)</label><div class="line"></div></div>
+          <div class="field"><label>Amp Draw (Fan)</label><div class="line"></div></div>
+          <div class="field"><label>Voltage L1-L2</label><div class="line"></div></div>
+          <div class="field"><label>Outdoor Temp (°F)</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Work Performed</div>
+      <div class="section-body">
+        <div style="margin-bottom:10px">
+          <div class="checkbox-row"><span class="cb"></span> Diagnostic / Inspection Only</div>
+          <div class="checkbox-row"><span class="cb"></span> Filter Replacement</div>
+          <div class="checkbox-row"><span class="cb"></span> Refrigerant Added — Amount: __________ lbs</div>
+          <div class="checkbox-row"><span class="cb"></span> Capacitor Replaced</div>
+          <div class="checkbox-row"><span class="cb"></span> Contactor Replaced</div>
+          <div class="checkbox-row"><span class="cb"></span> Coil Cleaned (Evap / Cond)</div>
+          <div class="checkbox-row"><span class="cb"></span> Drain Line Cleared / Treated</div>
+          <div class="checkbox-row"><span class="cb"></span> Thermostat Calibrated / Replaced</div>
+          <div class="checkbox-row"><span class="cb"></span> Blower Motor / Belt Serviced</div>
+          <div class="checkbox-row"><span class="cb"></span> Other — see notes below</div>
+        </div>
+        <div class="field"><label>Work Notes</label><div class="box" style="min-height:70px"></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Parts Used</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>#</th><th>Part Description</th><th>Part Number</th><th>Qty</th><th>Unit Cost</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>4</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td colspan="5" style="text-align:right;font-weight:700;padding-right:14px">Parts Subtotal</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">5 — Follow-Up &amp; Recommendations</div>
+      <div class="section-body">
+        <div class="field-grid cols-2" style="margin-bottom:12px">
+          <div class="field"><label>Recommended Follow-Up Date</label><div class="line"></div></div>
+          <div class="field"><label>Urgency Level</label><div class="line"></div></div>
+        </div>
+        <div class="field"><label>Technician Recommendations</label><div class="box"></div></div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Technician Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / License # / Date</div></div>
+      <div class="sig-field"><label>Customer Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">By signing you confirm work was performed satisfactorily</div></div>
+    </div>
+
   </div>
-  <div class="field">
-    <label>Time of Arrival</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Technician Name</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Tech ID / Badge</label>
-    <div class="line"></div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. This document is a working field form. Retain copy for your records. Not legal advice.</div>
+    <div>LS-001</div>
   </div>
 </div>
-
-<div class="row">
-  <div class="field">
-    <label>Customer Name</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Phone</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field" style="flex:3">
-    <label>Service Address</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Unit / Suite</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Equipment Information</div>
-
-<div class="row">
-  <div class="field">
-    <label>Equipment Type</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Make / Manufacturer</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Model Number</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Serial Number</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Age of Unit (approx.)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Last Service Date</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Filter Size</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Warranty Status</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Issue Reported by Customer</div>
-
-<div class="row">
-  <div class="field">
-    <label>Customer Complaint / Issue Description</label>
-    <div class="line-tall"></div>
-  </div>
-</div>
-
-<div class="section-title">System Readings &amp; Diagnostics</div>
-
-<div class="readings-grid">
-  <div class="field">
-    <label>Supply Air Temp (°F)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Return Air Temp (°F)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Delta T (Supply–Return)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Suction Pressure (PSI)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Discharge Pressure (PSI)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Refrigerant Type</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Refrigerant Added (lbs)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Outdoor Temp (°F)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Static Pressure (in. w.c.)</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Parts Used</div>
-
-<table class="parts-table">
-  <thead>
-    <tr>
-      <th style="width:15%">Part Number</th>
-      <th style="width:40%">Description</th>
-      <th style="width:15%">Qty</th>
-      <th style="width:15%">Unit Cost</th>
-      <th style="width:15%">Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-  </tbody>
-</table>
-
-<div class="section-title">Work Performed</div>
-
-<div class="row">
-  <div class="field">
-    <label>Description of Work Performed</label>
-    <div class="line-tall" style="min-height:70px"></div>
-  </div>
-</div>
-
-<div class="section-title">Follow-Up</div>
-
-<div class="followup-row">
-  <label>Follow-Up Needed?</label>
-  <div class="check-option"><div class="check-box"></div> Yes</div>
-  <div class="check-option"><div class="check-box"></div> No</div>
-  &nbsp;&nbsp;
-  <label>If yes, reason:</label>
-  <div style="flex:1; border-bottom:1.5px solid #333; min-height:22px;"></div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Scheduled Follow-Up Date</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Parts on Order</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Total Labor Hours</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Total Invoice Amount</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="sig-row">
-  <div class="sig-block">
-    <div class="sig-label">Customer Signature</div>
-    <div class="sig-name-line"></div>
-    <div class="sig-sub">By signing, customer acknowledges work has been completed as described above.</div>
-  </div>
-  <div class="sig-block" style="max-width:160px">
-    <div class="sig-label">Date</div>
-    <div class="sig-name-line"></div>
-  </div>
-  <div class="sig-block">
-    <div class="sig-label">Technician Signature</div>
-    <div class="sig-name-line"></div>
-    <div class="sig-sub">Technician certifies all information above is accurate and complete.</div>
-  </div>
-  <div class="sig-block" style="max-width:160px">
-    <div class="sig-label">Date</div>
-    <div class="sig-name-line"></div>
-  </div>
-</div>
-
-<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-001 HVAC Service Call Notes &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
-
-</body>
-</html>`
+</body></html>`
   },
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // LS-002 — Plumbing Dispatch & Diagnosis Checklist
-  // ─────────────────────────────────────────────────────────────────────────
   'LS-002': {
     id: 'LS-002',
     title: 'Plumbing Dispatch & Diagnosis Checklist',
-    html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plumbing Dispatch & Diagnosis — LS-002</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 11pt;
-    color: #111;
-    background: #fff;
-    padding: 24px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  .print-btn {
-    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
-    background: #1a56db; color: #fff; border: none; border-radius: 5px;
-    font-size: 11pt; cursor: pointer;
-  }
-  .print-btn:hover { background: #1345b7; }
-  @media print { .print-btn { display: none !important; } }
-
-  header {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    border-bottom: 2.5px solid #111; padding-bottom: 10px; margin-bottom: 18px;
-  }
-  .company-name {
-    font-size: 20pt; font-weight: 700; border: 2px dashed #bbb;
-    padding: 4px 12px; display: inline-block; min-width: 220px; min-height: 34px;
-  }
-  .company-sub { font-size: 8.5pt; color: #555; margin-top: 3px; }
-  .form-title { text-align: right; }
-  .form-title h1 { font-size: 15pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .form-title .form-id { font-size: 8.5pt; color: #666; margin-top: 2px; }
-
-  .row { display: flex; gap: 16px; margin-bottom: 12px; }
-  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
-  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
-  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
-  .line-tall { border: 1.5px solid #333; min-height: 60px; padding: 3px; }
-
-  .section-title {
-    font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
-    background: #f0f0f0; border-left: 3px solid #333; padding: 4px 8px; margin: 16px 0 10px 0;
-  }
-
-  .checkbox-grid {
-    display: flex; flex-wrap: wrap; gap: 10px 24px; margin-bottom: 12px;
-  }
-  .check-item {
-    display: flex; align-items: center; gap: 7px; font-size: 10pt;
-  }
-  .cb {
-    width: 15px; height: 15px; border: 1.5px solid #333;
-    display: inline-block; flex-shrink: 0; border-radius: 2px;
-  }
-
-  table.mat-table {
-    width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10pt;
-  }
-  table.mat-table th {
-    background: #f0f0f0; border: 1px solid #bbb; padding: 5px 8px;
-    text-align: left; font-size: 8pt; text-transform: uppercase;
-  }
-  table.mat-table td { border: 1px solid #bbb; padding: 4px 8px; height: 24px; }
-
-  .sig-row { display: flex; gap: 24px; margin-top: 20px; }
-  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 5px; }
-  .sig-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
-  .sig-line { border-bottom: 1px solid #aaa; margin-top: 28px; }
-  .sig-sub { font-size: 7.5pt; color: #666; margin-top: 2px; }
-
-  footer {
-    margin-top: 28px; padding-top: 8px; border-top: 1px solid #ccc;
-    text-align: center; font-size: 7.5pt; color: #999;
-  }
-  @media print { body { padding: 16px; } @page { margin: 0.6in; size: letter; } }
-</style>
-</head>
-<body>
-
-<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
-
-<header>
-  <div>
-    <div class="company-name">&nbsp;</div>
-    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; License #: _________________</div>
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Plumbing Dispatch & Diagnosis — LS-002</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Licensed Plumbing Services</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Plumbing Dispatch &amp; Diagnosis</div>
+      <div class="form-id">FORM LS-002 · REV 1.0</div>
+    </div>
   </div>
-  <div class="form-title">
-    <h1>Plumbing Dispatch &amp; Diagnosis</h1>
-    <div class="form-id">Form LS-002 &nbsp;|&nbsp; Dispatch #: _______________</div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Dispatch #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Job #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
   </div>
-</header>
+  <div class="body">
 
-<div class="row">
-  <div class="field">
-    <label>Date</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Call Time</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Dispatcher Name</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Priority</label>
-    <div class="line"></div>
-  </div>
-</div>
+    <div class="section">
+      <div class="section-header">1 — Job Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Customer Name</label><div class="line"></div></div>
+          <div class="field"><label>Service Address</label><div class="line"></div></div>
+          <div class="field"><label>Phone</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Technician</label><div class="line"></div></div>
+          <div class="field"><label>Dispatch Time</label><div class="line"></div></div>
+          <div class="field"><label>Arrival Time</label><div class="line"></div></div>
+          <div class="field"><label>Property Type</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
 
-<div class="row">
-  <div class="field">
-    <label>Technician Assigned</label>
-    <div class="line"></div>
+    <div class="section">
+      <div class="section-header">2 — Problem Description</div>
+      <div class="section-body">
+        <div class="field-grid cols-2" style="margin-bottom:10px">
+          <div class="field"><label>Customer-Reported Issue</label><div class="box" style="min-height:52px"></div></div>
+          <div class="field"><label>Location of Problem in Property</label><div class="box" style="min-height:52px"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Duration of Problem</label><div class="line"></div></div>
+          <div class="field"><label>Water Source (city/well)</label><div class="line"></div></div>
+          <div class="field"><label>Water Heater Type</label><div class="line"></div></div>
+          <div class="field"><label>Water Pressure (psi)</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Diagnosis Checklist</div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px">
+          <div class="checkbox-row"><span class="cb"></span> Active leak — location: _______________</div>
+          <div class="checkbox-row"><span class="cb"></span> Drain blockage / slow drain</div>
+          <div class="checkbox-row"><span class="cb"></span> Low water pressure</div>
+          <div class="checkbox-row"><span class="cb"></span> No hot water</div>
+          <div class="checkbox-row"><span class="cb"></span> Running toilet</div>
+          <div class="checkbox-row"><span class="cb"></span> Sewer odor</div>
+          <div class="checkbox-row"><span class="cb"></span> Water heater failure</div>
+          <div class="checkbox-row"><span class="cb"></span> Pipe corrosion / damage</div>
+          <div class="checkbox-row"><span class="cb"></span> Fixture replacement needed</div>
+          <div class="checkbox-row"><span class="cb"></span> Backflow / cross-connection</div>
+          <div class="checkbox-row"><span class="cb"></span> Sump pump issue</div>
+          <div class="checkbox-row"><span class="cb"></span> Other — see notes</div>
+        </div>
+        <div class="field" style="margin-top:12px"><label>Diagnosis Notes</label><div class="box"></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Work Completed</div>
+      <div class="section-body">
+        <div class="field"><label>Description of Repairs / Services Performed</label><div class="box" style="min-height:72px"></div></div>
+        <div class="field-grid cols-4" style="margin-top:12px">
+          <div class="field"><label>Work Start Time</label><div class="line"></div></div>
+          <div class="field"><label>Work End Time</label><div class="line"></div></div>
+          <div class="field"><label>Total Labor Hours</label><div class="line"></div></div>
+          <div class="field"><label>Labor Rate ($/hr)</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">5 — Parts &amp; Materials</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>#</th><th>Item / Part Description</th><th>Part #</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>4</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td colspan="5" style="text-align:right;font-weight:700;padding-right:14px">Parts Total</td><td></td></tr>
+            <tr><td colspan="5" style="text-align:right;font-weight:700;padding-right:14px">Labor Total</td><td></td></tr>
+            <tr><td colspan="5" style="text-align:right;font-weight:700;padding-right:14px;color:#1a1a2e">INVOICE TOTAL</td><td style="font-weight:700"></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Plumber / Technician Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / License # / Date</div></div>
+      <div class="sig-field"><label>Customer Approval Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">By signing you authorize work and accept charges above</div></div>
+    </div>
   </div>
-  <div class="field">
-    <label>Tech Phone / Radio</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Estimated Arrival</label>
-    <div class="line"></div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Retain for your records. Not legal advice.</div>
+    <div>LS-002</div>
   </div>
 </div>
-
-<div class="section-title">Customer Information</div>
-
-<div class="row">
-  <div class="field">
-    <label>Customer Name</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Phone</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Alt. Phone</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field" style="flex:3">
-    <label>Service Address</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Apt / Unit</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>City</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>State</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Zip</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Issue Type (check all that apply)</div>
-
-<div class="checkbox-grid">
-  <div class="check-item"><div class="cb"></div> Leak / Burst Pipe</div>
-  <div class="check-item"><div class="cb"></div> No Hot Water</div>
-  <div class="check-item"><div class="cb"></div> Slow / Clogged Drain</div>
-  <div class="check-item"><div class="cb"></div> Sewer Backup</div>
-  <div class="check-item"><div class="cb"></div> Running Toilet</div>
-  <div class="check-item"><div class="cb"></div> Low Water Pressure</div>
-  <div class="check-item"><div class="cb"></div> Water Heater Issue</div>
-  <div class="check-item"><div class="cb"></div> Gas Line Issue</div>
-  <div class="check-item"><div class="cb"></div> Fixture Replacement</div>
-  <div class="check-item"><div class="cb"></div> Other (describe below)</div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Additional Issue Details</label>
-    <div class="line-tall"></div>
-  </div>
-</div>
-
-<div class="section-title">Diagnosis &amp; Findings</div>
-
-<div class="row">
-  <div class="field">
-    <label>Technician Diagnosis Notes</label>
-    <div class="line-tall" style="min-height:70px"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Parts / Materials Needed</label>
-    <div class="line-tall"></div>
-  </div>
-</div>
-
-<div class="section-title">Materials Used</div>
-
-<table class="mat-table">
-  <thead>
-    <tr>
-      <th style="width:15%">Item #</th>
-      <th style="width:40%">Material / Part Description</th>
-      <th style="width:15%">Qty</th>
-      <th style="width:15%">Unit Cost</th>
-      <th style="width:15%">Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-  </tbody>
-</table>
-
-<div class="section-title">Time Log &amp; Job Status</div>
-
-<div class="row">
-  <div class="field">
-    <label>Time In</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Time Out</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Total Hours</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Labor Rate</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Total Invoice</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Job Status</div>
-
-<div class="checkbox-grid" style="margin-bottom:14px">
-  <div class="check-item"><div class="cb"></div> Job Complete</div>
-  <div class="check-item"><div class="cb"></div> Parts on Order — Return Scheduled</div>
-  <div class="check-item"><div class="cb"></div> Referred to Specialist</div>
-  <div class="check-item"><div class="cb"></div> Awaiting Customer Approval</div>
-  <div class="check-item"><div class="cb"></div> Emergency Shut-Off Engaged</div>
-  <div class="check-item"><div class="cb"></div> Follow-Up Required</div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Follow-Up Notes / Return Date</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="sig-row">
-  <div class="sig-block">
-    <div class="sig-label">Customer Sign-Off</div>
-    <div class="sig-line"></div>
-    <div class="sig-sub">I authorize the work described and confirm it was completed satisfactorily.</div>
-  </div>
-  <div class="sig-block" style="max-width:150px">
-    <div class="sig-label">Date</div>
-    <div class="sig-line"></div>
-  </div>
-  <div class="sig-block">
-    <div class="sig-label">Technician Signature</div>
-    <div class="sig-line"></div>
-    <div class="sig-sub">Tech certifies accuracy of all information above.</div>
-  </div>
-  <div class="sig-block" style="max-width:150px">
-    <div class="sig-label">Date</div>
-    <div class="sig-line"></div>
-  </div>
-</div>
-
-<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-002 Plumbing Dispatch &amp; Diagnosis &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
-
-</body>
-</html>`
+</body></html>`
   },
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // LS-003 — Electrician Jobsite Inspection Form
-  // ─────────────────────────────────────────────────────────────────────────
   'LS-003': {
     id: 'LS-003',
     title: 'Electrician Jobsite Inspection Form',
-    html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Electrician Jobsite Inspection — LS-003</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 11pt; color: #111; background: #fff;
-    padding: 24px; max-width: 800px; margin: 0 auto;
-  }
-  .print-btn {
-    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
-    background: #1a56db; color: #fff; border: none; border-radius: 5px;
-    font-size: 11pt; cursor: pointer;
-  }
-  .print-btn:hover { background: #1345b7; }
-  @media print { .print-btn { display: none !important; } }
-
-  header {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    border-bottom: 2.5px solid #111; padding-bottom: 10px; margin-bottom: 18px;
-  }
-  .company-name {
-    font-size: 20pt; font-weight: 700; border: 2px dashed #bbb;
-    padding: 4px 12px; display: inline-block; min-width: 220px; min-height: 34px;
-  }
-  .company-sub { font-size: 8.5pt; color: #555; margin-top: 3px; }
-  .form-title { text-align: right; }
-  .form-title h1 { font-size: 15pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .form-id { font-size: 8.5pt; color: #666; margin-top: 2px; }
-
-  .row { display: flex; gap: 16px; margin-bottom: 12px; }
-  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
-  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
-  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
-  .line-tall { border: 1.5px solid #333; min-height: 60px; padding: 3px; }
-
-  .section-title {
-    font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
-    background: #f0f0f0; border-left: 3px solid #333; padding: 4px 8px; margin: 16px 0 10px 0;
-  }
-
-  .checkbox-grid { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-bottom: 12px; }
-  .check-item { display: flex; align-items: center; gap: 7px; font-size: 10pt; }
-  .cb { width: 15px; height: 15px; border: 1.5px solid #333; display: inline-block; flex-shrink: 0; border-radius: 2px; }
-
-  table.circuit-table {
-    width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10pt;
-  }
-  table.circuit-table th {
-    background: #f0f0f0; border: 1px solid #bbb; padding: 5px 8px;
-    text-align: left; font-size: 8pt; text-transform: uppercase;
-  }
-  table.circuit-table td { border: 1px solid #bbb; padding: 4px 8px; height: 24px; }
-  table.circuit-table td.center { text-align: center; }
-
-  .yn-row { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
-  .yn-row .yn-label { font-size: 9.5pt; font-weight: 600; min-width: 220px; }
-  .yn-opt { display: flex; align-items: center; gap: 5px; font-size: 9.5pt; }
-
-  .sig-row { display: flex; gap: 24px; margin-top: 20px; }
-  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 5px; }
-  .sig-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
-  .sig-line { border-bottom: 1px solid #aaa; margin-top: 28px; }
-  .sig-sub { font-size: 7.5pt; color: #666; margin-top: 2px; }
-
-  footer {
-    margin-top: 28px; padding-top: 8px; border-top: 1px solid #ccc;
-    text-align: center; font-size: 7.5pt; color: #999;
-  }
-  @media print { body { padding: 16px; } @page { margin: 0.6in; size: letter; } }
-</style>
-</head>
-<body>
-
-<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
-
-<header>
-  <div>
-    <div class="company-name">&nbsp;</div>
-    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; Electrical License #: _________________</div>
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Electrician Jobsite Inspection — LS-003</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Licensed Electrical Contractor</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Jobsite Inspection Form</div>
+      <div class="form-id">FORM LS-003 · REV 1.0</div>
+    </div>
   </div>
-  <div class="form-title">
-    <h1>Electrician Jobsite Inspection</h1>
-    <div class="form-id">Form LS-003 &nbsp;|&nbsp; Inspection #: _______________</div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Inspection Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Form #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Permit #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
   </div>
-</header>
+  <div class="body">
 
-<div class="row">
-  <div class="field">
-    <label>Inspection Date</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Inspector Name</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Inspector License #</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Permit #</label>
-    <div class="line"></div>
-  </div>
-</div>
+    <div class="section">
+      <div class="section-header">1 — Site Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Client / Owner</label><div class="line"></div></div>
+          <div class="field"><label>Site Address</label><div class="line"></div></div>
+          <div class="field"><label>Inspector / Technician</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Property Type</label><div class="line"></div></div>
+          <div class="field"><label>Building Age (est.)</label><div class="line"></div></div>
+          <div class="field"><label>Service Voltage</label><div class="line"></div></div>
+          <div class="field"><label>Service Amperage</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
 
-<div class="row">
-  <div class="field" style="flex:3">
-    <label>Site / Job Address</label>
-    <div class="line"></div>
+    <div class="section">
+      <div class="section-header">2 — Panel &amp; Circuit Inspection</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:10px">
+          <div class="field"><label>Panel Manufacturer</label><div class="line"></div></div>
+          <div class="field"><label>Panel Rating (A)</label><div class="line"></div></div>
+          <div class="field"><label># of Circuits</label><div class="line"></div></div>
+          <div class="field"><label>GFCI Protected</label><div class="line"></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;margin-bottom:10px">
+          <div class="checkbox-row"><span class="cb"></span> Panel properly labeled</div>
+          <div class="checkbox-row"><span class="cb"></span> No double-tapped breakers</div>
+          <div class="checkbox-row"><span class="cb"></span> Grounding / bonding verified</div>
+          <div class="checkbox-row"><span class="cb"></span> No signs of arcing or burn marks</div>
+          <div class="checkbox-row"><span class="cb"></span> Correct breaker sizing throughout</div>
+          <div class="checkbox-row"><span class="cb"></span> Neutral and ground separated (subpanel)</div>
+          <div class="checkbox-row"><span class="cb"></span> Breakers seat fully (no loose breakers)</div>
+          <div class="checkbox-row"><span class="cb"></span> AFCI protection where required</div>
+        </div>
+        <div class="field"><label>Panel Notes</label><div class="box" style="min-height:50px"></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Hazard Assessment</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>Hazard Item</th><th>Location</th><th>Severity (L/M/H)</th><th>Action Required</th><th>Resolved?</th></tr></thead>
+          <tbody>
+            <tr><td>Exposed wiring</td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Overloaded circuits</td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Missing knockouts / covers</td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Improper wire gauging</td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Outdated wiring (aluminum/knob-tube)</td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Other:</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Code Notes</div>
+      <div class="section-body">
+        <div class="field-grid cols-2" style="margin-bottom:10px">
+          <div class="field"><label>NEC Edition in Effect</label><div class="line"></div></div>
+          <div class="field"><label>Local Amendments / AHJ</label><div class="line"></div></div>
+        </div>
+        <div class="field"><label>Code Violations / Notes</label><div class="box"></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">5 — Sign-Off</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Overall Rating</label><div class="line"></div></div>
+          <div class="field"><label>Re-inspection Required?</label><div class="line"></div></div>
+          <div class="field"><label>Re-inspection Date</label><div class="line"></div></div>
+        </div>
+        <div class="field"><label>Summary / Recommendations</label><div class="box" style="min-height:52px"></div></div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Electrician / Inspector Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / License # / Date</div></div>
+      <div class="sig-field"><label>Property Owner / Representative</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+    </div>
   </div>
-  <div class="field">
-    <label>Unit / Suite</label>
-    <div class="line"></div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Inspection findings do not constitute a code compliance certificate. Retain for your records.</div>
+    <div>LS-003</div>
   </div>
 </div>
-
-<div class="row">
-  <div class="field">
-    <label>Customer / Owner Name</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Phone</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Contractor / Company</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Job Type</div>
-
-<div class="checkbox-grid">
-  <div class="check-item"><div class="cb"></div> Residential</div>
-  <div class="check-item"><div class="cb"></div> Commercial</div>
-  <div class="check-item"><div class="cb"></div> Industrial</div>
-  <div class="check-item"><div class="cb"></div> New Construction</div>
-  <div class="check-item"><div class="cb"></div> Renovation / Upgrade</div>
-  <div class="check-item"><div class="cb"></div> Service Call / Repair</div>
-  <div class="check-item"><div class="cb"></div> Panel Upgrade</div>
-  <div class="check-item"><div class="cb"></div> EV Charger Install</div>
-  <div class="check-item"><div class="cb"></div> Solar / Inverter</div>
-  <div class="check-item"><div class="cb"></div> Other: _______________</div>
-</div>
-
-<div class="section-title">Panel Information</div>
-
-<div class="row">
-  <div class="field">
-    <label>Panel Make / Brand</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Panel Amperage</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Voltage (120V / 240V)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Panel Location</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Main Breaker Size</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Number of Slots</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Slots Used</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Slots Available</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Circuits Checked</div>
-
-<table class="circuit-table">
-  <thead>
-    <tr>
-      <th style="width:8%">Circuit #</th>
-      <th style="width:28%">Description / Location</th>
-      <th style="width:10%">Breaker (A)</th>
-      <th style="width:10%">Wire Gauge</th>
-      <th style="width:10%">Voltage</th>
-      <th style="width:14%">GFCI / AFCI</th>
-      <th style="width:10%">Pass</th>
-      <th style="width:10%">Fail</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
-    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
-    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
-    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
-    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
-    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
-    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
-    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
-  </tbody>
-</table>
-
-<div class="section-title">Hazards Identified</div>
-
-<div class="row">
-  <div class="field">
-    <label>Hazard Description (location, nature, severity)</label>
-    <div class="line-tall"></div>
-  </div>
-</div>
-
-<div class="section-title">Code &amp; Compliance Notes</div>
-
-<div class="row">
-  <div class="field">
-    <label>NEC Code References / Violations</label>
-    <div class="line-tall"></div>
-  </div>
-</div>
-
-<div class="section-title">Work Completed</div>
-
-<div class="row">
-  <div class="field">
-    <label>Summary of Work Performed</label>
-    <div class="line-tall"></div>
-  </div>
-</div>
-
-<div class="section-title">Reinspection</div>
-
-<div class="yn-row">
-  <div class="yn-label">Reinspection Required?</div>
-  <div class="yn-opt"><div class="cb"></div> Yes</div>
-  <div class="yn-opt"><div class="cb"></div> No</div>
-  &nbsp;&nbsp;&nbsp;
-  <div class="yn-label" style="min-width:180px">If yes, scheduled date:</div>
-  <div style="flex:1; border-bottom:1.5px solid #333; min-height:22px;"></div>
-</div>
-
-<div class="yn-row">
-  <div class="yn-label">Approved to Energize?</div>
-  <div class="yn-opt"><div class="cb"></div> Yes</div>
-  <div class="yn-opt"><div class="cb"></div> No — Do Not Energize</div>
-</div>
-
-<div class="sig-row">
-  <div class="sig-block">
-    <div class="sig-label">Customer / Owner Signature</div>
-    <div class="sig-line"></div>
-    <div class="sig-sub">Owner acknowledges receipt of inspection findings.</div>
-  </div>
-  <div class="sig-block" style="max-width:150px">
-    <div class="sig-label">Date</div>
-    <div class="sig-line"></div>
-  </div>
-  <div class="sig-block">
-    <div class="sig-label">Inspector Signature</div>
-    <div class="sig-line"></div>
-    <div class="sig-sub">Inspector certifies accuracy of this report.</div>
-  </div>
-  <div class="sig-block" style="max-width:150px">
-    <div class="sig-label">Date</div>
-    <div class="sig-line"></div>
-  </div>
-</div>
-
-<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-003 Electrician Jobsite Inspection &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
-
-</body>
-</html>`
+</body></html>`
   },
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // LS-004 — Lawn Care Weekly Crew Planner
-  // ─────────────────────────────────────────────────────────────────────────
   'LS-004': {
     id: 'LS-004',
     title: 'Lawn Care Weekly Crew Planner',
-    html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lawn Care Weekly Crew Planner — LS-004</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 10.5pt; color: #111; background: #fff;
-    padding: 24px; max-width: 800px; margin: 0 auto;
-  }
-  .print-btn {
-    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
-    background: #1a56db; color: #fff; border: none; border-radius: 5px;
-    font-size: 11pt; cursor: pointer;
-  }
-  .print-btn:hover { background: #1345b7; }
-  @media print { .print-btn { display: none !important; } }
-
-  header {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    border-bottom: 2.5px solid #111; padding-bottom: 10px; margin-bottom: 18px;
-  }
-  .company-name {
-    font-size: 20pt; font-weight: 700; border: 2px dashed #bbb;
-    padding: 4px 12px; display: inline-block; min-width: 220px; min-height: 34px;
-  }
-  .company-sub { font-size: 8.5pt; color: #555; margin-top: 3px; }
-  .form-title { text-align: right; }
-  .form-title h1 { font-size: 15pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .form-id { font-size: 8.5pt; color: #666; margin-top: 2px; }
-
-  .row { display: flex; gap: 16px; margin-bottom: 12px; }
-  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
-  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
-  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
-
-  .section-title {
-    font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
-    background: #f0f0f0; border-left: 3px solid #333; padding: 4px 8px; margin: 16px 0 10px 0;
-  }
-
-  table.route-table {
-    width: 100%; border-collapse: collapse; font-size: 9pt;
-  }
-  table.route-table th {
-    background: #222; color: #fff; border: 1px solid #444;
-    padding: 5px 6px; text-align: center; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.3px;
-  }
-  table.route-table td {
-    border: 1px solid #bbb; padding: 3px 5px; height: 22px; vertical-align: middle;
-  }
-  table.route-table tbody tr:nth-child(even) { background: #fafafa; }
-  table.route-table td.center { text-align: center; }
-  .mini-cb {
-    width: 12px; height: 12px; border: 1.5px solid #555;
-    display: inline-block; border-radius: 2px; vertical-align: middle;
-  }
-
-  .crew-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
-  }
-  .crew-slot { display: flex; gap: 8px; align-items: center; }
-  .crew-slot .crew-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; color: #555; min-width: 90px; }
-  .crew-slot .line { flex: 1; border-bottom: 1.5px solid #333; min-height: 22px; }
-
-  footer {
-    margin-top: 20px; padding-top: 8px; border-top: 1px solid #ccc;
-    text-align: center; font-size: 7.5pt; color: #999;
-  }
-  @media print { body { padding: 16px; } @page { margin: 0.5in; size: letter landscape; } }
-</style>
-</head>
-<body>
-
-<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
-
-<header>
-  <div>
-    <div class="company-name">&nbsp;</div>
-    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; Route Area: _________________</div>
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Lawn Care Weekly Crew Planner — LS-004</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Lawn &amp; Landscape Services</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Weekly Crew Planner</div>
+      <div class="form-id">FORM LS-004 · REV 1.0</div>
+    </div>
   </div>
-  <div class="form-title">
-    <h1>Lawn Care Weekly Crew Planner</h1>
-    <div class="form-id">Form LS-004 &nbsp;|&nbsp; Sheet #: _______________</div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Week Of</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Form #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Crew Lead</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
   </div>
-</header>
+  <div class="body">
 
-<div class="row">
-  <div class="field">
-    <label>Week Of</label>
-    <div class="line"></div>
+    <div class="section">
+      <div class="section-header">1 — Week Overview</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Total Stops This Week</label><div class="line"></div></div>
+          <div class="field"><label>Estimated Hours</label><div class="line"></div></div>
+          <div class="field"><label>Vehicle / Equipment</label><div class="line"></div></div>
+          <div class="field"><label>Weather Forecast</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Daily Route (Mon–Fri)</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th style="width:60px">Day</th><th>#</th><th>Client Name</th><th>Address</th><th>Services</th><th>Est. Time</th><th>Done ✓</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="3" style="font-weight:700;background:#e8eaf0">MON</td><td>1</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td rowspan="3" style="font-weight:700;background:#e8eaf0">TUE</td><td>4</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>6</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td rowspan="3" style="font-weight:700;background:#e8eaf0">WED</td><td>7</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>8</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>9</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td rowspan="3" style="font-weight:700;background:#e8eaf0">THU</td><td>10</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>11</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>12</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td rowspan="3" style="font-weight:700;background:#e8eaf0">FRI</td><td>13</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>14</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>15</td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Crew Assignments</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>Crew Member</th><th>Role</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Total Hrs</th></tr></thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Notes &amp; Issues</div>
+      <div class="section-body">
+        <div class="field-grid cols-2">
+          <div class="field"><label>Equipment Issues / Maintenance Needed</label><div class="box" style="min-height:60px"></div></div>
+          <div class="field"><label>Client Notes / Special Instructions</label><div class="box" style="min-height:60px"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Crew Lead Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+      <div class="sig-field"><label>Manager / Office Sign-Off</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+    </div>
   </div>
-  <div class="field">
-    <label>Crew Lead</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Vehicle / Truck #</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Equipment Trailer #</label>
-    <div class="line"></div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Retain for your records.</div>
+    <div>LS-004</div>
   </div>
 </div>
-
-<div class="section-title">Crew Members</div>
-
-<div class="crew-grid">
-  <div class="crew-slot">
-    <div class="crew-label">Member 1:</div>
-    <div class="line"></div>
-  </div>
-  <div class="crew-slot">
-    <div class="crew-label">Member 2:</div>
-    <div class="line"></div>
-  </div>
-  <div class="crew-slot">
-    <div class="crew-label">Member 3:</div>
-    <div class="line"></div>
-  </div>
-  <div class="crew-slot">
-    <div class="crew-label">Member 4:</div>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Daily Route &amp; Stop Log</div>
-
-<table class="route-table">
-  <thead>
-    <tr>
-      <th style="width:4%">#</th>
-      <th style="width:24%">Customer / Address</th>
-      <th style="width:14%">Service Type</th>
-      <th style="width:5%">Mow</th>
-      <th style="width:5%">Edge</th>
-      <th style="width:5%">Trim</th>
-      <th style="width:5%">Blow</th>
-      <th style="width:5%">Fert.</th>
-      <th style="width:18%">Special Notes</th>
-      <th style="width:9%">Time In/Out</th>
-      <th style="width:6%">Done</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td class="center">1</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">2</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">3</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">4</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">5</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">6</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">7</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">8</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">9</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">10</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">11</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">12</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">13</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">14</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-    <tr><td class="center">15</td><td></td><td></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td class="center"><div class="mini-cb"></div></td><td></td><td></td><td class="center"><div class="mini-cb"></div></td></tr>
-  </tbody>
-</table>
-
-<div class="row" style="margin-top:14px">
-  <div class="field">
-    <label>Total Stops Completed</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Total Hours on Route</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Fuel Used (gal)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Crew Lead Initials</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>End-of-Day Notes / Issues</label>
-    <div style="border: 1.5px solid #333; min-height: 50px; padding: 3px;"></div>
-  </div>
-</div>
-
-<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-004 Lawn Care Weekly Crew Planner &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
-
-</body>
-</html>`
+</body></html>`
   },
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // LS-005 — Auto Detail Intake + Damage Waiver
-  // ─────────────────────────────────────────────────────────────────────────
   'LS-005': {
     id: 'LS-005',
     title: 'Auto Detail Intake + Damage Waiver',
-    html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auto Detail Intake + Damage Waiver — LS-005</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 11pt; color: #111; background: #fff;
-    padding: 24px; max-width: 800px; margin: 0 auto;
-  }
-  .print-btn {
-    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
-    background: #1a56db; color: #fff; border: none; border-radius: 5px;
-    font-size: 11pt; cursor: pointer;
-  }
-  .print-btn:hover { background: #1345b7; }
-  @media print { .print-btn { display: none !important; } }
-
-  header {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    border-bottom: 2.5px solid #111; padding-bottom: 10px; margin-bottom: 18px;
-  }
-  .company-name {
-    font-size: 20pt; font-weight: 700; border: 2px dashed #bbb;
-    padding: 4px 12px; display: inline-block; min-width: 220px; min-height: 34px;
-  }
-  .company-sub { font-size: 8.5pt; color: #555; margin-top: 3px; }
-  .form-title { text-align: right; }
-  .form-title h1 { font-size: 15pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .form-id { font-size: 8.5pt; color: #666; margin-top: 2px; }
-
-  .row { display: flex; gap: 16px; margin-bottom: 12px; }
-  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
-  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
-  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
-  .line-tall { border: 1.5px solid #333; min-height: 60px; padding: 3px; }
-
-  .section-title {
-    font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
-    background: #f0f0f0; border-left: 3px solid #333; padding: 4px 8px; margin: 16px 0 10px 0;
-  }
-  .section-divider {
-    border: none; border-top: 2.5px solid #111; margin: 22px 0;
-  }
-  .part-label {
-    font-size: 12pt; font-weight: 700; text-align: center;
-    text-transform: uppercase; letter-spacing: 1px;
-    background: #111; color: #fff; padding: 6px 0; margin-bottom: 16px;
-  }
-
-  .services-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px 20px; margin-bottom: 14px;
-  }
-  .check-item { display: flex; align-items: center; gap: 7px; font-size: 10pt; }
-  .cb { width: 15px; height: 15px; border: 1.5px solid #333; display: inline-block; flex-shrink: 0; border-radius: 2px; }
-
-  /* Car diagram */
-  .car-diagram-wrapper {
-    border: 1.5px solid #bbb; padding: 12px 16px; margin-bottom: 14px;
-    background: #fafafa;
-  }
-  .car-diagram-title {
-    font-size: 8pt; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.5px; color: #444; margin-bottom: 8px;
-  }
-  .car-ascii {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 8.5pt; line-height: 1.4; color: #222;
-    white-space: pre;
-  }
-  .diagram-note {
-    font-size: 7.5pt; color: #666; margin-top: 6px;
-    font-style: italic;
-  }
-
-  .waiver-text {
-    font-size: 9pt; line-height: 1.55; color: #222;
-    border: 1.5px solid #bbb; padding: 10px 12px; background: #fafafa;
-    margin-bottom: 14px;
-  }
-
-  .sig-row { display: flex; gap: 24px; margin-top: 20px; }
-  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 5px; }
-  .sig-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
-  .sig-line { border-bottom: 1px solid #aaa; margin-top: 28px; }
-  .sig-sub { font-size: 7.5pt; color: #666; margin-top: 2px; }
-
-  footer {
-    margin-top: 28px; padding-top: 8px; border-top: 1px solid #ccc;
-    text-align: center; font-size: 7.5pt; color: #999;
-  }
-  @media print { body { padding: 16px; } @page { margin: 0.6in; size: letter; } }
-</style>
-</head>
-<body>
-
-<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
-
-<header>
-  <div>
-    <div class="company-name">&nbsp;</div>
-    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; Address: _________________________</div>
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Auto Detail Intake + Damage Waiver — LS-005</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Professional Auto Detailing</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Detail Intake &amp; Damage Waiver</div>
+      <div class="form-id">FORM LS-005 · REV 1.0</div>
+    </div>
   </div>
-  <div class="form-title">
-    <h1>Auto Detail Intake &amp; Waiver</h1>
-    <div class="form-id">Form LS-005 &nbsp;|&nbsp; Order #: _______________</div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Order #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Detailer</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
   </div>
-</header>
+  <div class="body">
 
-<!-- PART 1: INTAKE -->
-<div class="part-label">Part 1 — Customer &amp; Vehicle Intake</div>
+    <div class="section">
+      <div class="section-header">1 — Vehicle Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:12px">
+          <div class="field"><label>Customer Name</label><div class="line"></div></div>
+          <div class="field"><label>Phone</label><div class="line"></div></div>
+          <div class="field"><label>Email</label><div class="line"></div></div>
+          <div class="field"><label>Drop-Off Time</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Year</label><div class="line"></div></div>
+          <div class="field"><label>Make</label><div class="line"></div></div>
+          <div class="field"><label>Model</label><div class="line"></div></div>
+          <div class="field"><label>Color</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-3" style="margin-top:12px">
+          <div class="field"><label>License Plate</label><div class="line"></div></div>
+          <div class="field"><label>VIN (last 6)</label><div class="line"></div></div>
+          <div class="field"><label>Mileage In</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
 
-<div class="row">
-  <div class="field">
-    <label>Date</label>
-    <div class="line"></div>
+    <div class="section">
+      <div class="section-header">2 — Service Selections</div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px 20px">
+          <div class="checkbox-row"><span class="cb"></span> Exterior Hand Wash</div>
+          <div class="checkbox-row"><span class="cb"></span> Interior Vacuum</div>
+          <div class="checkbox-row"><span class="cb"></span> Full Interior Detail</div>
+          <div class="checkbox-row"><span class="cb"></span> Clay Bar Treatment</div>
+          <div class="checkbox-row"><span class="cb"></span> Paint Correction (Stage 1)</div>
+          <div class="checkbox-row"><span class="cb"></span> Paint Correction (Stage 2)</div>
+          <div class="checkbox-row"><span class="cb"></span> Ceramic Coating</div>
+          <div class="checkbox-row"><span class="cb"></span> Wax / Sealant Application</div>
+          <div class="checkbox-row"><span class="cb"></span> Engine Bay Cleaning</div>
+          <div class="checkbox-row"><span class="cb"></span> Headlight Restoration</div>
+          <div class="checkbox-row"><span class="cb"></span> Odor Elimination</div>
+          <div class="checkbox-row"><span class="cb"></span> Tire &amp; Wheel Detail</div>
+          <div class="checkbox-row"><span class="cb"></span> Glass Treatment</div>
+          <div class="checkbox-row"><span class="cb"></span> Leather Conditioning</div>
+          <div class="checkbox-row"><span class="cb"></span> Other: __________________</div>
+        </div>
+        <div class="field-grid cols-3" style="margin-top:12px">
+          <div class="field"><label>Package / Bundle Selected</label><div class="line"></div></div>
+          <div class="field"><label>Quoted Price</label><div class="line"></div></div>
+          <div class="field"><label>Estimated Completion Time</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Pre-Existing Damage Documentation</div>
+      <div class="section-body">
+        <p style="font-size:8pt;color:#667;margin-bottom:10px">Note all pre-existing damage before service begins. Sketch or describe damage on the vehicle outline below.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <div style="border:1.5px solid #ccd0e0;border-radius:4px;padding:10px;min-height:110px;position:relative;">
+              <div style="font-size:7pt;font-weight:700;text-transform:uppercase;color:#8899cc;margin-bottom:6px">Vehicle Diagram (Top View) — Mark damage with X</div>
+              <div style="font-size:8pt;color:#ccc;text-align:center;padding-top:20px">[ Sketch area — mark scratches, dents, chips ]</div>
+            </div>
+          </div>
+          <div class="field"><label>Written Damage Notes</label><div class="box" style="min-height:110px"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Liability Waiver</div>
+      <div class="section-body">
+        <p style="font-size:8.5pt;line-height:1.6;color:#334;border:1px solid #e0e4f0;padding:12px;border-radius:3px;background:#f7f8fc">
+          I, the undersigned vehicle owner, authorize the above-listed detailing services and acknowledge that all pre-existing damage has been documented above. I understand that detailing services involve the use of water, chemicals, and equipment that may react differently with aged, modified, or previously repaired surfaces. I release <strong>[Your Company Name]</strong> from liability for damage to pre-existing conditions including but not limited to: faded or peeling paint, aftermarket wraps, cracked trim, loose emblems, existing water damage, or items left inside the vehicle. I agree that the company is not responsible for loss of personal items left in the vehicle. Payment is due upon completion of services.
+        </p>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Customer Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Printed Name / Date — I have read and agree to the waiver above</div></div>
+      <div class="sig-field"><label>Detailer / Intake Staff</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+    </div>
   </div>
-  <div class="field">
-    <label>Drop-Off Time</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Est. Pick-Up Time</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Detailer Assigned</label>
-    <div class="line"></div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. This waiver does not override applicable consumer protection laws. Consult an attorney for jurisdiction-specific requirements.</div>
+    <div>LS-005</div>
   </div>
 </div>
-
-<div class="section-title">Customer Information</div>
-
-<div class="row">
-  <div class="field">
-    <label>Customer Name</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Phone</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Email</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Vehicle Information</div>
-
-<div class="row">
-  <div class="field">
-    <label>Year</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Make</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Model</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Color</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>License Plate</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>VIN (last 6 digits)</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Odometer</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Fuel Level</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Condition (1-10)</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Services Requested</div>
-
-<div class="services-grid">
-  <div class="check-item"><div class="cb"></div> Full Interior Detail</div>
-  <div class="check-item"><div class="cb"></div> Full Exterior Detail</div>
-  <div class="check-item"><div class="cb"></div> Full Detail (In + Out)</div>
-  <div class="check-item"><div class="cb"></div> Hand Wash &amp; Dry</div>
-  <div class="check-item"><div class="cb"></div> Wax / Sealant</div>
-  <div class="check-item"><div class="cb"></div> Paint Correction</div>
-  <div class="check-item"><div class="cb"></div> Ceramic Coating</div>
-  <div class="check-item"><div class="cb"></div> Headlight Restore</div>
-  <div class="check-item"><div class="cb"></div> Engine Bay Detail</div>
-  <div class="check-item"><div class="cb"></div> Carpet Shampoo</div>
-  <div class="check-item"><div class="cb"></div> Leather Clean &amp; Condition</div>
-  <div class="check-item"><div class="cb"></div> Odor Elimination</div>
-  <div class="check-item"><div class="cb"></div> Tire Dressing</div>
-  <div class="check-item"><div class="cb"></div> Window Tint (refer)</div>
-  <div class="check-item"><div class="cb"></div> Other: ____________</div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Special Instructions / Customer Requests</label>
-    <div class="line-tall"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Package / Service Tier</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Quoted Price</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Deposit Paid</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Balance Due</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<hr class="section-divider">
-
-<!-- PART 2: DAMAGE WAIVER -->
-<div class="part-label">Part 2 — Pre-Existing Damage &amp; Liability Waiver</div>
-
-<div class="section-title">Pre-Existing Damage Diagram</div>
-
-<div class="car-diagram-wrapper">
-  <div class="car-diagram-title">Mark any pre-existing damage with an X or note below each area</div>
-  <div class="car-ascii">
-              FRONT
-         _______________
-        /               \\
-       | [  ]       [  ] |   Hood: _______________________
-       |_________________|
-       |                 |   Windshield: __________________
-       | DR FL   DR FR   |
-       |  [  ]   [  ]   |   Driver Front Door: ___________
-       |_________________|   Passenger Front Door: ________
-       | DR RL   DR RR   |
-       |  [  ]   [  ]   |   Driver Rear Door: ____________
-       |_________________|   Passenger Rear Door: _________
-       |                 |
-       |  [  ]   [  ]   |   Rear Bumper: _________________
-        \\_______________/
-              REAR             Roof: ______________________
-
-  LEFT SIDE (Driver)                    RIGHT SIDE (Passenger)
-  ___________________________           ___________________________
-  |                         |           |                         |
-  | Front Quarter: ________ |           | Front Quarter: ________ |
-  | Rocker Panel:  ________ |           | Rocker Panel:  ________ |
-  | Rear Quarter:  ________ |           | Rear Quarter:  ________ |
-  |_________________________|           |_________________________|
-  </div>
-  <div class="diagram-note">Use a pen to circle or mark actual damage locations. Note scratches (S), dents (D), chips (C), cracks (CR).</div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Additional Pre-Existing Damage Notes</label>
-    <div class="line-tall"></div>
-  </div>
-</div>
-
-<div class="section-title">Liability Waiver</div>
-
-<div class="waiver-text">
-  <strong>PLEASE READ CAREFULLY BEFORE SIGNING.</strong> By signing below, the customer ("Owner") acknowledges and agrees to the following:<br><br>
-  1. <strong>Pre-Existing Damage:</strong> The Owner confirms that all pre-existing damage to the vehicle has been noted on this form. The detailing company shall not be liable for any pre-existing scratches, dents, chips, cracks, or other damage documented above.<br><br>
-  2. <strong>Personal Items:</strong> The Owner is responsible for removing all personal valuables from the vehicle prior to service. The detailing company is not responsible for lost, stolen, or damaged personal items left in the vehicle.<br><br>
-  3. <strong>Sensitive Surfaces:</strong> Some vehicles contain surfaces (custom wraps, specialty paint, modified bodywork, aftermarket parts) that may react differently to detailing products. The Owner assumes all risk associated with pre-existing modifications or sensitive surfaces not disclosed at intake.<br><br>
-  4. <strong>Limitation of Liability:</strong> In the unlikely event of damage caused during the detailing process, liability is limited to the cost of the service rendered. The company reserves the right to inspect and assess any damage claims before agreeing to repair or compensation.<br><br>
-  5. <strong>Authorization:</strong> The Owner authorizes the detailing company to perform the requested services and to move the vehicle as necessary within the service facility.
-</div>
-
-<div class="sig-row">
-  <div class="sig-block">
-    <div class="sig-label">Customer / Owner Signature</div>
-    <div class="sig-line"></div>
-    <div class="sig-sub">I have read and agree to the terms of this waiver.</div>
-  </div>
-  <div class="sig-block" style="max-width:150px">
-    <div class="sig-label">Date</div>
-    <div class="sig-line"></div>
-  </div>
-  <div class="sig-block">
-    <div class="sig-label">Technician / Intake Staff</div>
-    <div class="sig-line"></div>
-    <div class="sig-sub">Staff confirms vehicle inspection completed at intake.</div>
-  </div>
-  <div class="sig-block" style="max-width:150px">
-    <div class="sig-label">Date</div>
-    <div class="sig-line"></div>
-  </div>
-</div>
-
-<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-005 Auto Detail Intake + Damage Waiver &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
-
-</body>
-</html>`
+</body></html>`
   },
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // LS-006 — Pest Control Follow-Up Card
-  // ─────────────────────────────────────────────────────────────────────────
   'LS-006': {
     id: 'LS-006',
     title: 'Pest Control Follow-Up Card',
-    html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pest Control Follow-Up Card — LS-006</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 10.5pt; color: #111; background: #fff;
-    padding: 24px; max-width: 800px; margin: 0 auto;
-  }
-  .print-btn {
-    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
-    background: #1a56db; color: #fff; border: none; border-radius: 5px;
-    font-size: 11pt; cursor: pointer;
-  }
-  .print-btn:hover { background: #1345b7; }
-  @media print { .print-btn { display: none !important; } }
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Pest Control Follow-Up Card — LS-006</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Pest Management Services</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Pest Control Follow-Up Card</div>
+      <div class="form-id">FORM LS-006 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Service Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Account #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Technician</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
 
-  /* Two cards per page using a grid */
-  .cards-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .card {
-    border: 2px solid #333;
-    padding: 16px;
-    page-break-inside: avoid;
-  }
-  .card-header {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 12px;
-  }
-  .company-block .company-name {
-    font-size: 13pt; font-weight: 700; border: 1.5px dashed #bbb;
-    padding: 2px 8px; display: inline-block; min-width: 130px; min-height: 24px;
-  }
-  .company-block .company-contact {
-    font-size: 7pt; color: #555; margin-top: 3px;
-  }
-  .card-title {
-    text-align: right;
-    font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;
-  }
-  .card-id { font-size: 7pt; color: #666; }
-
-  .c-row { display: flex; gap: 10px; margin-bottom: 9px; }
-  .c-field { flex: 1; }
-  .c-field label {
-    display: block; font-size: 7pt; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.4px; color: #444; margin-bottom: 2px;
-  }
-  .c-field .line { border-bottom: 1.5px solid #333; min-height: 19px; }
-  .c-field .line-tall { border: 1.5px solid #333; min-height: 46px; padding: 2px 4px; font-size: 9pt; }
-
-  .section-title {
-    font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-    background: #f0f0f0; border-left: 2px solid #333; padding: 3px 6px; margin: 10px 0 7px 0;
-  }
-
-  .callback-box {
-    border: 1.5px solid #bbb; background: #fffbf0; padding: 8px 10px;
-    font-size: 8.5pt; line-height: 1.5; margin-top: 10px;
-  }
-  .callback-box strong { font-size: 8pt; text-transform: uppercase; letter-spacing: 0.3px; }
-
-  .card-footer {
-    margin-top: 10px; padding-top: 5px; border-top: 1px solid #ccc;
-    font-size: 7pt; color: #999; text-align: center;
-  }
-
-  @media print {
-    body { padding: 16px; }
-    @page { margin: 0.5in; size: letter; }
-    .cards-wrapper { grid-template-columns: 1fr 1fr; }
-  }
-</style>
-</head>
-<body>
-
-<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF (2 cards per page)</button>
-
-<!-- Renders 4 cards — 2 per row, 2 rows = 1 full sheet, front + back cutting -->
-<div class="cards-wrapper">
-
-  <!-- CARD 1 -->
-  <div class="card">
-    <div class="card-header">
-      <div class="company-block">
-        <div class="company-name">&nbsp;</div>
-        <div class="company-contact">
-          Phone: _____________________<br>
-          License #: __________________
+    <div class="section">
+      <div class="section-header">1 — Client Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:10px">
+          <div class="field"><label>Client Name</label><div class="line"></div></div>
+          <div class="field"><label>Service Address</label><div class="line"></div></div>
+          <div class="field"><label>Phone</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Property Type</label><div class="line"></div></div>
+          <div class="field"><label>Square Footage</label><div class="line"></div></div>
+          <div class="field"><label>Service Plan</label><div class="line"></div></div>
+          <div class="field"><label>Contract Start Date</label><div class="line"></div></div>
         </div>
       </div>
-      <div class="card-title">
-        Pest Control<br>Follow-Up Card
-        <div class="card-id">Form LS-006</div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Treatment Summary</div>
+      <div class="section-body">
+        <div class="field-grid cols-2" style="margin-bottom:10px">
+          <div>
+            <div style="font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#556;margin-bottom:6px">Pests Targeted</div>
+            <div class="checkbox-row"><span class="cb"></span> Ants</div>
+            <div class="checkbox-row"><span class="cb"></span> Cockroaches</div>
+            <div class="checkbox-row"><span class="cb"></span> Rodents (mice/rats)</div>
+            <div class="checkbox-row"><span class="cb"></span> Spiders</div>
+            <div class="checkbox-row"><span class="cb"></span> Termites</div>
+            <div class="checkbox-row"><span class="cb"></span> Bed Bugs</div>
+            <div class="checkbox-row"><span class="cb"></span> Wasps / Hornets</div>
+            <div class="checkbox-row"><span class="cb"></span> Other: ______________</div>
+          </div>
+          <div>
+            <div style="font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#556;margin-bottom:6px">Treatment Methods Used</div>
+            <div class="checkbox-row"><span class="cb"></span> Liquid Spray — Interior</div>
+            <div class="checkbox-row"><span class="cb"></span> Liquid Spray — Exterior</div>
+            <div class="checkbox-row"><span class="cb"></span> Bait Stations Placed / Checked</div>
+            <div class="checkbox-row"><span class="cb"></span> Glue Traps Set</div>
+            <div class="checkbox-row"><span class="cb"></span> Dust Application</div>
+            <div class="checkbox-row"><span class="cb"></span> Fumigation</div>
+            <div class="checkbox-row"><span class="cb"></span> Exclusion / Sealing</div>
+            <div class="checkbox-row"><span class="cb"></span> Other: ______________</div>
+          </div>
+        </div>
+        <div class="field-grid cols-3">
+          <div class="field"><label>Chemical(s) Used</label><div class="line"></div></div>
+          <div class="field"><label>EPA Reg. #</label><div class="line"></div></div>
+          <div class="field"><label>Application Rate</label><div class="line"></div></div>
+        </div>
+        <div class="field" style="margin-top:10px"><label>Treatment Notes</label><div class="box" style="min-height:52px"></div></div>
       </div>
     </div>
 
-    <div class="c-row">
-      <div class="c-field">
-        <label>Customer Name</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field" style="flex:2">
-        <label>Service Address</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Service Date</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Technician</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Treatment Applied</div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Pest / Target</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Treatment Method</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Products Used</div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Product 1 (EPA Reg. #)</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Product 2 (EPA Reg. #)</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Re-Entry Interval</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Next Service Due</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Technician Notes</div>
-    <div class="c-row">
-      <div class="c-field">
-        <div class="line-tall"></div>
-      </div>
-    </div>
-
-    <div class="callback-box">
-      <strong>Callback Instructions:</strong><br>
-      If pest activity continues after _______ days, please call us immediately. Do not re-treat with other products. Keep pets and children away from treated areas for the time listed above.
-    </div>
-
-    <div class="card-footer">INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; agentatlasshop.etsy.com</div>
-  </div>
-
-  <!-- CARD 2 (duplicate blank for printing) -->
-  <div class="card">
-    <div class="card-header">
-      <div class="company-block">
-        <div class="company-name">&nbsp;</div>
-        <div class="company-contact">
-          Phone: _____________________<br>
-          License #: __________________
+    <div class="section">
+      <div class="section-header">3 — Next Service</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Next Service Date</label><div class="line"></div></div>
+          <div class="field"><label>Service Frequency</label><div class="line"></div></div>
+          <div class="field"><label>Technician Assigned</label><div class="line"></div></div>
+          <div class="field"><label>Estimated Cost</label><div class="line"></div></div>
         </div>
       </div>
-      <div class="card-title">
-        Pest Control<br>Follow-Up Card
-        <div class="card-id">Form LS-006</div>
-      </div>
     </div>
 
-    <div class="c-row">
-      <div class="c-field">
-        <label>Customer Name</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field" style="flex:2">
-        <label>Service Address</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Service Date</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Technician</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Treatment Applied</div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Pest / Target</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Treatment Method</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Products Used</div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Product 1 (EPA Reg. #)</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Product 2 (EPA Reg. #)</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Re-Entry Interval</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Next Service Due</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Technician Notes</div>
-    <div class="c-row">
-      <div class="c-field">
-        <div class="line-tall"></div>
-      </div>
-    </div>
-
-    <div class="callback-box">
-      <strong>Callback Instructions:</strong><br>
-      If pest activity continues after _______ days, please call us immediately. Do not re-treat with other products. Keep pets and children away from treated areas for the time listed above.
-    </div>
-
-    <div class="card-footer">INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; agentatlasshop.etsy.com</div>
-  </div>
-
-  <!-- CARD 3 -->
-  <div class="card">
-    <div class="card-header">
-      <div class="company-block">
-        <div class="company-name">&nbsp;</div>
-        <div class="company-contact">
-          Phone: _____________________<br>
-          License #: __________________
+    <div class="section">
+      <div class="section-header">4 — Recommendations</div>
+      <div class="section-body">
+        <div class="field-grid cols-2">
+          <div>
+            <div style="font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#556;margin-bottom:6px">Client Action Items</div>
+            <div class="checkbox-row"><span class="cb"></span> Seal entry points (cracks / gaps)</div>
+            <div class="checkbox-row"><span class="cb"></span> Remove standing water</div>
+            <div class="checkbox-row"><span class="cb"></span> Store food in sealed containers</div>
+            <div class="checkbox-row"><span class="cb"></span> Clear debris / clutter from crawlspace</div>
+            <div class="checkbox-row"><span class="cb"></span> Trim vegetation away from structure</div>
+            <div class="checkbox-row"><span class="cb"></span> Fix moisture/leak issues</div>
+          </div>
+          <div class="field"><label>Additional Recommendations</label><div class="box" style="min-height:100px"></div></div>
         </div>
       </div>
-      <div class="card-title">
-        Pest Control<br>Follow-Up Card
-        <div class="card-id">Form LS-006</div>
-      </div>
     </div>
 
-    <div class="c-row">
-      <div class="c-field">
-        <label>Customer Name</label>
-        <div class="line"></div>
-      </div>
+    <div class="sig-block">
+      <div class="sig-field"><label>Technician Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / License # / Date</div></div>
+      <div class="sig-field"><label>Client Acknowledgment</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Service received and understood</div></div>
     </div>
-    <div class="c-row">
-      <div class="c-field" style="flex:2">
-        <label>Service Address</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Service Date</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Technician</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Treatment Applied</div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Pest / Target</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Treatment Method</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Products Used</div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Product 1 (EPA Reg. #)</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Product 2 (EPA Reg. #)</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Re-Entry Interval</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Next Service Due</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Technician Notes</div>
-    <div class="c-row">
-      <div class="c-field">
-        <div class="line-tall"></div>
-      </div>
-    </div>
-
-    <div class="callback-box">
-      <strong>Callback Instructions:</strong><br>
-      If pest activity continues after _______ days, please call us immediately. Do not re-treat with other products. Keep pets and children away from treated areas for the time listed above.
-    </div>
-
-    <div class="card-footer">INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; agentatlasshop.etsy.com</div>
   </div>
-
-  <!-- CARD 4 -->
-  <div class="card">
-    <div class="card-header">
-      <div class="company-block">
-        <div class="company-name">&nbsp;</div>
-        <div class="company-contact">
-          Phone: _____________________<br>
-          License #: __________________
-        </div>
-      </div>
-      <div class="card-title">
-        Pest Control<br>Follow-Up Card
-        <div class="card-id">Form LS-006</div>
-      </div>
-    </div>
-
-    <div class="c-row">
-      <div class="c-field">
-        <label>Customer Name</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field" style="flex:2">
-        <label>Service Address</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Service Date</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Technician</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Treatment Applied</div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Pest / Target</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Treatment Method</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Products Used</div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Product 1 (EPA Reg. #)</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Product 2 (EPA Reg. #)</label>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="c-row">
-      <div class="c-field">
-        <label>Re-Entry Interval</label>
-        <div class="line"></div>
-      </div>
-      <div class="c-field">
-        <label>Next Service Due</label>
-        <div class="line"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Technician Notes</div>
-    <div class="c-row">
-      <div class="c-field">
-        <div class="line-tall"></div>
-      </div>
-    </div>
-
-    <div class="callback-box">
-      <strong>Callback Instructions:</strong><br>
-      If pest activity continues after _______ days, please call us immediately. Do not re-treat with other products. Keep pets and children away from treated areas for the time listed above.
-    </div>
-
-    <div class="card-footer">INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; agentatlasshop.etsy.com</div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Keep copy for pesticide application records as required by state law.</div>
+    <div>LS-006</div>
   </div>
-
-</div><!-- end cards-wrapper -->
-
-</body>
-</html>`
+</div>
+</body></html>`
   },
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // LS-007 — Roofing Change Order + Approval Form
-  // ─────────────────────────────────────────────────────────────────────────
   'LS-007': {
     id: 'LS-007',
     title: 'Roofing Change Order + Approval Form',
-    html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roofing Change Order — LS-007</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 11pt; color: #111; background: #fff;
-    padding: 24px; max-width: 800px; margin: 0 auto;
-  }
-  .print-btn {
-    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
-    background: #1a56db; color: #fff; border: none; border-radius: 5px;
-    font-size: 11pt; cursor: pointer;
-  }
-  .print-btn:hover { background: #1345b7; }
-  @media print { .print-btn { display: none !important; } }
-
-  header {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    border-bottom: 2.5px solid #111; padding-bottom: 10px; margin-bottom: 18px;
-  }
-  .company-name {
-    font-size: 20pt; font-weight: 700; border: 2px dashed #bbb;
-    padding: 4px 12px; display: inline-block; min-width: 220px; min-height: 34px;
-  }
-  .company-sub { font-size: 8.5pt; color: #555; margin-top: 3px; }
-  .form-title { text-align: right; }
-  .form-title h1 { font-size: 15pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .form-id { font-size: 8.5pt; color: #666; margin-top: 2px; }
-
-  /* Change order banner */
-  .co-banner {
-    background: #111; color: #fff; text-align: center;
-    font-size: 13pt; font-weight: 700; letter-spacing: 2px;
-    text-transform: uppercase; padding: 8px 0; margin-bottom: 18px;
-  }
-
-  .row { display: flex; gap: 16px; margin-bottom: 12px; }
-  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
-  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
-  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
-  .line-tall { border: 1.5px solid #333; min-height: 70px; padding: 3px; }
-  .line-xl { border: 1.5px solid #333; min-height: 90px; padding: 4px; }
-
-  .section-title {
-    font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
-    background: #f0f0f0; border-left: 3px solid #333; padding: 4px 8px; margin: 16px 0 10px 0;
-  }
-
-  table.change-table {
-    width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10pt;
-  }
-  table.change-table th {
-    background: #f0f0f0; border: 1px solid #bbb; padding: 5px 8px;
-    text-align: left; font-size: 8pt; text-transform: uppercase;
-  }
-  table.change-table td { border: 1px solid #bbb; padding: 4px 8px; height: 24px; }
-
-  .price-summary {
-    border: 2px solid #333; padding: 14px 18px; margin: 16px 0;
-    background: #fcfcfc;
-  }
-  .price-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 6px 0; border-bottom: 1px solid #eee;
-  }
-  .price-row:last-child { border-bottom: none; }
-  .price-label { font-size: 10pt; font-weight: 500; }
-  .price-value { font-size: 10pt; min-width: 160px; border-bottom: 1.5px solid #333; text-align: right; padding-right: 4px; }
-  .price-total .price-label { font-size: 11.5pt; font-weight: 700; }
-  .price-total .price-value {
-    font-size: 11.5pt; font-weight: 700;
-    border-bottom: 3px double #333;
-  }
-
-  .reason-box {
-    border: 1.5px solid #bbb; padding: 10px 12px; background: #fafafa;
-    margin-bottom: 12px;
-  }
-  .reason-box label {
-    display: block; font-size: 8pt; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.4px; color: #444; margin-bottom: 6px;
-  }
-  .reason-checkboxes { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 8px; }
-  .check-item { display: flex; align-items: center; gap: 7px; font-size: 10pt; }
-  .cb { width: 15px; height: 15px; border: 1.5px solid #333; display: inline-block; flex-shrink: 0; border-radius: 2px; }
-
-  .sig-block-2col {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px;
-  }
-  .sig-unit { border-top: 1.5px solid #333; padding-top: 6px; }
-  .sig-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
-  .sig-line { border-bottom: 1px solid #aaa; margin-top: 32px; }
-  .sig-sub { font-size: 7.5pt; color: #666; margin-top: 3px; }
-  .sig-date { margin-top: 12px; }
-  .sig-date label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
-  .sig-date .line { border-bottom: 1.5px solid #333; min-height: 20px; }
-
-  .witness-row {
-    margin-top: 16px; padding-top: 14px; border-top: 1px dashed #bbb;
-  }
-
-  footer {
-    margin-top: 28px; padding-top: 8px; border-top: 1px solid #ccc;
-    text-align: center; font-size: 7.5pt; color: #999;
-  }
-  @media print { body { padding: 16px; } @page { margin: 0.6in; size: letter; } }
-</style>
-</head>
-<body>
-
-<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
-
-<header>
-  <div>
-    <div class="company-name">&nbsp;</div>
-    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; License #: _________________ &nbsp;&nbsp; Insurance #: _________________</div>
-  </div>
-  <div class="form-title">
-    <h1>Roofing Change Order</h1>
-    <div class="form-id">Form LS-007</div>
-  </div>
-</header>
-
-<div class="co-banner">Change Order &amp; Approval Form</div>
-
-<div class="row">
-  <div class="field">
-    <label>Change Order #</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Date</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Original Contract #</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Contract Date</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Project &amp; Party Information</div>
-
-<div class="row">
-  <div class="field" style="flex:3">
-    <label>Project / Property Address</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>City, State, Zip</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Property Owner Name</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Owner Phone</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Owner Email</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Contractor / Company Name</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Project Manager</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Contractor Phone</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="section-title">Description of Change</div>
-
-<div class="row">
-  <div class="field">
-    <label>Detailed Description of Work Being Added, Removed, or Modified</label>
-    <div class="line-xl"></div>
-  </div>
-</div>
-
-<div class="section-title">Materials Added / Removed</div>
-
-<table class="change-table">
-  <thead>
-    <tr>
-      <th style="width:8%">+/−</th>
-      <th style="width:38%">Material / Item Description</th>
-      <th style="width:12%">Unit</th>
-      <th style="width:12%">Qty</th>
-      <th style="width:15%">Unit Cost</th>
-      <th style="width:15%">Line Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  </tbody>
-</table>
-
-<div class="section-title">Labor Change</div>
-
-<div class="row">
-  <div class="field">
-    <label>Additional Labor Description</label>
-    <div class="line-tall"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="field">
-    <label>Additional Hours</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Rate per Hour</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Total Labor Cost</label>
-    <div class="line"></div>
-  </div>
-  <div class="field">
-    <label>Additional Days on Site</label>
-    <div class="line"></div>
-  </div>
-</div>
-
-<div class="price-summary">
-  <div class="price-row">
-    <div class="price-label">Original Contract Amount</div>
-    <div class="price-value">$</div>
-  </div>
-  <div class="price-row">
-    <div class="price-label">This Change Order — Materials</div>
-    <div class="price-value">$</div>
-  </div>
-  <div class="price-row">
-    <div class="price-label">This Change Order — Labor</div>
-    <div class="price-value">$</div>
-  </div>
-  <div class="price-row">
-    <div class="price-label">Total Price Adjustment (+ / −)</div>
-    <div class="price-value">$</div>
-  </div>
-  <div class="price-row price-total">
-    <div class="price-label">NEW REVISED CONTRACT TOTAL</div>
-    <div class="price-value">$</div>
-  </div>
-</div>
-
-<div class="reason-box">
-  <label>Reason for Change Order</label>
-  <div class="reason-checkboxes">
-    <div class="check-item"><div class="cb"></div> Hidden / Unforeseen Damage</div>
-    <div class="check-item"><div class="cb"></div> Owner-Requested Upgrade</div>
-    <div class="check-item"><div class="cb"></div> Code / Permit Requirement</div>
-    <div class="check-item"><div class="cb"></div> Scope Adjustment</div>
-    <div class="check-item"><div class="cb"></div> Material Substitution</div>
-    <div class="check-item"><div class="cb"></div> Insurance Supplement</div>
-    <div class="check-item"><div class="cb"></div> Weather / Site Condition</div>
-    <div class="check-item"><div class="cb"></div> Other (explain below)</div>
-  </div>
-  <div style="border-bottom: 1.5px solid #333; min-height: 22px;"></div>
-</div>
-
-<div class="section-title">Approval Signatures</div>
-
-<p style="font-size:9pt; color:#444; margin-bottom:12px;">
-  This Change Order becomes part of and is subject to all terms and conditions of the original contract. No work described herein shall begin until this document is signed by both parties. Unsigned change orders are not authorized.
-</p>
-
-<div class="sig-block-2col">
-  <div>
-    <div class="sig-unit">
-      <div class="sig-label">Owner / Authorized Representative Signature</div>
-      <div class="sig-line"></div>
-      <div class="sig-sub">Owner approves the work, price adjustment, and revised contract total above.</div>
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Roofing Change Order — LS-007</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Roofing &amp; Exterior Solutions</div>
     </div>
-    <div class="sig-date" style="margin-top:10px">
-      <label>Printed Name</label>
-      <div class="line"></div>
-    </div>
-    <div class="sig-date">
-      <label>Date Signed</label>
-      <div class="line"></div>
+    <div class="form-info">
+      <div class="form-title">Change Order &amp; Approval</div>
+      <div class="form-id">FORM LS-007 · REV 1.0</div>
     </div>
   </div>
-  <div>
-    <div class="sig-unit">
-      <div class="sig-label">Contractor / Project Manager Signature</div>
-      <div class="sig-line"></div>
-      <div class="sig-sub">Contractor confirms scope, pricing, and authorization to proceed.</div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Change Order Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Change Order #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Project / Job #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Project Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Property Owner</label><div class="line"></div></div>
+          <div class="field"><label>Property Address</label><div class="line"></div></div>
+          <div class="field"><label>Phone</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Roofing Foreman</label><div class="line"></div></div>
+          <div class="field"><label>Original Contract Date</label><div class="line"></div></div>
+          <div class="field"><label>Project Start Date</label><div class="line"></div></div>
+          <div class="field"><label>Projected Completion</label><div class="line"></div></div>
+        </div>
+      </div>
     </div>
-    <div class="sig-date" style="margin-top:10px">
-      <label>Printed Name</label>
-      <div class="line"></div>
+
+    <div class="section">
+      <div class="section-header">2 — Original Contract Summary</div>
+      <div class="section-body">
+        <div class="field-grid cols-3">
+          <div class="field"><label>Original Scope Summary</label><div class="line"></div></div>
+          <div class="field"><label>Original Contract Value</label><div class="line"></div></div>
+          <div class="field"><label>Amount Paid to Date</label><div class="line"></div></div>
+        </div>
+      </div>
     </div>
-    <div class="sig-date">
-      <label>Date Signed</label>
-      <div class="line"></div>
+
+    <div class="section">
+      <div class="section-header">3 — Scope of Change</div>
+      <div class="section-body">
+        <div class="field"><label>Reason for Change Order</label><div class="box" style="min-height:60px"></div></div>
+        <div class="field" style="margin-top:12px"><label>Detailed Description of Additional / Changed Work</label><div class="box" style="min-height:60px"></div></div>
+      </div>
     </div>
+
+    <div class="section">
+      <div class="section-header">4 — Materials Added / Removed</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>Action</th><th>Material / Item Description</th><th>Unit</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>ADD</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>ADD</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>ADD</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>REMOVE</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>REMOVE</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td colspan="5" style="text-align:right;font-weight:700;padding-right:14px">Materials Net Change</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">5 — Price Adjustment</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Materials Net Change</label><div class="line"></div></div>
+          <div class="field"><label>Additional Labor Cost</label><div class="line"></div></div>
+          <div class="field"><label>This Change Order Total</label><div class="line" style="font-weight:700"></div></div>
+          <div class="field"><label>Revised Contract Total</label><div class="line" style="font-weight:700"></div></div>
+        </div>
+        <div class="field-grid cols-2" style="margin-top:12px">
+          <div class="field"><label>New Estimated Completion Date</label><div class="line"></div></div>
+          <div class="field"><label>Schedule Impact (days added)</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">6 — Authorization</div>
+      <div class="section-body" style="background:#fffbf0;border-color:#e8d87a">
+        <p style="font-size:8.5pt;line-height:1.6;color:#444;margin-bottom:14px">By signing below, the property owner authorizes the above change in scope and the revised contract amount. Work will not begin on the changed scope until this form is signed. This change order is incorporated into and subject to the terms of the original contract.</p>
+        <div class="sig-block" style="margin-top:0;padding-top:0;border-top:none">
+          <div class="sig-field"><label>Property Owner Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Printed Name / Date</div></div>
+          <div class="sig-field"><label>Contractor Representative</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Title / Date</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Change orders must be signed before commencement of additional work. Retain all copies.</div>
+    <div>LS-007</div>
   </div>
 </div>
+</body></html>`
+  },
 
-<div class="witness-row">
-  <div class="row">
-    <div class="field">
-      <label>Witness Signature (optional)</label>
-      <div class="line"></div>
+
+  'LS-008': {
+    id: 'LS-008',
+    title: 'Pressure Washing Route Sheet',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Pressure Washing Route Sheet — LS-008</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Pressure Washing &amp; Surface Cleaning</div>
     </div>
-    <div class="field">
-      <label>Witness Printed Name</label>
-      <div class="line"></div>
-    </div>
-    <div class="field">
-      <label>Date</label>
-      <div class="line"></div>
+    <div class="form-info">
+      <div class="form-title">Daily Route Sheet</div>
+      <div class="form-id">FORM LS-008 · REV 1.0</div>
     </div>
   </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Route #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Crew / Operator</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Date &amp; Crew Info</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Vehicle / Rig #</label><div class="line"></div></div>
+          <div class="field"><label>Machine PSI</label><div class="line"></div></div>
+          <div class="field"><label>Start Mileage</label><div class="line"></div></div>
+          <div class="field"><label>End Mileage</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Daily Job List</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Client / Address</th>
+              <th>Surface Type</th>
+              <th>PSI Used</th>
+              <th>Detergent / Mix</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Hrs</th>
+              <th>Client Sign-Off</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — End of Day Summary</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:12px">
+          <div class="field"><label>Total Jobs Completed</label><div class="line"></div></div>
+          <div class="field"><label>Total Billable Hours</label><div class="line"></div></div>
+          <div class="field"><label>Water Used (gal est.)</label><div class="line"></div></div>
+          <div class="field"><label>Chemical Used (oz/gal)</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-2">
+          <div class="field"><label>Equipment Issues / Damage</label><div class="box" style="min-height:52px"></div></div>
+          <div class="field"><label>Notes / Follow-Up Items</label><div class="box" style="min-height:52px"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Operator Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+      <div class="sig-field"><label>Supervisor / Office Review</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Retain for your records.</div>
+    <div>LS-008</div>
+  </div>
 </div>
+</body></html>`
+  },
 
-<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-007 Roofing Change Order + Approval &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+  'LS-009': {
+    id: 'LS-009',
+    title: 'Appliance Repair Parts Tracker',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Appliance Repair Parts Tracker — LS-009</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Appliance Repair Services</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Parts Order Tracker</div>
+      <div class="form-id">FORM LS-009 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Week / Period</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Form #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Technician</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
 
-</body>
-</html>`
+    <div class="section">
+      <div class="section-header">1 — Technician Info</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Technician Name</label><div class="line"></div></div>
+          <div class="field"><label>Badge / ID #</label><div class="line"></div></div>
+          <div class="field"><label>Reporting Period</label><div class="line"></div></div>
+          <div class="field"><label>Supervisor</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Parts Order Log</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Customer / Job #</th>
+              <th>Appliance Make / Model</th>
+              <th>Part Description</th>
+              <th>Part #</th>
+              <th>Supplier</th>
+              <th>Ordered</th>
+              <th>ETA</th>
+              <th>Cost</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>9</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:7.5pt;color:#8899cc;margin-top:6px">Status codes: O = Ordered · S = Shipped · R = Received · I = Installed · B = Back-ordered · C = Cancelled</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Order Summary</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Total Parts Ordered</label><div class="line"></div></div>
+          <div class="field"><label>Total Parts Received</label><div class="line"></div></div>
+          <div class="field"><label>Total Parts Cost</label><div class="line"></div></div>
+          <div class="field"><label>Jobs Awaiting Parts</label><div class="line"></div></div>
+        </div>
+        <div class="field" style="margin-top:12px"><label>Notes / Back-Order Details</label><div class="box" style="min-height:52px"></div></div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Technician Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+      <div class="sig-field"><label>Parts Manager / Supervisor</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Reviewed / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Retain for inventory and job cost records.</div>
+    <div>LS-009</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+  'LS-010': {
+    id: 'LS-010',
+    title: 'Handyman Materials Reimbursement Sheet',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Handyman Materials Reimbursement — LS-010</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Handyman &amp; Home Repair Services</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Materials Reimbursement Sheet</div>
+      <div class="form-id">FORM LS-010 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Form #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Job #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Job Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Client Name</label><div class="line"></div></div>
+          <div class="field"><label>Job Address</label><div class="line"></div></div>
+          <div class="field"><label>Phone</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Technician / Handyman</label><div class="line"></div></div>
+          <div class="field"><label>Work Date(s)</label><div class="line"></div></div>
+          <div class="field"><label>Job Description</label><div class="line"></div></div>
+          <div class="field"><label>Labor Rate ($/hr)</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Materials Purchased</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Item Description</th>
+              <th>Store / Supplier</th>
+              <th>Receipt #</th>
+              <th>Date Purchased</th>
+              <th>Qty</th>
+              <th>Unit Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Cost Summary</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Materials Subtotal</label><div class="line"></div></div>
+          <div class="field"><label>Tax / Fees</label><div class="line"></div></div>
+          <div class="field"><label>Labor Total</label><div class="line"></div></div>
+          <div class="field"><label style="color:#1a1a2e;font-weight:900">TOTAL DUE</label><div class="line" style="border-color:#1a1a2e;font-weight:700"></div></div>
+        </div>
+        <div class="field" style="margin-top:12px"><label>Payment Method</label><div class="line" style="max-width:50%"></div></div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Technician Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">I certify all materials above were purchased for this job / Date</div></div>
+      <div class="sig-field"><label>Client Sign-Off</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">I authorize reimbursement of the above materials / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Attach receipts where required. Retain for your records.</div>
+    <div>LS-010</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+  'LS-011': {
+    id: 'LS-011',
+    title: 'Mobile Mechanic Service Summary',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Mobile Mechanic Service Summary — LS-011</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Mobile Auto Repair &amp; Service</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Service Summary</div>
+      <div class="form-id">FORM LS-011 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Service Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Invoice #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Job #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Vehicle Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:12px">
+          <div class="field"><label>Customer Name</label><div class="line"></div></div>
+          <div class="field"><label>Phone</label><div class="line"></div></div>
+          <div class="field"><label>Email</label><div class="line"></div></div>
+          <div class="field"><label>Service Location</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Year</label><div class="line"></div></div>
+          <div class="field"><label>Make</label><div class="line"></div></div>
+          <div class="field"><label>Model</label><div class="line"></div></div>
+          <div class="field"><label>Engine</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4" style="margin-top:12px">
+          <div class="field"><label>License Plate</label><div class="line"></div></div>
+          <div class="field"><label>VIN</label><div class="line"></div></div>
+          <div class="field"><label>Mileage</label><div class="line"></div></div>
+          <div class="field"><label>Color</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Work Performed</div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;margin-bottom:10px">
+          <div class="checkbox-row"><span class="cb"></span> Oil &amp; Filter Change</div>
+          <div class="checkbox-row"><span class="cb"></span> Brake Inspection / Service</div>
+          <div class="checkbox-row"><span class="cb"></span> Battery Test / Replacement</div>
+          <div class="checkbox-row"><span class="cb"></span> Starter / Alternator</div>
+          <div class="checkbox-row"><span class="cb"></span> Spark Plugs / Ignition</div>
+          <div class="checkbox-row"><span class="cb"></span> Belts / Hoses</div>
+          <div class="checkbox-row"><span class="cb"></span> Diagnostic Scan (OBD-II)</div>
+          <div class="checkbox-row"><span class="cb"></span> Fluid Top-Off / Flush</div>
+          <div class="checkbox-row"><span class="cb"></span> Tire Change / Rotation</div>
+          <div class="checkbox-row"><span class="cb"></span> Other: __________________</div>
+        </div>
+        <div class="field"><label>Detailed Work Description</label><div class="box" style="min-height:60px"></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Parts Replaced</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>#</th><th>Part Description</th><th>OEM / Aftermarket</th><th>Part Number</th><th>Qty</th><th>Unit Cost</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td colspan="6" style="text-align:right;font-weight:700;padding-right:14px">Parts Subtotal</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Labor &amp; Time</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Start Time</label><div class="line"></div></div>
+          <div class="field"><label>End Time</label><div class="line"></div></div>
+          <div class="field"><label>Total Hours</label><div class="line"></div></div>
+          <div class="field"><label>Labor Rate ($/hr)</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4" style="margin-top:12px">
+          <div class="field"><label>Labor Total</label><div class="line"></div></div>
+          <div class="field"><label>Parts Total</label><div class="line"></div></div>
+          <div class="field"><label>Travel / Service Fee</label><div class="line"></div></div>
+          <div class="field"><label style="color:#1a1a2e;font-weight:900">TOTAL DUE</label><div class="line" style="border-color:#1a1a2e;font-weight:700"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Mechanic Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Certification # / Date</div></div>
+      <div class="sig-field"><label>Customer Sign-Off</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Work completed to satisfaction / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Retain for vehicle service records.</div>
+    <div>LS-011</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+  'LS-012': {
+    id: 'LS-012',
+    title: 'Locksmith Job Authorization Form',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Locksmith Job Authorization — LS-012</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Licensed Locksmith Services</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Job Authorization Form</div>
+      <div class="form-id">FORM LS-012 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Work Order #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Technician</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Client &amp; Property Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Client Full Name</label><div class="line"></div></div>
+          <div class="field"><label>Phone Number</label><div class="line"></div></div>
+          <div class="field"><label>Email</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-3">
+          <div class="field"><label>Property / Service Address</label><div class="line"></div></div>
+          <div class="field"><label>Property Type</label><div class="line"></div></div>
+          <div class="field"><label>Unit / Apt #</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — ID Verification</div>
+      <div class="section-body" style="background:#fffaf0">
+        <p style="font-size:8pt;color:#774;margin-bottom:10px;font-style:italic">Locksmith is required by law to verify the identity and authorization of the requesting party before performing any service. Complete all fields.</p>
+        <div class="field-grid cols-4" style="margin-bottom:10px">
+          <div class="field"><label>ID Type Presented</label><div class="line"></div></div>
+          <div class="field"><label>ID Number</label><div class="line"></div></div>
+          <div class="field"><label>ID Expiration Date</label><div class="line"></div></div>
+          <div class="field"><label>ID Matches Name Above?</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-2">
+          <div class="field"><label>Relationship to Property (owner/tenant/agent)</label><div class="line"></div></div>
+          <div class="field"><label>Proof of Ownership / Residency</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Authorization Statement</div>
+      <div class="section-body">
+        <p style="font-size:8.5pt;line-height:1.7;color:#334;border:1px solid #e0e4f0;padding:12px;border-radius:3px;background:#f7f8fc">
+          I, the undersigned, hereby authorize <strong>[Your Company Name]</strong> to perform the locksmith services described below on the property listed above. I certify that I am the legal owner, authorized tenant, or designated representative of this property. I understand that making a false statement to obtain locksmith services may constitute a criminal offense. I accept full liability for any unauthorized service request. I agree to pay the quoted price upon completion of service.
+        </p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Service Description</div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;margin-bottom:12px">
+          <div class="checkbox-row"><span class="cb"></span> Lockout — Residential</div>
+          <div class="checkbox-row"><span class="cb"></span> Lockout — Vehicle</div>
+          <div class="checkbox-row"><span class="cb"></span> Lock Re-Key</div>
+          <div class="checkbox-row"><span class="cb"></span> Lock Replacement / Upgrade</div>
+          <div class="checkbox-row"><span class="cb"></span> Deadbolt Installation</div>
+          <div class="checkbox-row"><span class="cb"></span> Master Key System</div>
+          <div class="checkbox-row"><span class="cb"></span> Safe Opening / Combination Change</div>
+          <div class="checkbox-row"><span class="cb"></span> Key Duplication</div>
+          <div class="checkbox-row"><span class="cb"></span> Access Control / Smart Lock</div>
+          <div class="checkbox-row"><span class="cb"></span> Other: __________________</div>
+        </div>
+        <div class="field-grid cols-3">
+          <div class="field"><label>Quoted Price</label><div class="line"></div></div>
+          <div class="field"><label>After-Hours / Emergency Fee</label><div class="line"></div></div>
+          <div class="field"><label>Total Amount Agreed</label><div class="line"></div></div>
+        </div>
+        <div class="field" style="margin-top:12px"><label>Service Notes</label><div class="box" style="min-height:50px"></div></div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Client Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Printed Name / Date — I authorize the above service</div></div>
+      <div class="sig-field"><label>Locksmith Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / License # / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. ID verification is mandatory. Retain signed copy for all locksmith work orders per state licensing requirements.</div>
+    <div>LS-012</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+  'LS-013': {
+    id: 'LS-013',
+    title: 'Painting Prep & Final Punch List',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Painting Prep & Final Punch List — LS-013</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Professional Painting &amp; Finishing</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Prep &amp; Final Punch List</div>
+      <div class="form-id">FORM LS-013 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Form #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Job #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Project Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Client Name</label><div class="line"></div></div>
+          <div class="field"><label>Project Address</label><div class="line"></div></div>
+          <div class="field"><label>Lead Painter</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Project Type</label><div class="line"></div></div>
+          <div class="field"><label>Interior / Exterior</label><div class="line"></div></div>
+          <div class="field"><label>Start Date</label><div class="line"></div></div>
+          <div class="field"><label>Completion Date</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Surface Prep Checklist</div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px">
+          <div class="checkbox-row"><span class="cb"></span> Furniture / fixtures moved or covered</div>
+          <div class="checkbox-row"><span class="cb"></span> Drop cloths laid on all floors</div>
+          <div class="checkbox-row"><span class="cb"></span> Hardware removed (outlets, plates, hooks)</div>
+          <div class="checkbox-row"><span class="cb"></span> Cracks / holes patched with spackle</div>
+          <div class="checkbox-row"><span class="cb"></span> Surfaces sanded smooth</div>
+          <div class="checkbox-row"><span class="cb"></span> Surfaces wiped clean (dust / grease)</div>
+          <div class="checkbox-row"><span class="cb"></span> Caulk applied to trim / edges</div>
+          <div class="checkbox-row"><span class="cb"></span> Tape applied to all masking areas</div>
+          <div class="checkbox-row"><span class="cb"></span> Wood rot addressed / repaired</div>
+          <div class="checkbox-row"><span class="cb"></span> Stains spot-primed (water / smoke)</div>
+          <div class="checkbox-row"><span class="cb"></span> Exterior surfaces pressure washed</div>
+          <div class="checkbox-row"><span class="cb"></span> All prep work approved by lead</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Primer &amp; Base Coat Notes</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:10px">
+          <div class="field"><label>Primer Brand</label><div class="line"></div></div>
+          <div class="field"><label>Primer Color / Tint</label><div class="line"></div></div>
+          <div class="field"><label>Applied By</label><div class="line"></div></div>
+          <div class="field"><label>Dry Time</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Top Coat Brand</label><div class="line"></div></div>
+          <div class="field"><label>Color Name / Code</label><div class="line"></div></div>
+          <div class="field"><label>Sheen Level</label><div class="line"></div></div>
+          <div class="field"><label># of Coats</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Final Punch List</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>Area / Room</th><th>Item / Issue</th><th>Assigned To</th><th>Completed?</th><th>Initials</th></tr></thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">5 — Client Walkthrough Sign-Off</div>
+      <div class="section-body">
+        <div class="field"><label>Client Comments / Punch Items Noted</label><div class="box" style="min-height:50px"></div></div>
+        <div class="field-grid cols-3" style="margin-top:10px">
+          <div class="field"><label>Walkthrough Date</label><div class="line"></div></div>
+          <div class="field"><label>Outstanding Items Resolved?</label><div class="line"></div></div>
+          <div class="field"><label>Final Payment Amount</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Lead Painter Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+      <div class="sig-field"><label>Client Acceptance</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Work completed to satisfaction / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Retain for project records.</div>
+    <div>LS-013</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+
+  'LS-014': {
+    id: 'LS-014',
+    title: 'Snow Removal Trigger Checklist',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Snow Removal Trigger Checklist — LS-014</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Snow &amp; Ice Management Services</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Snow Removal Trigger Checklist</div>
+      <div class="form-id">FORM LS-014 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Season</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Form #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Operations Manager</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Season Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Season Start Date</label><div class="line"></div></div>
+          <div class="field"><label>Season End Date</label><div class="line"></div></div>
+          <div class="field"><label>Total Contracted Routes</label><div class="line"></div></div>
+          <div class="field"><label>Number of Crews</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Service Trigger Conditions</div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div>
+            <div style="font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#556;margin-bottom:8px">Snowfall Triggers (check applicable)</div>
+            <div class="checkbox-row"><span class="cb"></span> 1" accumulation trigger</div>
+            <div class="checkbox-row"><span class="cb"></span> 2" accumulation trigger</div>
+            <div class="checkbox-row"><span class="cb"></span> 3" accumulation trigger</div>
+            <div class="checkbox-row"><span class="cb"></span> Per-push (any accumulation)</div>
+            <div class="checkbox-row"><span class="cb"></span> Zero-tolerance (continuous)</div>
+            <div class="checkbox-row"><span class="cb"></span> Client-requested call-out only</div>
+          </div>
+          <div>
+            <div style="font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#556;margin-bottom:8px">Ice &amp; Conditions Triggers</div>
+            <div class="checkbox-row"><span class="cb"></span> Black ice — auto deploy</div>
+            <div class="checkbox-row"><span class="cb"></span> Temp below ___°F — pre-treat</div>
+            <div class="checkbox-row"><span class="cb"></span> Freezing rain forecast</div>
+            <div class="checkbox-row"><span class="cb"></span> Post-storm re-freeze check</div>
+            <div class="checkbox-row"><span class="cb"></span> Daytime melt + overnight freeze</div>
+            <div class="checkbox-row"><span class="cb"></span> Client site inspection only</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Client Route List</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>#</th><th>Client / Property Name</th><th>Address</th><th>Trigger (in.)</th><th>Salt / Sand?</th><th>Priority</th><th>Crew</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Service Log</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>Event Date</th><th>Snowfall / Condition</th><th>Deployment Time</th><th>Routes Serviced</th><th>Salt Used (lbs)</th><th>Completed By</th></tr></thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">5 — Equipment Check</div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px 20px">
+          <div class="checkbox-row"><span class="cb"></span> Plow blades inspected</div>
+          <div class="checkbox-row"><span class="cb"></span> Truck fluids topped off</div>
+          <div class="checkbox-row"><span class="cb"></span> Salt spreaders calibrated</div>
+          <div class="checkbox-row"><span class="cb"></span> Salt / sand inventory stocked</div>
+          <div class="checkbox-row"><span class="cb"></span> Snow blowers serviced</div>
+          <div class="checkbox-row"><span class="cb"></span> Emergency contact list updated</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Operations Manager Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+      <div class="sig-field"><label>Owner / Supervisor Review</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Retain for season operations records.</div>
+    <div>LS-014</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+  'LS-015': {
+    id: 'LS-015',
+    title: 'Window Cleaning Client Packet',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Window Cleaning Client Packet — LS-015</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Professional Window Cleaning</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Client Service Packet</div>
+      <div class="form-id">FORM LS-015 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Client #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Route</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Client Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Client Name</label><div class="line"></div></div>
+          <div class="field"><label>Billing Address</label><div class="line"></div></div>
+          <div class="field"><label>Phone</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-3">
+          <div class="field"><label>Email</label><div class="line"></div></div>
+          <div class="field"><label>Preferred Contact Method</label><div class="line"></div></div>
+          <div class="field"><label>Referral Source</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Property Details</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:12px">
+          <div class="field"><label>Service Address</label><div class="line"></div></div>
+          <div class="field"><label>Property Type</label><div class="line"></div></div>
+          <div class="field"><label>Stories / Height</label><div class="line"></div></div>
+          <div class="field"><label>Total Window Count</label><div class="line"></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px">
+          <div class="checkbox-row"><span class="cb"></span> Interior windows included</div>
+          <div class="checkbox-row"><span class="cb"></span> Screen cleaning included</div>
+          <div class="checkbox-row"><span class="cb"></span> Track &amp; sill cleaning included</div>
+          <div class="checkbox-row"><span class="cb"></span> Skylights included</div>
+          <div class="checkbox-row"><span class="cb"></span> Hard water stain removal</div>
+          <div class="checkbox-row"><span class="cb"></span> Storm windows / panels</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Service Schedule</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>Visit #</th><th>Scheduled Date</th><th>Time Window</th><th>Service Type</th><th>Technician</th><th>Completed</th><th>Amount</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Scope of Work</div>
+      <div class="section-body">
+        <div class="field"><label>Detailed Scope / Special Instructions</label><div class="box" style="min-height:60px"></div></div>
+        <div class="field-grid cols-3" style="margin-top:12px">
+          <div class="field"><label>Service Frequency</label><div class="line"></div></div>
+          <div class="field"><label>Quoted Price Per Visit</label><div class="line"></div></div>
+          <div class="field"><label>Annual Contract Value</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">5 — Terms &amp; Service Agreement</div>
+      <div class="section-body">
+        <p style="font-size:8.5pt;line-height:1.6;color:#334;border:1px solid #e0e4f0;padding:12px;border-radius:3px;background:#f7f8fc">
+          Services are performed during agreed-upon windows. Client is responsible for providing clear access to all windows. <strong>[Your Company Name]</strong> is not liable for pre-existing screen tears, cracked seals, window damage, or paint drips on glass. Cancellations require 24-hour notice or a $_______ cancellation fee applies. Payment is due on the day of service unless invoiced monthly under a contract agreement. Prices may be adjusted annually.
+        </p>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Client Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">I agree to the scope and terms above / Date</div></div>
+      <div class="sig-field"><label>Company Representative</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Title / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Retain signed copy for client file.</div>
+    <div>LS-015</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+  'LS-016': {
+    id: 'LS-016',
+    title: 'Pool Service Chemical Log',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Pool Service Chemical Log — LS-016</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Pool &amp; Spa Service</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Chemical Service Log</div>
+      <div class="form-id">FORM LS-016 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Month / Year</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Account #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Technician</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Pool Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:12px">
+          <div class="field"><label>Client Name</label><div class="line"></div></div>
+          <div class="field"><label>Service Address</label><div class="line"></div></div>
+          <div class="field"><label>Phone</label><div class="line"></div></div>
+          <div class="field"><label>Pool Type</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Pool Volume (gal)</label><div class="line"></div></div>
+          <div class="field"><label>Sanitizer Type</label><div class="line"></div></div>
+          <div class="field"><label>Filter Type</label><div class="line"></div></div>
+          <div class="field"><label>Pump Run Time (hr/day)</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Weekly Water Chemistry Log</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Tech</th>
+              <th>Free Cl (FC) ppm</th>
+              <th>pH</th>
+              <th>Total Alk (TA)</th>
+              <th>Cal Hard (CH)</th>
+              <th>CYA ppm</th>
+              <th>Temp °F</th>
+              <th>Notes / Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:7.5pt;color:#8899cc;margin-top:6px">Target ranges: FC 2–4 ppm · pH 7.4–7.6 · TA 80–120 ppm · CH 200–400 ppm · CYA 30–50 ppm</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Chemical Dosage Record</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>Date</th><th>Chemical Name</th><th>Purpose</th><th>Amount Added</th><th>Unit</th><th>Applied By</th></tr></thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Monthly Summary</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:10px">
+          <div class="field"><label>Total Service Visits</label><div class="line"></div></div>
+          <div class="field"><label>Filter Cleaned / Backwashed</label><div class="line"></div></div>
+          <div class="field"><label>Algae Treatment Required?</label><div class="line"></div></div>
+          <div class="field"><label>Equipment Issues Noted?</label><div class="line"></div></div>
+        </div>
+        <div class="field"><label>Monthly Observations &amp; Recommendations</label><div class="box" style="min-height:52px"></div></div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Pool Technician Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Certification # / Date</div></div>
+      <div class="sig-field"><label>Client Review</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Optional monthly sign-off / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Retain chemical records as required by local health department regulations.</div>
+    <div>LS-016</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+  'LS-017': {
+    id: 'LS-017',
+    title: 'Flooring Estimate Scope Matrix',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Flooring Estimate Scope Matrix — LS-017</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Flooring Installation &amp; Refinishing</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Estimate Scope Matrix</div>
+      <div class="form-id">FORM LS-017 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Estimate Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Estimate #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Valid Until</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Client &amp; Project Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Client Name</label><div class="line"></div></div>
+          <div class="field"><label>Project Address</label><div class="line"></div></div>
+          <div class="field"><label>Phone / Email</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Project Type</label><div class="line"></div></div>
+          <div class="field"><label>Estimated Start Date</label><div class="line"></div></div>
+          <div class="field"><label>Estimated Duration</label><div class="line"></div></div>
+          <div class="field"><label>Estimator</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Room-by-Room Scope</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>Room / Area</th>
+              <th>Sq Ft</th>
+              <th>Flooring Material</th>
+              <th>Material $/sqft</th>
+              <th>Material Total</th>
+              <th>Labor $/sqft</th>
+              <th>Labor Total</th>
+              <th>Room Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Living Room</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Master Bedroom</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Bedroom 2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Bedroom 3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Kitchen</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Dining Room</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Hallway</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Bathroom(s)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Stairs</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Other:</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td colspan="7" style="text-align:right;font-weight:700;padding-right:14px">PROJECT TOTAL SQ FT &amp; SUBTOTAL</td><td style="font-weight:700"></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Material Summary</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Primary Material</label><div class="line"></div></div>
+          <div class="field"><label>Brand / Grade</label><div class="line"></div></div>
+          <div class="field"><label>Color / SKU</label><div class="line"></div></div>
+          <div class="field"><label>Waste Factor (%)</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4" style="margin-top:10px">
+          <div class="field"><label>Underlayment Needed?</label><div class="line"></div></div>
+          <div class="field"><label>Subfloor Prep Required?</label><div class="line"></div></div>
+          <div class="field"><label>Transitions / Molding</label><div class="line"></div></div>
+          <div class="field"><label>Demo / Removal</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Estimate Total</div>
+      <div class="section-body">
+        <div class="field-grid cols-4">
+          <div class="field"><label>Materials Subtotal</label><div class="line"></div></div>
+          <div class="field"><label>Labor Subtotal</label><div class="line"></div></div>
+          <div class="field"><label>Additional Charges</label><div class="line"></div></div>
+          <div class="field"><label style="color:#1a1a2e;font-weight:900">ESTIMATE TOTAL</label><div class="line" style="border-color:#1a1a2e;font-weight:700"></div></div>
+        </div>
+        <div class="field-grid cols-3" style="margin-top:12px">
+          <div class="field"><label>Deposit Required</label><div class="line"></div></div>
+          <div class="field"><label>Balance Due</label><div class="line"></div></div>
+          <div class="field"><label>Payment Terms</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Estimator Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+      <div class="sig-field"><label>Client Approval</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">I approve this estimate and authorize the project to proceed / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Estimates are valid for the period shown. Final invoice may vary based on field conditions.</div>
+    <div>LS-017</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+
+  'LS-018': {
+    id: 'LS-018',
+    title: 'Contractor Daily Site Report',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Contractor Daily Site Report — LS-018</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">General Contracting &amp; Construction</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Daily Site Report</div>
+      <div class="form-id">FORM LS-018 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Report Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Report #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Project #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Project Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:12px">
+          <div class="field"><label>Project Name</label><div class="line"></div></div>
+          <div class="field"><label>Site Address</label><div class="line"></div></div>
+          <div class="field"><label>Project Manager</label><div class="line"></div></div>
+          <div class="field"><label>Weather / Conditions</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Temperature (°F)</label><div class="line"></div></div>
+          <div class="field"><label>Contract Phase</label><div class="line"></div></div>
+          <div class="field"><label>% Complete (overall)</label><div class="line"></div></div>
+          <div class="field"><label>Site Foreman</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Crew Roster</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>Name</th><th>Trade / Role</th><th>Company / Sub</th><th>Time In</th><th>Time Out</th><th>Hours</th></tr></thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td colspan="5" style="text-align:right;font-weight:700;padding-right:14px">Total Man-Hours Today</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Work Completed Today</div>
+      <div class="section-body">
+        <div class="field"><label>Summary of Work Performed</label><div class="box" style="min-height:72px"></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Materials Used / Received</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>Material / Item</th><th>Qty Used</th><th>Unit</th><th>Delivered Today?</th><th>Supplier</th></tr></thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">5 — Delays, Issues &amp; Safety Notes</div>
+      <div class="section-body">
+        <div class="field-grid cols-2">
+          <div class="field"><label>Delays / Problems Encountered</label><div class="box" style="min-height:56px"></div></div>
+          <div class="field"><label>Safety Incidents / Near-Misses</label><div class="box" style="min-height:56px"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">6 — Next Day Plan</div>
+      <div class="section-body">
+        <div class="field"><label>Planned Work for Tomorrow</label><div class="box" style="min-height:52px"></div></div>
+        <div class="field-grid cols-3" style="margin-top:12px">
+          <div class="field"><label>Materials Needed Tomorrow</label><div class="line"></div></div>
+          <div class="field"><label>Subs / Crew Expected</label><div class="line"></div></div>
+          <div class="field"><label>Inspections Scheduled?</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Site Foreman Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+      <div class="sig-field"><label>Project Manager Review</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. File in project documentation folder. Retain for duration of project plus 3 years.</div>
+    <div>LS-018</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+  'LS-019': {
+    id: 'LS-019',
+    title: 'Septic Service Pump Log',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Septic Service Pump Log — LS-019</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Septic &amp; Waste Management Services</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Septic Service Pump Log</div>
+      <div class="form-id">FORM LS-019 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Service Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Work Order #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Technician</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Property Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:12px">
+          <div class="field"><label>Property Owner</label><div class="line"></div></div>
+          <div class="field"><label>Service Address</label><div class="line"></div></div>
+          <div class="field"><label>Phone</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>County / Municipality</label><div class="line"></div></div>
+          <div class="field"><label>Permit # (if applicable)</label><div class="line"></div></div>
+          <div class="field"><label>Years at Property</label><div class="line"></div></div>
+          <div class="field"><label>Last Service Date</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Tank Details</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:12px">
+          <div class="field"><label>Tank Size (gal)</label><div class="line"></div></div>
+          <div class="field"><label>Tank Material</label><div class="line"></div></div>
+          <div class="field"><label>Number of Compartments</label><div class="line"></div></div>
+          <div class="field"><label>Tank Install Year</label><div class="line"></div></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Tank Location / Depth</label><div class="line"></div></div>
+          <div class="field"><label>Access Risers Present?</label><div class="line"></div></div>
+          <div class="field"><label>Effluent Filter Present?</label><div class="line"></div></div>
+          <div class="field"><label>Pump Chamber Present?</label><div class="line"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Service Record</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead><tr><th>Service Date</th><th>Tech</th><th>Service Type</th><th>Gallons Pumped</th><th>Waste Disposal Site</th><th>Manifest #</th></tr></thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Observations</div>
+      <div class="section-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;margin-bottom:12px">
+          <div class="checkbox-row"><span class="cb"></span> Tank in good condition</div>
+          <div class="checkbox-row"><span class="cb"></span> Inlet / outlet baffle intact</div>
+          <div class="checkbox-row"><span class="cb"></span> Signs of root intrusion</div>
+          <div class="checkbox-row"><span class="cb"></span> Cracks / damage to tank</div>
+          <div class="checkbox-row"><span class="cb"></span> High scum / sludge levels</div>
+          <div class="checkbox-row"><span class="cb"></span> Effluent filter cleaned</div>
+          <div class="checkbox-row"><span class="cb"></span> Pump alarm functioning</div>
+          <div class="checkbox-row"><span class="cb"></span> Evidence of drainfield failure</div>
+        </div>
+        <div class="field"><label>Observation Notes</label><div class="box" style="min-height:52px"></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">5 — Compliance Notes &amp; Recommendations</div>
+      <div class="section-body">
+        <div class="field-grid cols-3" style="margin-bottom:10px">
+          <div class="field"><label>Next Recommended Service Date</label><div class="line"></div></div>
+          <div class="field"><label>Pumping Frequency Recommended</label><div class="line"></div></div>
+          <div class="field"><label>Regulatory Report Required?</label><div class="line"></div></div>
+        </div>
+        <div class="field"><label>Compliance Notes / Required Actions</label><div class="box" style="min-height:52px"></div></div>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Technician Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / License # / Date</div></div>
+      <div class="sig-field"><label>Property Owner Acknowledgment</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Service received and conditions noted / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. Waste hauling manifests must comply with state environmental regulations. Retain all records.</div>
+    <div>LS-019</div>
+  </div>
+</div>
+</body></html>`
+  },
+
+  'LS-020': {
+    id: 'LS-020',
+    title: 'Service Fee Transparency Addendum',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Service Fee Transparency Addendum — LS-020</title>${_CSS}</head><body>
+<button class="print-btn no-print" onclick="window.print()">&#128438; Print / Save as PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="logo-area">
+      <div class="company-name">Your Company Name</div>
+      <div class="company-tagline">Professional Trade Services</div>
+    </div>
+    <div class="form-info">
+      <div class="form-title">Service Fee Transparency Addendum</div>
+      <div class="form-id">FORM LS-020 · REV 1.0</div>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="info-strip">
+    <div class="info-field"><label>Effective Date</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Addendum #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Job / Account #</label><div class="field-line"></div></div>
+    <div class="info-field"><label>Page</label><div class="field-line">1 of 1</div></div>
+  </div>
+  <div class="body">
+
+    <div class="section">
+      <div class="section-header">1 — Business &amp; Client Information</div>
+      <div class="section-body">
+        <div class="field-grid cols-2" style="margin-bottom:12px">
+          <div>
+            <div style="font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#8899cc;margin-bottom:6px">Service Provider</div>
+            <div class="field" style="margin-bottom:8px"><label>Company Name</label><div class="line"></div></div>
+            <div class="field" style="margin-bottom:8px"><label>Address</label><div class="line"></div></div>
+            <div class="field-grid cols-2">
+              <div class="field"><label>Phone</label><div class="line"></div></div>
+              <div class="field"><label>License #</label><div class="line"></div></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#8899cc;margin-bottom:6px">Client</div>
+            <div class="field" style="margin-bottom:8px"><label>Client Name</label><div class="line"></div></div>
+            <div class="field" style="margin-bottom:8px"><label>Service Address</label><div class="line"></div></div>
+            <div class="field-grid cols-2">
+              <div class="field"><label>Phone</label><div class="line"></div></div>
+              <div class="field"><label>Email</label><div class="line"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">2 — Current Fee Schedule</div>
+      <div class="section-body">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>Fee / Charge Type</th>
+              <th>Description</th>
+              <th>Rate / Amount</th>
+              <th>Unit</th>
+              <th>Applies When</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Service Call / Diagnostic</td><td></td><td></td><td>per visit</td><td>Every dispatch</td></tr>
+            <tr><td>Standard Labor Rate</td><td></td><td></td><td>per hour</td><td>Standard hours M–F</td></tr>
+            <tr><td>Overtime Labor Rate</td><td></td><td></td><td>per hour</td><td>After __ hrs / weekends</td></tr>
+            <tr><td>Emergency / After-Hours</td><td></td><td></td><td>per visit</td><td>Outside business hours</td></tr>
+            <tr><td>Holiday Rate</td><td></td><td></td><td>per hour</td><td>Recognized holidays</td></tr>
+            <tr><td>Travel / Mileage Fee</td><td></td><td></td><td>per mile / flat</td><td>Beyond __ miles</td></tr>
+            <tr><td>Parts Mark-Up</td><td></td><td>___% above cost</td><td>per order</td><td>All parts sourced</td></tr>
+            <tr><td>Permit / Filing Fee</td><td></td><td></td><td>flat fee</td><td>When permit required</td></tr>
+            <tr><td>Cancellation Fee</td><td></td><td></td><td>flat fee</td><td>Less than __ hrs notice</td></tr>
+            <tr><td>Returned Check Fee</td><td></td><td></td><td>flat fee</td><td>NSF / returned payment</td></tr>
+            <tr><td>Late Payment Fee</td><td></td><td>___% / month</td><td>monthly</td><td>Past due after __ days</td></tr>
+            <tr><td>Other:</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">3 — Payment Terms</div>
+      <div class="section-body">
+        <div class="field-grid cols-4" style="margin-bottom:10px">
+          <div class="field"><label>Invoice Due Date</label><div class="line"></div></div>
+          <div class="field"><label>Accepted Payment Methods</label><div class="line"></div></div>
+          <div class="field"><label>Deposit Required</label><div class="line"></div></div>
+          <div class="field"><label>Finance / Payment Plan?</label><div class="line"></div></div>
+        </div>
+        <div class="field"><label>Additional Payment Terms / Notes</label><div class="box" style="min-height:50px"></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">4 — Client Acknowledgment</div>
+      <div class="section-body" style="background:#f7f8fc">
+        <p style="font-size:8.5pt;line-height:1.7;color:#334;border:1px solid #e0e4f0;padding:12px;border-radius:3px">
+          By signing below, I acknowledge that I have received, read, and understand the fee schedule listed above. I agree that all services rendered by <strong>[Your Company Name]</strong> will be billed in accordance with the rates shown, and that this addendum forms part of my service agreement. I understand that rates may be updated with 30 days written notice. I agree to pay all invoices in accordance with the payment terms stated above.
+        </p>
+      </div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-field"><label>Client Signature</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Printed Name / Date</div></div>
+      <div class="sig-field"><label>Company Representative</label><div class="sig-line"></div><div style="font-size:7.5pt;color:#aab;margin-top:3px">Name / Title / Date</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>TradeOpsVault &nbsp;·&nbsp; tradeopsvault.etsy.com</div>
+    <div class="disclaimer">For business use only. This addendum should be presented to all new clients before service begins. Not a substitute for a full service contract.</div>
+    <div>LS-020</div>
+  </div>
+</div>
+</body></html>`
   }
 
-}; // end TEMPLATES
+};
 
-
-// ─────────────────────────────────────────────────────────────────────────────
-// generateTemplate — returns the full standalone HTML string for a listing ID
-// ─────────────────────────────────────────────────────────────────────────────
 function generateTemplate(listingId) {
   const t = TEMPLATES[listingId];
-  if (!t) return null;
-  return t.html; // the full standalone HTML string
+  if (!t) return '<p>Template not found.</p>';
+  return t.html;
 }
 
-
-// ─────────────────────────────────────────────────────────────────────────────
-// openTemplate — opens the form in a new browser tab ready to print
-// ─────────────────────────────────────────────────────────────────────────────
 function openTemplate(listingId) {
   const html = generateTemplate(listingId);
-  if (!html) return;
   const win = window.open('', '_blank');
-  win.document.write(html);
-  win.document.close();
+  if (win) { win.document.write(html); win.document.close(); }
 }
