@@ -52,7 +52,10 @@ export default function RevenuePage() {
 
     const chartData = Object.entries(byMonth).map(([m, vals]) => ({
       name: MONTHS[parseInt(m) - 1],
-      ...vals,
+      etsy: vals.etsy,
+      market: vals.market,
+      facebook: vals.facebook,
+      other: vals.other,
       expenses: expenseByMonth[m] || 0,
     }));
 
@@ -101,7 +104,7 @@ export default function RevenuePage() {
         const rev = m.etsy + m.market + m.facebook + m.other;
         return [m.name, m.etsy, m.market, m.facebook, m.other, rev, m.expenses, rev - m.expenses];
       }),
-      ['TOTAL', ...['etsy','market','facebook','other'].map(k => monthlyData.reduce((s, m) => s + (m as Record<string, number>)[k], 0)), totalRevenue, totalExpenses, profit],
+      ['TOTAL', monthlyData.reduce((s, m) => s + m.etsy, 0), monthlyData.reduce((s, m) => s + m.market, 0), monthlyData.reduce((s, m) => s + m.facebook, 0), monthlyData.reduce((s, m) => s + m.other, 0), totalRevenue, totalExpenses, profit],
     ];
     const csv = rows.map(r => r.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
