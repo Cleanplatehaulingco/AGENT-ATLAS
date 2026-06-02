@@ -5,8 +5,8 @@
 const _CSS = `
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Arial', sans-serif; font-size: 10pt; color: #1a1a1a; background: #f0f0f0; padding: 20px; }
-.page { background: #fff; max-width: 850px; margin: 0 auto; box-shadow: 0 4px 24px rgba(0,0,0,0.18); }
+body { font-family: 'Arial', sans-serif; font-size: 10pt; color: #1a1a1a; background-color: #1a1f35; background-image: linear-gradient(135deg, #1a1f35 25%, transparent 25%), linear-gradient(225deg, #1a1f35 25%, transparent 25%), linear-gradient(45deg, #1a1f35 25%, transparent 25%), linear-gradient(315deg, #1a1f35 25%, #1e2540 25%); background-size: 20px 20px; background-position: 10px 0, 10px 0, 0 0, 0 0; padding: 20px; }
+.page { background: #fff; max-width: 850px; margin: 0 auto; box-shadow: 0 4px 24px rgba(0,0,0,0.18); border-left: 5px solid #4f7cff; border-radius: 0 4px 4px 0; }
 @media print { body { background: #fff; padding: 0; } .page { box-shadow: none; } .no-print { display: none !important; } }
 .header { background: #1a1a2e; color: #fff; padding: 20px 28px; display: flex; justify-content: space-between; align-items: center; }
 .header .logo-area { display: flex; flex-direction: column; gap: 2px; }
@@ -16,13 +16,13 @@ body { font-family: 'Arial', sans-serif; font-size: 10pt; color: #1a1a1a; backgr
 .header .form-title { font-size: 14pt; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; }
 .header .form-id { font-size: 7.5pt; color: #8899cc; margin-top: 3px; letter-spacing: 1px; }
 .accent-bar { height: 4px; background: linear-gradient(90deg, #4f7cff, #2ed88a); }
-.info-strip { background: #f7f8fc; border-bottom: 1px solid #e0e4f0; padding: 12px 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.info-strip { background: linear-gradient(180deg, #f0f3fb 0%, #e8ecf7 100%); border-bottom: 2px solid #d0d8f0; padding: 12px 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .info-field { display: flex; flex-direction: column; gap: 3px; }
 .info-field label { font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #8899cc; }
 .info-field .field-line { border-bottom: 1.5px solid #ccd0e0; min-height: 20px; padding-bottom: 2px; font-size: 10pt; }
 .body { padding: 20px 28px; }
 .section { margin-bottom: 18px; }
-.section-header { background: #1a1a2e; color: #fff; padding: 6px 12px; font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0; border-radius: 3px 3px 0 0; }
+.section-header { background: linear-gradient(90deg, #162040 0%, #1e2d56 100%); border-left: 4px solid #4f7cff; color: #fff; padding: 6px 12px 6px 12px; font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0; border-radius: 3px 3px 0 0; }
 .section-body { border: 1.5px solid #ccd0e0; border-top: none; border-radius: 0 0 3px 3px; padding: 14px; }
 .field-grid { display: grid; gap: 12px; }
 .field-grid.cols-2 { grid-template-columns: 1fr 1fr; }
@@ -35,8 +35,9 @@ body { font-family: 'Arial', sans-serif; font-size: 10pt; color: #1a1a1a; backgr
 .form-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
 .form-table th { background: #1a1a2e; color: #fff; padding: 7px 10px; text-align: left; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
 .form-table td { border-bottom: 1px solid #e8eaf0; padding: 8px 10px; min-height: 28px; }
-.form-table tr:nth-child(even) td { background: #f7f8fc; }
-.sig-block { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 16px; padding-top: 16px; border-top: 1.5px solid #ccd0e0; }
+.form-table tr:nth-child(even) td { background: #f0f3fb; }
+.form-table tr:hover td { background: #e8eeff; }
+.sig-block { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 16px; padding-top: 16px; border-top: 1.5px solid #ccd0e0; background: #f7f9ff; border-radius: 6px; padding: 16px; border: 1px solid #dde2f0; }
 .sig-field { display: flex; flex-direction: column; gap: 4px; }
 .sig-field label { font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #8899cc; }
 .sig-field .sig-line { border-bottom: 2px solid #1a1a2e; min-height: 36px; }
@@ -46,6 +47,7 @@ body { font-family: 'Arial', sans-serif; font-size: 10pt; color: #1a1a1a; backgr
 .checkbox-row .cb { width: 14px; height: 14px; border: 1.5px solid #aab; display: inline-block; flex-shrink: 0; }
 .print-btn { display: inline-flex; align-items: center; gap: 8px; margin: 16px 28px; padding: 10px 24px; background: #4f7cff; color: #fff; border: none; border-radius: 6px; font-size: 10pt; font-weight: 700; cursor: pointer; }
 .print-btn:hover { background: #3a6ae8; }
+.toolbar { background: linear-gradient(180deg, #f0f3fb 0%, #e8ecf6 100%); border-bottom: 2px solid #d0d8f0; }
 </style>`;
 
 const TEMPLATES = {
