@@ -15,17 +15,21 @@ export async function POST(req: NextRequest) {
   try {
     const db = getDb();
     const body = await req.json();
-    const { name, category, cost_to_make, current_price, inventory_count, platforms, description } = body;
+    const { name, category, color, materials, design_style, cost_to_make, current_price, time_to_make_minutes, inventory_count, platforms, description } = body;
     if (!name) return NextResponse.json({ error: 'Name is required' }, { status: 400 });
 
     const result = db.prepare(`
-      INSERT INTO products (name, category, cost_to_make, current_price, inventory_count, platforms, description)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO products (name, category, color, materials, design_style, cost_to_make, current_price, time_to_make_minutes, inventory_count, platforms, description)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       name,
       category || null,
+      color || null,
+      materials || null,
+      design_style || null,
       cost_to_make || 0,
       current_price || 0,
+      time_to_make_minutes || 0,
       inventory_count || 0,
       JSON.stringify(platforms || []),
       description || null
@@ -42,14 +46,16 @@ export async function PUT(req: NextRequest) {
   try {
     const db = getDb();
     const body = await req.json();
-    const { id, name, category, cost_to_make, current_price, inventory_count, platforms, description } = body;
+    const { id, name, category, color, materials, design_style, cost_to_make, current_price, time_to_make_minutes, inventory_count, platforms, description } = body;
     if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
 
     db.prepare(`
-      UPDATE products SET name=?, category=?, cost_to_make=?, current_price=?,
+      UPDATE products SET name=?, category=?, color=?, materials=?, design_style=?,
+        cost_to_make=?, current_price=?, time_to_make_minutes=?,
         inventory_count=?, platforms=?, description=?, updated_at=datetime('now')
       WHERE id=?
-    `).run(name, category || null, cost_to_make || 0, current_price || 0,
+    `).run(name, category || null, color || null, materials || null, design_style || null,
+      cost_to_make || 0, current_price || 0, time_to_make_minutes || 0,
       inventory_count || 0, JSON.stringify(platforms || []), description || null, id);
 
     const product = db.prepare('SELECT * FROM products WHERE id = ?').get(id);

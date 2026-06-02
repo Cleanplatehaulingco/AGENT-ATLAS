@@ -14,6 +14,7 @@ import {
   Gem,
   Menu,
   X,
+  BarChart3,
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -24,6 +25,7 @@ const NAV_ITEMS = [
   { href: '/sales', label: 'Sales Log', icon: Receipt },
   { href: '/revenue', label: 'Revenue', icon: TrendingUp },
   { href: '/products', label: 'Products', icon: Package },
+  { href: '/analytics', label: 'Intelligence', icon: BarChart3 },
   { href: '/assistant', label: 'AI Assistant', icon: MessageSquare },
 ];
 

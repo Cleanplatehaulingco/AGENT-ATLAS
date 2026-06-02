@@ -19,6 +19,7 @@ export function getDb(): Database.Database {
   db.pragma('foreign_keys = ON');
 
   initSchema(db);
+  runMigrations(db);
   return db;
 }
 
@@ -59,11 +60,20 @@ function initSchema(db: Database.Database) {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       category TEXT,
+      color TEXT,
+      materials TEXT,
+      design_style TEXT,
+      sku TEXT,
       cost_to_make REAL NOT NULL DEFAULT 0,
+      time_to_make_minutes INTEGER DEFAULT 0,
       current_price REAL NOT NULL DEFAULT 0,
       inventory_count INTEGER DEFAULT 0,
+      total_units_sold INTEGER DEFAULT 0,
+      total_revenue REAL DEFAULT 0,
       platforms TEXT DEFAULT '[]',
       description TEXT,
+      image_url TEXT,
+      is_active INTEGER DEFAULT 1,
       created_at TEXT DEFAULT (datetime('now')),
       updated_at TEXT DEFAULT (datetime('now'))
     );
@@ -81,8 +91,49 @@ function initSchema(db: Database.Database) {
       key TEXT PRIMARY KEY,
       value TEXT
     );
+
+    CREATE TABLE IF NOT EXISTS schema_migrations (
+      version INTEGER PRIMARY KEY,
+      applied_at TEXT DEFAULT (datetime('now'))
+    );
   `);
 }
+
+function runMigrations(db: Database.Database) {
+  const applied = (db.prepare('SELECT version FROM schema_migrations').all() as Record<string, unknown>[]).map(r => r.version as number);
+
+  const migrations: { version: number; sql: string }[] = [
+    {
+      version: 1,
+      sql: `
+        -- Add rich product attributes if they don't exist yet
+        ALTER TABLE products ADD COLUMN color TEXT;
+        ALTER TABLE products ADD COLUMN materials TEXT;
+        ALTER TABLE products ADD COLUMN design_style TEXT;
+        ALTER TABLE products ADD COLUMN sku TEXT;
+        ALTER TABLE products ADD COLUMN time_to_make_minutes INTEGER DEFAULT 0;
+        ALTER TABLE products ADD COLUMN total_units_sold INTEGER DEFAULT 0;
+        ALTER TABLE products ADD COLUMN total_revenue REAL DEFAULT 0;
+        ALTER TABLE products ADD COLUMN image_url TEXT;
+        ALTER TABLE products ADD COLUMN is_active INTEGER DEFAULT 1;
+      `,
+    },
+  ];
+
+  for (const m of migrations) {
+    if (applied.includes(m.version)) continue;
+    try {
+      // Run each ALTER TABLE separately — SQLite doesn't support multi-statement ALTER
+      const statements = m.sql.split(';').map(s => s.trim()).filter(s => s.length > 0 && !s.startsWith('--'));
+      for (const stmt of statements) {
+        try { db.prepare(stmt).run(); } catch { /* column may already exist */ }
+      }
+      db.prepare('INSERT INTO schema_migrations (version) VALUES (?)').run(m.version);
+    } catch { /* migration already applied */ }
+  }
+}
+
+// ── Types ──────────────────────────────────────────────────────────────────────
 
 export type Client = {
   id: number;
@@ -119,11 +170,20 @@ export type Product = {
   id: number;
   name: string;
   category: string | null;
+  color: string | null;
+  materials: string | null;
+  design_style: string | null;
+  sku: string | null;
   cost_to_make: number;
+  time_to_make_minutes: number;
   current_price: number;
   inventory_count: number;
+  total_units_sold: number;
+  total_revenue: number;
   platforms: string;
   description: string | null;
+  image_url: string | null;
+  is_active: number;
   created_at: string;
   updated_at: string;
 };
@@ -139,6 +199,25 @@ export type Expense = {
 
 export type SaleItem = {
   name: string;
+  product_id?: number;
   quantity: number;
   price: number;
+};
+
+export type ProductAnalytics = {
+  product_id: number;
+  product_name: string;
+  category: string | null;
+  color: string | null;
+  materials: string | null;
+  design_style: string | null;
+  total_units: number;
+  total_revenue: number;
+  avg_price: number;
+  sale_count: number;
+  platforms: Record<string, number>;
+  monthly: Record<string, number>;
+  last_sold: string | null;
+  profit_per_unit: number;
+  revenue_per_hour: number | null;
 };

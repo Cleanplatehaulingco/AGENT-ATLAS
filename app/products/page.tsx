@@ -8,7 +8,11 @@ interface Product {
   id: number;
   name: string;
   category: string | null;
+  color: string | null;
+  materials: string | null;
+  design_style: string | null;
   cost_to_make: number;
+  time_to_make_minutes: number;
   current_price: number;
   inventory_count: number;
   platforms: string;
@@ -17,9 +21,11 @@ interface Product {
 
 const CATEGORIES = ['Bracelet','Necklace','Earrings','Ring','Anklet','Set','Keychain','Gift Item','Home Decor','Other'];
 const ALL_PLATFORMS = ['Etsy','South Lyon Market','Facebook Marketplace','Other'];
+const DESIGN_STYLES = ['Boho','Gothic','Minimalist','Cottagecore','Witchy','Nature','Celestial','Vintage','Modern','Rustic','Colorful','Custom'];
 
 const EMPTY_FORM = {
-  name: '', category: 'Bracelet', cost_to_make: '', current_price: '',
+  name: '', category: 'Bracelet', color: '', materials: '', design_style: '',
+  cost_to_make: '', current_price: '', time_to_make_minutes: '30',
   inventory_count: '0', platforms: [] as string[], description: '',
 };
 
@@ -62,8 +68,12 @@ export default function ProductsPage() {
     setForm({
       name: p.name,
       category: p.category || 'Other',
+      color: p.color || '',
+      materials: p.materials || '',
+      design_style: p.design_style || '',
       cost_to_make: p.cost_to_make.toString(),
       current_price: p.current_price.toString(),
+      time_to_make_minutes: (p.time_to_make_minutes || 30).toString(),
       inventory_count: p.inventory_count.toString(),
       platforms: JSON.parse(p.platforms || '[]'),
       description: p.description || '',
@@ -77,8 +87,12 @@ export default function ProductsPage() {
     const body = {
       name: form.name,
       category: form.category,
+      color: form.color || null,
+      materials: form.materials || null,
+      design_style: form.design_style || null,
       cost_to_make: parseFloat(form.cost_to_make) || 0,
       current_price: parseFloat(form.current_price) || 0,
+      time_to_make_minutes: parseInt(form.time_to_make_minutes) || 0,
       inventory_count: parseInt(form.inventory_count) || 0,
       platforms: form.platforms,
       description: form.description,
@@ -295,8 +309,19 @@ export default function ProductsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="label">Inventory Count</label>
-                  <input className="input" type="number" min="0" value={form.inventory_count} onChange={e => setForm(f => ({ ...f, inventory_count: e.target.value }))} />
+                  <label className="label">Design Style</label>
+                  <select className="input" value={form.design_style} onChange={e => setForm(f => ({ ...f, design_style: e.target.value }))}>
+                    <option value="">— Select —</option>
+                    {DESIGN_STYLES.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="label">Color</label>
+                  <input className="input" value={form.color} onChange={e => setForm(f => ({ ...f, color: e.target.value }))} placeholder="e.g. Purple, Multi, Black" />
+                </div>
+                <div>
+                  <label className="label">Materials</label>
+                  <input className="input" value={form.materials} onChange={e => setForm(f => ({ ...f, materials: e.target.value }))} placeholder="e.g. Amethyst, Sterling Silver" />
                 </div>
                 <div>
                   <label className="label">Cost to Make ($)</label>
@@ -306,9 +331,17 @@ export default function ProductsPage() {
                   <label className="label">Sale Price ($)</label>
                   <input className="input" type="number" min="0" step="0.01" placeholder="0.00" value={form.current_price} onChange={e => setForm(f => ({ ...f, current_price: e.target.value }))} />
                 </div>
+                <div>
+                  <label className="label">Time to Make (min)</label>
+                  <input className="input" type="number" min="0" value={form.time_to_make_minutes} onChange={e => setForm(f => ({ ...f, time_to_make_minutes: e.target.value }))} placeholder="30" />
+                </div>
+                <div>
+                  <label className="label">Inventory Count</label>
+                  <input className="input" type="number" min="0" value={form.inventory_count} onChange={e => setForm(f => ({ ...f, inventory_count: e.target.value }))} />
+                </div>
                 <div className="col-span-2">
                   <label className="label">Description</label>
-                  <textarea className="input" rows={2} placeholder="Materials, style notes…" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
+                  <textarea className="input" rows={2} placeholder="Notes about this piece…" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
                 </div>
                 <div className="col-span-2">
                   <label className="label">Sold On</label>
