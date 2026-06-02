@@ -10,6 +10,9 @@ out/
 .env.local
 .env.*.local
 
+# local database (never commit — contains real business data)
+data/
+
 # misc
 .DS_Store
 *.pem
