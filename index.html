@@ -118,6 +118,24 @@
     <script src="post-close-agent.js"></script>
     <script src="app.js"></script>
     <script>
+      // Auth gate: redirect unauthenticated visitors to landing page
+      (function () {
+        const params = new URLSearchParams(window.location.search);
+        const hasAppParam = params.get('app') === '1';
+        const hasToken = !!localStorage.getItem('etsy_token');
+        if (!hasToken && !hasAppParam) {
+          window.location.replace('landing.html');
+        }
+        // If connect=1 is present, trigger OAuth after app scripts load
+        if (params.get('connect') === '1') {
+          window.addEventListener('load', function () {
+            if (typeof EtsyAPI !== 'undefined' && EtsyAPI.startAuth) {
+              EtsyAPI.startAuth();
+            }
+          });
+        }
+      })();
+
       // Mobile nav drawer
       const ham = document.getElementById('hamburger');
       const sidebar = document.getElementById('sidebar');
