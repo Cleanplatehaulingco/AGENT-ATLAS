@@ -4,12 +4,11 @@
  * Three data sources (no Etsy API approval required):
  *  1. Bookmarklet  — user clicks while on Etsy Shop Manager Stats → scrapes DOM → saves here
  *  2. CSV Import   — drag Etsy order-history CSV onto drop zone → auto-parsed
- *  3. Site Uptime  — pings GitHub Pages every 20 min via Image beacon (CORS-safe)
+ *  3. Relay API    — Render server relays listing data to/from Etsy bookmarklet
  *
  * Stores everything in localStorage under:
  *   atlas_monitor_stats   — latest bookmarklet snapshot
  *   atlas_monitor_orders  — parsed CSV order rows
- *   atlas_monitor_uptime  — uptime ping log
  */
 
 var RENDER_API = 'https://agent-atlas-api.onrender.com';
@@ -575,9 +574,16 @@ shops_r — read my own shop info</div>
   }
 
   // ── Init ──────────────────────────────────────────────────────────────────
+  function _pingServer() {
+    fetch(RENDER_API + '/health', { method: 'GET', mode: 'cors' }).catch(function(){});
+  }
+
   function init() {
     // Clean up any old uptime data from previous builds
     try { localStorage.removeItem('atlas_monitor_uptime'); } catch(e) {}
+    // Keep our own Render API warm (free tier spins down after 15 min of inactivity)
+    _pingServer();
+    setInterval(_pingServer, 9 * 60 * 1000); // every 9 minutes
   }
 
   return {
