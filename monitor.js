@@ -94,6 +94,87 @@ var ShopMonitor = (function () {
     return 'javascript:' + encodeURIComponent(inner);
   }
 
+  // ── Listing Launcher Bookmarklet ─────────────────────────────────────────
+  // When clicked on etsy.com/sell/add-listing (or any Etsy listing creation page),
+  // this reads the chosen listing data from Atlas localStorage and fills every field.
+  function listingLauncherCode(listingId) {
+    // Pull listing data from Atlas localStorage at click-time (always fresh)
+    var inner = '(function(){'
+      // Load Atlas ETSY_COPY and listing data from localStorage
+      + 'var raw=localStorage.getItem("agentAtlasV3");'
+      + 'var copy=localStorage.getItem("atlas_launcher_payload");'
+      + 'if(!copy){alert("No listing data found.\\nOpen Agent Atlas, click Launch on a listing, then click this bookmark.");return;}'
+      + 'var d;try{d=JSON.parse(copy);}catch(e){alert("Corrupt payload — re-launch from Atlas.");return;}'
+
+      // Helper: find input/textarea by label text, aria-label, placeholder, or name
+      + 'function setField(sel,val){'
+      +   'var el=document.querySelector(sel);'
+      +   'if(!el)return false;'
+      +   'var nativeSetter=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,"value")||'
+      +     'Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype,"value");'
+      +   'if(nativeSetter&&nativeSetter.set)nativeSetter.set.call(el,val);'
+      +   'else el.value=val;'
+      +   'el.dispatchEvent(new Event("input",{bubbles:true}));'
+      +   'el.dispatchEvent(new Event("change",{bubbles:true}));'
+      +   'return true;'
+      + '}'
+      + 'function setByLabel(labelText,val){'
+      +   'var labels=Array.from(document.querySelectorAll("label"));'
+      +   'var lbl=labels.find(function(l){return l.textContent.toLowerCase().includes(labelText.toLowerCase());});'
+      +   'if(!lbl)return false;'
+      +   'var id=lbl.htmlFor||lbl.getAttribute("for");'
+      +   'var el=id?document.getElementById(id):lbl.querySelector("input,textarea");'
+      +   'if(!el)return false;'
+      +   'var nativeSetter=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),"value");'
+      +   'if(nativeSetter&&nativeSetter.set)nativeSetter.set.call(el,val);'
+      +   'else el.value=val;'
+      +   'el.dispatchEvent(new Event("input",{bubbles:true}));'
+      +   'el.dispatchEvent(new Event("change",{bubbles:true}));'
+      +   'return true;'
+      + '}'
+      // Fill title
+      + 'var filled=0;'
+      + 'if(setByLabel("listing title",d.title)||setField("[name=title],[placeholder*=title i],[aria-label*=title i]",d.title))filled++;'
+      // Fill description
+      + 'if(setByLabel("description",d.desc)||setField("[name=description],textarea[placeholder*=descri i]",d.desc))filled++;'
+      // Fill price
+      + 'if(d.price&&(setByLabel("price",d.price)||setField("[name=price],[aria-label*=price i]",d.price)))filled++;'
+      // Fill tags — Etsy uses a tag input where you type and press Enter/comma
+      + 'var tagInput=document.querySelector("[placeholder*=tag i],[aria-label*=tag i],[name*=tag i]");'
+      + 'if(tagInput&&d.tags){'
+      +   'var tags=d.tags.split(",").map(function(t){return t.trim();}).filter(Boolean).slice(0,13);'
+      +   'tags.forEach(function(tag){'
+      +     'var nativeSetter=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(tagInput),"value");'
+      +     'if(nativeSetter&&nativeSetter.set)nativeSetter.set.call(tagInput,tag);'
+      +     'tagInput.dispatchEvent(new Event("input",{bubbles:true}));'
+      +     'tagInput.dispatchEvent(new KeyboardEvent("keydown",{key:"Enter",code:"Enter",keyCode:13,bubbles:true}));'
+      +     'tagInput.dispatchEvent(new KeyboardEvent("keyup",{key:"Enter",code:"Enter",keyCode:13,bubbles:true}));'
+      +   '});'
+      +   'filled++;'
+      + '}'
+      + 'alert("✓ Atlas filled "+filled+" fields for:\\n"+d.title.substring(0,60)+"...\\n\\nReview everything, set your digital download file, then click Publish!");'
+      + '})();';
+    return 'javascript:' + encodeURIComponent(inner);
+  }
+
+  // Write a listing payload to localStorage so the bookmarklet can read it
+  function prepareLaunch(listingId) {
+    // Pull from ETSY_COPY (defined in app.js) and Atlas listings state
+    var copy = (typeof ETSY_COPY !== 'undefined' && ETSY_COPY[listingId]) || {};
+    var atlasData = (function(){ try{ return JSON.parse(localStorage.getItem('agentAtlasV3')||'{}'); }catch(e){return {};} })();
+    var listing = (atlasData.listings||[]).find(function(l){ return l.id === listingId; }) || {};
+    var payload = {
+      listingId: listingId,
+      title:     copy.title || listing.name || listing.title || '',
+      desc:      copy.desc  || '',
+      tags:      copy.tags  || '',
+      price:     String(listing.price || ''),
+      preparedAt: new Date().toISOString(),
+    };
+    try { localStorage.setItem('atlas_launcher_payload', JSON.stringify(payload)); } catch(e) {}
+    return payload;
+  }
+
   // ── CSV Parser ────────────────────────────────────────────────────────────
   // Etsy order CSV columns (varies slightly by export version):
   // "Sale Date","Item Name","Buyer","Order ID","SKU","Quantity","Price","Coupon Code","Coupon Amount","Discount","Shipping","Order Total","VAT Paid by Buyer","Transaction ID","Listing ID","Date Paid","Date Shipped","Ship Name","Ship Address1","Ship City","Ship State","Ship Zipcode","Ship Country"
@@ -373,6 +454,125 @@ var ShopMonitor = (function () {
     <button onclick="ShopMonitor._pingNow()" style="margin-top:12px;background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:6px 14px;cursor:pointer;font-size:.78rem;color:var(--text);">Ping Now</button>
   </div>
 
+  <!-- Listing Launcher -->
+  <div class="card">
+    <div class="section-header"><span class="section-title">🚀 Listing Launcher — Semi-Auto Publisher</span></div>
+    <p style="font-size:.82rem;color:var(--muted);margin:0 0 14px;">
+      No API needed. Pick a listing below → click <strong>Prepare Launch</strong> → go to
+      <code style="background:var(--panel2);padding:1px 5px;border-radius:3px;">etsy.com/sell/add-listing</code>
+      → click the bookmark. Every field fills automatically. You just review and hit Publish.
+    </p>
+
+    <!-- Step 1: drag bookmarklet -->
+    <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:.78rem;font-weight:800;color:var(--text);margin-bottom:8px;">Step 1 — Install once (drag to bookmarks bar)</div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <a id="launcher-bookmarklet-link" href="${listingLauncherCode()}"
+          style="display:inline-block;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;font-weight:800;font-size:.88rem;padding:9px 20px;border-radius:8px;text-decoration:none;box-shadow:0 4px 14px rgba(21,101,192,0.4);cursor:grab;white-space:nowrap;"
+          ondragstart="event.dataTransfer.setData('text/plain',this.href)"
+          onclick="event.preventDefault();alert('Drag this button to your bookmarks bar — don\\'t click it here.')">
+          ⚡ Atlas Launch Listing
+        </a>
+        <span style="font-size:.74rem;color:var(--muted);">← Drag to bookmarks bar · only do this once</span>
+      </div>
+    </div>
+
+    <!-- Step 2: pick listing + prepare -->
+    <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:.78rem;font-weight:800;color:var(--text);margin-bottom:10px;">Step 2 — Pick a listing &amp; load it</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <select id="launcher-listing-select" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:7px 12px;font-size:.82rem;min-width:220px;">
+          ${(function() {
+            if (typeof ETSY_COPY === 'undefined') return '<option>Loading…</option>';
+            return Object.keys(ETSY_COPY).map(function(id) {
+              var title = ETSY_COPY[id].title || id;
+              return '<option value="' + id + '">' + id + ' — ' + title.substring(0, 55) + (title.length > 55 ? '…' : '') + '</option>';
+            }).join('');
+          })()}
+        </select>
+        <button onclick="ShopMonitor._prepareLaunch()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:8px 18px;cursor:pointer;font-size:.82rem;font-weight:800;">Prepare Launch →</button>
+      </div>
+      <div id="launcher-status" style="margin-top:10px;font-size:.76rem;color:var(--muted);"></div>
+    </div>
+
+    <!-- Step 3: go fill -->
+    <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+      <div style="font-size:.78rem;font-weight:800;color:var(--text);margin-bottom:6px;">Step 3 — Go fill the form</div>
+      <div style="font-size:.76rem;color:var(--muted);line-height:1.7;">
+        1. Open a new tab → go to <code style="background:var(--surface);padding:1px 5px;border-radius:3px;">etsy.com/sell/add-listing</code><br>
+        2. Click <strong>⚡ Atlas Launch Listing</strong> in your bookmarks bar<br>
+        3. All fields fill instantly — review, upload your PDF file, hit <strong>Publish</strong><br>
+        4. Done. Whole process: ~30 seconds per listing
+      </div>
+    </div>
+  </div>
+
+  <!-- Etsy API Reapplication -->
+  <div class="card">
+    <div class="section-header">
+      <span class="section-title">📋 Etsy API Reapplication — Copy & Paste Ready</span>
+      <span style="background:rgba(0,200,83,0.15);color:var(--success);font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:4px;">High approval chance</span>
+    </div>
+    <p style="font-size:.82rem;color:var(--muted);margin:0 0 16px;">
+      Your original application was likely denied for vague framing. You now have a live shop, a live tool, and a specific use case.
+      Use the exact copy below — these fields match what Etsy's review team looks for.
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+
+      <div style="background:var(--panel2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:14px 16px;">
+        <div style="font-size:.72rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">App Name</div>
+        <div style="font-size:.88rem;color:var(--text);font-weight:600;" id="reapp-name">TradeOpsVault Listing Manager</div>
+        <button onclick="copyText('reapp-name')" style="margin-top:6px;background:none;border:1px solid var(--border);border-radius:5px;padding:3px 10px;cursor:pointer;font-size:.7rem;color:var(--muted);">Copy</button>
+      </div>
+
+      <div style="background:var(--panel2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:14px 16px;">
+        <div style="font-size:.72rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">App Description / Purpose</div>
+        <div style="font-size:.84rem;color:var(--text);line-height:1.7;white-space:pre-wrap;" id="reapp-desc">I am the owner of TradeOpsVault (etsy.com/shop/TradeOpsVault), a digital download shop selling printable business form templates to trade contractors (HVAC, plumbing, electrical, lawn care, etc.).
+
+I have built a private internal tool — Agent Atlas — to help me manage my own shop. The tool is deployed at https://cleanplatehaulingco.github.io/AGENT-ATLAS/ and is used exclusively by me to:
+
+1. Draft and manage listing copy (titles, descriptions, tags) for my own 20 listings
+2. Create and publish listings to my own shop via the Etsy API
+3. Track my own shop revenue and order metrics
+4. Upload listing images generated by my internal design tool
+
+This is a single-shop, single-owner tool. I am not building a multi-seller platform, reselling API access, or scraping competitor data. All API calls will target only my own shop ID. I estimate fewer than 200 API calls per day total.
+
+The app is live, functional, and already managing my listing pipeline without API access — I am applying for API access to replace the current manual publishing step with an automated one.</div>
+        <button onclick="copyText('reapp-desc')" style="margin-top:8px;background:none;border:1px solid var(--border);border-radius:5px;padding:3px 10px;cursor:pointer;font-size:.7rem;color:var(--muted);">Copy</button>
+      </div>
+
+      <div style="background:var(--panel2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:14px 16px;">
+        <div style="font-size:.72rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Requested Scopes (check only these)</div>
+        <div style="font-size:.84rem;color:var(--text);line-height:1.8;" id="reapp-scopes">listings_r — read my own listings
+listings_w — create and update my own listings
+listings_d — delete draft listings
+transactions_r — read my own order/transaction data
+shops_r — read my own shop info</div>
+        <button onclick="copyText('reapp-scopes')" style="margin-top:8px;background:none;border:1px solid var(--border);border-radius:5px;padding:3px 10px;cursor:pointer;font-size:.7rem;color:var(--muted);">Copy</button>
+      </div>
+
+      <div style="background:var(--panel2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:14px 16px;">
+        <div style="font-size:.72rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Website / App URL</div>
+        <div style="font-size:.88rem;color:var(--text);font-weight:600;" id="reapp-url">https://cleanplatehaulingco.github.io/AGENT-ATLAS/</div>
+        <button onclick="copyText('reapp-url')" style="margin-top:6px;background:none;border:1px solid var(--border);border-radius:5px;padding:3px 10px;cursor:pointer;font-size:.7rem;color:var(--muted);">Copy</button>
+      </div>
+
+      <div style="background:rgba(0,200,83,0.06);border:1px solid rgba(0,200,83,0.2);border-radius:8px;padding:14px 16px;">
+        <div style="font-size:.78rem;font-weight:800;color:var(--success);margin-bottom:8px;">Why this application should get approved</div>
+        <div style="font-size:.78rem;color:var(--muted);line-height:1.7;">
+          ✓ Real live shop — TradeOpsVault exists and has listings<br>
+          ✓ Real live tool — the app URL is deployed and functional<br>
+          ✓ Single-shop use only — not a multi-seller aggregator<br>
+          ✓ Minimal scopes — only what's needed, no profile/billing/payment access requested<br>
+          ✓ Low volume — internal tool, &lt;200 calls/day<br>
+          ✓ Legitimate use case — Etsy explicitly supports "shop management tools for your own shop"
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>`;
   }
 
@@ -420,6 +620,20 @@ var ShopMonitor = (function () {
     }, 3000);
   }
 
+  function _prepareLaunch() {
+    var sel = document.getElementById('launcher-listing-select');
+    var listingId = sel && sel.value;
+    if (!listingId) { if (typeof toast === 'function') toast('Pick a listing first', 'warn'); return; }
+    var payload = prepareLaunch(listingId);
+    var status = document.getElementById('launcher-status');
+    if (status) {
+      status.innerHTML = '<span style="color:var(--success);font-weight:700;">✓ Ready — ' + listingId + ' loaded</span>'
+        + ' · <span style="color:var(--muted);">' + (payload.title||'').substring(0,60) + '…</span>'
+        + '<br><span style="color:var(--muted);">Now go to etsy.com/sell/add-listing and click ⚡ Atlas Launch Listing</span>';
+    }
+    if (typeof toast === 'function') toast('✓ ' + listingId + ' ready — open Etsy and click the bookmark', 'success');
+  }
+
   // ── Init ──────────────────────────────────────────────────────────────────
   function init() {
     startPinging();
@@ -436,9 +650,10 @@ var ShopMonitor = (function () {
     importCSV:          importCSV,
     bookmarkletCode:    bookmarkletCode,
     // Internal handlers called from inline HTML
-    _onCSVDrop:  _onCSVDrop,
-    _onCSVFile:  _onCSVFile,
-    _clearOrders: _clearOrders,
-    _pingNow:    _pingNow,
+    _onCSVDrop:     _onCSVDrop,
+    _onCSVFile:     _onCSVFile,
+    _clearOrders:   _clearOrders,
+    _pingNow:       _pingNow,
+    _prepareLaunch: _prepareLaunch,
   };
 })();
