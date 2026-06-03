@@ -771,17 +771,47 @@ var DesignTeam = (function() {
       + '<div style="display:flex;gap:6px;flex-wrap:wrap;">' + badgeButtons + '</div>'
       + '</div>'
 
-      // Step 3 — Generate all mockup shots
-      + '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;">'
-      + '<div style="font-size:.82rem;font-weight:800;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px;">'
-      + '<span style="background:var(--accent);color:#000;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;">3</span>'
-      + ' Generate Mockup Images (Free)</div>'
-      + '<div style="font-size:.78rem;color:var(--muted);margin-bottom:10px;">Creates Hero, Detail, and Bundle shots from your screenshot. No API key needed.</div>'
-      + '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
-      + '<button onclick="DesignTeam._generateMockups(\'' + listingId + '\',\'' + accent + '\')" style="background:var(--success);color:#000;border:none;border-radius:7px;padding:8px 16px;cursor:pointer;font-size:.8rem;font-weight:700;">Generate All 8 Free Images</button>'
+      // Step 3 — Generate all shots
+      + '<div style="background:linear-gradient(135deg,#0d1f12 0%,#0a1a0d 100%);border:1.5px solid #1a4d24;border-radius:12px;padding:20px;position:relative;overflow:hidden;">'
+      + '<div style="position:absolute;top:0;right:0;width:180px;height:180px;background:radial-gradient(circle,' + accent + '22 0%,transparent 70%);pointer-events:none;"></div>'
+      + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'
+      + '<span style="background:' + accent + ';color:#000;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;flex-shrink:0;">3</span>'
+      + '<span style="font-size:.85rem;font-weight:800;color:#e8f5e9;">Generate Your Etsy Image Set</span>'
+      + '</div>'
+      + '<div style="display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap;">'
+      + '<div style="font-size:.72rem;color:#81c784;display:flex;align-items:center;gap:4px;"><span style="background:#1b5e20;border-radius:4px;padding:1px 6px;font-weight:700;">8 FREE</span> Mockup + Infographic slides</div>'
+      + '<div style="font-size:.72rem;color:#ffb74d;display:flex;align-items:center;gap:4px;"><span style="background:#4e2000;border-radius:4px;padding:1px 6px;font-weight:700;">2 DALL-E</span> Lifestyle + Before/After</div>'
+      + '<div style="font-size:.72rem;color:#90caf9;display:flex;align-items:center;gap:4px;font-weight:600;">= Etsy max 10 images ✓</div>'
+      + '</div>'
+      + '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">'
+      + '<button id="gen-btn-' + listingId + '" onclick="(function(btn,lid,acc){'
+      +   'btn.disabled=true;'
+      +   'btn.innerHTML=\'<span style=\\\"display:inline-block;animation:spin 0.9s linear infinite;\\\">⟳</span> Generating…\';'
+      +   'if(!document.getElementById(\\\"spin-style\\\")){'
+      +     'var s=document.createElement(\\\"style\\\");s.id=\\\"spin-style\\\";'
+      +     's.textContent=\\\"@keyframes spin{to{transform:rotate(360deg)}}\\\";'
+      +     'document.head.appendChild(s);}'
+      +   'DesignTeam._generateMockups(lid,acc);'
+      +   'setTimeout(function(){'
+      +     'btn.disabled=false;'
+      +     'btn.innerHTML=\'✓ Regenerate Free Images\';'
+      +     'btn.style.background=\\\"#1b5e20\\\";'
+      +   '},9000);'
+      + '})(document.getElementById(\'gen-btn-' + listingId + '\'),\'' + listingId + '\',\'' + accent + '\')" '
+      + 'style="background:' + accent + ';color:#000;border:none;border-radius:9px;padding:11px 24px;cursor:pointer;font-size:.88rem;font-weight:800;letter-spacing:.01em;box-shadow:0 4px 18px ' + accent + '55;transition:transform .12s,box-shadow .12s;" '
+      + 'onmouseover="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 6px 24px ' + accent + '88\';" '
+      + 'onmouseout="this.style.transform=\'\';this.style.boxShadow=\'0 4px 18px ' + accent + '55\';">'
+      + '🚀 Generate All 8 Free Images'
+      + '</button>'
       + (config.apiKey
-          ? '<button onclick="DesignTeam.generateFullSet(\'' + listingId + '\',function(l,s){toast(s+\' generated\',\'success\');}).then(function(){if(typeof renderDesignView===\'function\')renderDesignView();toast(\'DALL-E shots done!\',\'success\');})" style="background:var(--panel2);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:8px 16px;cursor:pointer;font-size:.8rem;font-weight:600;">+ DALL-E Lifestyle &amp; Before/After — $0.16</button>'
-          : '<div style="font-size:.76rem;color:var(--muted);align-self:center;">Add OpenAI key in Settings for lifestyle + before/after shots</div>')
+          ? '<button onclick="DesignTeam.generateFullSet(\'' + listingId + '\',function(l,s){toast(s+\' generated\',\'success\');}).then(function(){if(typeof renderDesignView===\'function\')renderDesignView();toast(\'DALL-E shots done!\',\'success\');})" '
+            + 'style="background:rgba(255,183,77,0.12);color:#ffb74d;border:1.5px solid #ffb74d55;border-radius:9px;padding:11px 20px;cursor:pointer;font-size:.82rem;font-weight:700;">'
+            + '+ DALL-E Lifestyle &amp; Before/After — $0.16</button>'
+          : '<div style="font-size:.74rem;color:#546e7a;align-self:center;padding:6px 0;">Add OpenAI key in Settings to unlock lifestyle + before/after shots</div>')
+      + '<button onclick="DesignTeam._pushToEtsy(\'' + listingId + '\')" '
+      + 'style="background:rgba(241,90,34,0.12);color:#f15a22;border:1.5px solid rgba(241,90,34,0.4);border-radius:9px;padding:11px 20px;cursor:pointer;font-size:.82rem;font-weight:700;margin-left:auto;" '
+      + 'title="Upload all generated images to this Etsy listing">'
+      + '🛍 Push to Etsy</button>'
       + '</div>'
       + '</div>'
 
@@ -861,7 +891,30 @@ var DesignTeam = (function() {
     });
 
     chain.then(function() {
-      toastFn('All 8 free images for ' + listingId + ' done!', 'success');
+      toastFn('All 8 free images for ' + listingId + ' done! — Ready to push to Etsy', 'success');
+    });
+  }
+
+  function _pushToEtsy(listingId) {
+    var toastFn = typeof toast === 'function' ? toast : function(){};
+    if (typeof EtsyAPI === 'undefined' || !EtsyAPI.isConnected()) {
+      toastFn('Connect Etsy first — go to Settings', 'warn');
+      return;
+    }
+    var listingCache = cache[listingId];
+    if (!listingCache) { toastFn('No images generated yet — generate first', 'warn'); return; }
+
+    // Look up Etsy listing_id stored on the Atlas listing
+    var atlasData = (function(){ try{ return JSON.parse(localStorage.getItem('agentAtlasV3')||'{}'); }catch(e){return {};} })();
+    var listing = atlasData.listings && atlasData.listings.find(function(l){ return l.id === listingId; });
+    var etsyId = listing && listing.etsyListingId;
+    if (!etsyId) { toastFn('No Etsy listing ID saved for ' + listingId + ' — publish it first or set listing ID in Edit', 'warn'); return; }
+
+    toastFn('Uploading images to Etsy for ' + listingId + '…', 'info');
+    EtsyAPI.pushImagesToEtsy(listingId, etsyId, listingCache).then(function(res) {
+      toastFn('Etsy upload done: ' + res.uploaded + ' images sent, ' + res.skipped + ' skipped', 'success');
+    }).catch(function(e) {
+      toastFn('Etsy upload error: ' + e.message, 'warn');
     });
   }
 
@@ -955,7 +1008,7 @@ var DesignTeam = (function() {
             return '<div style="width:8px;height:8px;border-radius:50%;background:' + col + ';"></div>';
           }).join('')
         + '</div>'
-        + '<span style="font-size:.7rem;color:' + (allDone?'var(--success)':'var(--muted)') + ';">' + shotsDone + '/5</span>'
+        + '<span style="font-size:.7rem;color:' + (allDone?'var(--success)':'var(--muted)') + ';font-weight:700;">' + shotsDone + '/' + SHOT_TYPES.length + '</span>'
         + '</div>'
         + '</div>'
         + '</div>';
@@ -982,7 +1035,7 @@ var DesignTeam = (function() {
           var done = Object.keys(SHOT_PROMPTS).filter(function(lid) {
             return cache[lid] && cache[lid][st.id] && cache[lid][st.id].url;
           }).length;
-          var isFree = st.method === 'mockup';
+          var isFree = st.method === 'mockup' || st.method === 'canvas';
           return '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">'
             + '<div style="font-size:1.2rem;margin-bottom:4px;">' + st.icon + '</div>'
             + '<div style="font-size:.75rem;font-weight:700;color:var(--text);">' + st.agent + '</div>'
@@ -1112,6 +1165,7 @@ var DesignTeam = (function() {
     _setScene:          _setScene,
     _toggleBadge:       _toggleBadge,
     _generateMockups:   _generateMockups,
+    _pushToEtsy:        _pushToEtsy,
     // Backwards compat
     generate:           function(lid) { return generateShot(lid, 'lifestyle'); },
     getHeroImage:       function(lid) { return getImage(lid, 'hero'); },

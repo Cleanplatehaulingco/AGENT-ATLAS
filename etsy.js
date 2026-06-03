@@ -327,6 +327,68 @@ async function updateListing(listingId, data) {
 }
 
 /**
+ * Upload a listing image from a data URL (base64 PNG/JPEG).
+ * Etsy v3 requires multipart/form-data — we convert the data URL to a Blob.
+ * @param {number|string} etsyListingId  The numeric Etsy listing_id
+ * @param {string} dataUrl               Base64 data URL (image/png or image/jpeg)
+ * @param {number} rank                  Position (1 = hero). Etsy allows 1–10.
+ * @returns {Promise<object>}
+ */
+async function uploadListingImage(etsyListingId, dataUrl, rank = 1) {
+  if (!isConnected()) {
+    console.warn('EtsyAPI: not connected — uploadListingImage is a no-op in mock mode.');
+    return { listing_image_id: Date.now(), rank };
+  }
+  // Convert data URL → Blob
+  const [meta, b64] = dataUrl.split(',');
+  const mime = (meta.match(/:(.*?);/) || [])[1] || 'image/png';
+  const bytes = atob(b64);
+  const arr = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+  const blob = new Blob([arr], { type: mime });
+
+  const form = new FormData();
+  form.append('image', blob, 'image.png');
+  form.append('rank', String(rank));
+  form.append('overwrite', 'true');
+
+  const token = getToken();
+  const res = await fetch(`${ETSY_BASE_URL}/shops/${ETSY_CONFIG.shopId}/listings/${etsyListingId}/images`, {
+    method: 'POST',
+    headers: { 'x-api-key': ETSY_CONFIG.clientId, 'Authorization': `Bearer ${token.access_token}` },
+    body: form,
+  });
+  if (!res.ok) throw new Error(`Etsy image upload failed: ${res.status} ${await res.text()}`);
+  return res.json();
+}
+
+/**
+ * Push all generated images for a listing to Etsy in the correct 10-slot order.
+ * Matches SHOT_TYPES order to Etsy image rank 1–10.
+ * @param {string} atlasListingId  e.g. 'LS-001'
+ * @param {number|string} etsyListingId  Etsy numeric listing_id
+ * @param {object} imageCache  The atlas_design_cache entry for this listing
+ * @returns {Promise<{uploaded:number, skipped:number}>}
+ */
+async function pushImagesToEtsy(atlasListingId, etsyListingId, imageCache) {
+  const SHOT_ORDER = ['hero','flat_preview','feature_callout','detail','whats_included','lifestyle','before_after','bundle','how_to_use','before_you_buy'];
+  let uploaded = 0, skipped = 0;
+  for (let i = 0; i < SHOT_ORDER.length; i++) {
+    const shotId = SHOT_ORDER[i];
+    const entry = imageCache && imageCache[shotId];
+    if (!entry || !entry.url) { skipped++; continue; }
+    try {
+      await uploadListingImage(etsyListingId, entry.url, i + 1);
+      uploaded++;
+    } catch(e) {
+      console.error('Upload failed for', shotId, e.message);
+      skipped++;
+    }
+  }
+  return { uploaded, skipped };
+}
+
+/**
  * Fetch stats (views, visits, revenue) for a specific listing.
  * Note: stats require the listings_r scope and a connected shop.
  * @param {number|string} listingId
@@ -506,8 +568,10 @@ var EtsyAPI = {
   getShop:         getShop,
   getListings:     getListings,
   getListing:      getListing,
-  createListing:   createListing,
-  updateListing:   updateListing,
+  createListing:      createListing,
+  updateListing:      updateListing,
+  uploadListingImage: uploadListingImage,
+  pushImagesToEtsy:   pushImagesToEtsy,
   getListingStats: getListingStats,
   getTransactions: getTransactions,
 
