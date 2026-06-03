@@ -1317,7 +1317,11 @@
       });
   }
 
-  // ── Check API server status ──────────────────────────────────────────
+  // ── Check API server status + keep warm ─────────────────────────────
+  function _pingApi() {
+    fetch(RENDER_API + '/health', { signal: AbortSignal.timeout(5000) }).catch(function(){});
+  }
+
   (function checkApiStatus() {
     var dot = document.getElementById('api-dot');
     var txt = document.getElementById('api-status-text');
@@ -1332,6 +1336,8 @@
         dot.style.background = '#febc2e';
         txt.textContent = 'API Server: Not yet deployed — connect via dashboard';
       });
+
+    setInterval(_pingApi, 9 * 60 * 1000);
   })();
 </script>
 
