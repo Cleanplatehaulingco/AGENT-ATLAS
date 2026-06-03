@@ -13,8 +13,8 @@ function _cssFor(accent, accentDark) {
   +'.page { background: #fff; max-width: 880px; margin: 0 auto; box-shadow: 0 12px 40px rgba(0,0,0,0.18); border-radius: 6px; overflow: hidden; }'
   +'@media print { body { background:#fff;padding:0; } .page{box-shadow:none;border-radius:0;} .no-print{display:none!important;} }'
   +'.header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color:#fff; padding:24px 40px; display:flex; justify-content:space-between; align-items:center; gap:16px; }'
-+'.logo-zone { border: 2px dashed rgba(255,255,255,0.3); border-radius:8px; padding:10px 18px; cursor:pointer; color:rgba(255,255,255,0.6); font-size:9pt; text-align:center; min-width:140px; transition:all .2s; }'
-  +'.logo-zone:hover { border-color:rgba(255,255,255,0.7); color:#fff; background:rgba(255,255,255,0.05); }'
++'.logo-zone { border: 2.5px dashed rgba(255,255,255,0.6); border-radius:10px; padding:14px 20px; cursor:pointer; color:rgba(255,255,255,0.85); font-size:9pt; text-align:center; min-width:160px; transition:all .2s; background:rgba(255,255,255,0.07); }'
+  +'.logo-zone:hover { border-color:#fff; color:#fff; background:rgba(255,255,255,0.14); transform:scale(1.02); }'
   +'.company-name-field { font-size:15pt; font-weight:900; letter-spacing:-0.5px; color:#fff; text-transform:uppercase; margin-top:6px; border-bottom:1px solid rgba(255,255,255,0.2); min-width:180px; }'
   +'.company-name-field:empty::before { content:\'YOUR COMPANY NAME\'; color:rgba(255,255,255,0.35); font-style:italic; }'
   +'.company-name-field:focus { border-bottom:1px solid rgba(255,255,255,0.7); outline:none; }'
@@ -92,26 +92,86 @@ function _cssFor(accent, accentDark) {
 
 const _JS = `<script>
 document.addEventListener('DOMContentLoaded',function(){
+  // Auto-fill today's date
   var df=document.getElementById('field-date');
   if(df&&!df.textContent.trim())df.textContent=new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
+
+  // Inject sample rows into every invoice/parts table
+  document.querySelectorAll('.form-table tbody').forEach(function(tbody){
+    var cols=tbody.closest('table').querySelectorAll('thead th').length;
+    if(cols<3)return; // skip tiny tables
+    var sr=document.createElement('tr');
+    sr.className='sample-row';
+    sr.setAttribute('data-sample','1');
+    var sampleCells=[];
+    // Build sample cells based on column count
+    if(cols===6){
+      sampleCells=['★ Ex','Labor — diagnostic visit (example)','SVC-001','1','$85.00','$85.00'];
+    } else if(cols===5){
+      sampleCells=['★ Ex','Service call — example entry','$85.00','Completed','—'];
+    } else if(cols===7){
+      sampleCells=['★ Ex','Example Client','123 Main St','Mow + Edge','45 min','✓','—'];
+    } else if(cols===8){
+      sampleCells=['★ Ex','J. Smith','Crew Lead','8','8','8','8','40'];
+    } else {
+      sampleCells=['★ Ex'];
+      for(var x=1;x<cols;x++)sampleCells.push(x===1?'Sample entry — clear before printing':'—');
+    }
+    sampleCells.forEach(function(txt,i){
+      var td=document.createElement('td');
+      if(i===0){
+        td.innerHTML='<span style="color:var(--accent);font-weight:900;">'+txt+'</span>';
+      } else {
+        td.textContent=txt;
+      }
+      sr.appendChild(td);
+    });
+    tbody.insertBefore(sr,tbody.firstChild);
+  });
 });
 function clearForm(){
   document.querySelectorAll('.editable').forEach(function(el){el.textContent='';});
   document.querySelectorAll('input[type=checkbox]').forEach(function(cb){cb.checked=false;});
+  // Remove sample rows
+  document.querySelectorAll('tr[data-sample]').forEach(function(r){r.remove();});
   var df=document.getElementById('field-date');
   if(df)df.textContent=new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
 }
 <\/script>`;
 
 function _logoBlock(uid){
-  return '<div class="logo-zone no-print" onclick="document.getElementById(\'lu-'+uid+'\').click()" title="Click to upload logo">&#128247; Click to add logo</div>'
-    +'<img id="li-'+uid+'" style="display:none;max-height:56px;max-width:180px;object-fit:contain" alt="Logo">'
+  return '<div class="logo-zone no-print" onclick="document.getElementById(\'lu-'+uid+'\').click()" title="Click to upload your logo">'
+    +'<div style="font-size:18pt;margin-bottom:4px;">&#128247;</div>'
+    +'<div style="font-size:8pt;font-weight:900;letter-spacing:0.5px;text-transform:uppercase;">CLICK HERE</div>'
+    +'<div style="font-size:7pt;font-weight:600;opacity:0.75;margin-top:2px;">Upload Your Logo</div>'
+    +'</div>'
+    +'<img id="li-'+uid+'" style="display:none;max-height:64px;max-width:200px;object-fit:contain;border-radius:4px;" alt="Logo">'
     +'<input type="file" id="lu-'+uid+'" accept="image/*" style="display:none" onchange="(function(i){var f=i.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){var im=document.getElementById(\'li-'+uid+'\');im.src=e.target.result;im.style.display=\'block\';i.previousElementSibling.previousElementSibling.style.display=\'none\';};r.readAsDataURL(f);})(this)">'
     +'<div contenteditable="true" class="company-name-field" data-placeholder="YOUR COMPANY NAME"></div>';
 }
 
 function _toolbar(){
-  return '<div class="toolbar no-print"><button class="toolbar-btn btn-print" onclick="window.print()">&#128438; Print / Save PDF</button><button class="toolbar-btn btn-clear" onclick="clearForm()">&#10006; Clear Form</button><span class="toolbar-tip">&#9432; Click any field to type &nbsp;|&nbsp; Upload logo &nbsp;|&nbsp; Print when ready</span></div>';
+  return '<div class="no-print" style="position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.12);">'
+    +'<div style="background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:#fff;padding:11px 40px;display:flex;align-items:center;gap:0;">'
+    +'<span style="font-size:7.5pt;font-weight:900;letter-spacing:2px;text-transform:uppercase;opacity:0.75;margin-right:28px;white-space:nowrap;">HOW TO USE</span>'
+    +'<span style="display:flex;gap:20px;flex-wrap:wrap;flex:1;">'
+    +'<span style="display:flex;align-items:center;gap:8px;font-size:9pt;font-weight:700;">'
+    +'<span style="background:rgba(255,255,255,0.25);border-radius:50%;width:21px;height:21px;display:inline-flex;align-items:center;justify-content:center;font-size:8.5pt;font-weight:900;flex-shrink:0;">1</span>'
+    +'Click the logo box (top-left) to upload your company logo</span>'
+    +'<span style="display:flex;align-items:center;gap:8px;font-size:9pt;font-weight:700;">'
+    +'<span style="background:rgba(255,255,255,0.25);border-radius:50%;width:21px;height:21px;display:inline-flex;align-items:center;justify-content:center;font-size:8.5pt;font-weight:900;flex-shrink:0;">2</span>'
+    +'Click any field to type — all yellow ★ rows are examples, clear them before printing</span>'
+    +'<span style="display:flex;align-items:center;gap:8px;font-size:9pt;font-weight:700;">'
+    +'<span style="background:rgba(255,255,255,0.25);border-radius:50%;width:21px;height:21px;display:inline-flex;align-items:center;justify-content:center;font-size:8.5pt;font-weight:900;flex-shrink:0;">3</span>'
+    +'Click &ldquo;Print / Save PDF&rdquo; when ready &mdash; this bar disappears automatically</span>'
+    +'</span>'
+    +'</div>'
+    +'<div style="background:#f7f8fc;border-bottom:1px solid #e0e4f0;padding:10px 40px;display:flex;gap:10px;align-items:center;">'
+    +'<button class="toolbar-btn btn-print" onclick="window.print()">&#128438; Print / Save PDF</button>'
+    +'<button class="toolbar-btn btn-clear" onclick="clearForm()">&#10006; Clear Form</button>'
+    +'<span class="toolbar-tip">&#9432; Best on desktop (Chrome or Safari) &nbsp;&bull;&nbsp; No software needed &mdash; works fully in your browser</span>'
+    +'</div>'
+    +'</div>';
 }
 
 function _header(uid, title, id){
