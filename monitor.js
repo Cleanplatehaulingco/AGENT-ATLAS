@@ -12,6 +12,8 @@
  *   atlas_monitor_uptime  — uptime ping log
  */
 
+var RENDER_API = 'https://agent-atlas-api.onrender.com';
+
 var ShopMonitor = (function () {
   'use strict';
 
@@ -91,14 +93,17 @@ var ShopMonitor = (function () {
   }
 
   // ── Listing Launcher Bookmarklet ─────────────────────────────────────────
-  // Reads data from window.name (cross-origin safe — persists through navigation).
-  // prepareLaunch() opens Etsy in a new window and sets window.name on it before Etsy loads.
+  // Fetches listing data from the relay API (POST by prepareLaunch, GET by bookmarklet).
+  // Fixed key "atlas_launch_latest" so the bookmarklet never needs re-installing.
   function listingLauncherCode() {
+    var RELAY_URL = RENDER_API + '/relay/load/atlas_launch_latest';
     var inner = '(function(){'
-      // Read from window.name (set by prepareLaunch via window.open)
-      + 'var copy=window.name;'
-      + 'if(!copy||copy.indexOf("title")===-1){alert("No listing data found.\\nGo back to Agent Atlas → Monitor → pick a listing → click Prepare Launch. It will open Etsy automatically with data loaded.");return;}'
-      + 'var d;try{d=JSON.parse(copy);}catch(e){alert("Data error — go back to Atlas and click Prepare Launch again.");return;}'
+      // Fetch from relay API — works cross-origin from etsy.com
+      + 'fetch(' + JSON.stringify(RELAY_URL) + ')'
+      + '.then(function(r){return r.json();})'
+      + '.then(function(res){'
+      +   'if(!res.ok||!res.data){alert("No listing data. Go back to Atlas, pick a listing, click Prepare Launch, then try again.");return;}'
+      +   'var d=res.data;'
 
       // Helper: find input/textarea by label text, aria-label, placeholder, or name
       + 'function setField(sel,val){'
@@ -147,11 +152,14 @@ var ShopMonitor = (function () {
       +   'filled++;'
       + '}'
       + 'alert("✓ Atlas filled "+filled+" fields for:\\n"+d.title.substring(0,60)+"...\\n\\nReview everything, set your digital download file, then click Publish!");'
+      + '})'
+      + '.catch(function(){alert("Could not reach Atlas API server. Check your connection.");});'
       + '})();';
     return 'javascript:' + encodeURIComponent(inner);
   }
 
-  // Open Etsy add-listing in a new window and inject payload via window.name (cross-origin safe)
+  // POST payload to relay API, then open Etsy in a new tab.
+  // Fixed relay key "atlas_launch_latest" — bookmarklet never needs re-installing.
   function prepareLaunch(listingId) {
     var copy = (typeof ETSY_COPY !== 'undefined' && ETSY_COPY[listingId]) || {};
     var atlasData = (function(){ try{ return JSON.parse(localStorage.getItem('agentAtlasV3')||'{}'); }catch(e){return {};} })();
@@ -164,15 +172,33 @@ var ShopMonitor = (function () {
       price:     String(listing.price || ''),
       preparedAt: new Date().toISOString(),
     };
-    // Open Etsy in a new window — set window.name BEFORE navigation so it persists
-    var w = window.open('about:blank', '_blank');
-    if (w) {
-      w.name = JSON.stringify(payload);
-      w.location.href = 'https://www.etsy.com/sell/add-listing';
-    } else {
-      // Popup blocked fallback — tell user to allow popups
-      if (typeof toast === 'function') toast('Allow popups for this site, then try again', 'warn');
-    }
+
+    var RELAY_STORE_URL = RENDER_API + '/relay/store';
+    var ETSY_NEW_LISTING = 'https://www.etsy.com/sell/add-listing';
+
+    // POST to relay, then open Etsy once we know the data is stored
+    fetch(RELAY_STORE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: 'atlas_launch_latest', data: payload }),
+    })
+    .then(function(r) {
+      if (!r.ok) throw new Error('relay store failed: ' + r.status);
+      // Open Etsy in a new tab after relay confirms storage
+      window.open(ETSY_NEW_LISTING, '_blank');
+    })
+    .catch(function(err) {
+      // Fallback: relay unavailable — use window.name approach
+      if (typeof toast === 'function') toast('Relay API unreachable — using fallback window method', 'warn');
+      var w = window.open('about:blank', '_blank');
+      if (w) {
+        w.name = JSON.stringify(payload);
+        w.location.href = ETSY_NEW_LISTING;
+      } else {
+        if (typeof toast === 'function') toast('Allow popups for this site, then try again', 'warn');
+      }
+    });
+
     return payload;
   }
 
