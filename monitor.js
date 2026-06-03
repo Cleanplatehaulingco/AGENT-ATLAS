@@ -95,16 +95,14 @@ var ShopMonitor = (function () {
   }
 
   // ── Listing Launcher Bookmarklet ─────────────────────────────────────────
-  // When clicked on etsy.com/sell/add-listing (or any Etsy listing creation page),
-  // this reads the chosen listing data from Atlas localStorage and fills every field.
-  function listingLauncherCode(listingId) {
-    // Pull listing data from Atlas localStorage at click-time (always fresh)
+  // Reads data from window.name (cross-origin safe — persists through navigation).
+  // prepareLaunch() opens Etsy in a new window and sets window.name on it before Etsy loads.
+  function listingLauncherCode() {
     var inner = '(function(){'
-      // Load Atlas ETSY_COPY and listing data from localStorage
-      + 'var raw=localStorage.getItem("agentAtlasV3");'
-      + 'var copy=localStorage.getItem("atlas_launcher_payload");'
-      + 'if(!copy){alert("No listing data found.\\nOpen Agent Atlas, click Launch on a listing, then click this bookmark.");return;}'
-      + 'var d;try{d=JSON.parse(copy);}catch(e){alert("Corrupt payload — re-launch from Atlas.");return;}'
+      // Read from window.name (set by prepareLaunch via window.open)
+      + 'var copy=window.name;'
+      + 'if(!copy||copy.indexOf("title")===-1){alert("No listing data found.\\nGo back to Agent Atlas → Monitor → pick a listing → click Prepare Launch. It will open Etsy automatically with data loaded.");return;}'
+      + 'var d;try{d=JSON.parse(copy);}catch(e){alert("Data error — go back to Atlas and click Prepare Launch again.");return;}'
 
       // Helper: find input/textarea by label text, aria-label, placeholder, or name
       + 'function setField(sel,val){'
@@ -157,9 +155,8 @@ var ShopMonitor = (function () {
     return 'javascript:' + encodeURIComponent(inner);
   }
 
-  // Write a listing payload to localStorage so the bookmarklet can read it
+  // Open Etsy add-listing in a new window and inject payload via window.name (cross-origin safe)
   function prepareLaunch(listingId) {
-    // Pull from ETSY_COPY (defined in app.js) and Atlas listings state
     var copy = (typeof ETSY_COPY !== 'undefined' && ETSY_COPY[listingId]) || {};
     var atlasData = (function(){ try{ return JSON.parse(localStorage.getItem('agentAtlasV3')||'{}'); }catch(e){return {};} })();
     var listing = (atlasData.listings||[]).find(function(l){ return l.id === listingId; }) || {};
@@ -171,7 +168,15 @@ var ShopMonitor = (function () {
       price:     String(listing.price || ''),
       preparedAt: new Date().toISOString(),
     };
-    try { localStorage.setItem('atlas_launcher_payload', JSON.stringify(payload)); } catch(e) {}
+    // Open Etsy in a new window — set window.name BEFORE navigation so it persists
+    var w = window.open('about:blank', '_blank');
+    if (w) {
+      w.name = JSON.stringify(payload);
+      w.location.href = 'https://www.etsy.com/sell/add-listing';
+    } else {
+      // Popup blocked fallback — tell user to allow popups
+      if (typeof toast === 'function') toast('Allow popups for this site, then try again', 'warn');
+    }
     return payload;
   }
 
@@ -479,7 +484,7 @@ var ShopMonitor = (function () {
 
     <!-- Step 2: pick listing + prepare -->
     <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
-      <div style="font-size:.78rem;font-weight:800;color:var(--text);margin-bottom:10px;">Step 2 — Pick a listing &amp; load it</div>
+      <div style="font-size:.78rem;font-weight:800;color:var(--text);margin-bottom:10px;">Step 2 — Pick a listing → opens Etsy automatically</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
         <select id="launcher-listing-select" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:7px 12px;font-size:.82rem;min-width:220px;">
           ${(function() {
@@ -497,12 +502,12 @@ var ShopMonitor = (function () {
 
     <!-- Step 3: go fill -->
     <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px;">
-      <div style="font-size:.78rem;font-weight:800;color:var(--text);margin-bottom:6px;">Step 3 — Go fill the form</div>
+      <div style="font-size:.78rem;font-weight:800;color:var(--text);margin-bottom:6px;">Step 3 — Fill &amp; publish</div>
       <div style="font-size:.76rem;color:var(--muted);line-height:1.7;">
-        1. Open a new tab → go to <code style="background:var(--surface);padding:1px 5px;border-radius:3px;">etsy.com/sell/add-listing</code><br>
-        2. Click <strong>⚡ Atlas Launch Listing</strong> in your bookmarks bar<br>
+        1. Click <strong>Prepare Launch</strong> above — Etsy opens automatically in a new tab with data preloaded<br>
+        2. Once Etsy loads, click <strong>⚡ Atlas Launch Listing</strong> in your bookmarks bar<br>
         3. All fields fill instantly — review, upload your PDF file, hit <strong>Publish</strong><br>
-        4. Done. Whole process: ~30 seconds per listing
+        4. Done. ~30 seconds per listing
       </div>
     </div>
   </div>
@@ -631,7 +636,7 @@ shops_r — read my own shop info</div>
         + ' · <span style="color:var(--muted);">' + (payload.title||'').substring(0,60) + '…</span>'
         + '<br><span style="color:var(--muted);">Now go to etsy.com/sell/add-listing and click ⚡ Atlas Launch Listing</span>';
     }
-    if (typeof toast === 'function') toast('✓ ' + listingId + ' ready — open Etsy and click the bookmark', 'success');
+    if (typeof toast === 'function') toast('✓ Etsy opening with ' + listingId + ' loaded — click ⚡ Atlas Launch Listing on that page', 'success');
   }
 
   // ── Init ──────────────────────────────────────────────────────────────────
