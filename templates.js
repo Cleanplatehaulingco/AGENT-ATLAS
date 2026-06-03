@@ -1089,8 +1089,12 @@ function generateTemplate(listingId) {
   return t.html;
 }
 
-function openTemplate(listingId) {
+function openTemplate(listingId, autoPrint) {
   var html = generateTemplate(listingId);
+  if (autoPrint) {
+    // Inject auto-print trigger before </body>
+    html = html.replace('</body>', '<script>window.addEventListener("load",function(){setTimeout(function(){window.print();},600);});<\/script></body>');
+  }
   var win = window.open('', '_blank');
   if (win) { win.document.write(html); win.document.close(); }
 }

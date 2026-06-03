@@ -946,7 +946,8 @@ function renderListings() {
                 <td><span class="badge ${l.perf==='Winner'?'live':''}">${l.perf}</span></td>
                 <td><span class="badge ${statusBadgeClass(l.status)}">${l.status}</span></td>
                 <td style="display:flex;gap:5px;flex-wrap:wrap">
-                  <button class="pill preview-template" data-id="${l.id}" title="Preview printable form" style="font-size:.68rem;padding:4px 8px">⬡ Form</button>
+                  <button class="pill preview-template" data-id="${l.id}" title="View form in browser" style="font-size:.68rem;padding:4px 8px">👁 View</button>
+                  <button class="pill pdf-download" data-id="${l.id}" title="Download as PDF" style="font-size:.68rem;padding:4px 8px">⬇ PDF</button>
                   <button class="pill dl-product" data-id="${l.id}" title="Download product bundle" style="font-size:.68rem;padding:4px 8px">↓ Bundle</button>
                   <button class="pill gen-image" data-id="${l.id}" title="Generate mockup image" style="font-size:.68rem;padding:4px 8px">${typeof ImageGen !== 'undefined' && ImageGen.cache[l.id] ? '✓ Img' : '⬡ Image'}</button>
                 </td>
@@ -992,6 +993,7 @@ ${copy.imagePrompt}</div>
   view.querySelectorAll('.edit-listing').forEach(b => b.onclick = e => { e.stopPropagation(); openListingEditor(b.dataset.id); });
   view.querySelectorAll('.advance-listing').forEach(b => b.onclick = e => { e.stopPropagation(); advanceListing(b.dataset.id); });
   view.querySelectorAll('.preview-template').forEach(b => b.onclick = e => { e.stopPropagation(); if (typeof openTemplate === 'function') openTemplate(b.dataset.id); else toast('Template engine loading…', 'info'); });
+  view.querySelectorAll('.pdf-download').forEach(b => b.onclick = e => { e.stopPropagation(); if (typeof openTemplate === 'function') openTemplate(b.dataset.id, true); else toast('Template engine loading…', 'info'); });
   view.querySelectorAll('.dl-product').forEach(b => b.onclick = e => { e.stopPropagation(); if (typeof Products !== 'undefined') Products.download(b.dataset.id); else toast('Product engine loading…', 'info'); });
   view.querySelectorAll('.gen-image').forEach(b => b.onclick = async e => {
     e.stopPropagation();

@@ -5,48 +5,46 @@
 
 var DesignTeam = (function() {
 
-  // ── Shot type definitions ────────────────────────────────────────────
+  // ── Listing names (used for text overlays on canvas) ────────────────
+  var LISTING_NAMES = {
+    'LS-001':'HVAC Service Call Notes',     'LS-002':'Plumbing Dispatch Form',
+    'LS-003':'Electrician Inspection Form', 'LS-004':'Lawn Care Crew Planner',
+    'LS-005':'Auto Detail Intake + Waiver', 'LS-006':'Pest Control Follow-Up',
+    'LS-007':'Roofing Change Order',        'LS-008':'Pressure Washing Route Sheet',
+    'LS-009':'Appliance Repair Tracker',    'LS-010':'Handyman Reimbursement Sheet',
+    'LS-011':'Mobile Mechanic Summary',     'LS-012':'Locksmith Authorization Form',
+    'LS-013':'Painting Prep Punch List',    'LS-014':'Snow Removal Checklist',
+    'LS-015':'Window Cleaning Client Pack', 'LS-016':'Pool Service Chemical Log',
+    'LS-017':'Flooring Estimate Matrix',    'LS-018':'Contractor Daily Site Report',
+    'LS-019':'Septic Service Pump Log',     'LS-020':'Service Fee Addendum',
+  };
+
+  // ── 10 shot types: research shows full 10-slot listings rank higher ──
   var SHOT_TYPES = [
-    {
-      id: 'hero',
-      label: 'Hero Shot',
-      agent: 'Mockup Studio',
-      description: 'Your actual form in a pro scene. Shows buyers exactly what they get.',
-      icon: '★',
-      method: 'mockup',  // uses screenshot + canvas compositor
-    },
-    {
-      id: 'detail',
-      label: 'Detail / Features',
-      agent: 'Mockup Studio',
-      description: 'Close-up with callout badges. "Fillable", "3 Pages", "Print Ready".',
-      icon: '◉',
-      method: 'mockup',
-    },
-    {
-      id: 'bundle',
-      label: 'Bundle / Value Stack',
-      agent: 'Mockup Studio',
-      description: 'All 3 pages fanned + badge: "3-Page System". Justifies $15.',
-      icon: '▦',
-      method: 'mockup',
-    },
-    {
-      id: 'lifestyle',
-      label: 'Lifestyle Shot',
-      agent: 'DALL-E 3 HD',
-      description: 'Contractor in context using the form. Emotional = clicks.',
-      icon: '◈',
-      method: 'dalle',
-    },
-    {
-      id: 'before_after',
-      label: 'Before / After',
-      agent: 'DALL-E 3 HD',
-      description: 'Chaos vs organized. #1 converting shot type on Etsy.',
-      icon: '⬡',
-      method: 'dalle',
-    },
+    // Slots 1–3: Mockup Studio (screenshot → canvas) — FREE
+    { id:'hero',          label:'Hero Mockup',          agent:'Mockup Studio', icon:'★', method:'mockup',
+      description:'Product name + form on bright desk + 2 badge pills. Top CTR driver.' },
+    { id:'flat_preview',  label:'Flat Preview',         agent:'Mockup Studio', icon:'◧', method:'canvas',
+      description:'Straight-on bright view of the actual form. Buyers see the real design.' },
+    { id:'detail',        label:'Detail + Arrows',      agent:'Mockup Studio', icon:'◉', method:'mockup',
+      description:'Zoomed header section with callout arrows to logo zone + fillable fields.' },
+    // Slots 4–6: Pure-canvas infographics — FREE, no screenshot needed
+    { id:'feature_callout',label:'Feature Callout',     agent:'Canvas Studio', icon:'✦', method:'canvas',
+      description:'5 checkmark bullets: Fillable, 3 Pages, Add Logo, Print Ready, No Software.' },
+    { id:'whats_included', label:"What's Included",     agent:'Canvas Studio', icon:'◈', method:'canvas',
+      description:'All files, format badges (PDF, Browser, Print), page count circle badge.' },
+    { id:'bundle',        label:'Bundle / Value Stack', agent:'Mockup Studio', icon:'▦', method:'mockup',
+      description:'3 pages fanned + "3-Page System" badge. Justifies the $15 price.' },
+    // Slots 7–8: DALL-E HD — ~$0.16 total for these 2 × 20 listings
+    { id:'lifestyle',     label:'Lifestyle Shot',       agent:'DALL-E 3 HD',  icon:'◈', method:'dalle',
+      description:'Contractor in context using the form. Emotional connection = clicks.' },
+    { id:'before_after',  label:'Before / After',       agent:'DALL-E 3 HD',  icon:'⬡', method:'dalle',
+      description:'Chaos vs organized. #1 converting shot type on Etsy.' },
+    // Slots 9–10: Pure-canvas info slides — FREE
+    { id:'how_to_use',    label:'How to Use',           agent:'Canvas Studio', icon:'①', method:'canvas',
+      description:'3-step numbered download + edit + print graphic. Kills "how does this work?" objection.' },
+    { id:'before_you_buy',label:'Before You Buy',       agent:'Canvas Studio', icon:'⚑', method:'canvas',
+      description:'Digital-only notice + compatibility + refund info. Prevents bad reviews.' },
   ];
 
   // ── Mockup scene definitions ─────────────────────────────────────────
@@ -163,7 +161,7 @@ var DesignTeam = (function() {
     size:         '1024x1024',
     quality:      'hd',       // upgraded from standard — sharper, worth the $0.04 extra per image
     style:        'natural',
-    activeScene:  'desk_dark',
+    activeScene:  'desk_light',
     activeBadges: ['instant', 'fillable', 'pages3'],
   };
 
@@ -212,6 +210,255 @@ var DesignTeam = (function() {
       '</svg>',
     ].join('');
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+
+  // ── Pure-canvas infographic generator (no screenshot needed) ─────────
+  // Generates feature_callout / whats_included / how_to_use / before_you_buy / flat_preview
+  function generateInfoSlide(listingId, shotType, accentColor) {
+    return new Promise(function(resolve) {
+      var SIZE = 1024;
+      var accent = accentColor || '#4f7cff';
+      var name = LISTING_NAMES[listingId] || listingId;
+      var canvas = document.createElement('canvas');
+      canvas.width = SIZE; canvas.height = SIZE;
+      var ctx = canvas.getContext('2d');
+
+      function roundRect(x,y,w,h,r,fill,stroke){
+        ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+        ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r);
+        ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h);
+        ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r);
+        ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+        if(fill){ctx.fillStyle=fill;ctx.fill();}
+        if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();}
+      }
+
+      function drawBase(bgLight){
+        if(bgLight){
+          // Bright clean background (research: bright wins in Etsy grid)
+          var bg = ctx.createLinearGradient(0,0,0,SIZE);
+          bg.addColorStop(0,'#f8f9ff'); bg.addColorStop(1,'#eef0f8');
+          ctx.fillStyle=bg; ctx.fillRect(0,0,SIZE,SIZE);
+          // Subtle dot grid
+          ctx.fillStyle='rgba(0,0,60,0.04)';
+          for(var gx=20;gx<SIZE;gx+=36) for(var gy=20;gy<SIZE;gy+=36){
+            ctx.beginPath(); ctx.arc(gx,gy,1.5,0,Math.PI*2); ctx.fill();
+          }
+        } else {
+          var dbg = ctx.createLinearGradient(0,0,SIZE,SIZE);
+          dbg.addColorStop(0,'#0f1628'); dbg.addColorStop(1,'#1a2744');
+          ctx.fillStyle=dbg; ctx.fillRect(0,0,SIZE,SIZE);
+        }
+        // Accent strip at top
+        ctx.fillStyle=accent; ctx.fillRect(0,0,SIZE,6);
+      }
+
+      function pill(text, x, y, color, bg){
+        ctx.font='bold 14px Inter,Arial,sans-serif';
+        var tw = ctx.measureText(text).width;
+        roundRect(x,y,tw+24,30,15,bg||'rgba(0,0,0,0.08)');
+        ctx.fillStyle=color; ctx.fillText(text, x+12, y+21);
+      }
+
+      function badge(text, cx, cy, color){
+        ctx.font='bold 20px Inter,Arial,sans-serif';
+        var tw=ctx.measureText(text).width;
+        var bw=Math.max(tw+32,90), bh=44;
+        roundRect(cx-bw/2,cy-bh/2,bw,bh,22,color);
+        ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.fillText(text,cx,cy+7); ctx.textAlign='left';
+      }
+
+      function headerBar(title){
+        roundRect(0,0,SIZE,80,0,'#0f1628');
+        ctx.fillStyle=accent; ctx.fillRect(0,76,SIZE,4);
+        ctx.font='bold 22px Inter,Arial,sans-serif';
+        ctx.fillStyle='#fff'; ctx.fillText('TradeOpsVault', 28, 50);
+        ctx.font='15px Inter,Arial,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.55)';
+        ctx.fillText(title, SIZE-ctx.measureText(title).width-28, 50);
+      }
+
+      if(shotType==='feature_callout'){
+        drawBase(true);
+        headerBar('Feature Overview');
+        // Large headline
+        ctx.font='bold 38px Inter,Arial,sans-serif'; ctx.fillStyle='#0f1628';
+        var hlines = name.length>22 ? [name.substring(0,name.lastIndexOf(' ',22)), name.substring(name.lastIndexOf(' ',22)+1)] : [name];
+        hlines.forEach(function(l,i){ ctx.fillText(l, 60, 148+i*46); });
+        ctx.font='18px Inter,Arial,sans-serif'; ctx.fillStyle='#667';
+        ctx.fillText('Professional Trade Business Template', 60, 148+hlines.length*46+10);
+
+        // 5 feature bullets with icons — research-backed callouts
+        var bullets = [
+          {icon:'✏', text:'Fillable directly in your browser — no software needed'},
+          {icon:'📄', text:'3-page system: Cover + Main Form + Job History Log'},
+          {icon:'🏷', text:'Add your company logo with one click'},
+          {icon:'🖨', text:'Print-ready PDF quality — crisp on any printer'},
+          {icon:'✓', text:'Clear Form button — reuse endlessly for every job'},
+        ];
+        var by = 310;
+        bullets.forEach(function(b){
+          roundRect(52, by-4, SIZE-104, 54, 10, 'rgba(255,255,255,0.9)', accent+'33');
+          ctx.font='bold 26px Inter,Arial,sans-serif'; ctx.fillStyle=accent;
+          ctx.fillText(b.icon, 78, by+34);
+          ctx.font='500 17px Inter,Arial,sans-serif'; ctx.fillStyle='#1a1a2e';
+          ctx.fillText(b.text, 120, by+34);
+          by += 70;
+        });
+        // Bottom badge row
+        pill('⚡ Instant Download', 52, SIZE-72, accent, accent+'22');
+        pill('✓ Editable', 280, SIZE-72, '#16a34a', '#16a34a22');
+        pill('📄 3 Pages', 390, SIZE-72, '#2563eb', '#2563eb22');
+        pill('🖨 Print Ready', 490, SIZE-72, '#7c3aed', '#7c3aed22');
+
+      } else if(shotType==='whats_included'){
+        drawBase(true);
+        headerBar("What's Included");
+        ctx.font='bold 36px Inter,Arial,sans-serif'; ctx.fillStyle='#0f1628';
+        ctx.fillText("Everything You Get:", 60, 148);
+        // Page list
+        var pages = ['Page 1 — Cover Page + Quick-Start Instructions','Page 2 — Main ' + name + ' Form','Page 3 — Job History Log (10-row tracker)'];
+        pages.forEach(function(p,i){
+          roundRect(52, 178+i*72, SIZE-104, 60, 8, i===1?accent+'18':'#fff', accent+'44');
+          ctx.font='bold 18px Inter,Arial,sans-serif'; ctx.fillStyle=accent;
+          ctx.fillText('0'+(i+1), 76, 178+i*72+38);
+          ctx.font='500 16px Inter,Arial,sans-serif'; ctx.fillStyle='#1a1a2e';
+          ctx.fillText(p, 112, 178+i*72+38);
+        });
+        // Format compatibility row (research: "works with" removes #1 objection)
+        ctx.font='bold 16px Inter,Arial,sans-serif'; ctx.fillStyle='#667';
+        ctx.fillText('WORKS IN YOUR BROWSER — COMPATIBLE WITH:', 52, 420);
+        var formats = ['Chrome','Safari','Firefox','Edge','Any Printer'];
+        formats.forEach(function(f,i){
+          roundRect(52+i*186, 436, 176, 50, 8, '#fff', accent+'55');
+          ctx.font='bold 15px Inter,Arial,sans-serif'; ctx.fillStyle=accent;
+          ctx.textAlign='center'; ctx.fillText(f, 52+i*186+88, 467); ctx.textAlign='left';
+        });
+        // Big value badge
+        badge('3-Page System', SIZE/2, 560, accent);
+        badge('$14.99', SIZE/2, 618, '#0f1628');
+        // Digital notice
+        roundRect(52, 670, SIZE-104, 68, 10, '#fff8e7','#f59e0b');
+        ctx.font='bold 14px Inter,Arial,sans-serif'; ctx.fillStyle='#92400e';
+        ctx.fillText('⬇ DIGITAL DOWNLOAD — Nothing will be shipped', 76, 698);
+        ctx.font='13px Inter,Arial,sans-serif'; ctx.fillStyle='#78350f';
+        ctx.fillText('Instant access via Etsy downloads after purchase. Download on desktop for best results.', 76, 720);
+        // Bottom brand
+        ctx.font='bold 15px Inter,Arial,sans-serif'; ctx.fillStyle='#0f1628';
+        ctx.fillText('TradeOpsVault  ·  tradeopsvault.etsy.com', 52, SIZE-28);
+        ctx.font='13px Inter,Arial,sans-serif'; ctx.fillStyle='#999';
+        ctx.fillText('Professional templates for trade contractors', SIZE-340, SIZE-28);
+
+      } else if(shotType==='how_to_use'){
+        drawBase(false);
+        ctx.font='bold 34px Inter,Arial,sans-serif'; ctx.fillStyle='#fff';
+        ctx.fillText('How to Use Your Template', 60, 120);
+        ctx.font='16px Inter,Arial,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.6)';
+        ctx.fillText('3 steps — takes about 60 seconds', 60, 152);
+        // 3 steps
+        var steps = [
+          {n:'1', title:'Purchase & Download', desc:'Click "Add to cart" → Complete checkout → Etsy sends download link instantly. Open on desktop (Chrome or Safari) for best results.', icon:'⬇'},
+          {n:'2', title:'Open & Fill In',      desc:'Click the HTML file → it opens in your browser. Click the logo zone to upload your logo. Click any field to type your info.', icon:'✏'},
+          {n:'3', title:'Print or Save PDF',   desc:'Click the "Print / Save PDF" button at the top. Choose your printer OR select "Save as PDF" to get a digital copy.', icon:'🖨'},
+        ];
+        steps.forEach(function(s,i){
+          var sy = 200+i*242;
+          roundRect(52, sy, SIZE-104, 216, 12, 'rgba(255,255,255,0.07)', accent+'66');
+          // Number circle
+          ctx.beginPath(); ctx.arc(110, sy+62, 38, 0, Math.PI*2);
+          ctx.fillStyle=accent; ctx.fill();
+          ctx.font='bold 32px Inter,Arial,sans-serif'; ctx.fillStyle='#fff';
+          ctx.textAlign='center'; ctx.fillText(s.n, 110, sy+74); ctx.textAlign='left';
+          // Icon + title
+          ctx.font='bold 22px Inter,Arial,sans-serif'; ctx.fillStyle='#fff';
+          ctx.fillText(s.icon+'  '+s.title, 165, sy+56);
+          // Description — word wrap
+          ctx.font='15px Inter,Arial,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.7)';
+          var words=s.desc.split(' '), line='', ly=sy+90, maxW=SIZE-230;
+          words.forEach(function(w){
+            var test=line+w+' ';
+            if(ctx.measureText(test).width>maxW&&line){ctx.fillText(line,165,ly);ly+=22;line=w+' ';}
+            else line=test;
+          });
+          if(line)ctx.fillText(line,165,ly);
+        });
+        // Tip
+        roundRect(52, SIZE-90, SIZE-104, 60, 8, accent+'33');
+        ctx.font='bold 14px Inter,Arial,sans-serif'; ctx.fillStyle=accent;
+        ctx.fillText('💡 Tip: Use "Clear Form" to reset all fields and reuse for every new job — unlimited reprints included!', 72, SIZE-55);
+
+      } else if(shotType==='before_you_buy'){
+        drawBase(true);
+        headerBar('Before You Buy');
+        ctx.font='bold 34px Inter,Arial,sans-serif'; ctx.fillStyle='#0f1628';
+        ctx.fillText('Good to Know', 60, 148);
+        var faqs = [
+          {q:'What do I actually receive?', a:'An HTML file that opens in any browser. Fill it in, then print or save as PDF.'},
+          {q:'Do I need Canva, Word, or Adobe?', a:'No. Everything works in Chrome, Safari, Firefox, or Edge — completely free.'},
+          {q:'Can I use this for my real business?', a:'Yes. Personal + commercial use license included. Use it for every job.'},
+          {q:'What if I need help?', a:'Message us on Etsy — we respond within 24 hours and will help you get it working.'},
+          {q:'Is anything shipped?', a:'No — this is a digital download. Etsy delivers the file instantly after purchase.'},
+        ];
+        var fy=184;
+        faqs.forEach(function(f){
+          roundRect(52, fy, SIZE-104, 88, 8, '#fff', '#e2e8f0');
+          ctx.font='bold 15px Inter,Arial,sans-serif'; ctx.fillStyle=accent;
+          ctx.fillText('Q: '+f.q, 72, fy+28);
+          ctx.font='14px Inter,Arial,sans-serif'; ctx.fillStyle='#334155';
+          ctx.fillText('A: '+f.a, 72, fy+54);
+          fy+=100;
+        });
+        // Stars + shop name
+        ctx.font='bold 22px Inter,Arial,sans-serif'; ctx.fillStyle='#f59e0b';
+        ctx.fillText('★★★★★', 60, SIZE-52);
+        ctx.font='bold 16px Inter,Arial,sans-serif'; ctx.fillStyle='#0f1628';
+        ctx.fillText('TradeOpsVault  ·  Professional Templates for Trade Contractors', 180, SIZE-52);
+
+      } else if(shotType==='flat_preview'){
+        // Bright straight-on preview — high brightness wins in Etsy grid per research
+        var fbg = ctx.createLinearGradient(0,0,0,SIZE);
+        fbg.addColorStop(0,'#f0f4ff'); fbg.addColorStop(1,'#e8edf8');
+        ctx.fillStyle=fbg; ctx.fillRect(0,0,SIZE,SIZE);
+        // Shadow behind page
+        ctx.shadowColor='rgba(0,0,80,0.18)'; ctx.shadowBlur=48; ctx.shadowOffsetX=0; ctx.shadowOffsetY=16;
+        roundRect(80, 48, SIZE-160, SIZE-96, 6, '#fff');
+        ctx.shadowColor='transparent';
+        // Dark header
+        roundRect(80, 48, SIZE-160, 68, 6, '#0f1628');
+        // Accent bar
+        ctx.fillStyle=accent; ctx.fillRect(80, 116, SIZE-160, 7);
+        // Product name in header
+        ctx.font='bold 18px Inter,Arial,sans-serif'; ctx.fillStyle='#fff';
+        ctx.fillText(name.toUpperCase(), 108, 90);
+        ctx.font='12px Inter,Arial,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.5)';
+        ctx.fillText('TradeOpsVault Premium Series  ·  3-Page System', 108, 110);
+        // Mock form content lines
+        ctx.fillStyle='#f7f8fc';
+        ctx.fillRect(80, 123, SIZE-160, 36); // info strip bg
+        ctx.fillStyle='#e2e8f0';
+        [[108,145,180,10],[320,145,180,10],[532,145,180,10],[744,145,140,10]].forEach(function(r){ ctx.fillRect(r[0],r[1],r[2],r[3]); });
+        // Section blocks
+        var sects=[['01  CUSTOMER & JOB INFORMATION',168],['02  WORK PERFORMED',340],['03  PARTS & INVOICE',512],['04  SIGN-OFF & CHECKLIST',680]];
+        sects.forEach(function(s){
+          ctx.fillStyle='#1a2744'; ctx.fillRect(80, s[1], SIZE-160, 32);
+          ctx.font='bold 11px Inter,Arial,sans-serif'; ctx.fillStyle='#fff';
+          ctx.fillText(s[0], 108, s[1]+21);
+          // Field lines
+          ctx.fillStyle='#f0f4ff';
+          ctx.fillRect(80, s[1]+32, SIZE-160, s===sects[sects.length-1]?104:136);
+          ctx.fillStyle='#e2e8f0';
+          for(var fl=0;fl<3;fl++){
+            ctx.fillRect(104, s[1]+52+fl*32, (SIZE-220)/2-8, 12);
+            ctx.fillRect(104+(SIZE-220)/2+8, s[1]+52+fl*32, (SIZE-220)/2-8, 12);
+          }
+        });
+        // Top-left badge: "Actual Template Preview"
+        roundRect(90, 58, 220, 26, 13, accent);
+        ctx.font='bold 11px Inter,Arial,sans-serif'; ctx.fillStyle='#fff'; ctx.textAlign='center';
+        ctx.fillText('ACTUAL TEMPLATE PREVIEW', 200, 76); ctx.textAlign='left';
+      }
+
+      resolve(canvas.toDataURL('image/png'));
+    });
   }
 
   // ── Mockup Studio — Canvas Compositor ────────────────────────────────
@@ -360,12 +607,13 @@ var DesignTeam = (function() {
           // Accent line at top of strip
           ctx.fillStyle = accentColor;
           ctx.fillRect(0, SIZE-stripH, SIZE, 2);
+          var productName = LISTING_NAMES[listingId] || listingId;
           ctx.font = 'bold 15px Inter, Arial, sans-serif';
           ctx.fillStyle = '#fff';
-          ctx.fillText('TradeOpsVault', 24, SIZE-stripH+22);
+          ctx.fillText(productName, 24, SIZE-stripH+22);
           ctx.font = '12px Inter, Arial, sans-serif';
           ctx.fillStyle = 'rgba(255,255,255,0.6)';
-          ctx.fillText('Professional Trade Templates  ·  Instant Download  ·  Fillable in Browser', 24, SIZE-stripH+40);
+          ctx.fillText('TradeOpsVault  ·  Instant Download  ·  Fillable in Browser', 24, SIZE-stripH+40);
         }
 
         resolve(canvas.toDataURL('image/png'));
@@ -530,7 +778,7 @@ var DesignTeam = (function() {
       + ' Generate Mockup Images (Free)</div>'
       + '<div style="font-size:.78rem;color:var(--muted);margin-bottom:10px;">Creates Hero, Detail, and Bundle shots from your screenshot. No API key needed.</div>'
       + '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
-      + '<button onclick="DesignTeam._generateMockups(\'' + listingId + '\',\'' + accent + '\')" style="background:var(--success);color:#000;border:none;border-radius:7px;padding:8px 16px;cursor:pointer;font-size:.8rem;font-weight:700;">Generate Hero + Detail + Bundle — Free</button>'
+      + '<button onclick="DesignTeam._generateMockups(\'' + listingId + '\',\'' + accent + '\')" style="background:var(--success);color:#000;border:none;border-radius:7px;padding:8px 16px;cursor:pointer;font-size:.8rem;font-weight:700;">Generate All 8 Free Images</button>'
       + (config.apiKey
           ? '<button onclick="DesignTeam.generateFullSet(\'' + listingId + '\',function(l,s){toast(s+\' generated\',\'success\');}).then(function(){if(typeof renderDesignView===\'function\')renderDesignView();toast(\'DALL-E shots done!\',\'success\');})" style="background:var(--panel2);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:8px 16px;cursor:pointer;font-size:.8rem;font-weight:600;">+ DALL-E Lifestyle &amp; Before/After — $0.16</button>'
           : '<div style="font-size:.76rem;color:var(--muted);align-self:center;">Add OpenAI key in Settings for lifestyle + before/after shots</div>')
@@ -583,23 +831,37 @@ var DesignTeam = (function() {
 
   function _generateMockups(listingId, accentColor) {
     var screenshot = getScreenshot(listingId);
-    var mockupShots = ['hero', 'detail', 'bundle'];
     var toastFn = typeof toast === 'function' ? toast : function(){};
-    toastFn('Compositing ' + listingId + ' mockups…', 'info');
+    toastFn('Compositing ' + listingId + ' images…', 'info');
 
     var chain = Promise.resolve();
-    mockupShots.forEach(function(shotType) {
+
+    // Mockup-method shots (need canvas compositor)
+    ['hero', 'detail', 'bundle', 'flat_preview'].forEach(function(shotType) {
       chain = chain.then(function() {
         return compositeImage(screenshot, listingId, shotType, config.activeScene, config.activeBadges, accentColor)
           .then(function(dataUrl) {
             saveMockup(listingId, shotType, dataUrl);
-            toastFn(listingId + ' · ' + shotType + ' ready ✓', 'success');
+            toastFn(listingId + ' · ' + shotType + ' ✓', 'success');
             if (typeof renderDesignView === 'function') renderDesignView();
           });
       });
     });
+
+    // Canvas-method infoslides (pure canvas, no screenshot needed)
+    ['feature_callout', 'whats_included', 'how_to_use', 'before_you_buy'].forEach(function(shotType) {
+      chain = chain.then(function() {
+        return Promise.resolve(generateInfoSlide(listingId, shotType, accentColor))
+          .then(function(dataUrl) {
+            saveMockup(listingId, shotType, dataUrl);
+            toastFn(listingId + ' · ' + shotType + ' ✓', 'success');
+            if (typeof renderDesignView === 'function') renderDesignView();
+          });
+      });
+    });
+
     chain.then(function() {
-      toastFn('All mockups for ' + listingId + ' generated — free!', 'success');
+      toastFn('All 8 free images for ' + listingId + ' done!', 'success');
     });
   }
 
@@ -619,13 +881,13 @@ var DesignTeam = (function() {
       var cached = cache[listingId] && cache[listingId][st.id] && cache[listingId][st.id].url;
       var imgSrc = cached ? cache[listingId][st.id].url : placeholder(listingId, st.id);
       var method = st.method;
-      var methodLabel = method === 'mockup' ? '🖼 Mockup Studio (free)' : '🤖 DALL-E 3 HD ($0.08)';
-      var methodColor = method === 'mockup' ? 'var(--success)' : 'var(--accent2)';
+      var methodLabel = method === 'mockup' ? '🖼 Mockup Studio (free)' : method === 'canvas' ? '🎨 Canvas Infographic (free)' : '🤖 DALL-E 3 HD ($0.08)';
+      var methodColor = method === 'dalle' ? 'var(--accent2)' : 'var(--success)';
       var statusColor = cached ? 'var(--success)' : 'var(--muted)';
       var statusLabel = cached ? '✓ Ready' : 'Not generated';
 
       var actionBtn = '';
-      if (method === 'mockup') {
+      if (method === 'mockup' || method === 'canvas') {
         actionBtn = '<button onclick="DesignTeam._generateMockups(\'' + listingId + '\',\'' + accent + '\')" '
           + 'style="width:100%;background:' + (cached?'var(--surface-raised)':'var(--success)') + ';color:' + (cached?'var(--muted)':'#000') + ';border:none;border-radius:6px;padding:6px;cursor:pointer;font-size:.76rem;font-weight:600;">'
           + (cached?'Regenerate':'Generate Free') + '</button>';
