@@ -1,201 +1,173 @@
-// images.js — AI Design Team for Agent Atlas
-// 5 specialized design agents generate a 10-photo Etsy gallery per listing.
+// images.js — AI Design Team + Mockup Studio for Agent Atlas
+// Strategy: Real screenshots for hero/detail/bundle (free, shows actual product)
+//           DALL-E 3 HD for lifestyle + before/after only (~$1.60 total vs $8)
 // Exposes global: DesignTeam (ImageGen alias preserved for backwards compat)
 
 var DesignTeam = (function() {
 
-  // ── Shot type definitions ───────────────────────────────────────────
+  // ── Shot type definitions ────────────────────────────────────────────
   var SHOT_TYPES = [
     {
       id: 'hero',
       label: 'Hero Shot',
-      agent: 'Hero Agent',
-      description: 'Clean flatlay — the form at its best. This is the thumbnail.',
+      agent: 'Mockup Studio',
+      description: 'Your actual form in a pro scene. Shows buyers exactly what they get.',
       icon: '★',
+      method: 'mockup',  // uses screenshot + canvas compositor
+    },
+    {
+      id: 'detail',
+      label: 'Detail / Features',
+      agent: 'Mockup Studio',
+      description: 'Close-up with callout badges. "Fillable", "3 Pages", "Print Ready".',
+      icon: '◉',
+      method: 'mockup',
+    },
+    {
+      id: 'bundle',
+      label: 'Bundle / Value Stack',
+      agent: 'Mockup Studio',
+      description: 'All 3 pages fanned + badge: "3-Page System". Justifies $15.',
+      icon: '▦',
+      method: 'mockup',
     },
     {
       id: 'lifestyle',
       label: 'Lifestyle Shot',
-      agent: 'Lifestyle Agent',
-      description: 'Real human in context using it. Emotional connection = clicks.',
+      agent: 'DALL-E 3 HD',
+      description: 'Contractor in context using the form. Emotional = clicks.',
       icon: '◈',
-    },
-    {
-      id: 'detail',
-      label: 'Detail Shot',
-      agent: 'Detail Agent',
-      description: 'Close-up of the form fields. Proves professional quality.',
-      icon: '◉',
-    },
-    {
-      id: 'bundle',
-      label: 'Bundle Shot',
-      agent: 'Bundle Agent',
-      description: 'Multiple forms fanned out. Makes the value obvious.',
-      icon: '▦',
+      method: 'dalle',
     },
     {
       id: 'before_after',
-      label: 'Before/After',
-      agent: 'Pain Agent',
-      description: 'Chaos vs organized. Best-converting shot type on Etsy.',
+      label: 'Before / After',
+      agent: 'DALL-E 3 HD',
+      description: 'Chaos vs organized. #1 converting shot type on Etsy.',
       icon: '⬡',
+      method: 'dalle',
     },
   ];
 
-  // ── Per-listing, per-shot prompts ────────────────────────────────────
+  // ── Mockup scene definitions ─────────────────────────────────────────
+  // Each scene = CSS background for the 1024×1024 canvas compositor
+  var MOCKUP_SCENES = [
+    { id: 'desk_dark',    label: 'Dark Desk',       bg: 'linear-gradient(145deg,#1a1f2e 0%,#0f1420 100%)',   surface: '#1e2535' },
+    { id: 'desk_light',   label: 'Clean Desk',      bg: 'linear-gradient(145deg,#f5f0eb 0%,#e8e0d5 100%)',   surface: '#fff' },
+    { id: 'concrete',     label: 'Concrete',         bg: 'linear-gradient(145deg,#3a3a3a 0%,#2a2a2a 100%)',   surface: '#444' },
+    { id: 'workshop',     label: 'Workshop',         bg: 'linear-gradient(145deg,#2c2010 0%,#1a1208 100%)',   surface: '#3a2c18' },
+    { id: 'outdoor',      label: 'Outdoor / Truck',  bg: 'linear-gradient(145deg,#2d4a1e 0%,#1a2e10 100%)',   surface: '#3a5a28' },
+    { id: 'premium',      label: 'Premium Black',    bg: 'radial-gradient(ellipse at 30% 30%,#1a1040 0%,#080810 100%)', surface: '#120c2e' },
+  ];
+
+  // ── Top-converter overlay badges (applied on canvas) ─────────────────
+  var OVERLAY_BADGES = [
+    { id: 'instant',    text: '⚡ Instant Download',     color: '#fbbf24', bg: 'rgba(0,0,0,0.7)' },
+    { id: 'fillable',   text: '✏ Fillable in Browser',  color: '#34d399', bg: 'rgba(0,0,0,0.7)' },
+    { id: 'pages3',     text: '📄 3-Page System',        color: '#60a5fa', bg: 'rgba(0,0,0,0.7)' },
+    { id: 'noapp',      text: '✓ No Software Needed',   color: '#a78bfa', bg: 'rgba(0,0,0,0.7)' },
+    { id: 'print',      text: '🖨 Print-Ready PDF',       color: '#f472b6', bg: 'rgba(0,0,0,0.7)' },
+    { id: 'logo',       text: '🏷 Add Your Logo',         color: '#fb923c', bg: 'rgba(0,0,0,0.7)' },
+  ];
+
+  // ── DALL-E prompts (lifestyle + before/after only) ────────────────────
+  // Updated: describe dark navy header + colored accent bar to match real templates
+  // "form section headers and field lines visible" — shows structure, no copyright issue
   var SHOT_PROMPTS = {
     'LS-001': {
-      hero:         'Premium product flatlay: HVAC service call form on a polished stainless steel clipboard, dark workshop bench background, single warm overhead spotlight, dramatic shadows, ultra-sharp focus on form, no text readable, commercial product photography, 4K quality',
-      lifestyle:    'HVAC technician in uniform kneeling beside outdoor AC unit, writing on a clipboard with a service form, golden hour natural light, focused professional expression, blurred suburban neighborhood background, photorealistic, no text readable',
-      detail:       'Extreme close-up macro shot of blank HVAC service form on clipboard, crisp fine-line form fields and section headers visible but no text filled in, shallow depth of field, neutral grey background, studio lighting, ultra-sharp',
-      bundle:       'Five HVAC service call forms fanned out on a dark textured metal surface, slight overlap, perspective view, soft studio lighting creating subtle shadows, clean and professional, no readable text, commercial photography',
-      before_after:  'Split image: LEFT side shows messy handwritten scraps of paper, greasy notes, and disorganized invoices on a dirty truck dashboard (chaos, stress); RIGHT side shows the same information neatly organized on a clean professional HVAC service form on a clipboard (order, relief). Cinematic lighting, no readable text',
+      lifestyle:   'HVAC technician in navy uniform kneeling beside outdoor AC unit, writing on clipboard with a dark-headered professional service form, golden hour natural light, suburban neighborhood background, photorealistic commercial photography, form section headers and field lines visible but no handwritten content',
+      before_after: 'Split image: LEFT half shows messy handwritten sticky notes and crumpled paper on dirty truck dashboard, stressed contractor, dim chaotic lighting, gritty texture. RIGHT half shows same contractor calm and confident, holding a clean professional dark-navy-header HVAC service form on clipboard, warm professional light. Dramatic cinematic split, no readable text in forms',
     },
     'LS-002': {
-      hero:         'Premium flatlay: plumbing dispatch checklist on a heavy-duty aluminum clipboard, blue-grey concrete background, crisp directional studio light, deep shadows, ultra-sharp form visible, no text readable, commercial photography',
-      lifestyle:    'Plumber in work uniform at kitchen sink, reviewing checklist on clipboard before starting job, natural home interior background slightly blurred, professional candid photography, no text readable',
-      detail:       'Close-up macro of plumbing diagnosis checklist, clean section dividers and checkbox fields visible, shallow depth of field, white studio background, no text filled in',
-      bundle:       'Four plumbing dispatch forms fanned out on slate grey surface, slight angle, professional studio lighting, crisp and clean, no readable text',
-      before_after:  'Split image: LEFT shows crumpled sticky notes and scribbled napkins near a drain (disorganized, stressful); RIGHT shows clean plumbing checklist on clipboard (professional, organized). Cinematic lighting, no text readable',
+      lifestyle:   'Plumber in work uniform at kitchen sink reviewing a professional dark-header checklist on clipboard before starting job, natural home interior, candid professional photography, form structure visible but no filled text',
+      before_after: 'Split image: LEFT shows crumpled sticky notes and phone texts near a leaky pipe, frustrated plumber. RIGHT shows clean professional plumbing dispatch form on clipboard, organized and calm contractor. Cinematic split lighting, dramatic contrast between chaos and order',
     },
     'LS-003': {
-      hero:         'Electrician inspection form on brushed aluminum clipboard, dark concrete background, cool blue-grey studio lighting, ultra-sharp, dramatic product shot, no text readable',
-      lifestyle:    'Licensed electrician in safety gear and hard hat reviewing inspection form on clipboard at commercial panel board, professional industrial photography, no text readable',
-      detail:       'Close-up of electrician jobsite inspection form showing organized checkboxes and section areas, crisp studio macro photography, no text filled in',
-      bundle:       'Set of three electrician forms fanned out on dark industrial surface, cool professional lighting, clean composition, no readable text',
-      before_after:  'Split: LEFT shows hand-sketched messy notes on paper at a circuit breaker (dangerous, informal); RIGHT shows clean professional inspection form on clipboard (safe, organized). No readable text',
+      lifestyle:   'Licensed electrician in safety gear reviewing a dark-header inspection form on clipboard at commercial panel board, industrial professional photography, form section headers visible but no filled content',
+      before_after: 'Split image: LEFT shows messy hand-sketched notes at circuit breaker, dangerous informal documentation. RIGHT shows clean professional electrician inspection form on clipboard, safe organized professional. No readable text in forms',
     },
     'LS-004': {
-      hero:         'Lawn care weekly crew planner on green clipboard against fresh-cut grass background, bright morning sunlight, commercial product photography, ultra-sharp, no text readable',
-      lifestyle:    'Lawn business owner in polo shirt reviewing weekly crew planner on clipboard beside mowing truck at dawn, warm golden light, professional outdoor photography, no text readable',
-      detail:       'Close-up of weekly crew planner form showing route columns and crew assignment areas, crisp outdoor natural light, shallow depth of field, no text filled in',
-      bundle:       'Four weekly planner sheets fanned out on a wooden picnic table with grass background, morning light, clean professional photography, no readable text',
-      before_after:  'Split: LEFT shows chaotic group texts and handwritten route lists on a phone and napkins; RIGHT shows organized weekly crew planner on clipboard (calm, efficient). No readable text',
+      lifestyle:   'Lawn business owner in polo shirt reviewing weekly crew planner on clipboard beside branded mowing truck at dawn, warm golden light, outdoor professional photography, form route columns visible',
+      before_after: 'Split image: LEFT shows chaotic group texts and handwritten route lists on phone and napkins, confused crew standing around. RIGHT shows organized dark-header weekly crew planner on clipboard, confident crew lead, efficient morning. Cinematic split',
     },
     'LS-005': {
-      hero:         'Auto detail intake form and damage waiver on dark leather clipboard, luxury car interior background blur, warm amber premium lighting, high-end product photography, no text readable',
-      lifestyle:    'Professional mobile detailer in branded polo presenting clipboard with intake form to car owner in upscale driveway, luxury vehicle background, natural afternoon light, no text readable',
-      detail:       'Macro shot of auto detail intake form showing service selection areas and waiver section, shallow depth of field, dark premium background, studio lighting, no text filled in',
-      bundle:       'Intake form and damage waiver side by side on dark polished surface, premium presentation, warm product lighting, no readable text',
-      before_after:  'Split: LEFT shows phone photos of scratch dispute with angry customer (no documentation); RIGHT shows clean signed damage waiver on clipboard next to car (protected, professional). No readable text',
+      lifestyle:   'Professional mobile detailer in branded polo presenting dark-header intake form on clipboard to luxury car owner in upscale driveway, afternoon natural light, form fields visible',
+      before_after: 'Split: LEFT shows customer on phone disputing scratch damage, no paperwork, stress. RIGHT shows signed professional damage waiver on clipboard next to luxury vehicle, protected confident detailer. Cinematic lighting',
     },
     'LS-006': {
-      hero:         'Pest control follow-up cards fanned out on clean white surface, professional product flatlay, neutral studio lighting, crisp and sharp, no text readable',
-      lifestyle:    'Pest control technician in uniform handing follow-up card to homeowner at front door, suburban neighborhood background, natural daylight, professional photography, no text readable',
-      detail:       'Close-up of pest control service card showing service sections and follow-up areas, macro studio photography, no text filled in',
-      bundle:       'Set of pest control cards in a neat stack with top card visible, clean surface, studio light, commercial product shot, no readable text',
-      before_after:  'Split: LEFT shows no follow-up and lost customer; RIGHT shows professional pest control card left at door with next service schedule (retention, professionalism). No readable text',
+      lifestyle:   'Pest control technician in uniform handing professional dark-header follow-up card to homeowner at front door, suburban daylight, form structure visible',
+      before_after: 'Split: LEFT shows lost customer, no follow-up, empty appointment book. RIGHT shows professional pest control service card with next visit scheduled, happy retained customer. Clean cinematic split',
     },
     'LS-007': {
-      hero:         'Roofing change order form on heavy-duty contractor clipboard, roofing shingles and blue sky background blur, strong natural sunlight, dramatic shadows, ultra-sharp, no text readable',
-      lifestyle:    'Roofing contractor in hard hat and safety vest showing change order form on clipboard to homeowner, residential rooftop background, natural daylight, professional photography, no text readable',
-      detail:       'Close-up of roofing change order showing scope sections and approval signature area, crisp macro photography, shallow depth of field, no text filled in',
-      bundle:       'Three roofing documents fanned out on rough wood surface, construction site aesthetic, outdoor natural lighting, no readable text',
-      before_after:  'Split: LEFT shows verbal argument about scope change with no documentation (dispute, stress); RIGHT shows signed change order on clipboard (protected, professional). No readable text',
+      lifestyle:   'Roofing contractor in hard hat showing dark-header change order form on clipboard to homeowner, residential rooftop background, natural daylight, form approval section visible',
+      before_after: 'Split: LEFT shows heated verbal argument about scope change on job site, no documentation. RIGHT shows signed change order on clipboard, professional contractor protected and paid. Dramatic cinematic contrast',
     },
     'LS-008': {
-      hero:         'Pressure washing route sheet on waterproof clipboard, clean wet concrete driveway background, bright midday sun, commercial product photography, no text readable',
-      lifestyle:    'Pressure washing operator reviewing route sheet on clipboard beside commercial pressure washer on residential driveway, professional outdoor photography, no text readable',
-      detail:       'Close-up of pressure washing route sheet showing job columns and site detail areas, outdoor natural light, sharp macro, no text filled in',
-      bundle:       'Stack of route sheets on clipboard with equipment in background, bright outdoor lighting, professional product shot, no readable text',
-      before_after:  'Split: LEFT shows missed stops and confused crew on phones; RIGHT shows clean route sheet on clipboard with organized daily stops (efficiency, profit). No readable text',
+      lifestyle:   'Pressure washing operator reviewing route sheet on clipboard beside commercial pressure washer on driveway, bright midday sun, form stop columns visible',
+      before_after: 'Split: LEFT shows confused crew members on phones, missed stops, lost revenue. RIGHT shows organized route sheet on clipboard, crew efficiently completing stops. Clean cinematic split',
     },
     'LS-009': {
-      hero:         'Appliance repair parts tracker form on clipboard, organized workshop bench background, warm shop lighting, premium product photography, no text readable',
-      lifestyle:    'Appliance repair technician checking parts tracker on clipboard beside open washing machine, home setting background, natural indoor light, professional photography, no text readable',
-      detail:       'Close-up macro of parts tracker form showing part number columns and supplier fields, warm bench lighting, shallow depth of field, no text filled in',
-      bundle:       'Parts tracker sheets stacked with tools nearby, workshop background, warm lighting, commercial product shot, no readable text',
-      before_after:  'Split: LEFT shows lost parts receipts and forgotten orders costing money; RIGHT shows organized parts tracker with every item logged (control, savings). No readable text',
+      lifestyle:   'Appliance repair technician checking dark-header parts tracker on clipboard beside open washing machine, home setting, warm indoor light, form part columns visible',
+      before_after: 'Split: LEFT shows lost receipts, wrong parts ordered, money wasted. RIGHT shows organized parts tracker with every item logged, professional controlled workflow. No readable text',
     },
     'LS-010': {
-      hero:         'Handyman reimbursement sheet on clipboard, home improvement background with tools softly blurred, natural window light, clean product photography, no text readable',
-      lifestyle:    'Handyman in work vest presenting reimbursement sheet on clipboard to homeowner at front door, professional photography, no text readable',
-      detail:       'Close-up of reimbursement form showing expense line items and client signature area, crisp natural light, shallow depth of field, no text filled in',
-      bundle:       'Reimbursement forms with receipts beside clipboard, organized home office surface, clean lighting, no readable text',
-      before_after:  'Split: LEFT shows arguing over material costs with no receipts documented; RIGHT shows clean reimbursement form signed by client (paid, protected). No readable text',
+      lifestyle:   'Handyman in work vest presenting materials reimbursement form on clipboard to homeowner at front door, professional photography, form line items visible',
+      before_after: 'Split: LEFT shows argument over material costs with no receipts, unpaid contractor. RIGHT shows clean signed reimbursement form, fully documented and paid. Cinematic lighting',
     },
     'LS-011': {
-      hero:         'Mobile mechanic service summary form on clipboard beside open engine bay, warm garage lighting, dramatic side light, ultra-sharp product photography, no text readable',
-      lifestyle:    'Mobile mechanic in coveralls reviewing service summary on clipboard at roadside repair scene, natural outdoor light, professional candid photography, no text readable',
-      detail:       'Close-up of service summary showing work performed section and parts replaced area, shallow depth of field, warm garage lighting, no text filled in',
-      bundle:       'Set of mobile mechanic forms on clipboard with tool bag visible, professional automotive photography, no readable text',
-      before_after:  'Split: LEFT shows customer disputing repair with no documentation; RIGHT shows clean signed service summary documenting every repair (trust, repeat business). No readable text',
+      lifestyle:   'Mobile mechanic in coveralls reviewing dark-header service summary on clipboard at roadside repair, natural outdoor light, form work performed section visible',
+      before_after: 'Split: LEFT shows customer disputing repair work, no documentation, stress. RIGHT shows signed service summary with every repair listed, trust and repeat business. Cinematic split',
     },
     'LS-012': {
-      hero:         'Locksmith authorization form on dark clipboard, professional moody low-key lighting, keys and lock background blur, premium product photography, no text readable',
-      lifestyle:    'Locksmith in uniform reviewing authorization form with homeowner at front door, natural residential lighting, professional photography, no text readable',
-      detail:       'Close-up of locksmith authorization form showing ID verification section and authorization signature area, dramatic lighting, macro, no text filled in',
-      bundle:       'Authorization forms stacked on dark surface with locksmith tools softly blurred, moody professional lighting, no readable text',
-      before_after:  'Split: LEFT shows police interaction due to no authorization documentation; RIGHT shows signed authorization form on clipboard protecting the locksmith (legal protection, professionalism). No readable text',
+      lifestyle:   'Locksmith in uniform reviewing dark-header authorization form on clipboard with homeowner at front door, residential natural lighting, form ID section visible',
+      before_after: 'Split: LEFT shows police interaction due to no authorization paperwork, stress. RIGHT shows signed authorization form protecting locksmith, professional and legal. Dramatic lighting',
     },
     'LS-013': {
-      hero:         'Painting prep checklist and punch list on clipboard, paint swatches and roller background, bright studio lighting, clean commercial product photography, no text readable',
-      lifestyle:    'Painting contractor reviewing punch list on clipboard with homeowner during final walkthrough, freshly painted room background, natural window light, professional photography, no text readable',
-      detail:       'Close-up of painting punch list showing surface condition checkboxes and touch-up areas, crisp macro, shallow depth of field, no text filled in',
-      bundle:       'Prep checklist and punch list side by side on drop cloth, painting tools nearby, bright natural light, no readable text',
-      before_after:  'Split: LEFT shows callback dispute for missed touch-ups costing time and money; RIGHT shows completed signed punch list (no callbacks, full payment). No readable text',
+      lifestyle:   'Painting contractor reviewing dark-header punch list on clipboard with homeowner during final walkthrough, freshly painted room, natural window light, checklist sections visible',
+      before_after: 'Split: LEFT shows callback dispute for missed touch-ups, angry client, lost money. RIGHT shows completed signed punch list, full payment received, happy client. No readable text',
     },
     'LS-014': {
-      hero:         'Snow removal trigger checklist on clipboard in snowy winter setting, crisp white and grey tones, clean product photography, no text readable',
-      lifestyle:    'Snow removal operator reviewing trigger checklist on clipboard beside plow truck, winter morning, natural light, professional photography, no text readable',
-      detail:       'Close-up of snow removal checklist showing trigger conditions and client list, winter natural light, macro, no text filled in',
-      bundle:       'Snow removal checklists stacked on truck dashboard, winter setting, clean product shot, no readable text',
-      before_after:  'Split: LEFT shows frantic calls from clients asking if snow service is happening (confusion); RIGHT shows organized trigger checklist with clear conditions (automatic, professional). No readable text',
+      lifestyle:   'Snow removal operator reviewing trigger checklist on clipboard beside plow truck, winter morning blue light, professional outdoor photography, form conditions columns visible',
+      before_after: 'Split: LEFT shows frantic calls from clients asking if service is happening, confusion. RIGHT shows organized trigger checklist, automatic professional response, calm operator. Cinematic winter contrast',
     },
     'LS-015': {
-      hero:         'Window cleaning client packet on clipboard, bright glass building background, clean natural daylight, premium product photography, no text readable',
-      lifestyle:    'Window cleaning professional reviewing client packet on clipboard at commercial building, outdoor professional photography, no text readable',
-      detail:       'Close-up of window cleaning packet showing service schedule and client information areas, bright natural light, macro, no text filled in',
-      bundle:       'Client packet forms fanned out on clean white surface, bright studio lighting, professional product shot, no readable text',
-      before_after:  'Split: LEFT shows confusion over service schedule and missed appointments; RIGHT shows organized client packet with clear schedule (professional, retained clients). No readable text',
+      lifestyle:   'Window cleaning professional reviewing dark-header client packet on clipboard at commercial building, outdoor professional photography, form schedule section visible',
+      before_after: 'Split: LEFT shows missed appointments, confused clients, lost contracts. RIGHT shows organized window cleaning client packet, retained clients and scheduled routes. Clean split',
     },
     'LS-016': {
-      hero:         'Pool service chemical log on clipboard beside sparkling blue pool, warm summer sunlight, premium outdoor product photography, no text readable',
-      lifestyle:    'Pool technician reviewing chemical log on clipboard beside pool, outdoor summer setting, natural warm light, professional photography, no text readable',
-      detail:       'Close-up of pool chemical log showing reading columns and chemical dosage areas, bright outdoor light, shallow depth of field, no text filled in',
-      bundle:       'Pool service logs stacked on pool deck with equipment background, summer natural lighting, no readable text',
-      before_after:  'Split: LEFT shows green algae pool from inconsistent chemical tracking; RIGHT shows clear blue pool with organized chemical log (healthy pool, happy client). No readable text',
+      lifestyle:   'Pool technician reviewing chemical log on clipboard beside sparkling blue pool, warm summer sunlight, outdoor photography, form chemical columns visible',
+      before_after: 'Split: LEFT shows green algae pool from inconsistent chemical tracking, angry homeowner. RIGHT shows crystal clear pool with organized chemical log, happy client, professional service. Vivid colors',
     },
     'LS-017': {
-      hero:         'Flooring estimate scope matrix on clipboard beside wood and tile samples, warm interior design studio lighting, premium product photography, no text readable',
-      lifestyle:    'Flooring contractor reviewing estimate matrix with homeowner in kitchen, natural home lighting, professional candid photography, no text readable',
-      detail:       'Close-up of flooring estimate matrix showing room sections and material columns, warm interior light, macro, no text filled in',
-      bundle:       'Estimate matrix and measurement sheets side by side on flooring samples, professional presentation, no readable text',
-      before_after:  'Split: LEFT shows estimate dispute with angry homeowner over unclear scope; RIGHT shows clean signed scope matrix with every room documented (trust, deposit paid). No readable text',
+      lifestyle:   'Flooring contractor reviewing dark-header estimate matrix on clipboard with homeowner in kitchen, natural home lighting, candid professional, form room section columns visible',
+      before_after: 'Split: LEFT shows estimate dispute, unclear scope, unhappy homeowner. RIGHT shows clean signed scope matrix, deposit paid, confident contractor. Cinematic contrast',
     },
     'LS-018': {
-      hero:         'Construction daily site report on aluminum contractor clipboard, active construction site background blur, dramatic natural daylight, ultra-sharp product photography, no text readable',
-      lifestyle:    'General contractor reviewing daily site report on clipboard at construction site, hard hat and safety vest, professional outdoor photography, no text readable',
-      detail:       'Close-up of site report showing crew roster and daily progress sections, outdoor construction lighting, macro, no text filled in',
-      bundle:       'Site report stack on clipboard with construction background, professional outdoor photography, no readable text',
-      before_after:  'Split: LEFT shows insurance claim dispute with no site documentation; RIGHT shows complete daily site report protecting contractor (legal protection, professionalism). No readable text',
+      lifestyle:   'General contractor in hard hat reviewing daily site report on clipboard at construction site, dramatic natural daylight, professional outdoor photography, form crew section visible',
+      before_after: 'Split: LEFT shows insurance claim dispute, no site documentation, major loss. RIGHT shows complete daily site report protecting contractor, legal protection and professionalism. Dramatic contrast',
     },
     'LS-019': {
-      hero:         'Septic pump log on clipboard in rural outdoor setting, green grass background, clean natural daylight, commercial product photography, no text readable',
-      lifestyle:    'Septic service technician reviewing pump log on clipboard at residential property, outdoor natural lighting, professional photography, no text readable',
-      detail:       'Close-up of septic pump log showing service date columns and tank condition areas, outdoor light, macro, no text filled in',
-      bundle:       'Pump log forms on clipboard with service truck in background, rural outdoor setting, clean product shot, no readable text',
-      before_after:  'Split: LEFT shows regulatory violation from poor record keeping; RIGHT shows complete pump log with every service documented (compliant, professional). No readable text',
+      lifestyle:   'Septic service technician reviewing dark-header pump log on clipboard at residential property, outdoor natural lighting, form date columns visible',
+      before_after: 'Split: LEFT shows regulatory violation from poor record keeping, compliance failure. RIGHT shows complete pump log with every service documented, compliant professional. Clean cinematic split',
     },
     'LS-020': {
-      hero:         'Professional fee transparency addendum on clean white clipboard, modern office surface, crisp overhead lighting, premium product photography, no text readable',
-      lifestyle:    'Service business owner reviewing fee addendum with client across clean desk, modern office setting, natural window light, professional photography, no text readable',
-      detail:       'Close-up of fee addendum showing fee schedule sections and client acknowledgment area, clean studio macro, no text filled in',
-      bundle:       'Fee addendum with service agreement on clean desk, professional office lighting, commercial product shot, no readable text',
-      before_after:  'Split: LEFT shows payment dispute over unexpected fees, angry client; RIGHT shows signed fee transparency addendum with no surprises (trust, full payment). No readable text',
+      lifestyle:   'Service business owner reviewing fee transparency addendum with client across clean desk, modern office, natural window light, form fee schedule sections visible',
+      before_after: 'Split: LEFT shows payment dispute, unexpected fees, angry client refusing to pay. RIGHT shows signed fee transparency addendum, no surprises, full payment received. Professional contrast',
     },
   };
 
+  // ── Config ────────────────────────────────────────────────────────────
   var config = {
-    apiKey:  '',
-    model:   'dall-e-3',
-    size:    '1024x1024',
-    quality: 'standard',
-    style:   'natural',
+    apiKey:       '',
+    model:        'dall-e-3',
+    size:         '1024x1024',
+    quality:      'hd',       // upgraded from standard — sharper, worth the $0.04 extra per image
+    style:        'natural',
+    activeScene:  'desk_dark',
+    activeBadges: ['instant', 'fillable', 'pages3'],
   };
 
-  // cache: { 'LS-001': { hero: {url}, lifestyle: {url}, ... }, ... }
+  // cache: { 'LS-001': { hero:{url,method}, lifestyle:{url}, ... }, ... }
   var cache = {};
 
   function saveCache() {
@@ -225,18 +197,210 @@ var DesignTeam = (function() {
   }
 
   function placeholder(listingId, shotType) {
-    var labels = { hero:'HERO', lifestyle:'LIFE', detail:'DETAIL', bundle:'BUNDLE', before_after:'B/A' };
-    var lbl = labels[shotType] || shotType || '';
+    var st = SHOT_TYPES.find(function(s){return s.id===shotType;}) || {};
+    var isMockup = st.method === 'mockup';
+    var label = (st.label || shotType).toUpperCase();
     var svg = [
       '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">',
-      '<rect width="400" height="400" fill="#111827"/>',
-      '<polygon points="200,140 240,160 240,200 200,220 160,200 160,160" fill="none" stroke="#4f7cff" stroke-width="2" opacity="0.5"/>',
-      '<text x="200" y="240" font-family="monospace" font-size="13" fill="#7a90b5" text-anchor="middle">' + (listingId||'') + ' ' + lbl + '</text>',
+      '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1f2e"/><stop offset="100%" stop-color="#0f1420"/></linearGradient></defs>',
+      '<rect width="400" height="400" fill="url(#g)"/>',
+      isMockup
+        ? '<rect x="100" y="80" width="200" height="240" rx="4" fill="none" stroke="#4f7cff" stroke-width="1.5" opacity="0.4"/><rect x="100" y="80" width="200" height="28" rx="4" fill="#4f7cff" opacity="0.2"/><text x="200" y="100" font-family="monospace" font-size="9" fill="#7a90b5" text-anchor="middle">UPLOAD SCREENSHOT</text><text x="200" y="260" font-family="monospace" font-size="10" fill="#4f7cff" text-anchor="middle">↑ click to add</text>'
+        : '<polygon points="200,150 230,165 230,195 200,210 170,195 170,165" fill="none" stroke="#4f7cff" stroke-width="1.5" opacity="0.4"/>',
+      '<text x="200" y="300" font-family="monospace" font-size="11" fill="#7a90b5" text-anchor="middle">' + (listingId||'') + '</text>',
+      '<text x="200" y="318" font-family="monospace" font-size="10" fill="#4a5568" text-anchor="middle">' + label + '</text>',
       '</svg>',
     ].join('');
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
+  // ── Mockup Studio — Canvas Compositor ────────────────────────────────
+  // Takes a screenshot (data URL) + scene + badges → composites to 1024×1024 canvas → returns data URL
+
+  function compositeImage(screenshotDataUrl, listingId, shotType, sceneId, badgeIds, accentColor) {
+    return new Promise(function(resolve) {
+      var SIZE = 1024;
+      var scene = MOCKUP_SCENES.find(function(s){return s.id===sceneId;}) || MOCKUP_SCENES[0];
+      var badges = (badgeIds||[]).map(function(bid){return OVERLAY_BADGES.find(function(b){return b.id===bid;});}).filter(Boolean);
+      accentColor = accentColor || '#4f7cff';
+
+      var canvas = document.createElement('canvas');
+      canvas.width = SIZE;
+      canvas.height = SIZE;
+      var ctx = canvas.getContext('2d');
+
+      // 1. Background
+      var bgGrad;
+      if (scene.bg.indexOf('radial') === 0) {
+        bgGrad = ctx.createRadialGradient(SIZE*0.3, SIZE*0.3, 0, SIZE*0.5, SIZE*0.5, SIZE*0.8);
+        bgGrad.addColorStop(0, '#1a1040');
+        bgGrad.addColorStop(1, '#080810');
+      } else {
+        bgGrad = ctx.createLinearGradient(0, 0, SIZE, SIZE);
+        if (scene.id === 'desk_light') { bgGrad.addColorStop(0,'#f5f0eb'); bgGrad.addColorStop(1,'#e8e0d5'); }
+        else if (scene.id === 'concrete') { bgGrad.addColorStop(0,'#3a3a3a'); bgGrad.addColorStop(1,'#2a2a2a'); }
+        else if (scene.id === 'workshop') { bgGrad.addColorStop(0,'#2c2010'); bgGrad.addColorStop(1,'#1a1208'); }
+        else if (scene.id === 'outdoor') { bgGrad.addColorStop(0,'#2d4a1e'); bgGrad.addColorStop(1,'#1a2e10'); }
+        else { bgGrad.addColorStop(0,'#1a1f2e'); bgGrad.addColorStop(1,'#0f1420'); }
+      }
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, SIZE, SIZE);
+
+      // 2. Subtle grid texture
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+      ctx.lineWidth = 1;
+      for (var x = 0; x < SIZE; x += 40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,SIZE); ctx.stroke(); }
+      for (var y = 0; y < SIZE; y += 40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(SIZE,y); ctx.stroke(); }
+
+      // 3. Accent glow
+      var glow = ctx.createRadialGradient(SIZE*0.5, SIZE*0.4, 0, SIZE*0.5, SIZE*0.4, SIZE*0.45);
+      glow.addColorStop(0, accentColor + '18');
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, SIZE, SIZE);
+
+      function drawPage(imgEl, x, y, w, h, angle, shadowAlpha) {
+        ctx.save();
+        ctx.translate(x + w/2, y + h/2);
+        ctx.rotate(angle);
+        // Drop shadow
+        ctx.shadowColor = 'rgba(0,0,0,' + (shadowAlpha||0.5) + ')';
+        ctx.shadowBlur = 32;
+        ctx.shadowOffsetX = 8;
+        ctx.shadowOffsetY = 12;
+        // White page background
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(-w/2, -h/2, w, h);
+        ctx.shadowColor = 'transparent';
+        // Dark navy header strip
+        ctx.fillStyle = '#0f1628';
+        ctx.fillRect(-w/2, -h/2, w, h * 0.09);
+        // Accent bar
+        ctx.fillStyle = accentColor;
+        ctx.fillRect(-w/2, -h/2 + h*0.09, w, h * 0.008);
+        // Template screenshot content
+        if (imgEl) {
+          ctx.drawImage(imgEl, -w/2 + 2, -h/2 + h*0.098, w - 4, h * 0.902 - 2);
+        } else {
+          // Placeholder lines
+          ctx.fillStyle = '#f0f4ff';
+          for (var li = 0; li < 8; li++) {
+            ctx.fillRect(-w/2 + w*0.06, -h/2 + h*(0.14 + li*0.1), w*0.88, h*0.05);
+          }
+        }
+        ctx.restore();
+      }
+
+      function drawContent(screenshotImg) {
+        if (shotType === 'bundle') {
+          // Fan of 3 pages
+          var pw = SIZE * 0.52, ph = pw * 1.294;
+          drawPage(screenshotImg, SIZE*0.08, SIZE*0.12, pw, ph, -0.08, 0.3);
+          drawPage(screenshotImg, SIZE*0.22, SIZE*0.08, pw, ph,  0.04, 0.35);
+          drawPage(screenshotImg, SIZE*0.30, SIZE*0.06, pw, ph,  0.0,  0.5);
+        } else if (shotType === 'detail') {
+          // Zoomed crop of form — show top 40% only (header + first section)
+          var dw = SIZE * 0.88, dh = dw * 0.55;
+          var dx = (SIZE - dw) / 2, dy = SIZE * 0.18;
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 40; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 16;
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(dx, dy, dw, dh);
+          ctx.shadowColor = 'transparent';
+          ctx.fillStyle = '#0f1628';
+          ctx.fillRect(dx, dy, dw, dh * 0.15);
+          ctx.fillStyle = accentColor;
+          ctx.fillRect(dx, dy + dh*0.15, dw, dh * 0.013);
+          if (screenshotImg) {
+            // Draw top portion of screenshot
+            var srcH = screenshotImg.naturalHeight * 0.40;
+            ctx.drawImage(screenshotImg, 0, 0, screenshotImg.naturalWidth, srcH, dx+2, dy+dh*0.163, dw-4, dh*0.837-2);
+          } else {
+            ctx.fillStyle = '#f0f4ff';
+            for (var i=0;i<4;i++) ctx.fillRect(dx+dw*0.05, dy+dh*(0.2+i*0.17), dw*0.9, dh*0.09);
+          }
+          ctx.restore();
+        } else {
+          // Hero: single centered page, slight tilt
+          var hw = SIZE * 0.68, hh = hw * 1.294;
+          var hx = (SIZE - hw) / 2, hy = (SIZE - hh) / 2 - SIZE * 0.02;
+          drawPage(screenshotImg, hx, hy, hw, hh, 0.015, 0.55);
+        }
+
+        // 4. Overlay badges (top converter tactic)
+        if (badges.length > 0 && shotType !== 'detail') {
+          var badgeX = 28, badgeY = 28;
+          var badgeH = 32, badgePad = 10;
+          ctx.font = 'bold 13px Inter, Arial, sans-serif';
+          badges.forEach(function(b, i) {
+            var tw = ctx.measureText(b.text).width;
+            var bw = tw + badgePad * 2;
+            // Pill background
+            ctx.fillStyle = 'rgba(0,0,0,0.72)';
+            ctx.beginPath();
+            ctx.roundRect(badgeX, badgeY + i*(badgeH+6), bw, badgeH, badgeH/2);
+            ctx.fill();
+            // Accent line on left
+            ctx.fillStyle = b.color;
+            ctx.fillRect(badgeX, badgeY + i*(badgeH+6) + 8, 3, badgeH-16);
+            // Text
+            ctx.fillStyle = b.color;
+            ctx.fillText(b.text, badgeX + badgePad, badgeY + i*(badgeH+6) + badgeH/2 + 5);
+          });
+        }
+
+        // 5. Bottom brand strip (top converter: shows shop name + value prop)
+        if (shotType === 'hero' || shotType === 'bundle') {
+          var stripH = 56;
+          var stripGrad = ctx.createLinearGradient(0, SIZE-stripH, SIZE, SIZE);
+          stripGrad.addColorStop(0, 'rgba(0,0,0,0.85)');
+          stripGrad.addColorStop(1, 'rgba(0,0,0,0.6)');
+          ctx.fillStyle = stripGrad;
+          ctx.fillRect(0, SIZE-stripH, SIZE, stripH);
+          // Accent line at top of strip
+          ctx.fillStyle = accentColor;
+          ctx.fillRect(0, SIZE-stripH, SIZE, 2);
+          ctx.font = 'bold 15px Inter, Arial, sans-serif';
+          ctx.fillStyle = '#fff';
+          ctx.fillText('TradeOpsVault', 24, SIZE-stripH+22);
+          ctx.font = '12px Inter, Arial, sans-serif';
+          ctx.fillStyle = 'rgba(255,255,255,0.6)';
+          ctx.fillText('Professional Trade Templates  ·  Instant Download  ·  Fillable in Browser', 24, SIZE-stripH+40);
+        }
+
+        resolve(canvas.toDataURL('image/png'));
+      }
+
+      if (screenshotDataUrl && screenshotDataUrl.length > 100) {
+        var img = new Image();
+        img.onload = function() { drawContent(img); };
+        img.onerror = function() { drawContent(null); };
+        img.src = screenshotDataUrl;
+      } else {
+        drawContent(null);
+      }
+    });
+  }
+
+  // Save a mockup into cache
+  function saveMockup(listingId, shotType, dataUrl) {
+    if (!cache[listingId]) cache[listingId] = {};
+    cache[listingId][shotType] = { url: dataUrl, method: 'mockup', generatedAt: Date.now() };
+    saveCache();
+  }
+
+  // Save an uploaded screenshot (raw, before compositing)
+  function saveScreenshot(listingId, dataUrl) {
+    if (!cache[listingId]) cache[listingId] = {};
+    cache[listingId]._screenshot = dataUrl;
+    saveCache();
+  }
+
+  function getScreenshot(listingId) {
+    return cache[listingId] && cache[listingId]._screenshot;
+  }
+
+  // ── DALL-E generation (lifestyle + before/after only) ──────────────────
   function generateShot(listingId, shotType) {
     if (!config.apiKey) return Promise.resolve({ error: 'no_key' });
     var prompts = SHOT_PROMPTS[listingId];
@@ -247,7 +411,14 @@ var DesignTeam = (function() {
     return fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + config.apiKey },
-      body: JSON.stringify({ model: config.model, prompt: prompt, n: 1, size: config.size, quality: config.quality, style: config.style }),
+      body: JSON.stringify({
+        model:   config.model,
+        prompt:  prompt,
+        n:       1,
+        size:    config.size,
+        quality: config.quality,  // 'hd' — sharper detail worth the $0.04 premium
+        style:   config.style,
+      }),
     })
     .then(function(res) {
       return res.json().then(function(data) {
@@ -255,7 +426,7 @@ var DesignTeam = (function() {
         var url = data.data && data.data[0] && data.data[0].url;
         if (!url) return { error: 'no_url' };
         if (!cache[listingId]) cache[listingId] = {};
-        cache[listingId][shotType] = { url: url, listingId: listingId, shotType: shotType, generatedAt: Date.now() };
+        cache[listingId][shotType] = { url: url, method: 'dalle', generatedAt: Date.now() };
         saveCache();
         return { url: url, listingId: listingId, shotType: shotType };
       });
@@ -263,28 +434,26 @@ var DesignTeam = (function() {
     .catch(function(err) { return { error: err.message || 'fetch_failed' }; });
   }
 
-  // Generate all 5 shots for a single listing in sequence
   function generateFullSet(listingId, onProgress) {
+    var dalleShots = SHOT_TYPES.filter(function(s){return s.method==='dalle';});
     var results = [];
     function next(i) {
-      if (i >= SHOT_TYPES.length) return Promise.resolve(results);
-      var st = SHOT_TYPES[i];
-      // Skip if already cached
+      if (i >= dalleShots.length) return Promise.resolve(results);
+      var st = dalleShots[i];
       if (cache[listingId] && cache[listingId][st.id] && cache[listingId][st.id].url) {
         results.push({ cached: true, shotType: st.id });
-        if (typeof onProgress === 'function') onProgress(listingId, st.id, i, SHOT_TYPES.length);
+        if (typeof onProgress === 'function') onProgress(listingId, st.id, i, dalleShots.length);
         return next(i + 1);
       }
       return generateShot(listingId, st.id).then(function(r) {
         results.push(r);
-        if (typeof onProgress === 'function') onProgress(listingId, st.id, i, SHOT_TYPES.length);
+        if (typeof onProgress === 'function') onProgress(listingId, st.id, i, dalleShots.length);
         return new Promise(function(resolve) { setTimeout(function() { resolve(next(i+1)); }, 600); });
       });
     }
     return next(0);
   }
 
-  // Generate all shots for all listings in sequence
   function generateAll(onProgress) {
     var listingIds = Object.keys(SHOT_PROMPTS);
     function nextListing(li) {
@@ -298,176 +467,348 @@ var DesignTeam = (function() {
     return nextListing(0);
   }
 
-  function setApiKey(key) {
-    config.apiKey = key;
-    try { localStorage.setItem('atlas_openai_key', key); } catch(e) {}
+  // ── Mockup Studio UI HTML ─────────────────────────────────────────────
+  function mockupStudioHTML(listingId) {
+    var screenshot = getScreenshot(listingId);
+    var accentColors = {
+      'LS-001':'#e85d04','LS-002':'#1565c0','LS-003':'#f9a825','LS-004':'#2e7d32',
+      'LS-005':'#c62828','LS-006':'#558b2f','LS-007':'#bf360c','LS-008':'#0277bd',
+      'LS-009':'#00838f','LS-010':'#6d4c41','LS-011':'#e65100','LS-012':'#f57f17',
+      'LS-013':'#d32f2f','LS-014':'#01579b','LS-015':'#0097a7','LS-016':'#00897b',
+      'LS-017':'#f57c00','LS-018':'#283593','LS-019':'#00695c','LS-020':'#455a64',
+    };
+    var accent = accentColors[listingId] || '#4f7cff';
+
+    var sceneButtons = MOCKUP_SCENES.map(function(s) {
+      return '<button onclick="DesignTeam._setScene(\'' + s.id + '\',\'' + listingId + '\')" '
+        + 'id="scene-btn-' + s.id + '" '
+        + 'style="padding:5px 10px;border-radius:5px;font-size:.75rem;font-weight:600;cursor:pointer;border:1px solid var(--border);background:' + (config.activeScene===s.id?'var(--accent)':'var(--panel2)') + ';color:' + (config.activeScene===s.id?'#000':'var(--text)') + ';">'
+        + s.label + '</button>';
+    }).join('');
+
+    var badgeButtons = OVERLAY_BADGES.map(function(b) {
+      var active = config.activeBadges.indexOf(b.id) !== -1;
+      return '<button onclick="DesignTeam._toggleBadge(\'' + b.id + '\',\'' + listingId + '\')" '
+        + 'id="badge-btn-' + b.id + '" '
+        + 'style="padding:4px 10px;border-radius:5px;font-size:.72rem;font-weight:600;cursor:pointer;border:1px solid var(--border);background:' + (active?b.bg:'var(--panel2)') + ';color:' + (active?b.color:'var(--muted)') + ';">'
+        + b.text + '</button>';
+    }).join('');
+
+    return '<div style="display:flex;flex-direction:column;gap:16px;">'
+
+      // Step 1 — Screenshot instructions
+      + '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;">'
+      + '<div style="font-size:.82rem;font-weight:800;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px;">'
+      + '<span style="background:var(--accent);color:#000;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;">1</span>'
+      + ' Open Template &amp; Take Screenshot</div>'
+      + '<div style="font-size:.78rem;color:var(--muted);margin-bottom:10px;">Open the template in a new tab → screenshot the page → upload below. This becomes your hero/detail/bundle image — shows buyers the <em>real product</em>.</div>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
+      + '<button onclick="openTemplate(\'' + listingId + '\')" style="background:var(--accent);color:#000;border:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-size:.8rem;font-weight:700;">Open Template →</button>'
+      + '<label style="background:var(--surface-raised);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:8px 14px;cursor:pointer;font-size:.8rem;font-weight:600;">'
+      + (screenshot ? '✓ Screenshot uploaded — replace?' : '↑ Upload Screenshot')
+      + '<input type="file" accept="image/*" style="display:none" onchange="DesignTeam._uploadScreenshot(\'' + listingId + '\',this)">'
+      + '</label>'
+      + (screenshot ? '<span style="font-size:.75rem;color:var(--success);align-self:center;">✓ Ready</span>' : '')
+      + '</div>'
+      + '</div>'
+
+      // Step 2 — Scene + badge picker + preview
+      + '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;">'
+      + '<div style="font-size:.82rem;font-weight:800;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px;">'
+      + '<span style="background:var(--accent);color:#000;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;">2</span>'
+      + ' Choose Scene &amp; Badges</div>'
+      + '<div style="font-size:.74rem;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;">Background Scene</div>'
+      + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">' + sceneButtons + '</div>'
+      + '<div style="font-size:.74rem;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;">Callout Badges (top converters use these)</div>'
+      + '<div style="display:flex;gap:6px;flex-wrap:wrap;">' + badgeButtons + '</div>'
+      + '</div>'
+
+      // Step 3 — Generate all mockup shots
+      + '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;">'
+      + '<div style="font-size:.82rem;font-weight:800;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px;">'
+      + '<span style="background:var(--accent);color:#000;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;">3</span>'
+      + ' Generate Mockup Images (Free)</div>'
+      + '<div style="font-size:.78rem;color:var(--muted);margin-bottom:10px;">Creates Hero, Detail, and Bundle shots from your screenshot. No API key needed.</div>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
+      + '<button onclick="DesignTeam._generateMockups(\'' + listingId + '\',\'' + accent + '\')" style="background:var(--success);color:#000;border:none;border-radius:7px;padding:8px 16px;cursor:pointer;font-size:.8rem;font-weight:700;">Generate Hero + Detail + Bundle — Free</button>'
+      + (config.apiKey
+          ? '<button onclick="DesignTeam.generateFullSet(\'' + listingId + '\',function(l,s){toast(s+\' generated\',\'success\');}).then(function(){if(typeof renderDesignView===\'function\')renderDesignView();toast(\'DALL-E shots done!\',\'success\');})" style="background:var(--panel2);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:8px 16px;cursor:pointer;font-size:.8rem;font-weight:600;">+ DALL-E Lifestyle &amp; Before/After — $0.16</button>'
+          : '<div style="font-size:.76rem;color:var(--muted);align-self:center;">Add OpenAI key in Settings for lifestyle + before/after shots</div>')
+      + '</div>'
+      + '</div>'
+
+      + '</div>';
   }
 
-  // Gallery HTML for a single listing — 5 shot cards
+  // ── Internal UI helpers ────────────────────────────────────────────────
+  function _uploadScreenshot(listingId, inputEl) {
+    var file = inputEl.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      saveScreenshot(listingId, e.target.result);
+      if (typeof toast === 'function') toast('Screenshot saved for ' + listingId, 'success');
+      if (typeof openPanel === 'function') {
+        // Refresh panel
+        openPanel('Mockup Studio — ' + listingId, mockupStudioHTML(listingId));
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function _setScene(sceneId, listingId) {
+    config.activeScene = sceneId;
+    // Update button styles
+    MOCKUP_SCENES.forEach(function(s) {
+      var btn = document.getElementById('scene-btn-' + s.id);
+      if (btn) {
+        btn.style.background = s.id === sceneId ? 'var(--accent)' : 'var(--panel2)';
+        btn.style.color = s.id === sceneId ? '#000' : 'var(--text)';
+      }
+    });
+  }
+
+  function _toggleBadge(badgeId, listingId) {
+    var idx = config.activeBadges.indexOf(badgeId);
+    if (idx === -1) { config.activeBadges.push(badgeId); }
+    else { config.activeBadges.splice(idx, 1); }
+    var btn = document.getElementById('badge-btn-' + badgeId);
+    var b = OVERLAY_BADGES.find(function(b){return b.id===badgeId;});
+    if (btn && b) {
+      var active = config.activeBadges.indexOf(badgeId) !== -1;
+      btn.style.background = active ? b.bg : 'var(--panel2)';
+      btn.style.color = active ? b.color : 'var(--muted)';
+    }
+  }
+
+  function _generateMockups(listingId, accentColor) {
+    var screenshot = getScreenshot(listingId);
+    var mockupShots = ['hero', 'detail', 'bundle'];
+    var toastFn = typeof toast === 'function' ? toast : function(){};
+    toastFn('Compositing ' + listingId + ' mockups…', 'info');
+
+    var chain = Promise.resolve();
+    mockupShots.forEach(function(shotType) {
+      chain = chain.then(function() {
+        return compositeImage(screenshot, listingId, shotType, config.activeScene, config.activeBadges, accentColor)
+          .then(function(dataUrl) {
+            saveMockup(listingId, shotType, dataUrl);
+            toastFn(listingId + ' · ' + shotType + ' ready ✓', 'success');
+            if (typeof renderDesignView === 'function') renderDesignView();
+          });
+      });
+    });
+    chain.then(function() {
+      toastFn('All mockups for ' + listingId + ' generated — free!', 'success');
+    });
+  }
+
+  // ── Gallery HTML ───────────────────────────────────────────────────────
   function galleryHTML(listingId) {
     var hasKey = !!config.apiKey;
+    var accentColors = {
+      'LS-001':'#e85d04','LS-002':'#1565c0','LS-003':'#f9a825','LS-004':'#2e7d32',
+      'LS-005':'#c62828','LS-006':'#558b2f','LS-007':'#bf360c','LS-008':'#0277bd',
+      'LS-009':'#00838f','LS-010':'#6d4c41','LS-011':'#e65100','LS-012':'#f57f17',
+      'LS-013':'#d32f2f','LS-014':'#01579b','LS-015':'#0097a7','LS-016':'#00897b',
+      'LS-017':'#f57c00','LS-018':'#283593','LS-019':'#00695c','LS-020':'#455a64',
+    };
+    var accent = accentColors[listingId] || '#4f7cff';
+
     var cards = SHOT_TYPES.map(function(st) {
       var cached = cache[listingId] && cache[listingId][st.id] && cache[listingId][st.id].url;
       var imgSrc = cached ? cache[listingId][st.id].url : placeholder(listingId, st.id);
+      var method = st.method;
+      var methodLabel = method === 'mockup' ? '🖼 Mockup Studio (free)' : '🤖 DALL-E 3 HD ($0.08)';
+      var methodColor = method === 'mockup' ? 'var(--success)' : 'var(--accent2)';
       var statusColor = cached ? 'var(--success)' : 'var(--muted)';
       var statusLabel = cached ? '✓ Ready' : 'Not generated';
-      return `
-        <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-          <img src="${imgSrc}" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" loading="lazy">
-          <div style="padding:10px 12px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-              <span style="font-size:.78rem;font-weight:700;color:var(--text);">${st.icon} ${st.label}</span>
-              <span style="font-size:.7rem;color:${statusColor};font-weight:600;">${statusLabel}</span>
-            </div>
-            <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px;">${st.description}</div>
-            ${hasKey
-              ? `<button onclick="DesignTeam.generateShot('${listingId}','${st.id}').then(function(r){if(r.url){renderDesignView&&renderDesignView();toast('${st.label} generated!','success');}else{toast('Error: '+r.error,'warn');}})" style="width:100%;background:${cached?'var(--surface-raised)':'var(--accent)'};color:${cached?'var(--muted)':'#000'};border:none;border-radius:6px;padding:6px;cursor:pointer;font-size:.76rem;font-weight:600;">${cached?'Regenerate':'Generate — $0.04'}</button>`
-              : `<div style="font-size:.72rem;color:var(--muted);text-align:center;">Add OpenAI key in Settings</div>`
-            }
-          </div>
-        </div>`;
+
+      var actionBtn = '';
+      if (method === 'mockup') {
+        actionBtn = '<button onclick="DesignTeam._generateMockups(\'' + listingId + '\',\'' + accent + '\')" '
+          + 'style="width:100%;background:' + (cached?'var(--surface-raised)':'var(--success)') + ';color:' + (cached?'var(--muted)':'#000') + ';border:none;border-radius:6px;padding:6px;cursor:pointer;font-size:.76rem;font-weight:600;">'
+          + (cached?'Regenerate':'Generate Free') + '</button>';
+      } else {
+        actionBtn = hasKey
+          ? '<button onclick="DesignTeam.generateShot(\'' + listingId + '\',\'' + st.id + '\').then(function(r){if(r.url){if(typeof renderDesignView===\'function\')renderDesignView();toast(\'' + st.label + ' done!\',\'success\');}else{toast(\'Error: \'+r.error,\'warn\');}})" '
+            + 'style="width:100%;background:' + (cached?'var(--surface-raised)':'var(--accent)') + ';color:' + (cached?'var(--muted)':'#000') + ';border:none;border-radius:6px;padding:6px;cursor:pointer;font-size:.76rem;font-weight:600;">'
+            + (cached?'Regenerate':'Generate — $0.08') + '</button>'
+          : '<div style="font-size:.7rem;color:var(--muted);text-align:center;padding:6px;">Add OpenAI key in Settings</div>';
+      }
+
+      return '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">'
+        + '<img src="' + imgSrc + '" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" loading="lazy">'
+        + '<div style="padding:10px 12px;">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">'
+        + '<span style="font-size:.78rem;font-weight:700;color:var(--text);">' + st.icon + ' ' + st.label + '</span>'
+        + '<span style="font-size:.68rem;color:' + statusColor + ';font-weight:600;">' + statusLabel + '</span>'
+        + '</div>'
+        + '<div style="font-size:.68rem;color:' + methodColor + ';margin-bottom:4px;font-weight:600;">' + methodLabel + '</div>'
+        + '<div style="font-size:.7rem;color:var(--muted);margin-bottom:8px;">' + st.description + '</div>'
+        + actionBtn
+        + '</div>'
+        + '</div>';
     }).join('');
 
-    return `<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;">${cards}</div>`;
+    return '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;">' + cards + '</div>';
   }
 
-  // Full Design view HTML (called from app.js renderDesignView)
+  // ── Full Design View HTML ──────────────────────────────────────────────
   function designViewHTML() {
     var hasKey = !!config.apiKey;
     var gen = totalGenerated();
     var total = totalPossible();
     var pct = total > 0 ? Math.round((gen/total)*100) : 0;
     var listingIds = Object.keys(SHOT_PROMPTS);
-    var costRemaining = ((total - gen) * 0.04).toFixed(2);
+
+    // Cost breakdown: only dalle shots cost money
+    var dalleShotsRemaining = listingIds.reduce(function(n, lid) {
+      return n + SHOT_TYPES.filter(function(st) {
+        return st.method === 'dalle' && !(cache[lid] && cache[lid][st.id] && cache[lid][st.id].url);
+      }).length;
+    }, 0);
+    var costRemaining = (dalleShotsRemaining * 0.08).toFixed(2);
 
     var listingCards = listingIds.map(function(lid) {
       var shotsDone = SHOT_TYPES.filter(function(st) {
         return cache[lid] && cache[lid][st.id] && cache[lid][st.id].url;
       }).length;
       var allDone = shotsDone === SHOT_TYPES.length;
-      var heroImg = cache[lid] && cache[lid].hero && cache[lid].hero.url
-        ? cache[lid].hero.url : placeholder(lid, 'hero');
-      return `
-        <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;" onclick="DesignTeam.openGallery('${lid}')">
-          <img src="${heroImg}" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" loading="lazy">
-          <div style="padding:10px 12px;">
-            <div style="font-size:.75rem;font-weight:700;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${lid}</div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <div style="display:flex;gap:2px;">
-                ${SHOT_TYPES.map(function(st) {
-                  var done = cache[lid] && cache[lid][st.id] && cache[lid][st.id].url;
-                  return '<div style="width:8px;height:8px;border-radius:50%;background:' + (done ? 'var(--success)' : 'var(--border)') + ';"></div>';
-                }).join('')}
-              </div>
-              <span style="font-size:.7rem;color:${allDone?'var(--success)':'var(--muted)'};">${shotsDone}/5</span>
-            </div>
-          </div>
-        </div>`;
+      var hasScreenshot = !!getScreenshot(lid);
+      var heroImg = cache[lid] && cache[lid].hero && cache[lid].hero.url ? cache[lid].hero.url : placeholder(lid, 'hero');
+
+      return '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;" onclick="DesignTeam.openGallery(\'' + lid + '\')">'
+        + '<div style="position:relative;">'
+        + '<img src="' + heroImg + '" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;" loading="lazy">'
+        + (hasScreenshot ? '<div style="position:absolute;top:6px;right:6px;background:var(--success);color:#000;font-size:.62rem;font-weight:800;padding:2px 6px;border-radius:4px;">📷</div>' : '')
+        + '</div>'
+        + '<div style="padding:8px 10px;">'
+        + '<div style="font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + lid + '</div>'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;">'
+        + '<div style="display:flex;gap:2px;">'
+        + SHOT_TYPES.map(function(st) {
+            var done = cache[lid] && cache[lid][st.id] && cache[lid][st.id].url;
+            var col = done ? (st.method==='mockup'?'var(--success)':'var(--accent)') : 'var(--border)';
+            return '<div style="width:8px;height:8px;border-radius:50%;background:' + col + ';"></div>';
+          }).join('')
+        + '</div>'
+        + '<span style="font-size:.7rem;color:' + (allDone?'var(--success)':'var(--muted)') + ';">' + shotsDone + '/5</span>'
+        + '</div>'
+        + '</div>'
+        + '</div>';
     }).join('');
 
-    return `
-      <div style="max-width:960px;display:flex;flex-direction:column;gap:24px;">
+    return '<div style="max-width:960px;display:flex;flex-direction:column;gap:24px;">'
 
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
-            <div>
-              <div class="card-title">AI Design Team</div>
-              <p style="color:var(--muted);font-size:.84rem;margin:4px 0 0;">5 specialized agents generate a full 10-photo Etsy gallery per listing. More photos = higher ranking + 2–4× CVR.</p>
-            </div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              ${hasKey
-                ? `<button onclick="DesignTeam.batchGenerate()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:.86rem;font-weight:700;">Generate All Missing ($${costRemaining})</button>`
-                : `<button onclick="switchView('settings')" style="background:var(--warn);color:#000;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:.86rem;font-weight:700;">Add OpenAI Key to Start</button>`
-              }
-            </div>
-          </div>
+      + '<div class="card">'
+      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">'
+      + '<div>'
+      + '<div class="card-title">AI Design Team + Mockup Studio</div>'
+      + '<p style="color:var(--muted);font-size:.84rem;margin:4px 0 0;">Real screenshots for hero/detail/bundle (free). DALL-E 3 HD for lifestyle + before/after only. More images = higher Etsy ranking + 2–4× clicks.</p>'
+      + '</div>'
+      + '<div style="display:flex;gap:10px;flex-wrap:wrap;">'
+      + (hasKey
+          ? '<button onclick="DesignTeam.batchGenerate()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:.86rem;font-weight:700;">Generate All DALL-E ($' + costRemaining + ')</button>'
+          : '<button onclick="typeof switchView===\'function\'&&switchView(\'settings\')" style="background:var(--warn);color:#000;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:.86rem;font-weight:700;">Add OpenAI Key for DALL-E shots</button>')
+      + '</div>'
+      + '</div>'
 
-          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0 10px;">
-            ${SHOT_TYPES.map(function(st) {
-              var done = Object.keys(SHOT_PROMPTS).filter(function(lid) {
-                return cache[lid] && cache[lid][st.id] && cache[lid][st.id].url;
-              }).length;
-              return `
-                <div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
-                  <div style="font-size:1.2rem;margin-bottom:4px;">${st.icon}</div>
-                  <div style="font-size:.75rem;font-weight:700;color:var(--text);">${st.agent}</div>
-                  <div style="font-size:.7rem;color:var(--muted);margin:2px 0 6px;">${st.label}</div>
-                  <div style="font-size:1rem;font-weight:800;color:${done===20?'var(--success)':'var(--accent2)'};">${done}/20</div>
-                </div>`;
-            }).join('')}
-          </div>
+      // Agent breakdown
+      + '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0 10px;">'
+      + SHOT_TYPES.map(function(st) {
+          var done = Object.keys(SHOT_PROMPTS).filter(function(lid) {
+            return cache[lid] && cache[lid][st.id] && cache[lid][st.id].url;
+          }).length;
+          var isFree = st.method === 'mockup';
+          return '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">'
+            + '<div style="font-size:1.2rem;margin-bottom:4px;">' + st.icon + '</div>'
+            + '<div style="font-size:.75rem;font-weight:700;color:var(--text);">' + st.agent + '</div>'
+            + '<div style="font-size:.68rem;color:' + (isFree?'var(--success)':'var(--accent2)') + ';margin:2px 0 2px;font-weight:600;">' + (isFree?'FREE':'$0.08/image') + '</div>'
+            + '<div style="font-size:.7rem;color:var(--muted);margin-bottom:6px;">' + st.label + '</div>'
+            + '<div style="font-size:1rem;font-weight:800;color:' + (done===20?'var(--success)':'var(--accent2)') + ';">' + done + '/20</div>'
+            + '</div>';
+        }).join('')
+      + '</div>'
 
-          <div style="background:var(--panel2);border-radius:8px;padding:3px;margin-bottom:6px;">
-            <div style="height:10px;border-radius:6px;background:var(--accent);width:${pct}%;transition:width .4s;min-width:${pct>0?'4px':'0'};"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);">
-            <span>${gen} / ${total} shots generated (${pct}%)</span>
-            <span>${total-gen} remaining · ~$${costRemaining} total cost</span>
-          </div>
-        </div>
+      + '<div style="background:var(--panel2);border-radius:8px;padding:3px;margin-bottom:6px;">'
+      + '<div style="height:10px;border-radius:6px;background:var(--accent);width:' + pct + '%;transition:width .4s;min-width:' + (pct>0?'4px':'0') + ';"></div>'
+      + '</div>'
+      + '<div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);">'
+      + '<span>' + gen + ' / ' + total + ' shots ready (' + pct + '%)</span>'
+      + '<span>' + dalleShotsRemaining + ' DALL-E shots remaining · ~$' + costRemaining + ' · Mockup shots are free</span>'
+      + '</div>'
+      + '</div>'
 
-        <div>
-          <div style="font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em;">All Listings — Click to Open Gallery</div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;">
-            ${listingCards}
-          </div>
-        </div>
+      + '<div>'
+      + '<div style="font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em;">All Listings — Click to Open Studio</div>'
+      + '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;">' + listingCards + '</div>'
+      + '</div>'
 
-      </div>
-    `;
+      + '</div>';
   }
 
-  // Open gallery side panel for a listing
+  // ── Open Studio panel ─────────────────────────────────────────────────
   function openGallery(listingId) {
     if (typeof openPanel === 'function') {
-      openPanel('Design Gallery — ' + listingId, `
-        <p style="font-size:.8rem;color:var(--muted);margin:0 0 14px;">5-shot set. Each image optimized for a different conversion purpose. Click any Generate button to create that shot.</p>
-        ${galleryHTML(listingId)}
-        <div style="margin-top:14px;display:flex;gap:8px;">
-          ${config.apiKey
-            ? `<button onclick="DesignTeam.generateFullSet('${listingId}',function(lid,st,i,t){toast(st+' generated ('+( i+1)+'/'+t+')','success');}).then(function(){renderDesignView&&renderDesignView();toast('Full set complete for ${listingId}!','success');})" style="background:var(--accent);color:#000;border:none;border-radius:7px;padding:9px 18px;cursor:pointer;font-size:.84rem;font-weight:700;">Generate Full Set — $0.20</button>`
-            : ''
-          }
-        </div>
-      `);
+      openPanel('Design Studio — ' + listingId,
+        '<p style="font-size:.8rem;color:var(--muted);margin:0 0 14px;">Upload a screenshot of the template to generate free mockup images. DALL-E handles lifestyle + before/after.</p>'
+        + mockupStudioHTML(listingId)
+        + '<hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">'
+        + '<div style="font-size:.8rem;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;">Generated Images</div>'
+        + galleryHTML(listingId)
+      );
     }
   }
 
-  // Batch generate all missing with live progress toasts
   function batchGenerate() {
     if (!config.apiKey) { if(typeof toast==='function') toast('Add OpenAI key in Settings first', 'warn'); return; }
-    if(typeof toast==='function') toast('Design Team starting — generating all missing shots…', 'info');
+    if(typeof toast==='function') toast('DALL-E generating lifestyle + before/after shots…', 'info');
     generateAll(function(lid, shotType, li, lt, si, st) {
       if(typeof toast==='function') toast(lid + ' · ' + shotType + ' (' + (li+1) + '/' + lt + ')', 'success');
       if(typeof renderDesignView==='function') renderDesignView();
     }).then(function() {
-      if(typeof toast==='function') toast('All shots generated! Full gallery ready.', 'success');
+      if(typeof toast==='function') toast('All DALL-E shots done! Use Mockup Studio for hero/detail/bundle.', 'success');
       if(typeof renderDesignView==='function') renderDesignView();
     });
+  }
+
+  function setApiKey(key) {
+    config.apiKey = key;
+    try { localStorage.setItem('atlas_openai_key', key); } catch(e) {}
   }
 
   function settingsHTML() {
     var gen = totalGenerated();
     var total = totalPossible();
-    return `
-      <div style="display:flex;flex-direction:column;gap:12px;">
-        <div>
-          <label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:5px;">OpenAI API Key</label>
-          <div style="display:flex;gap:8px;">
-            <input id="atlas-openai-key-input" type="password" placeholder="sk-..." value="${config.apiKey||''}"
-              style="flex:1;background:var(--panel2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:.86rem;padding:8px 10px;outline:none;font-family:monospace;">
-            <button onclick="DesignTeam.setApiKey(document.getElementById('atlas-openai-key-input').value);this.textContent='✓ Saved';this.style.background='var(--success)';this.style.color='#000';" style="background:var(--accent);color:#000;border:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-size:.84rem;font-weight:700;">Save Key</button>
-          </div>
-        </div>
-        <div style="font-size:.8rem;color:var(--muted);">${gen}/${total} shots generated · ${total-gen} remaining · ~$${((total-gen)*0.04).toFixed(2)} to complete</div>
-      </div>`;
+    var dalleShotsRemaining = Object.keys(SHOT_PROMPTS).reduce(function(n, lid) {
+      return n + SHOT_TYPES.filter(function(st) {
+        return st.method === 'dalle' && !(cache[lid] && cache[lid][st.id] && cache[lid][st.id].url);
+      }).length;
+    }, 0);
+    return '<div style="display:flex;flex-direction:column;gap:12px;">'
+      + '<div>'
+      + '<label style="font-size:.82rem;font-weight:600;color:var(--muted);display:block;margin-bottom:5px;">OpenAI API Key (for lifestyle + before/after shots only)</label>'
+      + '<div style="display:flex;gap:8px;">'
+      + '<input id="atlas-openai-key-input" type="password" placeholder="sk-..." value="' + (config.apiKey||'') + '" '
+      + 'style="flex:1;background:var(--panel2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:.86rem;padding:8px 10px;outline:none;font-family:monospace;">'
+      + '<button onclick="DesignTeam.setApiKey(document.getElementById(\'atlas-openai-key-input\').value);this.textContent=\'✓ Saved\';this.style.background=\'var(--success)\';this.style.color=\'#000\';" '
+      + 'style="background:var(--accent);color:#000;border:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-size:.84rem;font-weight:700;">Save Key</button>'
+      + '</div>'
+      + '</div>'
+      + '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:.8rem;color:var(--muted);">'
+      + '<div style="font-weight:700;color:var(--text);margin-bottom:4px;">Cost Breakdown</div>'
+      + '<div>Hero + Detail + Bundle: <strong style="color:var(--success);">FREE</strong> — generated from your template screenshots</div>'
+      + '<div>Lifestyle + Before/After: <strong style="color:var(--accent2);">$0.08/image (DALL-E 3 HD)</strong> — ' + dalleShotsRemaining + ' remaining = $' + (dalleShotsRemaining*0.08).toFixed(2) + '</div>'
+      + '<div style="margin-top:6px;">' + gen + '/' + total + ' shots generated total</div>'
+      + '</div>'
+      + '</div>';
   }
 
-  // Init
+  // ── Init ──────────────────────────────────────────────────────────────
   (function init() {
     try { var k = localStorage.getItem('atlas_openai_key'); if (k) config.apiKey = k; } catch(e) {}
     try { var c = localStorage.getItem('atlas_design_cache'); if (c) cache = JSON.parse(c); } catch(e) {}
-    // Migrate old single-image cache
     try {
       var old = localStorage.getItem('atlas_image_cache');
       if (old) {
@@ -475,7 +816,7 @@ var DesignTeam = (function() {
         Object.keys(oldCache).forEach(function(lid) {
           if (oldCache[lid] && oldCache[lid].url) {
             if (!cache[lid]) cache[lid] = {};
-            if (!cache[lid].hero) cache[lid].hero = { url: oldCache[lid].url, migrated: true };
+            if (!cache[lid].hero) cache[lid].hero = { url: oldCache[lid].url, method: 'migrated' };
           }
         });
         saveCache();
@@ -484,29 +825,37 @@ var DesignTeam = (function() {
   })();
 
   return {
-    config:           config,
-    cache:            cache,
-    SHOT_TYPES:       SHOT_TYPES,
-    generateShot:     generateShot,
-    generateFullSet:  generateFullSet,
-    generateAll:      generateAll,
-    batchGenerate:    batchGenerate,
-    getImage:         getImage,
-    placeholder:      placeholder,
-    galleryHTML:      galleryHTML,
-    designViewHTML:   designViewHTML,
-    openGallery:      openGallery,
-    setApiKey:        setApiKey,
-    settingsHTML:     settingsHTML,
-    totalGenerated:   totalGenerated,
-    totalPossible:    totalPossible,
+    config:             config,
+    cache:              cache,
+    SHOT_TYPES:         SHOT_TYPES,
+    MOCKUP_SCENES:      MOCKUP_SCENES,
+    OVERLAY_BADGES:     OVERLAY_BADGES,
+    generateShot:       generateShot,
+    generateFullSet:    generateFullSet,
+    generateAll:        generateAll,
+    batchGenerate:      batchGenerate,
+    compositeImage:     compositeImage,
+    saveMockup:         saveMockup,
+    getImage:           getImage,
+    placeholder:        placeholder,
+    galleryHTML:        galleryHTML,
+    designViewHTML:     designViewHTML,
+    openGallery:        openGallery,
+    mockupStudioHTML:   mockupStudioHTML,
+    setApiKey:          setApiKey,
+    settingsHTML:       settingsHTML,
+    totalGenerated:     totalGenerated,
+    totalPossible:      totalPossible,
+    _uploadScreenshot:  _uploadScreenshot,
+    _setScene:          _setScene,
+    _toggleBadge:       _toggleBadge,
+    _generateMockups:   _generateMockups,
     // Backwards compat
-    generate:         function(lid) { return generateShot(lid, 'hero'); },
-    getHeroImage:     function(lid) { return getImage(lid, 'hero'); },
-    clearCache:       function() { cache = {}; try { localStorage.removeItem('atlas_design_cache'); } catch(e) {} },
+    generate:           function(lid) { return generateShot(lid, 'lifestyle'); },
+    getHeroImage:       function(lid) { return getImage(lid, 'hero'); },
+    clearCache:         function() { cache = {}; try { localStorage.removeItem('atlas_design_cache'); } catch(e) {} },
   };
 
 })();
 
-// Backwards compatibility alias
 var ImageGen = DesignTeam;
