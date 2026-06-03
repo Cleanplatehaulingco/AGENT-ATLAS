@@ -560,8 +560,6 @@ shops_r — read my own shop info</div>
     getStats:           getStats,
     getOrders:          getOrders,
     bestRevenue:        bestRevenue,
-    totalRevenueFromOrders: totalRevenueFromOrders,
-    uptimeSummary:      uptimeSummary,
     importCSV:          importCSV,
     bookmarkletCode:    bookmarkletCode,
     // Internal handlers called from inline HTML
