@@ -245,7 +245,7 @@ var ShopMonitor = (function () {
     var bm = bookmarkletCode();
 
     return `
-<div style="max-width:960px;display:flex;flex-direction:column;gap:20px;">
+<div style="width:100%;display:flex;flex-direction:column;gap:20px;">
 
   <!-- KPI row -->
   <div class="kpi-grid">

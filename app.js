@@ -1663,7 +1663,7 @@ function renderSettingsView() {
     : `<span style="color:var(--warn);font-weight:600;">⚠ Not set</span>`;
 
   view.innerHTML = `
-    <div style="max-width:680px;display:flex;flex-direction:column;gap:24px;">
+    <div style="width:100%;display:flex;flex-direction:column;gap:24px;">
 
       <div class="card">
         <div class="card-title">Account Setup</div>
@@ -1960,7 +1960,7 @@ function renderAdsView() {
   }).join('');
 
   view.innerHTML = `
-    <div style="max-width:860px;display:flex;flex-direction:column;gap:24px;">
+    <div style="width:100%;display:flex;flex-direction:column;gap:24px;">
 
       <!-- Budget Guard -->
       ${budgetGuardHTML()}

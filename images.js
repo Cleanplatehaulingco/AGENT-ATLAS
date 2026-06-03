@@ -1014,7 +1014,7 @@ var DesignTeam = (function() {
         + '</div>';
     }).join('');
 
-    return '<div style="max-width:960px;display:flex;flex-direction:column;gap:24px;">'
+    return '<div style="width:100%;display:flex;flex-direction:column;gap:24px;">'
 
       + '<div class="card">'
       + '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">'
