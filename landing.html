@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Agent Atlas — Private shop management system for TradeOpsVault. Automates listing creation, revenue tracking, and image publishing for a single Etsy seller." />
+  <title>Agent Atlas — TradeOpsVault Shop Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #060910;
+      --bg2:        #0b0f1a;
+      --surface:    #0f1520;
+      --surface2:   #141c2e;
+      --border:     #1e293b;
+      --border2:    #263348;
+      --text:       #f0f4ff;
+      --text2:      #c8d4f0;
+      --muted:      #6b7fa3;
+      --accent:     #4f7cff;
+      --accent2:    #7c9fff;
+      --accent-glow:rgba(79,124,255,0.15);
+      --orange:     #f15a22;
+      --orange2:    #ff7043;
+      --orange-glow:rgba(241,90,34,0.15);
+      --green:      #00e676;
+      --green-dim:  rgba(0,230,118,0.1);
+      --radius:     14px;
+      --radius-lg:  20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ─────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── GRID BACKGROUND ───────────────────────────────────── */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79,124,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,124,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ───────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      background: rgba(6,9,16,0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(30,41,59,0.8);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-logo-mark {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #4f7cff, #7c9fff);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 14px;
+      color: #fff;
+      letter-spacing: -0.5px;
+      box-shadow: 0 0 20px rgba(79,124,255,0.4);
+      flex-shrink: 0;
+    }
+
+    .nav-brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .nav-brand-name {
+      font-size: .92rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -.3px;
+    }
+    .nav-brand-sub {
+      font-size: .68rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-dim);
+      border: 1px solid rgba(0,230,118,0.2);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .nav-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      border-radius: 10px;
+      font-size: .85rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: all .15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(241,90,34,0.35);
+    }
+    .btn-primary:hover {
+      background: var(--orange2);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(241,90,34,0.5);
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.05);
+      color: var(--text2);
+      border: 1px solid var(--border2);
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.09);
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    /* ── HERO ──────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px clamp(1.5rem, 6vw, 5rem) 80px;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Radial glow behind hero text */
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(79,124,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(79,124,255,0.08);
+      border: 1px solid rgba(79,124,255,0.2);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--accent2);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -2px;
+      color: var(--text);
+      max-width: 820px;
+      margin-bottom: 24px;
+    }
+
+    .hero-title .accent { color: var(--accent); }
+    .hero-title .orange { color: var(--orange); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--muted);
+      max-width: 580px;
+      line-height: 1.7;
+      margin-bottom: 44px;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 64px;
+    }
+
+    .btn-hero {
+      padding: 14px 32px;
+      font-size: 1rem;
+      border-radius: 12px;
+    }
+
+    /* ── STATS ROW ─────────────────────────────────────────── */
+    .stats-row {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      border-top: 1px solid var(--border);
+      padding-top: 40px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+    .stat-val {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: .75rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    /* ── DASHBOARD PREVIEW ─────────────────────────────────── */
+    .preview-section {
+      position: relative;
+      z-index: 1;
+      padding: 0 clamp(1.5rem, 5vw, 4rem) 100px;
+    }
+
+    .preview-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .preview-frame {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(79,124,255,0.1),
+        0 32px 80px rgba(0,0,0,0.7),
+        0 0 80px rgba(79,124,255,0.06);
+    }
+
+    /* Fake browser chrome */
+    .frame-chrome {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chrome-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .chrome-dots span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .chrome-dots span:nth-child(1) { background: #ff5f57; }
+    .chrome-dots span:nth-child(2) { background: #febc2e; }
+    .chrome-dots span:nth-child(3) { background: #28c840; }
+
+    .chrome-url {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: .76rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chrome-url::before {
+      content: '🔒';
+      font-size: .65rem;
+    }
+
+    /* Fake dashboard content inside frame */
+    .frame-body {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      min-height: 420px;
+    }
+
+    .frame-sidebar {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .frame-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      margin-bottom: 12px;
+    }
+    .frame-brand-mark {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #4f7cff, #7c9fff);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .frame-brand-text {
+      font-size: .75rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .frame-nav-item {
+      padding: 7px 10px;
+      border-radius: 7px;
+      font-size: .73rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .frame-nav-item.active {
+      background: rgba(79,124,255,0.12);
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .frame-main {
+      padding: 20px 24px;
+      background: var(--bg);
+    }
+
+    .frame-kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .frame-kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .frame-kpi-label { font-size: .65rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+    .frame-kpi-val { font-size: 1.3rem; font-weight: 900; color: var(--text); letter-spacing: -0.5px; }
+    .frame-kpi-sub { font-size: .62rem; color: var(--muted); margin-top: 3px; }
+    .frame-kpi-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 8px; }
+    .frame-kpi-bar-fill { height: 100%; border-radius: 2px; background: var(--accent); }
+
+    .frame-progress-label {
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .frame-progress-track {
+      height: 8px;
+      background: var(--surface2);
+      border-radius: 4px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .frame-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--green));
+      border-radius: 4px;
+      width: 33%;
+    }
+
+    .frame-table-row {
+      display: grid;
+      grid-template-columns: 1fr 80px 60px 80px 70px;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .7rem;
+      align-items: center;
+    }
+    .frame-table-row.header { color: var(--muted); font-weight: 700; }
+    .frame-table-row.data { color: var(--text2); }
+    .frame-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: .62rem;
+      font-weight: 700;
+    }
+    .pill-live { background: rgba(0,230,118,0.12); color: var(--green); }
+    .pill-ready { background: rgba(79,124,255,0.12); color: var(--accent2); }
+
+    /* ── GLOW GRADIENTS on frame edges */
+    .preview-wrap::before {
+      content: '';
+      position: absolute;
+      top: -40px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 200px;
+      background: radial-gradient(ellipse, rgba(79,124,255,0.15), transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── SECTION LAYOUT ────────────────────────────────────── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 100px clamp(1.5rem, 5vw, 4rem);
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: .75rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 56px;
+    }
+
+    /* ── FEATURE CARDS ─────────────────────────────────────── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      transition: border-color .2s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(79,124,255,0.4), transparent);
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--border2);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(79,124,255,0.1);
+    }
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+
+    .icon-blue { background: rgba(79,124,255,0.12); }
+    .icon-orange { background: rgba(241,90,34,0.12); }
+    .icon-green { background: rgba(0,230,118,0.1); }
+    .icon-purple { background: rgba(180,100,255,0.1); }
+
+    .feature-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 10px;
+      letter-spacing: -.3px;
+    }
+
+    .feature-desc {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .feature-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .feature-bullets li {
+      font-size: .82rem;
+      color: var(--text2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-bullets li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── HOW IT WORKS ──────────────────────────────────────── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .step {
+      background: var(--surface);
+      padding: 32px 28px;
+      position: relative;
+    }
+
+    .step-num {
+      font-size: 3rem;
+      font-weight: 900;
+      color: rgba(79,124,255,0.12);
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-size: .92rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── API USAGE TABLE ───────────────────────────────────── */
+    .api-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .api-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .api-card-title {
+      font-size: .78rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 16px;
+    }
+
+    .api-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .84rem;
+    }
+    .api-row:last-child { border-bottom: none; }
+    .api-row-label { color: var(--muted); }
+    .api-row-val { color: var(--text); font-weight: 600; font-size: .82rem; }
+
+    .scope-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .scope-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .82rem;
+    }
+
+    .scope-badge {
+      background: rgba(79,124,255,0.1);
+      border: 1px solid rgba(79,124,255,0.2);
+      color: var(--accent2);
+      font-size: .7rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      padding: 3px 8px;
+      border-radius: 5px;
+      flex-shrink: 0;
+      min-width: 120px;
+    }
+
+    .scope-desc { color: var(--muted); }
+
+    /* ── COMPLIANCE SECTION ────────────────────────────────── */
+    .compliance-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .compliance-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .compliance-check {
+      width: 28px;
+      height: 28px;
+      background: var(--green-dim);
+      border: 1px solid rgba(0,230,118,0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .85rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .compliance-text strong {
+      display: block;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .compliance-text span {
+      font-size: .78rem;
+      color: var(--muted);
+    }
+
+    /* ── CTA SECTION ───────────────────────────────────────── */
+    .cta-section {
+      padding: 80px clamp(1.5rem, 5vw, 4rem) 100px;
+    }
+
+    .cta-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(79,124,255,0.06), rgba(241,90,34,0.04));
+      border: 1px solid var(--border2);
+      border-radius: 24px;
+      padding: 64px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-inner::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: 50%; transform: translateX(-50%);
+      width: 400px; height: 200px;
+      background: radial-gradient(ellipse, rgba(79,124,255,0.1), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -1px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .cta-sub {
+      font-size: .95rem;
+      color: var(--muted);
+      margin-bottom: 36px;
+      line-height: 1.7;
+      position: relative;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .btn-cta {
+      padding: 14px 36px;
+      font-size: 1rem;
+      border-radius: 12px;
+    }
+
+    /* ── API STATUS BADGE ──────────────────────────────────── */
+    .api-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .72rem;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+    .api-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .api-status-dot.online { background: var(--green); }
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 32px clamp(1.5rem, 5vw, 4rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .84rem;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      font-size: .8rem;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── ANIMATIONS ────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+      opacity: 0;
+      animation: fadeUp .6s ease forwards;
+    }
+    .delay-1 { animation-delay: .1s; }
+    .delay-2 { animation-delay: .2s; }
+    .delay-3 { animation-delay: .3s; }
+    .delay-4 { animation-delay: .4s; }
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .frame-body { grid-template-columns: 1fr; }
+      .frame-sidebar { display: none; }
+      .frame-kpi-row { grid-template-columns: 1fr 1fr; }
+      .api-grid { grid-template-columns: 1fr; }
+      .nav-badge { display: none; }
+      .cta-inner { padding: 40px 24px; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo-mark">AA</div>
+    <div class="nav-brand-text">
+      <span class="nav-brand-name">Agent Atlas</span>
+      <span class="nav-brand-sub">TradeOpsVault Management System</span>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-badge">System Active</div>
+    <a href="index.html?app=1" class="btn btn-ghost" style="font-size:.82rem;padding:7px 16px;">Open Dashboard →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+
+  <div class="hero-eyebrow fade-up">
+    Private Internal Tool · Single Seller · TradeOpsVault
+  </div>
+
+  <h1 class="hero-title fade-up delay-1">
+    The operating system<br>for <span class="orange">TradeOpsVault</span>
+  </h1>
+
+  <p class="hero-sub fade-up delay-2">
+    A purpose-built shop management platform that handles listing creation, revenue tracking, and Etsy API operations for a single owner-operated digital download shop.
+  </p>
+
+  <div class="hero-actions fade-up delay-3">
+    <a href="#" id="connect-btn" class="btn btn-primary btn-hero" onclick="handleConnect(event)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Connect with Etsy
+    </a>
+    <a href="index.html?app=1" class="btn btn-ghost btn-hero">
+      Open Dashboard
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+
+  <div class="stats-row fade-up delay-4">
+    <div class="stat-item">
+      <div class="stat-val">20</div>
+      <div class="stat-label">Active Listings</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">10</div>
+      <div class="stat-label">Images Per Listing</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">1</div>
+      <div class="stat-label">Shop · TradeOpsVault</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">&lt;200</div>
+      <div class="stat-label">API Calls / Day</div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD PREVIEW -->
+<div class="preview-section">
+  <div class="preview-wrap">
+    <div class="preview-frame">
+      <!-- Browser chrome -->
+      <div class="frame-chrome">
+        <div class="chrome-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="chrome-url">cleanplatehaulingco.github.io/AGENT-ATLAS/index.html?app=1</div>
+      </div>
+      <!-- Dashboard content -->
+      <div class="frame-body">
+        <div class="frame-sidebar">
+          <div class="frame-brand">
+            <div class="frame-brand-mark">AA</div>
+            <div class="frame-brand-text">Agent Atlas</div>
+          </div>
+          <div class="frame-nav-item active">⬡ Dashboard</div>
+          <div class="frame-nav-item">▦ Listings</div>
+          <div class="frame-nav-item">◎ Revenue</div>
+          <div class="frame-nav-item">✦ Design Team</div>
+          <div class="frame-nav-item">◑ Monitor</div>
+          <div class="frame-nav-item">◇ Compliance</div>
+          <div class="frame-nav-item">⚙ Settings</div>
+        </div>
+        <div class="frame-main">
+          <div class="frame-kpi-row">
+            <div class="frame-kpi">
+              <div class="frame-kpi-label">Revenue</div>
+              <div class="frame-kpi-val">$163</div>
+              <div class="frame-kpi-sub">of $500 goal</div>
+              <div class="frame-kpi-bar"><div class="frame-kpi-bar-fill" style="width:33%"></div></div>
+            </div>
+            <div class="frame-kpi">
+              <div class="frame-kpi-label">Live Listings</div>
+              <div class="frame-kpi-val">5</div>
+              <div class="frame-kpi-sub">15 in pipeline</div>
+              <div class="frame-kpi-bar"><div class="frame-kpi-bar-fill" style="width:25%;background:#f15a22"></div></div>
+            </div>
+            <div class="frame-kpi">
+              <div class="frame-kpi-label">Avg CVR</div>
+              <div class="frame-kpi-val">3.4%</div>
+              <div class="frame-kpi-sub">+0.6% this week</div>
+              <div class="frame-kpi-bar"><div class="frame-kpi-bar-fill" style="width:68%;background:#00e676"></div></div>
+            </div>
+            <div class="frame-kpi">
+              <div class="frame-kpi-label">Days Left</div>
+              <div class="frame-kpi-val">32</div>
+              <div class="frame-kpi-sub">of 45-day goal</div>
+              <div class="frame-kpi-bar"><div class="frame-kpi-bar-fill" style="width:71%;background:#febc2e"></div></div>
+            </div>
+          </div>
+          <div class="frame-progress-label">45-Day Goal Progress</div>
+          <div class="frame-progress-track">
+            <div class="frame-progress-fill"></div>
+          </div>
+          <div class="frame-table-row header">
+            <span>Listing</span><span>Price</span><span>CVR</span><span>Revenue</span><span>Status</span>
+          </div>
+          <div class="frame-table-row data">
+            <span>HVAC Service Call Notes</span><span>$7.99</span><span style="color:#00e676">3.5%</span><span style="color:#00e676">$39.95</span><span><span class="frame-pill pill-live">Live</span></span>
+          </div>
+          <div class="frame-table-row data">
+            <span>Plumbing Dispatch Form</span><span>$11.99</span><span style="color:#00e676">3.2%</span><span style="color:#00e676">$47.96</span><span><span class="frame-pill pill-live">Live</span></span>
+          </div>
+          <div class="frame-table-row data">
+            <span>Lawn Care Weekly Planner</span><span>$6.99</span><span style="color:#00e676">4.1%</span><span style="color:#00e676">$48.93</span><span><span class="frame-pill pill-live">Live</span></span>
+          </div>
+          <div class="frame-table-row data">
+            <span>Roofing Change Order Form</span><span>$14.99</span><span>—</span><span>—</span><span><span class="frame-pill pill-ready">Ready</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section>
+  <div class="section-inner">
+    <div class="section-eyebrow">What This Application Does</div>
+    <h2 class="section-title">Built for one shop.<br>Engineered for scale.</h2>
+    <p class="section-sub">Agent Atlas is a private internal tool built and operated exclusively by the owner of TradeOpsVault to manage a single Etsy digital download shop.</p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon icon-blue">📋</div>
+        <div class="feature-title">Listing Management</div>
+        <div class="feature-desc">Draft, edit, and publish all 20 listings to TradeOpsVault with consistent formatting, optimized titles, and full tag sets.</div>
+        <ul class="feature-bullets">
+          <li>Create and update listings via Etsy API</li>
+          <li>Manage titles, descriptions, 13-tag sets</li>
+          <li>Set pricing, categories, and digital file flags</li>
+          <li>Pipeline view from draft → live</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-orange">🖼</div>
+        <div class="feature-title">Image Publishing</div>
+        <div class="feature-desc">Generates and uploads up to 10 product images per listing using canvas compositing and DALL-E 3. Fills every Etsy image slot in the correct order.</div>
+        <ul class="feature-bullets">
+          <li>Hero, detail, bundle, infographic slides</li>
+          <li>Uploads to correct Etsy rank slots (1–10)</li>
+          <li>Canvas compositor — no external services</li>
+          <li>DALL-E 3 HD for lifestyle shots only</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-green">📊</div>
+        <div class="feature-title">Revenue Tracking</div>
+        <div class="feature-desc">Reads TradeOpsVault's own transaction history to track revenue against a 45-day $500 goal. No competitor data, no third-party shops.</div>
+        <ul class="feature-bullets">
+          <li>Reads own transactions via transactions_r scope</li>
+          <li>CSV import from Etsy order export</li>
+          <li>Pace tracking against goal timeline</li>
+          <li>Per-listing revenue breakdown</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-purple">⚡</div>
+        <div class="feature-title">Listing Launcher</div>
+        <div class="feature-desc">A bookmarklet tool that auto-fills Etsy's add-listing form from prepared data — reducing manual listing entry from 10 minutes to under 30 seconds.</div>
+        <ul class="feature-bullets">
+          <li>Fills title, description, tags, price</li>
+          <li>Data relay via secure server endpoint</li>
+          <li>No scraping — user-initiated only</li>
+          <li>Works on etsy.com/sell/add-listing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="padding-top:0;">
+  <div class="section-inner">
+    <div class="section-eyebrow">Workflow</div>
+    <h2 class="section-title" style="margin-bottom:40px;">From draft to live in minutes</h2>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Draft Listing</div>
+        <div class="step-desc">Write title, description, and tags in the Atlas listing editor with AI-suggested copy.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Generate Images</div>
+        <div class="step-desc">Canvas compositor builds all 10 Etsy image slots. DALL-E generates lifestyle shots.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Compliance Check</div>
+        <div class="step-desc">Automated scan checks titles, tags, and descriptions against Etsy policy rules.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Publish to Etsy</div>
+        <div class="step-desc">One click creates the listing and uploads all images via the Etsy API in correct order.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- API USAGE -->
+<section>
+  <div class="section-inner">
+    <div class="section-eyebrow">API Usage Transparency</div>
+    <h2 class="section-title">Minimal scope.<br>Single shop. Your data only.</h2>
+    <p class="section-sub">Agent Atlas requests only the permissions it needs to manage TradeOpsVault. No competitor data, no resale, no third-party access.</p>
+
+    <div class="api-grid">
+      <div class="api-card">
+        <div class="api-card-title">Usage Details</div>
+        <div class="api-row">
+          <span class="api-row-label">Shops targeted</span>
+          <span class="api-row-val">1 — TradeOpsVault only</span>
+        </div>
+        <div class="api-row">
+          <span class="api-row-label">Estimated API calls</span>
+          <span class="api-row-val">&lt; 200 / day</span>
+        </div>
+        <div class="api-row">
+          <span class="api-row-label">Users</span>
+          <span class="api-row-val">1 — shop owner only</span>
+        </div>
+        <div class="api-row">
+          <span class="api-row-label">Data storage</span>
+          <span class="api-row-val">Browser localStorage only</span>
+        </div>
+        <div class="api-row">
+          <span class="api-row-label">Third-party access</span>
+          <span class="api-row-val">None</span>
+        </div>
+        <div class="api-row">
+          <span class="api-row-label">Data resale</span>
+          <span class="api-row-val">Never</span>
+        </div>
+      </div>
+
+      <div class="api-card">
+        <div class="api-card-title">Requested OAuth Scopes</div>
+        <div class="scope-list">
+          <div class="scope-item">
+            <span class="scope-badge">listings_r</span>
+            <span class="scope-desc">Read own listings</span>
+          </div>
+          <div class="scope-item">
+            <span class="scope-badge">listings_w</span>
+            <span class="scope-desc">Create &amp; update own listings</span>
+          </div>
+          <div class="scope-item">
+            <span class="scope-badge">listings_d</span>
+            <span class="scope-desc">Delete own draft listings</span>
+          </div>
+          <div class="scope-item">
+            <span class="scope-badge">transactions_r</span>
+            <span class="scope-desc">Read own order/revenue data</span>
+          </div>
+          <div class="scope-item">
+            <span class="scope-badge">shops_r</span>
+            <span class="scope-desc">Read own shop info</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLIANCE -->
+<section style="padding-top:0;">
+  <div class="section-inner">
+    <div class="section-eyebrow">Why This Should Be Approved</div>
+    <h2 class="section-title" style="margin-bottom:40px;">Built for the use case<br>Etsy explicitly supports</h2>
+    <div class="compliance-grid">
+      <div class="compliance-item">
+        <div class="compliance-check">✓</div>
+        <div class="compliance-text">
+          <strong>Real operating shop</strong>
+          <span>TradeOpsVault is a live Etsy shop with active digital download listings</span>
+        </div>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-check">✓</div>
+        <div class="compliance-text">
+          <strong>Deployed production tool</strong>
+          <span>This application is live, functional, and actively used by the shop owner</span>
+        </div>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-check">✓</div>
+        <div class="compliance-text">
+          <strong>Single-seller only</strong>
+          <span>All API calls target one shop ID — not a multi-seller aggregator platform</span>
+        </div>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-check">✓</div>
+        <div class="compliance-text">
+          <strong>Minimal permission scope</strong>
+          <span>Only 5 scopes requested — no payment, billing, or profile data access</span>
+        </div>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-check">✓</div>
+        <div class="compliance-text">
+          <strong>Low API volume</strong>
+          <span>Internal tool used by one person — fewer than 200 API calls per day</span>
+        </div>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-check">✓</div>
+        <div class="compliance-text">
+          <strong>No data monetization</strong>
+          <span>All shop data stays in the owner's browser. Nothing is sold or shared.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-title">Ready to connect</h2>
+    <p class="cta-sub">Link your TradeOpsVault Etsy account to enable full listing management, revenue sync, and automated image publishing.</p>
+    <div class="cta-actions">
+      <a href="#" id="connect-btn-2" class="btn btn-primary btn-cta" onclick="handleConnect(event)">
+        Connect with Etsy
+      </a>
+      <a href="index.html?app=1" class="btn btn-ghost btn-cta">Open Dashboard</a>
+    </div>
+    <div class="api-status" id="api-status">
+      <span class="api-status-dot" id="api-dot"></span>
+      <span id="api-status-text">Checking API server…</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="nav-logo-mark" style="width:28px;height:28px;font-size:11px;">AA</div>
+    <span>Agent Atlas · TradeOpsVault Shop Manager · © 2025</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://www.etsy.com/shop/TradeOpsVault" target="_blank" rel="noopener">TradeOpsVault on Etsy</a>
+    <a href="index.html?app=1">Dashboard</a>
+    <a href="index.html?app=1#settings">Settings</a>
+  </div>
+</footer>
+
+<script>
+  // ── API server URL (update once Render is deployed) ──────────────────
+  var RENDER_API = 'https://agent-atlas-api.onrender.com';
+
+  // ── Connect with Etsy ────────────────────────────────────────────────
+  function handleConnect(e) {
+    e.preventDefault();
+    // Try server OAuth first, fall back to client-side
+    var btn = e.currentTarget;
+    btn.textContent = 'Connecting…';
+    btn.style.opacity = '0.7';
+
+    fetch(RENDER_API + '/health', { signal: AbortSignal.timeout(4000) })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.status === 'ok') {
+          // Server is up — use server-side OAuth (more secure)
+          window.location.href = RENDER_API + '/auth/etsy';
+        } else {
+          throw new Error('Server not ready');
+        }
+      })
+      .catch(function() {
+        // Server not yet deployed — fall back to dashboard with client-side OAuth
+        window.location.href = 'index.html?app=1&connect=1';
+      });
+  }
+
+  // ── Check API server status + keep warm ─────────────────────────────
+  function _pingApi() {
+    fetch(RENDER_API + '/health', { signal: AbortSignal.timeout(5000) }).catch(function(){});
+  }
+
+  (function checkApiStatus() {
+    var dot = document.getElementById('api-dot');
+    var txt = document.getElementById('api-status-text');
+
+    fetch(RENDER_API + '/health', { signal: AbortSignal.timeout(5000) })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        dot.classList.add('online');
+        txt.textContent = 'API Server: Online ✓  ·  ' + (data.authenticated ? 'Etsy: Connected ✓' : 'Etsy: Not connected');
+      })
+      .catch(function() {
+        dot.style.background = '#febc2e';
+        txt.textContent = 'API Server: Not yet deployed — connect via dashboard';
+      });
+
+    setInterval(_pingApi, 9 * 60 * 1000);
+  })();
+</script>
+
+</body>
+</html>

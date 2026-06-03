@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: agent-atlas-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        value: https://cleanplatehaulingco.github.io
+      - key: ETSY_CLIENT_ID
+        sync: false
+      - key: ETSY_SHOP_ID
+        sync: false
+      - key: APP_URL
+        sync: false
