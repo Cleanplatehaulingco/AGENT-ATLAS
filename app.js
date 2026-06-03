@@ -389,6 +389,7 @@ const NAV_ITEMS = [
   { id:'design',      label:'Design Team',   icon:'✦' },
   { id:'postclose',   label:'Post-Close',    icon:'◆' },
   { id:'compliance',  label:'Compliance',    icon:'◇' },
+  { id:'monitor',     label:'Monitor',       icon:'◑' },
   { id:'settings',    label:'Settings',      icon:'⚙' },
 ];
 
@@ -424,16 +425,19 @@ function switchView(id) {
     id === 'design'      ? 'AI Design Team' :
     id === 'postclose'   ? 'Post-Close Conversion Agent' :
     id === 'compliance'  ? 'Compliance & Copyright Center' :
+    id === 'monitor'     ? 'Shop Monitor' :
     id === 'settings'    ? 'System Settings' : 'Revenue Tracker';
   if (id === 'postclose')  renderPostClose();
   if (id === 'compliance') renderComplianceView();
   if (id === 'settings')   renderSettingsView();
   if (id === 'ads')        renderAdsView();
   if (id === 'design')     renderDesignView();
+  if (id === 'monitor')    renderMonitorView();
 }
 
 function updateSidebarStatus() {
-  const rev = currentRevenue();
+  const monitorRev = typeof ShopMonitor !== 'undefined' ? ShopMonitor.bestRevenue() : 0;
+  const rev = monitorRev > 0 ? monitorRev : currentRevenue();
   document.getElementById('sidebar-rev').textContent = `$${rev.toFixed(2)} / $500`;
   const bar = document.querySelector('#sidebar-prog > div');
   if (bar) bar.style.width = Math.min(rev / 5, 100) + '%';
@@ -1914,6 +1918,15 @@ function budgetGuardHTML() {
   `;
 }
 
+function renderMonitorView() {
+  const view = document.getElementById('monitor-view');
+  if (!view) return;
+  if (typeof ShopMonitor === 'undefined') {
+    view.innerHTML = '<div class="card"><p class="text-muted">Monitor loading…</p></div>'; return;
+  }
+  view.innerHTML = ShopMonitor.renderView();
+}
+
 function renderAdsView() {
   const view = document.getElementById('ads-view');
   if (!view) return;
@@ -2095,3 +2108,4 @@ if (state.autoPilot) startAutoPilot();
 rerenderAll();
 persist();
 if (needsSetup()) setTimeout(openSetupWizard, 600);
+if (typeof ShopMonitor !== 'undefined') ShopMonitor.init();
