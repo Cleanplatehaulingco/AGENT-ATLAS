@@ -2,84 +2,93 @@
 // TradeOpsVault · Premium Series — 3-Page Template System
 // Usage: openTemplate('LS-001') to open in new tab, or generateTemplate('LS-001') to get HTML string
 
-const _CSS = `<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10pt; color: #1a1a2e; background: #e8eaf0; padding: 24px; }
-.page { background: #fff; max-width: 860px; margin: 0 auto; box-shadow: 0 8px 32px rgba(0,0,0,0.15); border-radius: 4px; overflow: hidden; }
-@media print { body { background:#fff;padding:0; } .page{box-shadow:none;border-radius:0;} .no-print{display:none!important;} }
-.header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color:#fff; padding:22px 32px; display:flex; justify-content:space-between; align-items:center; gap:16px; }
-.logo-zone { border: 2px dashed rgba(255,255,255,0.3); border-radius:8px; padding:10px 18px; cursor:pointer; color:rgba(255,255,255,0.6); font-size:9pt; text-align:center; min-width:140px; transition:all .2s; }
-.logo-zone:hover { border-color:rgba(255,255,255,0.7); color:#fff; background:rgba(255,255,255,0.05); }
-.company-name-field { font-size:15pt; font-weight:900; letter-spacing:-0.5px; color:#fff; text-transform:uppercase; margin-top:6px; border-bottom:1px solid rgba(255,255,255,0.2); min-width:180px; }
-.company-name-field:empty::before { content:'YOUR COMPANY NAME'; color:rgba(255,255,255,0.35); font-style:italic; }
-.company-name-field:focus { border-bottom:1px solid rgba(255,255,255,0.7); outline:none; }
-.header-right { text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
-.form-title-text { font-size:14pt; font-weight:800; color:#fff; text-transform:uppercase; letter-spacing:0.5px; line-height:1.2; }
-.form-badge { display:inline-block; background:rgba(79,124,255,0.3); color:#8eb4ff; padding:3px 10px; border-radius:12px; font-size:7.5pt; font-weight:700; letter-spacing:1px; margin-top:6px; }
-.qr-placeholder { border:1.5px dashed rgba(255,255,255,0.3); border-radius:4px; width:52px; height:52px; display:flex; align-items:center; justify-content:center; font-size:5.5pt; color:rgba(255,255,255,0.4); text-align:center; line-height:1.3; padding:4px; flex-shrink:0; }
-.accent-bar { height:5px; background:linear-gradient(90deg, #4f7cff 0%, #2ed88a 50%, #ffbb45 100%); }
-.toolbar { background:#f7f8fc; border-bottom:1px solid #e0e4f0; padding:10px 32px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-.toolbar-btn { display:inline-flex; align-items:center; gap:6px; padding:7px 18px; border-radius:6px; font-size:9pt; font-weight:700; cursor:pointer; border:none; transition:all .15s; }
-.btn-print { background:#4f7cff; color:#fff; }
-.btn-print:hover { background:#3a6ae8; }
-.btn-clear { background:#f0f4ff; color:#4f7cff; border:1px solid #c8d8ff; }
-.btn-clear:hover { background:#e0e8ff; }
-.toolbar-tip { font-size:8pt; color:#aab; margin-left:auto; }
-.info-strip { background:#f7f8fc; border-bottom:2px solid #e0e4f0; padding:14px 32px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
-.info-field label { font-size:6.5pt; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#8899cc; display:block; margin-bottom:4px; }
-.body { padding:22px 32px; display:flex; flex-direction:column; gap:18px; }
-.section { }
-.section-header { background:linear-gradient(90deg,#1a2744,#243358); color:#fff; padding:8px 14px; font-size:8pt; font-weight:800; text-transform:uppercase; letter-spacing:1.2px; border-radius:4px 4px 0 0; display:flex; align-items:center; gap:8px; }
-.section-body { border:1.5px solid #dde2f0; border-top:none; border-radius:0 0 4px 4px; padding:16px; background:#fff; border-left:3px solid #4f7cff; }
-.sec-num { background:rgba(255,255,255,0.2); border-radius:50%; width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center; font-size:7pt; font-weight:900; margin-right:6px; flex-shrink:0; }
-.field-grid { display:grid; gap:14px; }
-.field-grid.cols-2 { grid-template-columns:1fr 1fr; }
-.field-grid.cols-3 { grid-template-columns:1fr 1fr 1fr; }
-.field-grid.cols-4 { grid-template-columns:1fr 1fr 1fr 1fr; }
-.field label { font-size:6.5pt; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:#8899cc; display:block; margin-bottom:4px; }
-.editable { border-bottom:1.5px solid #dde2f0; min-height:26px; padding:3px 5px; outline:none; transition:border-color .15s,background .15s; display:block; width:100%; line-height:1.5; }
-.editable:focus { border-bottom:2px solid #4f7cff; background:#f0f4ff; border-radius:3px 3px 0 0; }
-.editable:empty::before { content:attr(data-placeholder); color:#ccd; font-style:italic; pointer-events:none; }
-.editable.multiline { min-height:72px; border:1.5px solid #dde2f0; border-radius:4px; padding:8px; }
-.editable.multiline:focus { border-color:#4f7cff; background:#f0f4ff; }
-@media print { .editable{border-bottom:1.5px solid #ccd0e0!important;background:transparent!important;} .editable:empty::before{display:none;} .editable.multiline{border:1.5px solid #ccd0e0!important;background:transparent!important;} }
-.form-table { width:100%; border-collapse:collapse; font-size:9pt; }
-.form-table th { background:linear-gradient(90deg,#1a2744,#243358); color:#fff; padding:8px 12px; text-align:left; font-size:7pt; text-transform:uppercase; letter-spacing:0.8px; font-weight:800; }
-.form-table td { border-bottom:1px solid #eaecf4; padding:4px 6px; vertical-align:middle; }
-.form-table tr:nth-child(even) td { background:#f9fafc; }
-.form-table td:focus-within { background:#f0f4ff!important; }
-.form-table .editable { min-height:22px; font-size:9pt; border-bottom:none; }
-.check-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; }
-.check-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
-.check-item { display:flex; align-items:center; gap:8px; padding:5px 8px; border:1px solid #eaecf4; border-radius:4px; cursor:pointer; }
-.check-item:hover { background:#f0f4ff; border-color:#c8d8ff; }
-.check-item input[type=checkbox] { width:15px; height:15px; accent-color:#4f7cff; cursor:pointer; flex-shrink:0; }
-.check-item label { font-size:9pt; cursor:pointer; }
-.sig-block { display:grid; grid-template-columns:1fr 1fr; gap:32px; padding-top:16px; border-top:2px solid #eaecf4; }
-.sig-field label { font-size:6.5pt; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:#8899cc; display:block; margin-bottom:6px; }
-.sig-line { border-bottom:2px solid #1a2744; min-height:44px; }
-.sig-sub { font-size:7pt; color:#aab; margin-top:4px; }
-.footer { background:linear-gradient(135deg,#0f1628,#1a2744); padding:12px 32px; display:flex; justify-content:space-between; align-items:center; }
-.footer-brand { font-size:8.5pt; font-weight:800; color:#8eb4ff; }
-.footer-legal { font-size:6.5pt; color:rgba(255,255,255,0.35); max-width:55%; text-align:center; line-height:1.5; }
-.footer-id { font-size:7pt; color:rgba(255,255,255,0.4); text-align:right; }
-.footer-conf { font-size:6pt; color:rgba(255,255,255,0.25); letter-spacing:0.5px; text-transform:uppercase; }
-.total-row td { font-weight:700; background:#f0f4ff!important; }
-.grand-total-row td { font-weight:900; background:#1a2744!important; color:#fff!important; }
-.page-break { page-break-after:always; break-after:page; border-bottom:3px dashed #e0e4f0; margin:32px 0; padding-bottom:32px; }
-.page-break:last-child { border-bottom:none; }
-@media print { .page-break { border-bottom:none; margin:0; padding:0; } }
-.page-label { background:#f0f4ff; border:1px solid #c8d8ff; color:#4f7cff; font-size:7.5pt; font-weight:800; padding:4px 12px; border-radius:12px; display:inline-block; margin-bottom:16px; letter-spacing:1px; text-transform:uppercase; }
-@media print { .page-label { display:none; } }
-.cover-hero { text-align:center; padding:40px 20px 32px; }
-.cover-title { font-size:28pt; font-weight:900; color:#1a2744; text-transform:uppercase; letter-spacing:-1px; line-height:1.1; }
-.cover-sub { font-size:12pt; color:#667; margin-top:8px; font-weight:500; }
-.cover-badge { display:inline-block; background:linear-gradient(90deg,#4f7cff,#2ed88a); color:#fff; padding:6px 20px; border-radius:20px; font-size:8.5pt; font-weight:800; margin-top:16px; letter-spacing:1px; text-transform:uppercase; }
-.cover-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
-.cover-box { background:#f7f9ff; border:1.5px solid #dde2f0; border-radius:8px; padding:18px; border-top:4px solid #4f7cff; }
-.cover-box-title { font-size:9pt; font-weight:800; color:#1a2744; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:10px; }
-.cover-list { padding-left:16px; color:#445; font-size:9.5pt; line-height:2; }
-</style>`;
+function _cssFor(accent, accentDark) {
+  accent = accent || '#4f7cff';
+  accentDark = accentDark || '#3a6ae8';
+  return '<style>'
+  +'@import url(\'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap\');'
+  +':root{--accent:'+accent+';--accent-dark:'+accentDark+';}'
+  +'* { box-sizing: border-box; margin: 0; padding: 0; }'
+  +'body { font-family: \'Inter\', \'Segoe UI\', Arial, sans-serif; font-size: 10pt; color: #1a1a2e; background: #dfe3ef; padding: 28px; }'
+  +'.page { background: #fff; max-width: 880px; margin: 0 auto; box-shadow: 0 12px 40px rgba(0,0,0,0.18); border-radius: 6px; overflow: hidden; }'
+  +'@media print { body { background:#fff;padding:0; } .page{box-shadow:none;border-radius:0;} .no-print{display:none!important;} }'
+  +'.header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color:#fff; padding:24px 40px; display:flex; justify-content:space-between; align-items:center; gap:16px; }'
++'.logo-zone { border: 2px dashed rgba(255,255,255,0.3); border-radius:8px; padding:10px 18px; cursor:pointer; color:rgba(255,255,255,0.6); font-size:9pt; text-align:center; min-width:140px; transition:all .2s; }'
+  +'.logo-zone:hover { border-color:rgba(255,255,255,0.7); color:#fff; background:rgba(255,255,255,0.05); }'
+  +'.company-name-field { font-size:15pt; font-weight:900; letter-spacing:-0.5px; color:#fff; text-transform:uppercase; margin-top:6px; border-bottom:1px solid rgba(255,255,255,0.2); min-width:180px; }'
+  +'.company-name-field:empty::before { content:\'YOUR COMPANY NAME\'; color:rgba(255,255,255,0.35); font-style:italic; }'
+  +'.company-name-field:focus { border-bottom:1px solid rgba(255,255,255,0.7); outline:none; }'
+  +'.header-right { text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:4px; }'
+  +'.form-title-text { font-size:14pt; font-weight:800; color:#fff; text-transform:uppercase; letter-spacing:0.5px; line-height:1.2; }'
+  +'.form-badge { display:inline-block; background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.85); padding:3px 10px; border-radius:12px; font-size:7.5pt; font-weight:700; letter-spacing:1px; margin-top:6px; }'
+  +'.qr-placeholder { border:1.5px dashed rgba(255,255,255,0.3); border-radius:4px; width:52px; height:52px; display:flex; align-items:center; justify-content:center; font-size:5.5pt; color:rgba(255,255,255,0.4); text-align:center; line-height:1.3; padding:4px; flex-shrink:0; }'
+  +'.accent-bar { height:6px; background:linear-gradient(90deg, var(--accent) 0%, var(--accent-dark) 100%); }'
+  +'.toolbar { background:#f7f8fc; border-bottom:1px solid #e0e4f0; padding:12px 40px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }'
+  +'.toolbar-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 20px; border-radius:6px; font-size:9pt; font-weight:700; cursor:pointer; border:none; transition:all .15s; letter-spacing:0.2px; }'
+  +'.btn-print { background:var(--accent); color:#fff; }'
+  +'.btn-print:hover { background:var(--accent-dark); }'
+  +'.btn-clear { background:#f0f4ff; color:var(--accent); border:1px solid rgba(0,0,0,0.12); }'
+  +'.btn-clear:hover { background:#e0e8ff; }'
+  +'.toolbar-tip { font-size:8pt; color:#aab; margin-left:auto; }'
+  +'.info-strip { background:#f7f8fc; border-bottom:2px solid #e0e4f0; padding:16px 40px; display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }'
+  +'.info-field label { font-size:6.5pt; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#8899cc; display:block; margin-bottom:5px; }'
+  +'.body { padding:28px 40px; display:flex; flex-direction:column; gap:22px; }'
+  +'.section { }'
+  +'.section-header { background:linear-gradient(90deg,#1a2744,#243358); color:#fff; padding:10px 16px; font-size:8pt; font-weight:800; text-transform:uppercase; letter-spacing:1.2px; border-radius:4px 4px 0 0; display:flex; align-items:center; gap:8px; }'
+  +'.section-body { border:1.5px solid #dde2f0; border-top:none; border-radius:0 0 6px 6px; padding:20px; background:#fff; border-left:4px solid var(--accent); }'
+  +'.sec-num { background:rgba(255,255,255,0.2); border-radius:50%; width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center; font-size:7pt; font-weight:900; margin-right:6px; flex-shrink:0; }'
+  +'.field-grid { display:grid; gap:16px; }'
+  +'.field-grid.cols-2 { grid-template-columns:1fr 1fr; }'
+  +'.field-grid.cols-3 { grid-template-columns:1fr 1fr 1fr; }'
+  +'.field-grid.cols-4 { grid-template-columns:1fr 1fr 1fr 1fr; }'
+  +'.field label { font-size:6.5pt; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:#8899cc; display:block; margin-bottom:5px; }'
+  +'.editable { border-bottom:1.5px solid #dde2f0; min-height:28px; padding:4px 6px; outline:none; transition:border-color .15s,background .15s; display:block; width:100%; line-height:1.6; font-family:inherit; font-size:10pt; }'
+  +'.editable:focus { border-bottom:2px solid var(--accent); background:#f5f7ff; border-radius:3px 3px 0 0; }'
+  +'.editable:empty::before { content:attr(data-placeholder); color:#bbc; font-style:italic; pointer-events:none; }'
+  +'.editable.multiline { min-height:80px; border:1.5px solid #dde2f0; border-radius:4px; padding:10px; }'
+  +'.editable.multiline:focus { border-color:var(--accent); background:#f5f7ff; }'
+  +'@media print { .editable{border-bottom:1.5px solid #ccd0e0!important;background:transparent!important;} .editable:empty::before{display:none;} .editable.multiline{border:1.5px solid #ccd0e0!important;background:transparent!important;} }'
+  +'.form-table { width:100%; border-collapse:collapse; font-size:9pt; }'
+  +'.form-table th { background:linear-gradient(90deg,#1a2744,#243358); color:#fff; padding:9px 12px; text-align:left; font-size:7pt; text-transform:uppercase; letter-spacing:0.8px; font-weight:800; }'
+  +'.form-table td { border-bottom:1px solid #eaecf4; padding:5px 7px; vertical-align:middle; }'
+  +'.form-table tr:nth-child(even) td { background:#f9fafc; }'
+  +'.form-table td:focus-within { background:#f0f4ff!important; }'
+  +'.form-table .editable { min-height:22px; font-size:9pt; border-bottom:none; }'
+  +'.sample-row td { background:#fffde7!important; font-style:italic; color:#555; font-size:8.5pt; }'
+  +'.check-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }'
+  +'.check-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }'
+  +'.check-item { display:flex; align-items:center; gap:8px; padding:7px 10px; border:1px solid #eaecf4; border-radius:5px; cursor:pointer; }'
+  +'.check-item:hover { background:#f0f4ff; border-color:rgba(0,0,0,0.15); }'
+  +'.check-item input[type=checkbox] { width:15px; height:15px; accent-color:var(--accent); cursor:pointer; flex-shrink:0; }'
+  +'.check-item label { font-size:9pt; cursor:pointer; }'
+  +'.sig-block { display:grid; grid-template-columns:1fr 1fr; gap:40px; padding-top:20px; border-top:2px solid #eaecf4; }'
+  +'.sig-field label { font-size:6.5pt; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:#8899cc; display:block; margin-bottom:8px; }'
+  +'.sig-line { border-bottom:2px solid #1a2744; min-height:48px; }'
+  +'.sig-sub { font-size:7pt; color:#aab; margin-top:5px; }'
+  +'.footer { background:linear-gradient(135deg,#0f1628,#1a2744); padding:14px 40px; display:flex; justify-content:space-between; align-items:center; }'
+  +'.footer-brand { font-size:8.5pt; font-weight:800; color:#8eb4ff; }'
+  +'.footer-legal { font-size:6.5pt; color:rgba(255,255,255,0.35); max-width:55%; text-align:center; line-height:1.5; }'
+  +'.footer-id { font-size:7pt; color:rgba(255,255,255,0.4); text-align:right; }'
+  +'.footer-conf { font-size:6pt; color:rgba(255,255,255,0.25); letter-spacing:0.5px; text-transform:uppercase; }'
+  +'.total-row td { font-weight:700; background:#f5f7ff!important; }'
+  +'.grand-total-row td { font-weight:900; background:#1a2744!important; color:#fff!important; }'
+  +'.page-break { page-break-after:always; break-after:page; border-bottom:3px dashed #e0e4f0; margin:36px 0; padding-bottom:36px; }'
+  +'.page-break:last-child { border-bottom:none; }'
+  +'@media print { .page-break { border-bottom:none; margin:0; padding:0; } }'
+  +'.page-label { background:#f0f4ff; border:1px solid rgba(0,0,0,0.1); color:var(--accent); font-size:7.5pt; font-weight:800; padding:4px 14px; border-radius:12px; display:inline-block; margin-bottom:18px; letter-spacing:1px; text-transform:uppercase; }'
+  +'@media print { .page-label { display:none; } }'
+  +'.cover-hero { text-align:center; padding:52px 32px 44px; background:linear-gradient(160deg,#0f1628 0%,#1a2744 40%,#0f2040 100%); position:relative; overflow:hidden; }'
+  +'.cover-hero::before { content:""; position:absolute; top:-60px; right:-60px; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle,'+accent+'33 0%,transparent 70%); pointer-events:none; }'
+  +'.cover-hero::after { content:""; position:absolute; bottom:-40px; left:-40px; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,'+accentDark+'22 0%,transparent 70%); pointer-events:none; }'
+  +'.cover-title { font-size:30pt; font-weight:900; color:#fff; text-transform:uppercase; letter-spacing:-1px; line-height:1.1; position:relative; }'
+  +'.cover-sub { font-size:12pt; color:rgba(255,255,255,0.65); margin-top:10px; font-weight:400; position:relative; }'
+  +'.cover-badge { display:inline-block; background:var(--accent); color:#fff; padding:7px 22px; border-radius:20px; font-size:8.5pt; font-weight:800; margin-top:20px; letter-spacing:1px; text-transform:uppercase; position:relative; box-shadow:0 4px 16px rgba(0,0,0,0.3); }'
+  +'.cover-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:22px; }'
+  +'.cover-box { background:#fff; border:1.5px solid #dde2f0; border-radius:8px; padding:22px; border-top:4px solid var(--accent); box-shadow:0 2px 8px rgba(0,0,0,0.06); }'
+  +'.cover-box-title { font-size:9pt; font-weight:800; color:#1a2744; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:12px; }'
+  +'.cover-list { padding-left:18px; color:#445; font-size:9.5pt; line-height:2.1; }'
+  +'</style>';
+}
 
 const _JS = `<script>
 document.addEventListener('DOMContentLoaded',function(){
@@ -142,7 +151,8 @@ function _coverPage(uid, formId, formTitle, tradeName, mainFormName, extraInclud
 }
 
 function _historyPage(uid, formId, note){
-  var rows = '';
+  var sampleRow = '<tr class="sample-row"><td>★ Ex</td><td>06/03/2025</td><td>Johnson Residence</td><td>Annual maintenance visit</td><td>$185.00</td><td>Done</td></tr>';
+  var rows = sampleRow;
   for(var i=1;i<=10;i++){
     rows += '<tr><td>'+i+'</td><td><div class="editable" data-placeholder="MM/DD/YYYY"></div></td><td><div class="editable" data-placeholder="Client Name"></div></td><td><div class="editable" data-placeholder="Description"></div></td><td><div class="editable" data-placeholder="$0.00"></div></td><td><div class="editable" data-placeholder="Done / Pending"></div></td></tr>';
   }
@@ -216,7 +226,7 @@ var mainForm = '<div class="page-break">'
   +_footer(id,'For business use only. Retain for your records.')
   +'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>HVAC Service Call Notes</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>HVAC Service Call Notes</title>'+_cssFor('#e85d04','#c44b00')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'HVAC Service Call Notes',html:html};
 })();
 
@@ -262,7 +272,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Plumber / Technician Signature</label><div class="sig-line"></div><div class="sig-sub">Name / License # / Date</div></div><div class="sig-field"><label>Customer Approval</label><div class="sig-line"></div><div class="sig-sub">By signing you authorize work and accept charges above</div></div></div>'
   +'</div>'+_footer(id,'For business use only. Retain for your records.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Plumbing Dispatch &amp; Diagnosis</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Plumbing Dispatch &amp; Diagnosis</title>'+_cssFor('#1565c0','#003c8f')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Plumbing Dispatch & Diagnosis Checklist',html:html};
 })();
 
@@ -303,7 +313,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Electrician / Inspector Signature</label><div class="sig-line"></div><div class="sig-sub">Name / License # / Date</div></div><div class="sig-field"><label>Property Owner / Representative</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div></div>'
   +'</div>'+_footer(id,'Findings do not constitute a code compliance certificate. Retain for records.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Electrician Jobsite Inspection</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Electrician Jobsite Inspection</title>'+_cssFor('#f9a825','#c17900')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Electrician Jobsite Inspection Form',html:html};
 })();
 
@@ -353,7 +363,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Crew Lead Signature</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div><div class="sig-field"><label>Manager / Office Sign-Off</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div></div>'
   +'</div>'+_footer(id,'For business use only. Retain for your records.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Lawn Care Weekly Crew Planner</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Lawn Care Weekly Crew Planner</title>'+_cssFor('#2e7d32','#1b5e20')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Lawn Care Weekly Crew Planner',html:html};
 })();
 
@@ -388,7 +398,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Customer Signature</label><div class="sig-line"></div><div class="sig-sub">Printed Name / Date &mdash; I have read and agree to the waiver above</div></div><div class="sig-field"><label>Detailer / Intake Staff</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div></div>'
   +'</div>'+_footer(id,'For business use only. This waiver does not override applicable consumer protection laws.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Auto Detail Intake + Damage Waiver</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Auto Detail Intake + Damage Waiver</title>'+_cssFor('#c62828','#8e0000')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Auto Detail Intake + Damage Waiver',html:html};
 })();
 
@@ -423,7 +433,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Technician Signature</label><div class="sig-line"></div><div class="sig-sub">Name / License # / Date</div></div><div class="sig-field"><label>Client Acknowledgment</label><div class="sig-line"></div><div class="sig-sub">Service received and post-treatment instructions understood</div></div></div>'
   +'</div>'+_footer(id,'Keep copy for pesticide application records as required by state law.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Pest Control Follow-Up Card</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Pest Control Follow-Up Card</title>'+_cssFor('#558b2f','#255d00')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Pest Control Follow-Up Card',html:html};
 })();
 
@@ -466,7 +476,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Property Owner Signature</label><div class="sig-line"></div><div class="sig-sub">Printed Name / Date</div></div><div class="sig-field"><label>Contractor Representative</label><div class="sig-line"></div><div class="sig-sub">Name / Title / Date</div></div></div>'
   +'</div>'+_footer(id,'Change orders must be signed before commencement of additional work. Retain all copies.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Roofing Change Order + Approval Form</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Roofing Change Order + Approval Form</title>'+_cssFor('#bf360c','#870000')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Roofing Change Order + Approval Form',html:html};
 })();
 
@@ -503,7 +513,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Operator Signature</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div><div class="sig-field"><label>Supervisor / Office Review</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div></div>'
   +'</div>'+_footer(id,'For business use only. Retain for your records.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Pressure Washing Route Sheet</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Pressure Washing Route Sheet</title>'+_cssFor('#0277bd','#004c8c')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Pressure Washing Route Sheet',html:html};
 })();
 
@@ -545,7 +555,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Technician Signature</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div><div class="sig-field"><label>Parts Manager / Supervisor</label><div class="sig-line"></div><div class="sig-sub">Reviewed / Date</div></div></div>'
   +'</div>'+_footer(id,'For business use only. Retain for inventory and job cost records.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Appliance Repair Parts Tracker</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Appliance Repair Parts Tracker</title>'+_cssFor('#00838f','#005662')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Appliance Repair Parts Tracker',html:html};
 })();
 
@@ -582,7 +592,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Technician Signature</label><div class="sig-line"></div><div class="sig-sub">I certify all materials above were purchased for this job / Date</div></div><div class="sig-field"><label>Client Sign-Off</label><div class="sig-line"></div><div class="sig-sub">I authorize reimbursement of the above materials / Date</div></div></div>'
   +'</div>'+_footer(id,'Attach receipts where required. Retain for your records.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Handyman Materials Reimbursement Sheet</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Handyman Materials Reimbursement Sheet</title>'+_cssFor('#6d4c41','#40241a')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Handyman Materials Reimbursement Sheet',html:html};
 })();
 
@@ -623,7 +633,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Mechanic Signature</label><div class="sig-line"></div><div class="sig-sub">Name / Certification # / Date</div></div><div class="sig-field"><label>Customer Sign-Off</label><div class="sig-line"></div><div class="sig-sub">Work completed to satisfaction / Date</div></div></div>'
   +'</div>'+_footer(id,'For business use only. Retain for vehicle service records.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Mobile Mechanic Service Summary</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Mobile Mechanic Service Summary</title>'+_cssFor('#e65100','#ac1900')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Mobile Mechanic Service Summary',html:html};
 })();
 
@@ -658,7 +668,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Client Signature</label><div class="sig-line"></div><div class="sig-sub">Printed Name / Date &mdash; I authorize the above service</div></div><div class="sig-field"><label>Locksmith Signature</label><div class="sig-line"></div><div class="sig-sub">Name / License # / Date</div></div></div>'
   +'</div>'+_footer(id,'ID verification is mandatory. Retain signed copy per state licensing requirements.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Locksmith Job Authorization Form</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Locksmith Job Authorization Form</title>'+_cssFor('#f57f17','#bc5100')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Locksmith Job Authorization Form',html:html};
 })();
 
@@ -701,7 +711,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Lead Painter Signature</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div><div class="sig-field"><label>Client Acceptance</label><div class="sig-line"></div><div class="sig-sub">Work completed to satisfaction / Date</div></div></div>'
   +'</div>'+_footer(id,'For business use only. Retain for project records.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Painting Prep &amp; Final Punch List</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Painting Prep &amp; Final Punch List</title>'+_cssFor('#d32f2f','#9a0007')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Painting Prep & Final Punch List',html:html};
 })();
 
@@ -741,7 +751,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Operations Manager Signature</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div><div class="sig-field"><label>Owner / Supervisor Review</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div></div>'
   +'</div>'+_footer(id,'For business use only. Retain for season operations records.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Snow Removal Trigger Checklist</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Snow Removal Trigger Checklist</title>'+_cssFor('#01579b','#002f6c')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Snow Removal Trigger Checklist',html:html};
 })();
 
@@ -784,7 +794,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Client Signature</label><div class="sig-line"></div><div class="sig-sub">I agree to the scope and terms above / Date</div></div><div class="sig-field"><label>Company Representative</label><div class="sig-line"></div><div class="sig-sub">Name / Title / Date</div></div></div>'
   +'</div>'+_footer(id,'For business use only. Retain signed copy for client file.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Window Cleaning Client Packet</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Window Cleaning Client Packet</title>'+_cssFor('#0097a7','#006978')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Window Cleaning Client Packet',html:html};
 })();
 
@@ -828,7 +838,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Pool Technician Signature</label><div class="sig-line"></div><div class="sig-sub">Name / Certification # / Date</div></div><div class="sig-field"><label>Client Review (optional)</label><div class="sig-line"></div><div class="sig-sub">Monthly sign-off / Date</div></div></div>'
   +'</div>'+_footer(id,'Retain chemical records as required by local health department regulations.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Pool Service Chemical Log</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Pool Service Chemical Log</title>'+_cssFor('#00897b','#00574b')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Pool Service Chemical Log',html:html};
 })();
 
@@ -872,7 +882,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Estimator Signature</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div><div class="sig-field"><label>Client Approval</label><div class="sig-line"></div><div class="sig-sub">I approve this estimate and authorize the project to proceed / Date</div></div></div>'
   +'</div>'+_footer(id,'Estimates valid for period shown. Final invoice may vary based on field conditions.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Flooring Estimate Scope Matrix</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Flooring Estimate Scope Matrix</title>'+_cssFor('#f57c00','#bb4d00')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Flooring Estimate Scope Matrix',html:html};
 })();
 
@@ -921,7 +931,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Site Foreman Signature</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div><div class="sig-field"><label>Project Manager Review</label><div class="sig-line"></div><div class="sig-sub">Name / Date</div></div></div>'
   +'</div>'+_footer(id,'File in project documentation folder. Retain for duration of project plus 3 years.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Contractor Daily Site Report</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Contractor Daily Site Report</title>'+_cssFor('#283593','#001064')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Contractor Daily Site Report',html:html};
 })();
 
@@ -963,7 +973,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Technician Signature</label><div class="sig-line"></div><div class="sig-sub">Name / License # / Date</div></div><div class="sig-field"><label>Property Owner Acknowledgment</label><div class="sig-line"></div><div class="sig-sub">Service received and conditions noted / Date</div></div></div>'
   +'</div>'+_footer(id,'Waste hauling manifests must comply with state environmental regulations. Retain all records.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Septic Service Pump Log</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Septic Service Pump Log</title>'+_cssFor('#00695c','#003d33')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Septic Service Pump Log',html:html};
 })();
 
@@ -1008,7 +1018,7 @@ var mainForm = '<div class="page-break">'
   +'<div class="sig-block"><div class="sig-field"><label>Client Signature</label><div class="sig-line"></div><div class="sig-sub">Printed Name / Date</div></div><div class="sig-field"><label>Company Representative</label><div class="sig-line"></div><div class="sig-sub">Name / Title / Date</div></div></div>'
   +'</div>'+_footer(id,'Present to all new clients before service begins. Not a substitute for a full service contract.')+'</div>';
 var history = _historyPage(uid, id, 'For business use only. Retain for your records.');
-var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Service Fee Transparency Addendum</title>'+_CSS+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
+var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Service Fee Transparency Addendum</title>'+_cssFor('#455a64','#1c313a')+'</head><body>'+_toolbar()+'<div class="page">'+cover+mainForm+history+'</div>'+_JS+'</body></html>';
 return {id:id,title:'Service Fee Transparency Addendum',html:html};
 })();
 
