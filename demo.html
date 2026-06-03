@@ -208,14 +208,14 @@ label.field-label{display:block;font-size:10px;color:#525252;text-transform:uppe
     <!-- CLIENTS -->
     <div class="page" id="page-clients">
       <div class="page-title">Clients</div>
-      <div class="page-subtitle">8 contacts &middot; 3 VIP &middot; 2 Wholesale</div>
+      <div class="page-subtitle" id="clients-subtitle">8 contacts</div>
       <div class="filter-bar">
         <input type="text" placeholder="Search clients..." id="client-search" oninput="filterClients()">
         <button class="btn btn-primary" onclick="openModal('add-client-modal')">+ Add Contact</button>
       </div>
       <div class="card" style="padding:0">
         <table class="data-table" id="clients-table">
-          <thead><tr><th>Name</th><th>Tags</th><th>Last Purchase</th><th>LTV</th><th>Phone</th><th>Status</th></tr></thead>
+          <thead><tr><th>Name</th><th>Tags</th><th>Last Purchase</th><th>LTV</th><th>Phone</th><th>Status</th><th></th></tr></thead>
           <tbody id="clients-body"></tbody>
         </table>
       </div>
@@ -235,7 +235,7 @@ label.field-label{display:block;font-size:10px;color:#525252;text-transform:uppe
       </div>
       <div class="card" style="padding:0">
         <table class="data-table">
-          <thead><tr><th>Date</th><th>Customer</th><th>Item</th><th>Amount</th><th>Platform</th><th>Payment</th></tr></thead>
+          <thead><tr><th>Date</th><th>Customer</th><th>Item</th><th>Amount</th><th>Platform</th><th>Payment</th><th></th></tr></thead>
           <tbody id="sales-body"></tbody>
         </table>
       </div>
@@ -299,16 +299,7 @@ label.field-label{display:block;font-size:10px;color:#525252;text-transform:uppe
       <div class="card" style="padding:0">
         <table class="data-table">
           <thead><tr><th>Product</th><th>Category</th><th>Cost</th><th>Price</th><th>Margin</th><th>Stock</th><th>Platforms</th><th></th></tr></thead>
-          <tbody>
-            <tr><td><strong style="color:#f4f4f4">Hand-Thrown Berry Bowl</strong></td><td><span class="badge badge-blue">Pottery</span></td><td>$12</td><td style="color:#24a148">$38</td><td style="color:#24a148">68%</td><td>8</td><td style="font-size:11px;color:#6f6f6f">Etsy, Market</td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="openPanel('Hand-Thrown Berry Bowl','$38','$12','68%','4 people have this in cart on Etsy RIGHT NOW. Your demand is there — test raising to $42 on your next listing refresh. At market, offer a Berry Bowl + Mug bundle at $72 (normally $80) to lift average transaction value. Speckled earthy glaze is trending heavily in cottagecore searches.')">Analyze</button></td></tr>
-            <tr><td><strong style="color:#f4f4f4">Pottery Sage Incense Dish</strong></td><td><span class="badge badge-blue">Pottery</span></td><td>$18</td><td style="color:#24a148">$60</td><td style="color:#24a148">70%</td><td>5</td><td style="font-size:11px;color:#6f6f6f">Etsy, Market</td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="openPanel('Pottery Sage Incense Dish','$60','$18','70%','Your highest per-unit profit item. Wellness buyers on Etsy search smudge bowl, crystal charging plate, and sage dish 40K+ times per month. Add those as tags. Test at $65 — comparable handmade pieces sell $55-$80. This is your breakout product.')">Analyze</button></td></tr>
-            <tr><td><strong style="color:#f4f4f4">Hand-Painted Driftwood Ornaments</strong></td><td><span class="badge badge-gray">Wood Art</span></td><td>$8</td><td style="color:#24a148">$30</td><td style="color:#24a148">73%</td><td>12</td><td style="font-size:11px;color:#6f6f6f">Etsy, Market, FB</td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="openPanel('Driftwood Ornaments','$30','$8','73%','Highest margin in your catalog. Christmas is 206 days away — start stockpiling NOW. At market these are the best impulse buy anchor piece. Bundle: 3 for $78 saves buyer $12, moves 3x the inventory. List on Etsy by September 15 — holiday search traffic starts early.')">Analyze</button></td></tr>
-            <tr><td><strong style="color:#f4f4f4">Hand-Thrown Ceramic Mug</strong></td><td><span class="badge badge-blue">Pottery</span></td><td>$14</td><td style="color:#24a148">$42</td><td style="color:#24a148">67%</td><td>6</td><td style="font-size:11px;color:#6f6f6f">Etsy, Market</td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="openPanel('Ceramic Mug','$42','$14','67%','Father\'s Day is 13 days away — create a Father\'s Day Mug listing on Etsy TODAY. Made in Michigan adds perceived value. Coffee + handmade mug gift set at market = great $55 bundle. Mugs are your most giftable pottery item year-round.')">Analyze</button></td></tr>
-            <tr><td><strong style="color:#f4f4f4">Pottery Planter</strong></td><td><span class="badge badge-blue">Pottery</span></td><td>$20</td><td style="color:#24a148">$55</td><td style="color:#24a148">64%</td><td>3</td><td style="font-size:11px;color:#6f6f6f">Market, FB</td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="openPanel('Pottery Planter','$55','$20','64%','Low stock — only 3 left. Plant parent market on Etsy is enormous and you are NOT listed there. This is a missed opportunity. Add to Etsy this week. Handmade planter searches peak March-June — you\'re in the window right now.')">Analyze</button></td></tr>
-            <tr><td><strong style="color:#f4f4f4">Driftwood Wall Art</strong></td><td><span class="badge badge-gray">Wood Art</span></td><td>$22</td><td style="color:#24a148">$75</td><td style="color:#24a148">71%</td><td>2</td><td style="font-size:11px;color:#6f6f6f">Market, FB</td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="openPanel('Driftwood Wall Art','$75','$22','71%','Premium price point with great margin. Only 2 in stock — make more immediately. Karen S. (interior designer, $420 LTV) buys these for home staging. That buyer profile is worth cultivating. Target interior designers in your area with a wholesale rate.')">Analyze</button></td></tr>
-            <tr><td><strong style="color:#f4f4f4">Ceramic Bowl Set (3pc)</strong></td><td><span class="badge badge-blue">Pottery</span></td><td>$35</td><td style="color:#24a148">$85</td><td style="color:#24a148">59%</td><td>2</td><td style="font-size:11px;color:#6f6f6f">Etsy, Market</td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="openPanel('Ceramic Bowl Set','$85','$35','59%','Lowest margin in your catalog. Check if clay cost has increased — if so raise to $92. Sets perform best as holiday gifts Nov-Dec. Feature in your Christmas campaign. Crystal B. bought this and loves gifting it — she is a repeat buyer candidate for the holidays.')">Analyze</button></td></tr>
-            <tr><td><strong style="color:#f4f4f4">Stoneware Candle Holder</strong></td><td><span class="badge badge-blue">Pottery</span></td><td>$11</td><td style="color:#24a148">$35</td><td style="color:#24a148">69%</td><td>4</td><td style="font-size:11px;color:#6f6f6f">Etsy, Market</td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="openPanel('Stoneware Candle Holder','$35','$11','69%','Consistent seller year-round. Pairs perfectly with the Sage Incense Dish — sell as a Mindful Home Set at $88 (individual total $95, so buyer saves $7). Candle holders spike in fall and winter. Consider a matte black glaze colorway for Halloween and winter market dates.')">Analyze</button></td></tr>
-          </tbody>
+          <tbody id="products-body"></tbody>
         </table>
       </div>
     </div>
@@ -393,16 +384,19 @@ label.field-label{display:block;font-size:10px;color:#525252;text-transform:uppe
   <div id="panel-content"></div>
 </div>
 
+<!-- Toast -->
+<div id="toast" style="position:fixed;bottom:32px;right:32px;background:#0f62fe;color:#fff;padding:14px 22px;font-size:13px;font-weight:600;border-radius:4px;box-shadow:0 8px 32px rgba(0,0,0,.6);z-index:9999;opacity:0;transform:translateY(12px);transition:all .25s;pointer-events:none"></div>
+
 <!-- MODALS -->
 <div class="modal-overlay" id="add-client-modal" onclick="if(event.target.id==='add-client-modal')closeModal('add-client-modal')">
   <div class="modal">
     <div class="modal-header"><span class="modal-title">Add Contact</span><button class="modal-close" onclick="closeModal('add-client-modal')">&#10005;</button></div>
     <div class="modal-body">
-      <div class="input-row"><div><label class="field-label">Full Name</label><input type="text" placeholder="Jennifer M."></div><div><label class="field-label">Phone</label><input type="text" placeholder="(734) 555-0100"></div></div>
-      <div class="input-row"><div><label class="field-label">Email</label><input type="text" placeholder="email@example.com"></div><div><label class="field-label">Tag</label><select><option>Repeat</option><option>VIP</option><option>Wholesale</option><option>New</option></select></div></div>
-      <div class="input-row full"><div><label class="field-label">Notes</label><textarea rows="3" placeholder="What she buys, preferences, how she found you..."></textarea></div></div>
+      <div class="input-row"><div><label class="field-label">Full Name *</label><input id="c-name" type="text" placeholder="Jennifer M."></div><div><label class="field-label">Phone</label><input id="c-phone" type="text" placeholder="(734) 555-0100"></div></div>
+      <div class="input-row"><div><label class="field-label">Email</label><input id="c-email" type="text" placeholder="email@example.com"></div><div><label class="field-label">Tag</label><select id="c-tag"><option>Repeat</option><option>VIP</option><option>Wholesale</option><option>New</option></select></div></div>
+      <div class="input-row full"><div><label class="field-label">Notes</label><textarea id="c-notes" rows="3" placeholder="What she buys, preferences, how she found you..."></textarea></div></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('add-client-modal')">Cancel</button><button class="btn btn-primary" onclick="closeModal('add-client-modal')">Save Contact</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('add-client-modal')">Cancel</button><button class="btn btn-primary" onclick="saveClient()">Save Contact</button></div>
   </div>
 </div>
 
@@ -410,12 +404,12 @@ label.field-label{display:block;font-size:10px;color:#525252;text-transform:uppe
   <div class="modal">
     <div class="modal-header"><span class="modal-title">Record Sale</span><button class="modal-close" onclick="closeModal('add-sale-modal')">&#10005;</button></div>
     <div class="modal-body">
-      <div class="input-row"><div><label class="field-label">Date</label><input type="date"></div><div><label class="field-label">Platform</label><select><option>Etsy</option><option>South Lyon Market</option><option>Facebook Marketplace</option></select></div></div>
-      <div class="input-row"><div><label class="field-label">Customer Name</label><input type="text" placeholder="Jennifer M."></div><div><label class="field-label">Payment</label><select><option>Square / Card</option><option>Cash</option><option>Venmo</option><option>PayPal</option></select></div></div>
-      <div class="input-row full"><div><label class="field-label">Items Sold</label><input type="text" placeholder="Berry Bowl x1, Incense Dish x1"></div></div>
-      <div class="input-row"><div><label class="field-label">Total ($)</label><input type="number" placeholder="98.00"></div><div><label class="field-label">Notes</label><input type="text" placeholder="Gift, repeat customer..."></div></div>
+      <div class="input-row"><div><label class="field-label">Date *</label><input id="s-date" type="date"></div><div><label class="field-label">Platform</label><select id="s-platform"><option value="Etsy">Etsy</option><option value="Market">South Lyon Market</option><option value="Marketplace">Facebook Marketplace</option></select></div></div>
+      <div class="input-row"><div><label class="field-label">Customer Name *</label><input id="s-customer" type="text" placeholder="Jennifer M."></div><div><label class="field-label">Payment</label><select id="s-payment"><option>Square</option><option>Cash</option><option>Venmo</option><option>PayPal</option><option>Card</option></select></div></div>
+      <div class="input-row full"><div><label class="field-label">Items Sold *</label><input id="s-items" type="text" placeholder="Berry Bowl x1, Incense Dish x1"></div></div>
+      <div class="input-row"><div><label class="field-label">Total ($) *</label><input id="s-total" type="number" placeholder="98.00" min="0"></div><div><label class="field-label">Notes</label><input id="s-notes" type="text" placeholder="Gift, repeat customer..."></div></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('add-sale-modal')">Cancel</button><button class="btn btn-primary" onclick="closeModal('add-sale-modal')">Record Sale</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('add-sale-modal')">Cancel</button><button class="btn btn-primary" onclick="saveSale()">Record Sale</button></div>
   </div>
 </div>
 
@@ -423,13 +417,14 @@ label.field-label{display:block;font-size:10px;color:#525252;text-transform:uppe
   <div class="modal">
     <div class="modal-header"><span class="modal-title">Add Product</span><button class="modal-close" onclick="closeModal('add-product-modal')">&#10005;</button></div>
     <div class="modal-body">
-      <div class="input-row full"><div><label class="field-label">Product Name</label><input type="text" placeholder="Hand-Thrown Berry Bowl"></div></div>
-      <div class="input-row"><div><label class="field-label">Category</label><select><option>Pottery</option><option>Wood Art</option><option>Ornament</option><option>Set</option><option>Other</option></select></div><div><label class="field-label">Glaze / Style</label><input type="text" placeholder="Earthy speckle, matte black..."></div></div>
-      <div class="input-row"><div><label class="field-label">Cost to Make ($)</label><input type="number" placeholder="12.00"></div><div><label class="field-label">Sale Price ($)</label><input type="number" placeholder="38.00"></div></div>
-      <div class="input-row"><div><label class="field-label">Time to Make (min)</label><input type="number" placeholder="90"></div><div><label class="field-label">Stock Count</label><input type="number" placeholder="8"></div></div>
-      <div class="input-row full"><div><label class="field-label">Description / Notes</label><textarea rows="2" placeholder="Materials, dimensions, glaze details..."></textarea></div></div>
+      <div class="input-row full"><div><label class="field-label">Product Name *</label><input id="p-name" type="text" placeholder="Hand-Thrown Berry Bowl"></div></div>
+      <div class="input-row"><div><label class="field-label">Category</label><select id="p-category"><option>Pottery</option><option>Wood Art</option><option>Ornament</option><option>Set</option><option>Other</option></select></div><div><label class="field-label">Glaze / Style</label><input id="p-glaze" type="text" placeholder="Earthy speckle, matte black..."></div></div>
+      <div class="input-row"><div><label class="field-label">Cost to Make ($) *</label><input id="p-cost" type="number" placeholder="12.00" min="0"></div><div><label class="field-label">Sale Price ($) *</label><input id="p-price" type="number" placeholder="38.00" min="0"></div></div>
+      <div class="input-row"><div><label class="field-label">Time to Make (min)</label><input id="p-time" type="number" placeholder="90"></div><div><label class="field-label">Stock Count</label><input id="p-stock" type="number" placeholder="8"></div></div>
+      <div class="input-row full"><div><label class="field-label">Platforms</label><input id="p-platforms" type="text" placeholder="Etsy, Market, FB"></div></div>
+      <div class="input-row full"><div><label class="field-label">Description / Notes</label><textarea id="p-notes" rows="2" placeholder="Materials, dimensions, glaze details..."></textarea></div></div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('add-product-modal')">Cancel</button><button class="btn btn-primary" onclick="closeModal('add-product-modal')">Add Product</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('add-product-modal')">Cancel</button><button class="btn btn-primary" onclick="saveProduct()">Add Product</button></div>
   </div>
 </div>
 
@@ -481,15 +476,16 @@ label.field-label{display:block;font-size:10px;color:#525252;text-transform:uppe
 </div>
 
 <script>
+// ── Data ─────────────────────────────────────────────────────────────────────
 var CLIENTS=[
-  {name:"Jennifer M.",email:"jennifer.m@email.com",tags:["VIP","Repeat"],last:"2026-05-10",ltv:"$98",phone:"(734)555-0101",notes:"Loves earthy glazes. Bought Berry Bowl and Incense Dish. Birthday in July.",purchases:[{date:"2026-05-10",item:"Hand-Thrown Berry Bowl",total:38},{date:"2026-03-22",item:"Pottery Sage Incense Dish",total:60}]},
-  {name:"Sarah K.",email:"sarahk@gmail.com",tags:["Wholesale"],last:"2026-05-28",ltv:"$340",phone:"(734)555-0202",notes:"Boutique owner in Brighton. Orders in bulk for resale. Net-30 terms.",purchases:[{date:"2026-05-28",item:"Driftwood Ornaments x5",total:120},{date:"2026-04-01",item:"Berry Bowl x3",total:102},{date:"2026-02-14",item:"Incense Dish x2",total:108}]},
-  {name:"Lisa T.",email:"lisa.t@work.com",tags:["VIP","Repeat"],last:"2026-06-01",ltv:"$215",phone:"(734)555-0303",notes:"Comes to South Lyon Market nearly every Saturday. Always asks what is new.",purchases:[{date:"2026-06-01",item:"Ceramic Mug",total:42},{date:"2026-04-20",item:"Pottery Planter",total:55},{date:"2026-03-08",item:"Berry Bowl",total:38},{date:"2026-02-01",item:"Candle Holder",total:35},{date:"2026-01-10",item:"Incense Dish",total:60}]},
-  {name:"Amanda R.",email:"amanda.r@email.com",tags:["Repeat"],last:"2026-03-18",ltv:"$60",phone:"(734)555-0404",notes:"Buys ornaments as gifts for coworkers. Reach out in October for holiday pre-orders.",purchases:[{date:"2026-03-18",item:"Driftwood Ornaments",total:30},{date:"2025-12-15",item:"Driftwood Ornaments",total:30}]},
-  {name:"Crystal B.",email:"crystalb@gmail.com",tags:["VIP","Repeat"],last:"2026-05-30",ltv:"$185",phone:"(734)555-0505",notes:"Custom order customer. Requested specific glaze twice. Leaves 5-star reviews.",purchases:[{date:"2026-05-30",item:"Custom Berry Bowl (teal glaze)",total:50},{date:"2026-04-10",item:"Ceramic Bowl Set",total:85},{date:"2026-02-20",item:"Incense Dish",total:60}]},
-  {name:"Michelle W.",email:"michelle.w@email.com",tags:["Repeat"],last:"2026-02-14",ltv:"$42",phone:"(734)555-0606",notes:"Valentine's Day Etsy purchase. Follow-up for fall gifting season.",purchases:[{date:"2026-02-14",item:"Ceramic Mug",total:42}]},
-  {name:"Donna P.",email:"donnap@gmail.com",tags:[],last:"2026-04-20",ltv:"$38",phone:"(734)555-0707",notes:"New customer from South Lyon Market. First purchase April.",purchases:[{date:"2026-04-20",item:"Hand-Thrown Berry Bowl",total:38}]},
-  {name:"Karen S.",email:"karen.s@email.com",tags:["VIP","Wholesale"],last:"2026-05-05",ltv:"$420",phone:"(734)555-0808",notes:"Interior designer. Buys driftwood art and bowl sets for home staging. High-value account.",purchases:[{date:"2026-05-05",item:"Driftwood Wall Art x2",total:150},{date:"2026-03-08",item:"Ceramic Bowl Set",total:85},{date:"2026-01-28",item:"Driftwood Wall Art",total:75},{date:"2025-12-10",item:"Driftwood Ornaments x4",total:110}]},
+  {name:"Jennifer M.",email:"jennifer.m@email.com",tags:["VIP","Repeat"],last:"2026-05-10",ltv:98,phone:"(734)555-0101",notes:"Loves earthy glazes. Bought Berry Bowl and Incense Dish. Birthday in July.",purchases:[{date:"2026-05-10",item:"Hand-Thrown Berry Bowl",total:38},{date:"2026-03-22",item:"Pottery Sage Incense Dish",total:60}]},
+  {name:"Sarah K.",email:"sarahk@gmail.com",tags:["Wholesale"],last:"2026-05-28",ltv:340,phone:"(734)555-0202",notes:"Boutique owner in Brighton. Orders in bulk for resale. Net-30 terms.",purchases:[{date:"2026-05-28",item:"Driftwood Ornaments x5",total:120},{date:"2026-04-01",item:"Berry Bowl x3",total:102},{date:"2026-02-14",item:"Incense Dish x2",total:108}]},
+  {name:"Lisa T.",email:"lisa.t@work.com",tags:["VIP","Repeat"],last:"2026-06-01",ltv:215,phone:"(734)555-0303",notes:"Comes to South Lyon Market nearly every Saturday. Always asks what is new.",purchases:[{date:"2026-06-01",item:"Ceramic Mug",total:42},{date:"2026-04-20",item:"Pottery Planter",total:55},{date:"2026-03-08",item:"Berry Bowl",total:38},{date:"2026-02-01",item:"Candle Holder",total:35},{date:"2026-01-10",item:"Incense Dish",total:60}]},
+  {name:"Amanda R.",email:"amanda.r@email.com",tags:["Repeat"],last:"2026-03-18",ltv:60,phone:"(734)555-0404",notes:"Buys ornaments as gifts for coworkers. Reach out in October for holiday pre-orders.",purchases:[{date:"2026-03-18",item:"Driftwood Ornaments",total:30},{date:"2025-12-15",item:"Driftwood Ornaments",total:30}]},
+  {name:"Crystal B.",email:"crystalb@gmail.com",tags:["VIP","Repeat"],last:"2026-05-30",ltv:185,phone:"(734)555-0505",notes:"Custom order customer. Requested specific glaze twice. Leaves 5-star reviews.",purchases:[{date:"2026-05-30",item:"Custom Berry Bowl (teal glaze)",total:50},{date:"2026-04-10",item:"Ceramic Bowl Set",total:85},{date:"2026-02-20",item:"Incense Dish",total:60}]},
+  {name:"Michelle W.",email:"michelle.w@email.com",tags:["Repeat"],last:"2026-02-14",ltv:42,phone:"(734)555-0606",notes:"Valentine's Day Etsy purchase. Follow-up for fall gifting season.",purchases:[{date:"2026-02-14",item:"Ceramic Mug",total:42}]},
+  {name:"Donna P.",email:"donnap@gmail.com",tags:[],last:"2026-04-20",ltv:38,phone:"(734)555-0707",notes:"New customer from South Lyon Market. First purchase April.",purchases:[{date:"2026-04-20",item:"Hand-Thrown Berry Bowl",total:38}]},
+  {name:"Karen S.",email:"karen.s@email.com",tags:["VIP","Wholesale"],last:"2026-05-05",ltv:420,phone:"(734)555-0808",notes:"Interior designer. Buys driftwood art and bowl sets for home staging. High-value account.",purchases:[{date:"2026-05-05",item:"Driftwood Wall Art x2",total:150},{date:"2026-03-08",item:"Ceramic Bowl Set",total:85},{date:"2026-01-28",item:"Driftwood Wall Art",total:75},{date:"2025-12-10",item:"Driftwood Ornaments x4",total:110}]},
 ];
 var SALES=[
   {date:"2026-06-01",customer:"Lisa T.",item:"Ceramic Mug",total:42,platform:"Market",payment:"Cash"},
@@ -502,6 +498,16 @@ var SALES=[
   {date:"2026-05-18",customer:"Crystal B.",item:"Ceramic Bowl Set",total:85,platform:"Etsy",payment:"Card"},
   {date:"2026-05-17",customer:"Donna P.",item:"Berry Bowl",total:38,platform:"Market",payment:"Cash"},
   {date:"2026-05-12",customer:"Lisa T.",item:"Pottery Planter",total:55,platform:"Market",payment:"Square"},
+];
+var PRODUCTS=[
+  {name:"Hand-Thrown Berry Bowl",category:"Pottery",cost:12,price:38,stock:8,platforms:"Etsy, Market",analysis:"4 people have this in cart on Etsy RIGHT NOW. Your demand is there — test raising to $42 on your next listing refresh. At market, offer a Berry Bowl + Mug bundle at $72 (normally $80) to lift average transaction value. Speckled earthy glaze is trending heavily in cottagecore searches."},
+  {name:"Pottery Sage Incense Dish",category:"Pottery",cost:18,price:60,stock:5,platforms:"Etsy, Market",analysis:"Your highest per-unit profit item. Wellness buyers on Etsy search smudge bowl, crystal charging plate, and sage dish 40K+ times per month. Add those as tags. Test at $65 — comparable handmade pieces sell $55–$80. This is your breakout product."},
+  {name:"Hand-Painted Driftwood Ornaments",category:"Wood Art",cost:8,price:30,stock:12,platforms:"Etsy, Market, FB",analysis:"Highest margin in your catalog. Christmas is 206 days away — start stockpiling NOW. At market these are the best impulse buy anchor piece. Bundle: 3 for $78 saves buyer $12, moves 3x the inventory. List on Etsy by September 15 — holiday search traffic starts early."},
+  {name:"Hand-Thrown Ceramic Mug",category:"Pottery",cost:14,price:42,stock:6,platforms:"Etsy, Market",analysis:"Father's Day is 13 days away — create a Father's Day Mug listing on Etsy TODAY. Made in Michigan adds perceived value. Coffee + handmade mug gift set at market = great $55 bundle. Mugs are your most giftable pottery item year-round."},
+  {name:"Pottery Planter",category:"Pottery",cost:20,price:55,stock:3,platforms:"Market, FB",analysis:"Low stock — only 3 left. Plant parent market on Etsy is enormous and you are NOT listed there. This is a missed opportunity. Add to Etsy this week. Handmade planter searches peak March–June — you're in the window right now."},
+  {name:"Driftwood Wall Art",category:"Wood Art",cost:22,price:75,stock:2,platforms:"Market, FB",analysis:"Premium price point with great margin. Only 2 in stock — make more immediately. Karen S. (interior designer, $420 LTV) buys these for home staging. That buyer profile is worth cultivating. Target interior designers in your area with a wholesale rate."},
+  {name:"Ceramic Bowl Set (3pc)",category:"Pottery",cost:35,price:85,stock:2,platforms:"Etsy, Market",analysis:"Lowest margin in your catalog. Check if clay cost has increased — if so raise to $92. Sets perform best as holiday gifts Nov–Dec. Feature in your Christmas campaign. Crystal B. bought this and loves gifting it — she is a repeat buyer candidate for the holidays."},
+  {name:"Stoneware Candle Holder",category:"Pottery",cost:11,price:35,stock:4,platforms:"Etsy, Market",analysis:"Consistent seller year-round. Pairs perfectly with the Sage Incense Dish — sell as a Mindful Home Set at $88 (individual total $95, so buyer saves $7). Candle holders spike in fall and winter. Consider a matte black glaze colorway for Halloween and winter market dates."},
 ];
 var PROMPTS=[
   {l:"Price pottery for market vs Etsy?",a:"ETSY: Add 15-20% over your base price.\nEtsy charges 6.5% transaction + ~3% payment + $0.20 listing.\nExample: Berry Bowl $38 at market → list $42-$44 on Etsy.\n\nSOUTH LYON MARKET: Your in-person price is your anchor.\nNo platform fees — pure margin.\nSaturday buyers are impulse purchasers. Keep prices clean ($35, $40, $45).\n\nKEY RULE: Never price Etsy lower than market. If locals see your Etsy shop, they feel cheated paying more in person."},
@@ -518,7 +524,17 @@ var PROMPTS=[
   {l:"How do I increase Etsy conversion?",a:"BENCHMARK: Average Etsy converts 1-3%. Top shops hit 5-8%.\n\n1. PHOTOS (biggest lever)\n• Photo 1: Clean, bright, beautiful product\n• Photo 2: Lifestyle — bowl on kitchen counter with fruit\n• Photo 3: Size reference — hand holding bowl\n• Photo 4: Glaze detail close-up\n• Photo 5: Packaging experience\nNatural light always beats flash.\n\n2. FREE SHIPPING\nBuild $10 into price. Algorithm rewards free shipping listings.\n\n3. ANSWER HESITATIONS IN DESCRIPTION\n'Is it food safe?' — Yes, all glazes are lead-free.\n'Will it break in shipping?' — Triple-wrapped, insured.\n'Is it really handmade?' — Shaped on my wheel in Wixom, Michigan.\n\n4. USE YOUR 5.0 RATING\nScreenshot your best review. Use it as photo 5 or 6.\n\n5. OFFER GLAZE VARIATIONS\n'Choose your glaze' listings get 60% more clicks."},
 ];
 
-// Page navigation
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg,color){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.background=color||'#0f62fe';
+  t.style.opacity='1';t.style.transform='translateY(0)';
+  clearTimeout(t._tid);
+  t._tid=setTimeout(function(){t.style.opacity='0';t.style.transform='translateY(12px)';},2800);
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
 var pageTitles={dashboard:'Dashboard',clients:'Clients',sales:'Sales Log',revenue:'Revenue',products:'Product Catalog',intelligence:'Business Intelligence',assistant:'AI Assistant'};
 function showPage(id){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
@@ -529,42 +545,97 @@ function showPage(id){
   document.querySelectorAll('.nav-item').forEach(function(n){if(n.textContent.toLowerCase().indexOf(label)>-1)n.classList.add('active');});
 }
 
-// Clients
+// ── Clients ───────────────────────────────────────────────────────────────────
 function tagBadge(t){var m={VIP:'badge-gold',Wholesale:'badge-teal',Repeat:'badge-gray'};return '<span class="badge '+(m[t]||'badge-gray')+'" style="margin-right:3px">'+t+'</span>';}
+function calcLtv(c){return c.purchases?c.purchases.reduce(function(a,p){return a+p.total;},0):c.ltv||0;}
 function renderClients(data){
   var tbody=document.getElementById('clients-body');
   tbody.innerHTML='';
-  data.forEach(function(c){
+  document.getElementById('clients-subtitle').textContent=CLIENTS.length+' contacts';
+  data.forEach(function(c,i){
     var tr=document.createElement('tr');
     var isOld=c.last<'2026-04-01';
-    tr.innerHTML='<td style="color:#f4f4f4;font-weight:500">'+c.name+'</td><td>'+c.tags.map(tagBadge).join('')+'</td><td style="font-variant-numeric:tabular-nums;color:#6f6f6f">'+c.last+'</td><td style="color:#24a148;font-variant-numeric:tabular-nums">'+c.ltv+'</td><td style="color:#6f6f6f">'+c.phone+'</td><td>'+(isOld?'<span class="badge badge-red">Follow-up</span>':'<span class="badge badge-green">Active</span>')+'</td>';
+    var ltv=typeof c.ltv==='number'?c.ltv:calcLtv(c);
+    tr.innerHTML='<td style="color:#f4f4f4;font-weight:500">'+c.name+'</td>'
+      +'<td>'+c.tags.map(tagBadge).join('')+'</td>'
+      +'<td style="font-variant-numeric:tabular-nums;color:#6f6f6f">'+c.last+'</td>'
+      +'<td style="color:#42be65;font-variant-numeric:tabular-nums">$'+ltv+'</td>'
+      +'<td style="color:#6f6f6f">'+c.phone+'</td>'
+      +'<td>'+(isOld?'<span class="badge badge-red">Follow-up</span>':'<span class="badge badge-green">Active</span>')+'</td>'
+      +'<td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="event.stopPropagation();deleteClient('+CLIENTS.indexOf(c)+')">&#10005;</button></td>';
     tr.onclick=function(){toggleClient(c,tr);};
     tbody.appendChild(tr);
   });
 }
 function toggleClient(c,tr){
-  var eid='exp-'+c.name.replace(/\s/g,'');
+  var eid='exp-'+c.name.replace(/[^a-z0-9]/gi,'');
   var ex=document.getElementById(eid);
   if(ex){ex.remove();return;}
   var row=document.createElement('tr');
   row.id=eid;row.className='expand-row';
-  var hist=c.purchases.map(function(p){return '<tr><td style="color:#6f6f6f">'+p.date+'</td><td>'+p.item+'</td><td style="color:#24a148;text-align:right">$'+p.total+'</td></tr>';}).join('');
-  row.innerHTML='<td colspan="6"><div class="expand-inner"><div style="display:grid;grid-template-columns:1fr 1fr;gap:24px"><div><div class="section-label">Notes</div><div style="font-size:13px;color:#a8a8a8;line-height:1.6">'+c.notes+'</div></div><div><div class="section-label">Purchase History</div><table class="data-table">'+hist+'</table></div></div></div></td>';
+  var hist=(c.purchases||[]).map(function(p){return '<tr><td style="color:#6f6f6f">'+p.date+'</td><td>'+p.item+'</td><td style="color:#42be65;text-align:right">$'+p.total+'</td></tr>';}).join('');
+  row.innerHTML='<td colspan="7"><div class="expand-inner"><div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">'
+    +'<div><div class="section-label">Notes</div><div style="font-size:13px;color:#a8a8a8;line-height:1.6">'+c.notes+'</div>'
+    +'<div style="margin-top:12px"><div class="section-label">Email</div><div style="font-size:13px;color:#78a9ff">'+(c.email||'—')+'</div></div></div>'
+    +'<div><div class="section-label">Purchase History</div><table class="data-table">'+hist+'</table></div>'
+    +'</div></div></td>';
   tr.after(row);
+}
+function deleteClient(idx){
+  if(!confirm('Remove '+CLIENTS[idx].name+'?'))return;
+  CLIENTS.splice(idx,1);
+  renderClients(CLIENTS);
+  toast('Contact removed','#da1e28');
 }
 function filterClients(){
   var q=document.getElementById('client-search').value.toLowerCase();
   renderClients(CLIENTS.filter(function(c){return c.name.toLowerCase().indexOf(q)>-1||c.tags.join(' ').toLowerCase().indexOf(q)>-1;}));
 }
+function saveClient(){
+  var name=document.getElementById('c-name').value.trim();
+  if(!name){toast('Name is required','#da1e28');return;}
+  var tag=document.getElementById('c-tag').value;
+  var today=new Date().toISOString().slice(0,10);
+  CLIENTS.unshift({
+    name:name,
+    phone:document.getElementById('c-phone').value.trim()||'—',
+    email:document.getElementById('c-email').value.trim()||'',
+    tags:tag==='New'?[]:tag?[tag]:[],
+    last:today,
+    ltv:0,
+    notes:document.getElementById('c-notes').value.trim()||'New contact.',
+    purchases:[]
+  });
+  renderClients(CLIENTS);
+  closeModal('add-client-modal');
+  ['c-name','c-phone','c-email','c-notes'].forEach(function(id){document.getElementById(id).value='';});
+  toast('Contact saved — '+name);
+}
 renderClients(CLIENTS);
 
-// Sales
+// ── Sales ─────────────────────────────────────────────────────────────────────
 var salesPF='all';
 function platBadge(p){var m={Etsy:'badge-orange',Market:'badge-blue',Marketplace:'badge-gray'};return '<span class="badge '+(m[p]||'badge-gray')+'">'+p+'</span>';}
 function renderSales(data){
-  document.getElementById('sales-body').innerHTML=data.map(function(s){return '<tr><td style="font-variant-numeric:tabular-nums;color:#6f6f6f">'+s.date+'</td><td style="color:#f4f4f4">'+s.customer+'</td><td>'+s.item+'</td><td style="color:#24a148;font-variant-numeric:tabular-nums;font-weight:600">$'+s.total+'</td><td>'+platBadge(s.platform)+'</td><td style="color:#6f6f6f">'+s.payment+'</td></tr>';}).join('');
+  document.getElementById('sales-body').innerHTML=data.map(function(s,i){
+    var realIdx=SALES.indexOf(s);
+    return '<tr>'
+      +'<td style="font-variant-numeric:tabular-nums;color:#6f6f6f">'+s.date+'</td>'
+      +'<td style="color:#f4f4f4">'+s.customer+'</td>'
+      +'<td>'+s.item+'</td>'
+      +'<td style="color:#42be65;font-variant-numeric:tabular-nums;font-weight:600">$'+s.total+'</td>'
+      +'<td>'+platBadge(s.platform)+'</td>'
+      +'<td style="color:#6f6f6f">'+s.payment+'</td>'
+      +'<td><button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="deleteSale('+realIdx+')">&#10005;</button></td>'
+      +'</tr>';
+  }).join('');
   var tot=data.reduce(function(a,s){return a+s.total;},0);
-  document.getElementById('sales-subtitle').textContent=data.length+' transactions · $'+tot+' total';
+  document.getElementById('sales-subtitle').textContent=data.length+' transactions · $'+tot.toLocaleString()+' total';
+}
+function deleteSale(idx){
+  if(!confirm('Delete this sale?'))return;
+  SALES.splice(idx,1);filterSales();
+  toast('Sale removed','#da1e28');
 }
 function setSalesPlatform(p,btn){
   salesPF=p;
@@ -573,25 +644,98 @@ function setSalesPlatform(p,btn){
 }
 function filterSales(){
   var q=document.getElementById('sales-search').value.toLowerCase();
-  var d=SALES;
+  var d=SALES.slice();
   if(salesPF!=='all')d=d.filter(function(s){return s.platform===salesPF;});
   if(q)d=d.filter(function(s){return s.customer.toLowerCase().indexOf(q)>-1||s.item.toLowerCase().indexOf(q)>-1;});
   renderSales(d);
 }
+function saveSale(){
+  var date=document.getElementById('s-date').value;
+  var customer=document.getElementById('s-customer').value.trim();
+  var items=document.getElementById('s-items').value.trim();
+  var total=parseFloat(document.getElementById('s-total').value);
+  if(!date||!customer||!items||isNaN(total)||total<=0){toast('Fill in date, customer, items, and total','#da1e28');return;}
+  var pf=document.getElementById('s-platform').value;
+  var shortPf=pf==='South Lyon Market'?'Market':pf==='Facebook Marketplace'?'Marketplace':pf;
+  SALES.unshift({date:date,customer:customer,item:items,total:total,platform:shortPf,payment:document.getElementById('s-payment').value});
+  filterSales();
+  closeModal('add-sale-modal');
+  ['s-date','s-customer','s-items','s-total','s-notes'].forEach(function(id){document.getElementById(id).value='';});
+  toast('Sale recorded — $'+total.toFixed(2));
+}
+// set today as default date
+(function(){var d=new Date();var s=d.toISOString().slice(0,10);document.getElementById('s-date').value=s;})();
 renderSales(SALES);
 
-// Modals
+// ── Products ──────────────────────────────────────────────────────────────────
+var catBadge={Pottery:'badge-blue','Wood Art':'badge-gray',Ornament:'badge-gray',Set:'badge-teal',Other:'badge-gray'};
+function renderProducts(){
+  var subtitle=document.querySelector('#page-products .page-subtitle');
+  if(subtitle)subtitle.textContent=PRODUCTS.length+' active products · avg '+Math.round(PRODUCTS.reduce(function(a,p){return a+Math.round((p.price-p.cost)/p.price*100);},0)/PRODUCTS.length)+'% margin';
+  document.getElementById('products-body').innerHTML=PRODUCTS.map(function(p,i){
+    var margin=Math.round((p.price-p.cost)/p.price*100);
+    var stockColor=p.stock<=2?'#ff8389':p.stock<=4?'#f1c21b':'#a8a8a8';
+    var escAnalysis=p.analysis.replace(/'/g,"\\'");
+    return '<tr>'
+      +'<td><strong style="color:#f4f4f4">'+p.name+'</strong></td>'
+      +'<td><span class="badge '+(catBadge[p.category]||'badge-gray')+'">'+p.category+'</span></td>'
+      +'<td style="color:#a8a8a8">$'+p.cost+'</td>'
+      +'<td style="color:#42be65">$'+p.price+'</td>'
+      +'<td style="color:#42be65">'+margin+'%</td>'
+      +'<td style="color:'+stockColor+';font-weight:600">'+p.stock+'</td>'
+      +'<td style="font-size:11px;color:#525252">'+p.platforms+'</td>'
+      +'<td style="display:flex;gap:6px;align-items:center">'
+        +'<button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="openPanel(\''+p.name.replace(/'/g,"\\'")+'\',' + '\'$'+p.price+'\',\'$'+p.cost+'\',\''+margin+'%\',\''+escAnalysis+'\')">Analyze</button>'
+        +'<button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;color:#ff8389;border-color:rgba(255,131,137,.3)" onclick="deleteProduct('+i+')">&#10005;</button>'
+      +'</td>'
+      +'</tr>';
+  }).join('');
+}
+function deleteProduct(idx){
+  if(!confirm('Remove '+PRODUCTS[idx].name+'?'))return;
+  PRODUCTS.splice(idx,1);renderProducts();
+  toast('Product removed','#da1e28');
+}
+function saveProduct(){
+  var name=document.getElementById('p-name').value.trim();
+  var cost=parseFloat(document.getElementById('p-cost').value);
+  var price=parseFloat(document.getElementById('p-price').value);
+  if(!name||isNaN(cost)||isNaN(price)||price<=0){toast('Name, cost, and price are required','#da1e28');return;}
+  var stock=parseInt(document.getElementById('p-stock').value)||0;
+  PRODUCTS.push({
+    name:name,
+    category:document.getElementById('p-category').value,
+    cost:cost,price:price,stock:stock,
+    platforms:document.getElementById('p-platforms').value.trim()||'Etsy, Market',
+    analysis:'New product — click Analyze once you have sales data to generate pricing recommendations.'
+  });
+  renderProducts();
+  closeModal('add-product-modal');
+  ['p-name','p-glaze','p-cost','p-price','p-time','p-stock','p-platforms','p-notes'].forEach(function(id){document.getElementById(id).value='';});
+  toast('Product added — '+name);
+}
+renderProducts();
+
+// ── Modals & Panel ────────────────────────────────────────────────────────────
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-
-// Slide panel
 function openPanel(name,price,cost,margin,analysis){
-  document.getElementById('panel-content').innerHTML='<div style="margin-bottom:16px"><div class="section-label">AI Pricing Analysis</div><div style="font-size:18px;font-weight:600;color:#f4f4f4;margin-bottom:16px">'+name+'</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#393939;margin-bottom:20px"><div style="background:#161616;padding:16px;text-align:center"><div style="font-size:22px;font-weight:300;color:#da1e28">'+cost+'</div><div style="font-size:11px;color:#6f6f6f;margin-top:4px;text-transform:uppercase">Cost</div></div><div style="background:#161616;padding:16px;text-align:center"><div style="font-size:22px;font-weight:300;color:#24a148">'+price+'</div><div style="font-size:11px;color:#6f6f6f;margin-top:4px;text-transform:uppercase">Price</div></div><div style="background:#161616;padding:16px;text-align:center"><div style="font-size:22px;font-weight:300;color:#f1c21b">'+margin+'</div><div style="font-size:11px;color:#6f6f6f;margin-top:4px;text-transform:uppercase">Margin</div></div></div><div class="section-label">Recommendation</div><div style="font-size:13px;color:#a8a8a8;line-height:1.8;background:#1a1a1a;border:1px solid #393939;padding:16px">'+analysis+'</div></div>';
+  document.getElementById('panel-content').innerHTML=
+    '<div><div class="section-label">AI Pricing Analysis</div>'
+    +'<div style="font-size:18px;font-weight:600;color:#f4f4f4;margin:8px 0 20px">'+name+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#1a1a1a;margin-bottom:22px;border-radius:4px;overflow:hidden">'
+      +'<div style="background:#0f0f0f;padding:16px;text-align:center"><div style="font-size:22px;font-weight:300;color:#ff8389">'+cost+'</div><div style="font-size:10px;color:#525252;margin-top:6px;text-transform:uppercase;letter-spacing:.8px">Cost</div></div>'
+      +'<div style="background:#0f0f0f;padding:16px;text-align:center"><div style="font-size:22px;font-weight:300;color:#42be65">'+price+'</div><div style="font-size:10px;color:#525252;margin-top:6px;text-transform:uppercase;letter-spacing:.8px">Price</div></div>'
+      +'<div style="background:#0f0f0f;padding:16px;text-align:center"><div style="font-size:22px;font-weight:300;color:#f1c21b">'+margin+'</div><div style="font-size:10px;color:#525252;margin-top:6px;text-transform:uppercase;letter-spacing:.8px">Margin</div></div>'
+    +'</div>'
+    +'<div class="section-label">Recommendation</div>'
+    +'<div style="font-size:13px;color:#a8a8a8;line-height:1.85;background:#111;border:1px solid #1e1e1e;padding:18px;border-radius:4px">'+analysis+'</div>'
+    +'</div>';
   document.getElementById('slide-panel').classList.add('open');
 }
 function closePanel(){document.getElementById('slide-panel').classList.remove('open');}
 
-// Chat
+// ── Chat ──────────────────────────────────────────────────────────────────────
 var messages=[
   {role:'ai',text:"Hello Vikki! I'm your AI business assistant for RavensBaublesnGifts. I know your products, platforms, and goals. Ask me anything about pricing, Etsy strategy, booth prep, packaging, or campaign planning."},
   {role:'user',text:"My Berry Bowl has 4 people with it in cart on Etsy. What does that tell me?"},
