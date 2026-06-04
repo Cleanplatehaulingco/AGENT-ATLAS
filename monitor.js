@@ -428,7 +428,7 @@ var ShopMonitor = (function () {
     <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
       <div style="font-size:.78rem;font-weight:800;color:var(--text);margin-bottom:10px;">Step 2 — Pick a listing → opens Etsy automatically</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-        <select id="launcher-listing-select" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:7px 12px;font-size:.82rem;min-width:220px;">
+        <select id="launcher-listing-select" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:7px 12px;font-size:.82rem;flex:1;min-width:220px;max-width:100%;">
           ${(function() {
             if (typeof ETSY_COPY === 'undefined') return '<option>Loading…</option>';
             return Object.keys(ETSY_COPY).map(function(id) {
@@ -437,7 +437,7 @@ var ShopMonitor = (function () {
             }).join('');
           })()}
         </select>
-        <button onclick="ShopMonitor._prepareLaunch()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:8px 18px;cursor:pointer;font-size:.82rem;font-weight:800;">Prepare Launch →</button>
+        <button onclick="ShopMonitor._prepareLaunch()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:8px 18px;cursor:pointer;font-size:.82rem;font-weight:800;white-space:nowrap;">Prepare Launch →</button>
       </div>
       <div id="launcher-status" style="margin-top:10px;font-size:.76rem;color:var(--muted);"></div>
     </div>
