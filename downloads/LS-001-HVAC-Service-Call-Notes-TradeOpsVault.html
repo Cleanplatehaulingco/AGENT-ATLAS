@@ -47,6 +47,16 @@ function clearForm(){
 
 // ── AI Analysis ──────────────────────────────────────────────────────────────
 var AI_API = 'https://agent-atlas.onrender.com';
+function startCheckout(){
+  fetch(AI_API+'/subscribe/create-session',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({deviceId:getDeviceId()})
+  }).then(function(r){return r.json();}).then(function(res){
+    if(res.ok&&res.url){window.open(res.url,'_blank');}
+    else{window.open('https://tradeopsvault.com','_blank');}
+  }).catch(function(){window.open('https://tradeopsvault.com','_blank');});
+}
 function getDeviceId(){
   var k='tov_device_id';
   var id=localStorage.getItem(k);
@@ -107,7 +117,7 @@ function analyzeForm(){
       upsellBanner='<div style="background:linear-gradient(135deg,rgba(232,93,4,0.15),rgba(232,93,4,0.08));border:1px solid rgba(232,93,4,0.3);border-radius:10px;padding:14px 16px;margin-top:14px">'
         +'<div style="font-size:12px;font-weight:800;color:#e85d04;margin-bottom:6px">✦ You\'re getting real value from this</div>'
         +'<div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:1.5;margin-bottom:10px">Upgrade to <strong style="color:#fff">TradeOpsVault Pro</strong> for unlimited AI analyses, job history tracking, and client CRM — <strong style="color:#e85d04">$14.99/mo</strong></div>'
-        +'<a href="https://tradeopsvault.com" target="_blank" style="display:block;background:#e85d04;color:#fff;text-align:center;padding:9px;border-radius:7px;text-decoration:none;font-weight:800;font-size:12px;letter-spacing:0.5px">Get Unlimited Access →</a>'
+        +'<button onclick="startCheckout()" style="display:block;width:100%;background:#e85d04;color:#fff;text-align:center;padding:9px;border-radius:7px;border:none;cursor:pointer;font-weight:800;font-size:12px;letter-spacing:0.5px;font-family:inherit">Get Unlimited Access — $14.99/mo →</button>'
         +'</div>';
     }
     var footerText=remaining<=1

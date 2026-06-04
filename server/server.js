@@ -3,12 +3,15 @@
 // ─── Environment ──────────────────────────────────────────────────────────────
 require('dotenv').config();
 
-const PORT            = process.env.PORT            || 3000;
-const ETSY_CLIENT_ID  = process.env.ETSY_CLIENT_ID  || '';
-const ETSY_SHOP_ID    = process.env.ETSY_SHOP_ID    || '';
-const APP_URL         = process.env.APP_URL         || `http://localhost:${PORT}`;
-const FRONTEND_URL    = process.env.FRONTEND_URL    || 'https://cleanplatehaulingco.github.io';
+const PORT              = process.env.PORT              || 3000;
+const ETSY_CLIENT_ID    = process.env.ETSY_CLIENT_ID    || '';
+const ETSY_SHOP_ID      = process.env.ETSY_SHOP_ID      || '';
+const APP_URL           = process.env.APP_URL           || `http://localhost:${PORT}`;
+const FRONTEND_URL      = process.env.FRONTEND_URL      || 'https://cleanplatehaulingco.github.io';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
+const STRIPE_PRICE_ID   = process.env.STRIPE_PRICE_ID   || ''; // $14.99/mo recurring price ID
 
 const ETSY_API_BASE   = 'https://openapi.etsy.com/v3';
 const ETSY_AUTH_BASE  = 'https://www.etsy.com/oauth/connect';
@@ -22,6 +25,7 @@ const cors        = require('cors');
 const rateLimit   = require('express-rate-limit');
 const crypto      = require('crypto');
 const Anthropic   = require('@anthropic-ai/sdk');
+const Stripe      = require('stripe');
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 const app = express();
@@ -563,6 +567,17 @@ app.get('/relay/load/:key', (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// PRO SUBSCRIBERS — deviceId → { stripeCustomerId, subscriptionId, status, email }
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const _proStore = new Map(); // key: deviceId
+
+function isProSubscriber(deviceId) {
+  const sub = _proStore.get(deviceId);
+  return sub && sub.status === 'active';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // AI ANALYSIS — no auth required, open CORS (used by locally-opened templates)
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -576,14 +591,15 @@ app.post('/ai/analyze', _aiCors, async (req, res) => {
     return res.status(400).json({ ok: false, error: 'formType, formData, and deviceId are required' });
   }
 
-  // Usage check
+  // Pro subscribers get unlimited calls — skip usage check
+  const isPro = isProSubscriber(deviceId);
   const now   = new Date();
   const year  = now.getFullYear();
-  const month = now.getMonth() + 1;  // 1-based
-  const usageKey = `${deviceId}-${year}-${month}`;
-  const callsUsed = _usageStore.get(usageKey) || 0;
+  const month = now.getMonth() + 1;
+  const usageKey   = `${deviceId}-${year}-${month}`;
+  const callsUsed  = _usageStore.get(usageKey) || 0;
 
-  if (callsUsed >= AI_FREE_CALLS_PER_MONTH) {
+  if (!isPro && callsUsed >= AI_FREE_CALLS_PER_MONTH) {
     return res.status(200).json({
       ok:           false,
       limitReached: true,
@@ -615,10 +631,11 @@ app.post('/ai/analyze', _aiCors, async (req, res) => {
     _usageStore.set(usageKey, callsUsed + 1);
 
     const analysis      = message.content.find(b => b.type === 'text')?.text || '';
-    const newCallsUsed  = callsUsed + 1;
-    const callsRemaining = Math.max(0, AI_FREE_CALLS_PER_MONTH - newCallsUsed);
+    const newCallsUsed  = isPro ? callsUsed : callsUsed + 1;
+    if (!isPro) _usageStore.set(usageKey, newCallsUsed);
+    const callsRemaining = isPro ? Infinity : Math.max(0, AI_FREE_CALLS_PER_MONTH - newCallsUsed);
 
-    res.json({ ok: true, analysis, callsUsed: newCallsUsed, callsRemaining });
+    res.json({ ok: true, analysis, callsUsed: newCallsUsed, callsRemaining: isPro ? 9999 : callsRemaining, isPro });
 
   } catch (err) {
     logError('POST /ai/analyze: Claude API error', { message: err.message });
@@ -641,6 +658,113 @@ app.get('/ai/usage/:deviceId', _aiCors, (req, res) => {
   const resetDate = new Date(year, month, 1).toISOString().slice(0, 10);
 
   res.json({ callsUsed, callsRemaining, resetDate });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STRIPE SUBSCRIPTION
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ─── Create Stripe checkout session ──────────────────────────────────────────
+app.post('/subscribe/create-session', _aiCors, async (req, res) => {
+  if (!STRIPE_SECRET_KEY || !STRIPE_PRICE_ID) {
+    return res.status(503).json({ ok: false, error: 'Subscription not yet configured' });
+  }
+  const { deviceId } = req.body || {};
+  if (!deviceId) return res.status(400).json({ ok: false, error: 'deviceId required' });
+
+  try {
+    const stripe = Stripe(STRIPE_SECRET_KEY);
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: [{ price: STRIPE_PRICE_ID, quantity: 1 }],
+      client_reference_id: deviceId,
+      success_url: `${APP_URL}/subscribe/success?session_id={CHECKOUT_SESSION_ID}&deviceId=${deviceId}`,
+      cancel_url:  `https://tradeopsvault.com?cancelled=1`,
+      metadata: { deviceId },
+    });
+    res.json({ ok: true, url: session.url });
+  } catch (err) {
+    logError('POST /subscribe/create-session failed', { message: err.message });
+    res.status(500).json({ ok: false, error: 'Could not create checkout session' });
+  }
+});
+
+// ─── Stripe webhook — raw body required ──────────────────────────────────────
+app.post('/webhook/stripe', express.raw({ type: 'application/json' }), (req, res) => {
+  if (!STRIPE_SECRET_KEY) return res.sendStatus(200);
+
+  const stripe = Stripe(STRIPE_SECRET_KEY);
+  const sig    = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = STRIPE_WEBHOOK_SECRET
+      ? stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET)
+      : JSON.parse(req.body);
+  } catch (err) {
+    logError('Stripe webhook signature invalid', { message: err.message });
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+
+  const obj = event.data.object;
+
+  if (event.type === 'checkout.session.completed') {
+    const deviceId = obj.client_reference_id || obj.metadata?.deviceId;
+    if (deviceId) {
+      _proStore.set(deviceId, {
+        status:         'active',
+        stripeCustomerId: obj.customer,
+        subscriptionId: obj.subscription,
+        email:          obj.customer_details?.email || '',
+        activatedAt:    new Date().toISOString(),
+      });
+      logInfo('Pro subscriber activated', { deviceId });
+    }
+  }
+
+  if (event.type === 'customer.subscription.deleted' || event.type === 'customer.subscription.paused') {
+    // Find deviceId by subscriptionId
+    for (const [deviceId, sub] of _proStore) {
+      if (sub.subscriptionId === obj.id) {
+        _proStore.set(deviceId, { ...sub, status: 'cancelled' });
+        logInfo('Pro subscriber cancelled', { deviceId });
+        break;
+      }
+    }
+  }
+
+  res.sendStatus(200);
+});
+
+// ─── Success page — activated confirmation ─────────────────────────────────
+app.get('/subscribe/success', (req, res) => {
+  const { deviceId } = req.query;
+  if (deviceId && _proStore.has(deviceId)) {
+    res.send(`<!DOCTYPE html><html><head><title>TradeOpsVault Pro Activated</title>
+<style>body{font-family:Segoe UI,Arial,sans-serif;background:#0d1526;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;}
+.card{background:#1a2744;border:1.5px solid #e85d04;border-radius:16px;padding:48px;text-align:center;max-width:480px;}
+h1{color:#e85d04;font-size:2rem;margin-bottom:12px;}p{color:rgba(255,255,255,0.7);line-height:1.6;}
+.badge{background:#e85d04;color:#fff;padding:8px 20px;border-radius:20px;font-weight:800;display:inline-block;margin-top:20px;}
+</style></head><body><div class="card">
+<div style="font-size:48px;margin-bottom:16px">✦</div>
+<h1>You're Pro!</h1>
+<p>TradeOpsVault Pro is now active on this device.<br>Your AI analyses are now <strong style="color:#fff">unlimited</strong>.</p>
+<p style="margin-top:16px">Go back to your template and click <strong style="color:#e85d04">Analyze with AI</strong> — no more limits.</p>
+<div class="badge">Pro Active · $14.99/mo</div>
+</div></body></html>`);
+  } else {
+    res.send(`<!DOCTYPE html><html><head><title>Processing...</title>
+<meta http-equiv="refresh" content="3;url=/subscribe/success?deviceId=${deviceId}">
+<style>body{font-family:Segoe UI,Arial,sans-serif;background:#0d1526;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;}</style>
+</head><body><p>Activating your Pro access... one moment.</p></body></html>`);
+  }
+});
+
+// ─── Check pro status ─────────────────────────────────────────────────────────
+app.get('/subscribe/status/:deviceId', _aiCors, (req, res) => {
+  const sub = _proStore.get(req.params.deviceId);
+  res.json({ isPro: !!(sub && sub.status === 'active'), status: sub?.status || 'free' });
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
