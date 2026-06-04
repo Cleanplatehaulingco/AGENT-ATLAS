@@ -130,6 +130,13 @@ const ETSY_COPY = {
     faq:   'Q: Can I customize the fee categories?\nA: Yes — all fee line items are editable in Canva.\n\nQ: Does this work as a standalone document or add-on?\nA: Either — it can be a standalone disclosure or attached to an existing service agreement.',
     imagePrompt: 'Professional service business aesthetic: fee addendum on clean desk, neutral professional tones, modern flatlay, no clutter, slight warm lighting.'
   },
+  'LS-BUNDLE': {
+    title: 'Complete Trades Business Forms Bundle – All 20 Editable Templates | Instant Download',
+    tags:  'trades bundle,contractor forms,hvac template,plumbing form,electrician template,lawn care,auto detail,roofing form,contractor bundle,small business forms,trade business,editable templates,instant download',
+    desc:  `Every form your trade business needs — in one instant download.\n\n20 professional, browser-fillable HTML templates covering HVAC, plumbing, electrical, lawn care, auto detail, roofing, pressure washing, appliance repair, mobile mechanic, locksmith, painting, snow removal, window cleaning, pool service, flooring, contracting, septic service, and more.\n\n✅ 20 templates — one low price\n✅ Works in any browser — no Canva, no Word, no apps needed\n✅ Click any field and type, then print or save as PDF\n✅ Upload your company logo with one click\n✅ Unlimited reprints for your business\n✅ Instant digital download\n\nBuyers who need multiple forms save 50%+ vs buying individually.\n\n→ Download once. Use forever. Cover every job your business takes.`,
+    faq:   'Q: Do I need any special software?\nA: No. Open the HTML files in any browser (Chrome, Safari, Edge) — no Canva, no Word, no subscriptions required.\n\nQ: Can I use these for my whole crew?\nA: Yes. One purchase covers unlimited reprints for your business.',
+    imagePrompt: 'Premium bundle flatlay: 20 trade forms fanned out on dark desk, TradeOpsVault branding, professional lighting.',
+  },
 };
 
 function getEtsyCopy(listingId, listing) {
@@ -233,6 +240,7 @@ const SEED = {
     { id:'LS-018', name:'Contractor Daily Site Report',            price:3.99,  buyer:'General Contractors',        bundle:'GC Field Documentation Pack',perf:'N/A', status:'draft',           category:'Contracting',     views:0, cvr:0, revenue:0 },
     { id:'LS-019', name:'Septic Service Pump Log',                 price:3.99,  buyer:'Septic Service Techs',       bundle:'Septic Ops Kit',             perf:'N/A', status:'draft',           category:'Septic',          views:0, cvr:0, revenue:0 },
     { id:'LS-020', name:'Service Business Fee Transparency Addendum', price:3.99, buyer:'Any Service Trade Owner',  bundle:'Multi-Trade Admin Vault',    perf:'N/A', status:'draft',           category:'Multi-Trade',     views:0, cvr:0, revenue:0 },
+    { id:'LS-BUNDLE', name:'Complete Trades Business Forms Bundle – All 20 Templates', price:9.99, buyer:'Any Trade Contractor', bundle:'N/A', perf:'N/A', status:'draft', category:'Bundle', views:0, cvr:0, revenue:0 },
   ],
   approvals: [
     { id:'AP-001', type:'Publish Listing', item:'Roofing Change Order + Approval Form', listingId:'LS-007', why:'Strong bundle lift projected at +22%. Confidence based on comparable roofing templates ranking in top 50 Etsy results.', conf:0.84, agent:'Approval Agent', important:true, status:'pending', archived:false, createdAt:'09:10', history:[] },
