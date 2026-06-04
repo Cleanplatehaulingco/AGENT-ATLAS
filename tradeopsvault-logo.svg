@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1526"/>
+      <stop offset="100%" style="stop-color:#111d35"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f7cff;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#4f7cff;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark background -->
+  <rect width="500" height="500" fill="url(#bgGrad)" rx="60"/>
+
+  <!-- Subtle glow behind mark -->
+  <ellipse cx="250" cy="250" rx="180" ry="180" fill="url(#glowGrad)"/>
+
+  <!-- Border ring -->
+  <rect width="500" height="500" fill="none" stroke="rgba(79,124,255,0.25)" stroke-width="2" rx="60"/>
+
+  <!-- AA Letterforms — left A -->
+  <path d="M130 370 L195 130 L260 370" stroke="white" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- AA Letterforms — right A -->
+  <path d="M240 370 L305 130 L370 370" stroke="white" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Shared diagonal crossbar — the signature element -->
+  <line x1="115" y1="270" x2="385" y2="230" stroke="#7ba4ff" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Bottom wordmark -->
+  <text x="250" y="440" font-family="Arial Black, Arial, sans-serif" font-size="26" font-weight="900" fill="rgba(255,255,255,0.55)" text-anchor="middle" letter-spacing="6">TRADEOPSVAULT</text>
+</svg>
