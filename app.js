@@ -1788,7 +1788,18 @@ function renderDesignView() {
     view.innerHTML = '<p class="text-muted">Design Team loading…</p>';
     return;
   }
-  view.innerHTML = DesignTeam.designViewHTML();
+  const bannerBar = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:3px;">Shop Banner</div>
+        <div style="font-size:.78rem;color:var(--muted);">Download your 3360×840 Etsy shop banner — upload it in Etsy → Shop Manager → Edit Shop.</div>
+      </div>
+      <button onclick="DesignTeam.generateShopBanner().then(function(){toast('Banner downloaded!','success')})"
+        style="background:var(--accent);color:#000;border:none;border-radius:9px;padding:10px 22px;font-size:.84rem;font-weight:700;cursor:pointer;white-space:nowrap;">
+        ⬇ Download Shop Banner
+      </button>
+    </div>`;
+  view.innerHTML = bannerBar + DesignTeam.designViewHTML();
 }
 
 /* ─── Ads Strategy Engine ──────────────────────────────────────────── */

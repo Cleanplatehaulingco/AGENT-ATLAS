@@ -1139,6 +1139,112 @@ var DesignTeam = (function() {
     } catch(e) {}
   })();
 
+  // ── Shop Banner Generator (3360 × 840 — Etsy recommended) ──────────────
+  function generateShopBanner() {
+    return new Promise(function(resolve) {
+      var W = 3360, H = 840;
+      var canvas = document.createElement('canvas');
+      canvas.width  = W;
+      canvas.height = H;
+      var ctx = canvas.getContext('2d');
+
+      // Background gradient
+      var bg = ctx.createLinearGradient(0, 0, W, H);
+      bg.addColorStop(0,   '#0a0f1e');
+      bg.addColorStop(0.5, '#0d1526');
+      bg.addColorStop(1,   '#0a0f1e');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+
+      // Subtle grid lines
+      ctx.strokeStyle = 'rgba(79,124,255,0.06)';
+      ctx.lineWidth = 1;
+      var gridSize = 80;
+      for (var x = 0; x < W; x += gridSize) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      }
+      for (var y = 0; y < H; y += gridSize) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      }
+
+      // Centre glow
+      var glow = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, 700);
+      glow.addColorStop(0,   'rgba(79,124,255,0.14)');
+      glow.addColorStop(1,   'rgba(79,124,255,0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, W, H);
+
+      // Left accent bar
+      var barGrad = ctx.createLinearGradient(0, 0, 0, H);
+      barGrad.addColorStop(0,   'rgba(79,124,255,0)');
+      barGrad.addColorStop(0.5, '#4f7cff');
+      barGrad.addColorStop(1,   'rgba(79,124,255,0)');
+      ctx.fillStyle = barGrad;
+      ctx.fillRect(160, 0, 3, H);
+
+      // Shop name
+      ctx.textBaseline = 'middle';
+      ctx.textAlign    = 'left';
+      ctx.font         = '900 148px Inter, Arial Black, sans-serif';
+      ctx.letterSpacing = '-4px';
+      var nameGrad = ctx.createLinearGradient(220, 0, 900, 0);
+      nameGrad.addColorStop(0, '#eef2ff');
+      nameGrad.addColorStop(1, '#b4c6ef');
+      ctx.fillStyle = nameGrad;
+      ctx.fillText('TradeOpsVault', 220, H/2 - 52);
+
+      // Tagline
+      ctx.font      = '400 58px Inter, Arial, sans-serif';
+      ctx.fillStyle = 'rgba(180,198,239,0.55)';
+      ctx.fillText('Professional Printable Forms for Trade Contractors & Service Businesses', 222, H/2 + 52);
+
+      // Right side — 3 stat pills
+      var pills = [
+        { label: '20 Templates', icon: '▦' },
+        { label: 'Instant Download', icon: '↓' },
+        { label: 'Print-Ready PDF', icon: '◈' },
+      ];
+      var pillX = W - 820, pillY = H/2 - 90, pillGap = 100;
+      pills.forEach(function(p, i) {
+        var py = pillY + i * pillGap;
+        // Pill bg
+        ctx.fillStyle = 'rgba(79,124,255,0.1)';
+        ctx.beginPath();
+        ctx.roundRect(pillX, py, 580, 72, 36);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(79,124,255,0.25)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(pillX, py, 580, 72, 36);
+        ctx.stroke();
+        // Accent dot
+        ctx.fillStyle = '#4f7cff';
+        ctx.beginPath();
+        ctx.arc(pillX + 44, py + 36, 8, 0, Math.PI * 2);
+        ctx.fill();
+        // Text
+        ctx.font      = '600 38px Inter, Arial, sans-serif';
+        ctx.fillStyle = '#b4c6ef';
+        ctx.textAlign = 'left';
+        ctx.fillText(p.label, pillX + 72, py + 36);
+      });
+
+      // Bottom brand line
+      ctx.fillStyle = 'rgba(79,124,255,0.5)';
+      ctx.fillRect(0, H - 4, W, 4);
+
+      var url = canvas.toDataURL('image/png');
+      // Auto-download
+      var a = document.createElement('a');
+      a.href     = url;
+      a.download = 'TradeOpsVault-shop-banner.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      resolve(url);
+    });
+  }
+
   return {
     config:             config,
     cache:              cache,
@@ -1166,6 +1272,7 @@ var DesignTeam = (function() {
     _toggleBadge:       _toggleBadge,
     _generateMockups:   _generateMockups,
     _pushToEtsy:        _pushToEtsy,
+    generateShopBanner: generateShopBanner,
     // Backwards compat
     generate:           function(lid) { return generateShot(lid, 'lifestyle'); },
     getHeroImage:       function(lid) { return getImage(lid, 'hero'); },
