@@ -24,19 +24,23 @@ async function generate() {
 
   const shots = [
     { name: '1-Cover-Page',   y: 0,    h: 900,  label: 'Page 1 of 3 — Cover & Setup' },
-    { name: '2-Service-Form', y: 980,  h: 900,  label: 'Page 2 of 3 — Service Call Form' },
-    { name: '3-Diagnosis',    y: 1600, h: 900,  label: 'Diagnosis & Refrigerant Record' },
-    { name: '4-Invoice',      y: 2400, h: 900,  label: 'Parts & Labor Invoice' },
-    { name: '5-Job-History',  y: 3800, h: 900,  label: 'Page 3 of 3 — Job History Log' },
+    { name: '2-Service-Form', y: 1100, h: 900,  label: 'Page 2 of 3 — Customer & Equipment' },
+    { name: '3-Diagnosis',    y: 2000, h: 900,  label: 'Diagnosis Checklist & Refrigerant Record' },
+    { name: '4-Invoice',      y: 2900, h: 900,  label: 'Parts & Labor Invoice' },
+    { name: '5-Job-History',  y: 3900, h: 900,  label: 'Page 3 of 3 — Job History Log' },
   ];
 
   for (const s of shots) {
     await page.evaluate(y => window.scrollTo(0, y), s.y);
-    await new Promise(r => setTimeout(r, 350));
+    await new Promise(r => setTimeout(r, 500));
+    // Verify scroll actually happened
+    const actualY = await page.evaluate(() => window.scrollY);
+    console.log(`  scrolled to ${actualY}`);
 
-    // Capture the viewport as a raw shot
+    // Capture the visible viewport after scroll
     const raw = await page.screenshot({
       type: 'png',
+      fullPage: false,
       clip: { x: 0, y: 0, width: 1200, height: s.h },
     });
 
