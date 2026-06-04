@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HVAC Service Call Notes — LS-001</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 11pt;
+    color: #111;
+    background: #fff;
+    padding: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .print-btn {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 8px 22px;
+    background: #1a56db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 11pt;
+    cursor: pointer;
+  }
+  .print-btn:hover { background: #1345b7; }
+  @media print { .print-btn { display: none !important; } }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2.5px solid #111;
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+  }
+  .company-block .company-name {
+    font-size: 20pt;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #111;
+    border: 2px dashed #bbb;
+    padding: 4px 12px;
+    display: inline-block;
+    min-width: 220px;
+    min-height: 34px;
+  }
+  .company-block .company-sub {
+    font-size: 8.5pt;
+    color: #555;
+    margin-top: 3px;
+  }
+  .form-title {
+    text-align: right;
+  }
+  .form-title h1 {
+    font-size: 15pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .form-title .form-id {
+    font-size: 8.5pt;
+    color: #666;
+    margin-top: 2px;
+  }
+
+  .row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .field label {
+    font-size: 8pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #444;
+  }
+  .field .line {
+    border-bottom: 1.5px solid #333;
+    min-height: 22px;
+    width: 100%;
+  }
+  .field .line-tall {
+    border: 1.5px solid #333;
+    min-height: 54px;
+    width: 100%;
+    padding: 3px;
+  }
+
+  .section-title {
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    background: #f0f0f0;
+    border-left: 3px solid #333;
+    padding: 4px 8px;
+    margin: 16px 0 10px 0;
+  }
+
+  .readings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  table.parts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+    font-size: 10pt;
+  }
+  table.parts-table th {
+    background: #f0f0f0;
+    border: 1px solid #bbb;
+    padding: 5px 8px;
+    text-align: left;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  table.parts-table td {
+    border: 1px solid #bbb;
+    padding: 4px 8px;
+    height: 24px;
+  }
+
+  .sig-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 20px;
+  }
+  .sig-block {
+    flex: 1;
+    border-top: 1.5px solid #333;
+    padding-top: 5px;
+  }
+  .sig-block .sig-label {
+    font-size: 8pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #444;
+  }
+  .sig-block .sig-name-line {
+    border-bottom: 1px solid #aaa;
+    margin-top: 28px;
+    min-height: 18px;
+  }
+  .sig-block .sig-sub {
+    font-size: 7.5pt;
+    color: #666;
+    margin-top: 2px;
+  }
+
+  .followup-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .followup-row label { font-size: 9pt; font-weight: 600; }
+  .check-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9.5pt;
+  }
+  .check-box {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid #333;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  footer {
+    margin-top: 28px;
+    padding-top: 8px;
+    border-top: 1px solid #ccc;
+    text-align: center;
+    font-size: 7.5pt;
+    color: #999;
+  }
+  @media print {
+    body { padding: 16px; }
+    @page { margin: 0.6in; size: letter; }
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
+
+<header>
+  <div class="company-block">
+    <div class="company-name">&nbsp;</div>
+    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; License #: _________________</div>
+  </div>
+  <div class="form-title">
+    <h1>HVAC Service Call Notes</h1>
+    <div class="form-id">Form LS-001 &nbsp;|&nbsp; Work Order #: _______________</div>
+  </div>
+</header>
+
+<div class="row">
+  <div class="field">
+    <label>Date</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Time of Arrival</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Technician Name</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Tech ID / Badge</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Customer Name</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Phone</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field" style="flex:3">
+    <label>Service Address</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Unit / Suite</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Equipment Information</div>
+
+<div class="row">
+  <div class="field">
+    <label>Equipment Type</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Make / Manufacturer</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Model Number</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Serial Number</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Age of Unit (approx.)</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Last Service Date</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Filter Size</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Warranty Status</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Issue Reported by Customer</div>
+
+<div class="row">
+  <div class="field">
+    <label>Customer Complaint / Issue Description</label>
+    <div class="line-tall"></div>
+  </div>
+</div>
+
+<div class="section-title">System Readings &amp; Diagnostics</div>
+
+<div class="readings-grid">
+  <div class="field">
+    <label>Supply Air Temp (°F)</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Return Air Temp (°F)</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Delta T (Supply–Return)</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Suction Pressure (PSI)</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Discharge Pressure (PSI)</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Refrigerant Type</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Refrigerant Added (lbs)</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Outdoor Temp (°F)</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Static Pressure (in. w.c.)</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Parts Used</div>
+
+<table class="parts-table">
+  <thead>
+    <tr>
+      <th style="width:15%">Part Number</th>
+      <th style="width:40%">Description</th>
+      <th style="width:15%">Qty</th>
+      <th style="width:15%">Unit Cost</th>
+      <th style="width:15%">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Work Performed</div>
+
+<div class="row">
+  <div class="field">
+    <label>Description of Work Performed</label>
+    <div class="line-tall" style="min-height:70px"></div>
+  </div>
+</div>
+
+<div class="section-title">Follow-Up</div>
+
+<div class="followup-row">
+  <label>Follow-Up Needed?</label>
+  <div class="check-option"><div class="check-box"></div> Yes</div>
+  <div class="check-option"><div class="check-box"></div> No</div>
+  &nbsp;&nbsp;
+  <label>If yes, reason:</label>
+  <div style="flex:1; border-bottom:1.5px solid #333; min-height:22px;"></div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Scheduled Follow-Up Date</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Parts on Order</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Total Labor Hours</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Total Invoice Amount</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="sig-row">
+  <div class="sig-block">
+    <div class="sig-label">Customer Signature</div>
+    <div class="sig-name-line"></div>
+    <div class="sig-sub">By signing, customer acknowledges work has been completed as described above.</div>
+  </div>
+  <div class="sig-block" style="max-width:160px">
+    <div class="sig-label">Date</div>
+    <div class="sig-name-line"></div>
+  </div>
+  <div class="sig-block">
+    <div class="sig-label">Technician Signature</div>
+    <div class="sig-name-line"></div>
+    <div class="sig-sub">Technician certifies all information above is accurate and complete.</div>
+  </div>
+  <div class="sig-block" style="max-width:160px">
+    <div class="sig-label">Date</div>
+    <div class="sig-name-line"></div>
+  </div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-001 HVAC Service Call Notes &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+
+</body>
+</html>

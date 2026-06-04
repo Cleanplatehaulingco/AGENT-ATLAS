@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flooring Estimate Scope Matrix — LS-017</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Flooring Estimate Scope Matrix</div>
+    <div class="form-label">Form LS-017 &nbsp;|&nbsp; Flooring Contractor</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Flooring Estimate<br>Scope Matrix</h1>
+      <div class="form-id">Form LS-017 &nbsp;|&nbsp; Estimate #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Client Name</label><div class="line"></div></div>
+    <div class="field"><label>Phone</label><div class="line"></div></div>
+    <div class="field"><label>Estimate Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Property Address</label><div class="line"></div></div>
+    <div class="field"><label>Sales Rep / Estimator</label><div class="line"></div></div>
+    <div class="field"><label>Priority</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Room-by-Room Scope Matrix</div>
+<table>
+  <thead><tr>
+    <th>Room / Area</th><th>Sq Ft</th><th>Flooring Type</th><th>Product / SKU</th><th>Removal?</th><th>Subfloor Work?</th><th>Mat'l Cost</th><th>Install Cost</th><th>Total</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>Living Room</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Master Bedroom</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Bedroom 2</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Kitchen</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Bathroom</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Hallway</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Other</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td colspan="6" style="text-align:right;font-weight:700;">Totals</td><td>$</td><td>$</td><td>$</td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Materials &amp; Add-Ons</div>
+<div class="row">
+  <div class="field"><label>Underlayment Type</label><div class="line"></div></div>
+  <div class="field"><label>Transition Strips</label><div class="line"></div></div>
+  <div class="field"><label>Baseboard / Quarter Round</label><div class="line"></div></div>
+  <div class="field"><label>Adhesive / Fasteners</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Subfloor &amp; Demo Notes</div>
+<div class="row"><div class="field"><div class="line-tall"></div></div></div>
+
+<div class="section-title">Installation Notes &amp; Conditions</div>
+<div class="row">
+  <div class="field"><label>Acclimation Required?</label><div class="line"></div></div>
+  <div class="field"><label>Moisture Test Result</label><div class="line"></div></div>
+  <div class="field"><label>Install Pattern / Direction</label><div class="line"></div></div>
+</div>
+
+<div class="invoice-box">
+  <h2>Estimate / Invoice Summary</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Total Materials</td><td>$</td></tr>
+      <tr><td>Total Labor / Installation</td><td>$</td></tr>
+      <tr><td>Demo / Removal</td><td>$</td></tr>
+      <tr><td>Subfloor Repair</td><td>$</td></tr>
+      <tr><td>Miscellaneous / Disposal</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">ESTIMATE / INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Deposit Required</label><div class="line"></div></div>
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Job Complete Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> All rooms installed per scope</div>
+  <div class="check-item"><div class="check-box"></div> Transitions installed</div>
+  <div class="check-item"><div class="check-box"></div> Baseboards reinstalled / installed</div>
+  <div class="check-item"><div class="check-box"></div> Debris removed from site</div>
+  <div class="check-item"><div class="check-box"></div> Client walk-through completed</div>
+  <div class="check-item"><div class="check-box"></div> Final invoice collected</div>
+</div>
+
+<div class="rating-row" style="margin-top:14px;">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Contractor Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Client Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-017 Flooring Estimate Scope Matrix &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>

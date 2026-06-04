@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roofing Change Order — LS-007</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 11pt; color: #111; background: #fff;
+    padding: 24px; max-width: 800px; margin: 0 auto;
+  }
+  .print-btn {
+    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
+    background: #1a56db; color: #fff; border: none; border-radius: 5px;
+    font-size: 11pt; cursor: pointer;
+  }
+  .print-btn:hover { background: #1345b7; }
+  @media print { .print-btn { display: none !important; } }
+
+  header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 2.5px solid #111; padding-bottom: 10px; margin-bottom: 18px;
+  }
+  .company-name {
+    font-size: 20pt; font-weight: 700; border: 2px dashed #bbb;
+    padding: 4px 12px; display: inline-block; min-width: 220px; min-height: 34px;
+  }
+  .company-sub { font-size: 8.5pt; color: #555; margin-top: 3px; }
+  .form-title { text-align: right; }
+  .form-title h1 { font-size: 15pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-id { font-size: 8.5pt; color: #666; margin-top: 2px; }
+
+  /* Change order banner */
+  .co-banner {
+    background: #111; color: #fff; text-align: center;
+    font-size: 13pt; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; padding: 8px 0; margin-bottom: 18px;
+  }
+
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 70px; padding: 3px; }
+  .line-xl { border: 1.5px solid #333; min-height: 90px; padding: 4px; }
+
+  .section-title {
+    font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+    background: #f0f0f0; border-left: 3px solid #333; padding: 4px 8px; margin: 16px 0 10px 0;
+  }
+
+  table.change-table {
+    width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10pt;
+  }
+  table.change-table th {
+    background: #f0f0f0; border: 1px solid #bbb; padding: 5px 8px;
+    text-align: left; font-size: 8pt; text-transform: uppercase;
+  }
+  table.change-table td { border: 1px solid #bbb; padding: 4px 8px; height: 24px; }
+
+  .price-summary {
+    border: 2px solid #333; padding: 14px 18px; margin: 16px 0;
+    background: #fcfcfc;
+  }
+  .price-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0; border-bottom: 1px solid #eee;
+  }
+  .price-row:last-child { border-bottom: none; }
+  .price-label { font-size: 10pt; font-weight: 500; }
+  .price-value { font-size: 10pt; min-width: 160px; border-bottom: 1.5px solid #333; text-align: right; padding-right: 4px; }
+  .price-total .price-label { font-size: 11.5pt; font-weight: 700; }
+  .price-total .price-value {
+    font-size: 11.5pt; font-weight: 700;
+    border-bottom: 3px double #333;
+  }
+
+  .reason-box {
+    border: 1.5px solid #bbb; padding: 10px 12px; background: #fafafa;
+    margin-bottom: 12px;
+  }
+  .reason-box label {
+    display: block; font-size: 8pt; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.4px; color: #444; margin-bottom: 6px;
+  }
+  .reason-checkboxes { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 8px; }
+  .check-item { display: flex; align-items: center; gap: 7px; font-size: 10pt; }
+  .cb { width: 15px; height: 15px; border: 1.5px solid #333; display: inline-block; flex-shrink: 0; border-radius: 2px; }
+
+  .sig-block-2col {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px;
+  }
+  .sig-unit { border-top: 1.5px solid #333; padding-top: 6px; }
+  .sig-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .sig-line { border-bottom: 1px solid #aaa; margin-top: 32px; }
+  .sig-sub { font-size: 7.5pt; color: #666; margin-top: 3px; }
+  .sig-date { margin-top: 12px; }
+  .sig-date label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .sig-date .line { border-bottom: 1.5px solid #333; min-height: 20px; }
+
+  .witness-row {
+    margin-top: 16px; padding-top: 14px; border-top: 1px dashed #bbb;
+  }
+
+  footer {
+    margin-top: 28px; padding-top: 8px; border-top: 1px solid #ccc;
+    text-align: center; font-size: 7.5pt; color: #999;
+  }
+  @media print { body { padding: 16px; } @page { margin: 0.6in; size: letter; } }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
+
+<header>
+  <div>
+    <div class="company-name">&nbsp;</div>
+    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; License #: _________________ &nbsp;&nbsp; Insurance #: _________________</div>
+  </div>
+  <div class="form-title">
+    <h1>Roofing Change Order</h1>
+    <div class="form-id">Form LS-007</div>
+  </div>
+</header>
+
+<div class="co-banner">Change Order &amp; Approval Form</div>
+
+<div class="row">
+  <div class="field">
+    <label>Change Order #</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Date</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Original Contract #</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Contract Date</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Project &amp; Party Information</div>
+
+<div class="row">
+  <div class="field" style="flex:3">
+    <label>Project / Property Address</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>City, State, Zip</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Property Owner Name</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Owner Phone</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Owner Email</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Contractor / Company Name</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Project Manager</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Contractor Phone</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Description of Change</div>
+
+<div class="row">
+  <div class="field">
+    <label>Detailed Description of Work Being Added, Removed, or Modified</label>
+    <div class="line-xl"></div>
+  </div>
+</div>
+
+<div class="section-title">Materials Added / Removed</div>
+
+<table class="change-table">
+  <thead>
+    <tr>
+      <th style="width:8%">+/−</th>
+      <th style="width:38%">Material / Item Description</th>
+      <th style="width:12%">Unit</th>
+      <th style="width:12%">Qty</th>
+      <th style="width:15%">Unit Cost</th>
+      <th style="width:15%">Line Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Labor Change</div>
+
+<div class="row">
+  <div class="field">
+    <label>Additional Labor Description</label>
+    <div class="line-tall"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Additional Hours</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Rate per Hour</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Total Labor Cost</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Additional Days on Site</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="price-summary">
+  <div class="price-row">
+    <div class="price-label">Original Contract Amount</div>
+    <div class="price-value">$</div>
+  </div>
+  <div class="price-row">
+    <div class="price-label">This Change Order — Materials</div>
+    <div class="price-value">$</div>
+  </div>
+  <div class="price-row">
+    <div class="price-label">This Change Order — Labor</div>
+    <div class="price-value">$</div>
+  </div>
+  <div class="price-row">
+    <div class="price-label">Total Price Adjustment (+ / −)</div>
+    <div class="price-value">$</div>
+  </div>
+  <div class="price-row price-total">
+    <div class="price-label">NEW REVISED CONTRACT TOTAL</div>
+    <div class="price-value">$</div>
+  </div>
+</div>
+
+<div class="reason-box">
+  <label>Reason for Change Order</label>
+  <div class="reason-checkboxes">
+    <div class="check-item"><div class="cb"></div> Hidden / Unforeseen Damage</div>
+    <div class="check-item"><div class="cb"></div> Owner-Requested Upgrade</div>
+    <div class="check-item"><div class="cb"></div> Code / Permit Requirement</div>
+    <div class="check-item"><div class="cb"></div> Scope Adjustment</div>
+    <div class="check-item"><div class="cb"></div> Material Substitution</div>
+    <div class="check-item"><div class="cb"></div> Insurance Supplement</div>
+    <div class="check-item"><div class="cb"></div> Weather / Site Condition</div>
+    <div class="check-item"><div class="cb"></div> Other (explain below)</div>
+  </div>
+  <div style="border-bottom: 1.5px solid #333; min-height: 22px;"></div>
+</div>
+
+<div class="section-title">Approval Signatures</div>
+
+<p style="font-size:9pt; color:#444; margin-bottom:12px;">
+  This Change Order becomes part of and is subject to all terms and conditions of the original contract. No work described herein shall begin until this document is signed by both parties. Unsigned change orders are not authorized.
+</p>
+
+<div class="sig-block-2col">
+  <div>
+    <div class="sig-unit">
+      <div class="sig-label">Owner / Authorized Representative Signature</div>
+      <div class="sig-line"></div>
+      <div class="sig-sub">Owner approves the work, price adjustment, and revised contract total above.</div>
+    </div>
+    <div class="sig-date" style="margin-top:10px">
+      <label>Printed Name</label>
+      <div class="line"></div>
+    </div>
+    <div class="sig-date">
+      <label>Date Signed</label>
+      <div class="line"></div>
+    </div>
+  </div>
+  <div>
+    <div class="sig-unit">
+      <div class="sig-label">Contractor / Project Manager Signature</div>
+      <div class="sig-line"></div>
+      <div class="sig-sub">Contractor confirms scope, pricing, and authorization to proceed.</div>
+    </div>
+    <div class="sig-date" style="margin-top:10px">
+      <label>Printed Name</label>
+      <div class="line"></div>
+    </div>
+    <div class="sig-date">
+      <label>Date Signed</label>
+      <div class="line"></div>
+    </div>
+  </div>
+</div>
+
+<div class="witness-row">
+  <div class="row">
+    <div class="field">
+      <label>Witness Signature (optional)</label>
+      <div class="line"></div>
+    </div>
+    <div class="field">
+      <label>Witness Printed Name</label>
+      <div class="line"></div>
+    </div>
+    <div class="field">
+      <label>Date</label>
+      <div class="line"></div>
+    </div>
+  </div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-007 Roofing Change Order + Approval &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+
+</body>
+</html>

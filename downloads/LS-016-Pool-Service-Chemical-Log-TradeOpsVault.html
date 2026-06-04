@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pool Service Chemical Log — LS-016</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Pool Service Chemical Log</div>
+    <div class="form-label">Form LS-016 &nbsp;|&nbsp; Pool Service Technician</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Pool Service<br>Chemical Log</h1>
+      <div class="form-id">Form LS-016 &nbsp;|&nbsp; Service #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Client Name</label><div class="line"></div></div>
+    <div class="field"><label>Service Address</label><div class="line"></div></div>
+    <div class="field"><label>Service Date</label><div class="line"></div></div>
+    <div class="field"><label>Technician</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Pool Info</div>
+<div class="row">
+  <div class="field"><label>Pool Type (In-Ground / Above)</label><div class="line"></div></div>
+  <div class="field"><label>Gallons (approx)</label><div class="line"></div></div>
+  <div class="field"><label>Filter Type</label><div class="line"></div></div>
+  <div class="field"><label>Sanitizer System</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Water Test Results</div>
+<table>
+  <thead><tr>
+    <th>Parameter</th><th>Ideal Range</th><th>Reading</th><th>Action Taken</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>Free Chlorine (ppm)</td><td>1.0 – 3.0</td><td></td><td></td></tr>
+    <tr><td>Combined Chlorine (ppm)</td><td>&lt; 0.2</td><td></td><td></td></tr>
+    <tr><td>pH</td><td>7.4 – 7.6</td><td></td><td></td></tr>
+    <tr><td>Total Alkalinity (ppm)</td><td>80 – 120</td><td></td><td></td></tr>
+    <tr><td>Calcium Hardness (ppm)</td><td>200 – 400</td><td></td><td></td></tr>
+    <tr><td>Cyanuric Acid (ppm)</td><td>30 – 50</td><td></td><td></td></tr>
+    <tr><td>Salt (ppm) — if SWG</td><td>2700 – 3400</td><td></td><td></td></tr>
+    <tr><td>Phosphates (ppb)</td><td>&lt; 100</td><td></td><td></td></tr>
+    <tr><td>Total Dissolved Solids</td><td>&lt; 1500</td><td></td><td></td></tr>
+    <tr><td>Water Temp (°F)</td><td>—</td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Chemicals Added</div>
+<table>
+  <thead><tr>
+    <th>Chemical / Product</th><th>Brand</th><th>Amount Added</th><th>Unit</th><th>Purpose</th>
+  </tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Physical Maintenance</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> Skimmer baskets emptied</div>
+  <div class="check-item"><div class="check-box"></div> Pump basket emptied</div>
+  <div class="check-item"><div class="check-box"></div> Surface skimmed</div>
+  <div class="check-item"><div class="check-box"></div> Pool brushed</div>
+  <div class="check-item"><div class="check-box"></div> Vacuumed</div>
+  <div class="check-item"><div class="check-box"></div> Filter backwashed / cleaned</div>
+  <div class="check-item"><div class="check-box"></div> Equipment inspected</div>
+  <div class="check-item"><div class="check-box"></div> Waterline tiles cleaned</div>
+</div>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Weekly / Monthly Service Fee</td><td>$</td></tr>
+      <tr><td>Chemicals Used</td><td>$</td></tr>
+      <tr><td>Additional Repair / Parts</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Technician Notes &amp; Next Visit</div>
+<div class="row"><div class="field"><label>Notes / Issues</label><div class="line-tall"></div></div></div>
+<div class="row">
+  <div class="field"><label>Next Scheduled Service</label><div class="line"></div></div>
+  <div class="field"><label>Priority Items for Next Visit</label><div class="line"></div></div>
+</div>
+
+<div class="rating-row" style="margin-top:14px;">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Client Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Technician Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Client Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-016 Pool Service Chemical Log &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>

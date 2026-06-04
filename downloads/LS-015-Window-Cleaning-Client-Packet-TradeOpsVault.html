@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Window Cleaning Client Packet — LS-015</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Window Cleaning Client Packet</div>
+    <div class="form-label">Form LS-015 &nbsp;|&nbsp; Window Cleaning Operator</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Window Cleaning<br>Client Packet</h1>
+      <div class="form-id">Form LS-015 &nbsp;|&nbsp; Job #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Client Name</label><div class="line"></div></div>
+    <div class="field"><label>Phone</label><div class="line"></div></div>
+    <div class="field"><label>Service Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Service Address</label><div class="line"></div></div>
+    <div class="field"><label>Technician</label><div class="line"></div></div>
+    <div class="field"><label>Priority</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Property &amp; Scope</div>
+<div class="row">
+  <div class="field"><label>Property Type</label><div class="line"></div></div>
+  <div class="field"><label>Floors / Stories</label><div class="line"></div></div>
+  <div class="field"><label>Total Windows</label><div class="line"></div></div>
+  <div class="field"><label>Interior &amp; Exterior?</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Special Conditions (hard water, screens, etc.)</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Window Count by Area</div>
+<table>
+  <thead><tr>
+    <th>Area / Zone</th><th>Window Count</th><th>Interior?</th><th>Exterior?</th><th>Screens Cleaned?</th><th>Condition Notes</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>Front Facade</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Rear / Back</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Left Side</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Right Side</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Skylights</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Other</td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Products &amp; Equipment Used</div>
+<div class="row">
+  <div class="field"><label>Squeegee Size(s)</label><div class="line"></div></div>
+  <div class="field"><label>Cleaning Solution</label><div class="line"></div></div>
+  <div class="field"><label>Water Fed Pole?</label><div class="line"></div></div>
+  <div class="field"><label>Ladder Type Used</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Pre-Existing Damage Notes</div>
+<div class="row"><div class="field"><div class="line-tall"></div></div></div>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>Exterior Windows</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Interior Windows</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Screen Cleaning</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Hard Water Treatment</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Additional Services</td><td></td><td>$</td><td>$</td></tr>
+      <tr class="total-row"><td colspan="3" style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Job Complete Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> All windows cleaned per scope</div>
+  <div class="check-item"><div class="check-box"></div> Screens cleaned and re-installed</div>
+  <div class="check-item"><div class="check-box"></div> Sills wiped down</div>
+  <div class="check-item"><div class="check-box"></div> No streaks — final inspection done</div>
+  <div class="check-item"><div class="check-box"></div> Interior surfaces protected</div>
+  <div class="check-item"><div class="check-box"></div> Invoice collected / sent</div>
+</div>
+
+<div class="rating-row" style="margin-top:14px;">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Technician Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Client Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-015 Window Cleaning Client Packet &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>
