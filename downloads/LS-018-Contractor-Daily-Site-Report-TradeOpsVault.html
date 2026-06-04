@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contractor Daily Site Report — LS-018</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Contractor Daily Site Report</div>
+    <div class="form-label">Form LS-018 &nbsp;|&nbsp; General Contractor</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Contractor Daily<br>Site Report</h1>
+      <div class="form-id">Form LS-018 &nbsp;|&nbsp; Report #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Project Name</label><div class="line"></div></div>
+    <div class="field"><label>Site Address</label><div class="line"></div></div>
+    <div class="field"><label>Report Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Superintendent / GC</label><div class="line"></div></div>
+    <div class="field"><label>Project #</label><div class="line"></div></div>
+    <div class="field"><label>Weather Conditions</label><div class="line"></div></div>
+    <div class="field"><label>Temp (°F)</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Crew on Site</div>
+<table>
+  <thead><tr>
+    <th>Trade / Sub</th><th>Foreman / Lead</th><th>Crew Count</th><th>Hours on Site</th><th>Work Performed</th>
+  </tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Work Completed Today</div>
+<div class="row"><div class="field"><div class="line-tall"></div></div></div>
+
+<div class="section-title">Materials Delivered</div>
+<table>
+  <thead><tr><th>Material / Item</th><th>Supplier</th><th>Qty Delivered</th><th>PO / Ticket #</th><th>Condition</th></tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Issues, Delays &amp; Safety</div>
+<div class="row">
+  <div class="field"><label>Delays / Issues</label><div class="line-tall"></div></div>
+  <div class="field"><label>Safety Incidents / Near Misses</label><div class="line-tall"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Visitors / Inspectors on Site</label><div class="line"></div></div>
+  <div class="field"><label>Inspection Result</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Tomorrow's Plan</div>
+<div class="row"><div class="field"><div class="line-tall"></div></div></div>
+
+<div class="invoice-box">
+  <h2>Daily Cost Summary (T&amp;M)</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Hours / Qty</th><th>Rate</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>Labor — Crew 1</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Labor — Crew 2 / Sub</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Materials Used Today</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Equipment / Rental</td><td></td><td>$</td><td>$</td></tr>
+      <tr class="total-row"><td colspan="3" style="text-align:right;">DAY TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Cumulative Project Cost to Date</label><div class="line"></div></div>
+    <div class="field"><label>Budget Remaining</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">End-of-Day Site Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> Site secured / locked</div>
+  <div class="check-item"><div class="check-box"></div> Tools stored</div>
+  <div class="check-item"><div class="check-box"></div> Debris removed or staged</div>
+  <div class="check-item"><div class="check-box"></div> Utilities shut off if needed</div>
+  <div class="check-item"><div class="check-box"></div> Safety hazards mitigated</div>
+  <div class="check-item"><div class="check-box"></div> Report submitted to owner</div>
+</div>
+
+<div class="sig-row" style="margin-top:14px;">
+  <div class="sig-block">Superintendent Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Owner / PM Acknowledgment &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-018 Contractor Daily Site Report &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>

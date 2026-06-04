@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pest Control Follow-Up Card — LS-006</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 10.5pt; color: #111; background: #fff;
+    padding: 24px; max-width: 800px; margin: 0 auto;
+  }
+  .print-btn {
+    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
+    background: #1a56db; color: #fff; border: none; border-radius: 5px;
+    font-size: 11pt; cursor: pointer;
+  }
+  .print-btn:hover { background: #1345b7; }
+  @media print { .print-btn { display: none !important; } }
+
+  /* Two cards per page using a grid */
+  .cards-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .card {
+    border: 2px solid #333;
+    padding: 16px;
+    page-break-inside: avoid;
+  }
+  .card-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 12px;
+  }
+  .company-block .company-name {
+    font-size: 13pt; font-weight: 700; border: 1.5px dashed #bbb;
+    padding: 2px 8px; display: inline-block; min-width: 130px; min-height: 24px;
+  }
+  .company-block .company-contact {
+    font-size: 7pt; color: #555; margin-top: 3px;
+  }
+  .card-title {
+    text-align: right;
+    font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .card-id { font-size: 7pt; color: #666; }
+
+  .c-row { display: flex; gap: 10px; margin-bottom: 9px; }
+  .c-field { flex: 1; }
+  .c-field label {
+    display: block; font-size: 7pt; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.4px; color: #444; margin-bottom: 2px;
+  }
+  .c-field .line { border-bottom: 1.5px solid #333; min-height: 19px; }
+  .c-field .line-tall { border: 1.5px solid #333; min-height: 46px; padding: 2px 4px; font-size: 9pt; }
+
+  .section-title {
+    font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    background: #f0f0f0; border-left: 2px solid #333; padding: 3px 6px; margin: 10px 0 7px 0;
+  }
+
+  .callback-box {
+    border: 1.5px solid #bbb; background: #fffbf0; padding: 8px 10px;
+    font-size: 8.5pt; line-height: 1.5; margin-top: 10px;
+  }
+  .callback-box strong { font-size: 8pt; text-transform: uppercase; letter-spacing: 0.3px; }
+
+  .card-footer {
+    margin-top: 10px; padding-top: 5px; border-top: 1px solid #ccc;
+    font-size: 7pt; color: #999; text-align: center;
+  }
+
+  @media print {
+    body { padding: 16px; }
+    @page { margin: 0.5in; size: letter; }
+    .cards-wrapper { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF (2 cards per page)</button>
+
+<!-- Renders 4 cards — 2 per row, 2 rows = 1 full sheet, front + back cutting -->
+<div class="cards-wrapper">
+
+  <!-- CARD 1 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="company-block">
+        <div class="company-name">&nbsp;</div>
+        <div class="company-contact">
+          Phone: _____________________<br>
+          License #: __________________
+        </div>
+      </div>
+      <div class="card-title">
+        Pest Control<br>Follow-Up Card
+        <div class="card-id">Form LS-006</div>
+      </div>
+    </div>
+
+    <div class="c-row">
+      <div class="c-field">
+        <label>Customer Name</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field" style="flex:2">
+        <label>Service Address</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Service Date</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Technician</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Treatment Applied</div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Pest / Target</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Treatment Method</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Products Used</div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Product 1 (EPA Reg. #)</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Product 2 (EPA Reg. #)</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Re-Entry Interval</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Next Service Due</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Technician Notes</div>
+    <div class="c-row">
+      <div class="c-field">
+        <div class="line-tall"></div>
+      </div>
+    </div>
+
+    <div class="callback-box">
+      <strong>Callback Instructions:</strong><br>
+      If pest activity continues after _______ days, please call us immediately. Do not re-treat with other products. Keep pets and children away from treated areas for the time listed above.
+    </div>
+
+    <div class="card-footer">INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; agentatlasshop.etsy.com</div>
+  </div>
+
+  <!-- CARD 2 (duplicate blank for printing) -->
+  <div class="card">
+    <div class="card-header">
+      <div class="company-block">
+        <div class="company-name">&nbsp;</div>
+        <div class="company-contact">
+          Phone: _____________________<br>
+          License #: __________________
+        </div>
+      </div>
+      <div class="card-title">
+        Pest Control<br>Follow-Up Card
+        <div class="card-id">Form LS-006</div>
+      </div>
+    </div>
+
+    <div class="c-row">
+      <div class="c-field">
+        <label>Customer Name</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field" style="flex:2">
+        <label>Service Address</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Service Date</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Technician</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Treatment Applied</div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Pest / Target</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Treatment Method</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Products Used</div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Product 1 (EPA Reg. #)</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Product 2 (EPA Reg. #)</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Re-Entry Interval</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Next Service Due</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Technician Notes</div>
+    <div class="c-row">
+      <div class="c-field">
+        <div class="line-tall"></div>
+      </div>
+    </div>
+
+    <div class="callback-box">
+      <strong>Callback Instructions:</strong><br>
+      If pest activity continues after _______ days, please call us immediately. Do not re-treat with other products. Keep pets and children away from treated areas for the time listed above.
+    </div>
+
+    <div class="card-footer">INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; agentatlasshop.etsy.com</div>
+  </div>
+
+  <!-- CARD 3 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="company-block">
+        <div class="company-name">&nbsp;</div>
+        <div class="company-contact">
+          Phone: _____________________<br>
+          License #: __________________
+        </div>
+      </div>
+      <div class="card-title">
+        Pest Control<br>Follow-Up Card
+        <div class="card-id">Form LS-006</div>
+      </div>
+    </div>
+
+    <div class="c-row">
+      <div class="c-field">
+        <label>Customer Name</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field" style="flex:2">
+        <label>Service Address</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Service Date</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Technician</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Treatment Applied</div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Pest / Target</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Treatment Method</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Products Used</div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Product 1 (EPA Reg. #)</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Product 2 (EPA Reg. #)</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Re-Entry Interval</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Next Service Due</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Technician Notes</div>
+    <div class="c-row">
+      <div class="c-field">
+        <div class="line-tall"></div>
+      </div>
+    </div>
+
+    <div class="callback-box">
+      <strong>Callback Instructions:</strong><br>
+      If pest activity continues after _______ days, please call us immediately. Do not re-treat with other products. Keep pets and children away from treated areas for the time listed above.
+    </div>
+
+    <div class="card-footer">INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; agentatlasshop.etsy.com</div>
+  </div>
+
+  <!-- CARD 4 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="company-block">
+        <div class="company-name">&nbsp;</div>
+        <div class="company-contact">
+          Phone: _____________________<br>
+          License #: __________________
+        </div>
+      </div>
+      <div class="card-title">
+        Pest Control<br>Follow-Up Card
+        <div class="card-id">Form LS-006</div>
+      </div>
+    </div>
+
+    <div class="c-row">
+      <div class="c-field">
+        <label>Customer Name</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field" style="flex:2">
+        <label>Service Address</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Service Date</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Technician</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Treatment Applied</div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Pest / Target</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Treatment Method</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Products Used</div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Product 1 (EPA Reg. #)</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Product 2 (EPA Reg. #)</label>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="c-row">
+      <div class="c-field">
+        <label>Re-Entry Interval</label>
+        <div class="line"></div>
+      </div>
+      <div class="c-field">
+        <label>Next Service Due</label>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Technician Notes</div>
+    <div class="c-row">
+      <div class="c-field">
+        <div class="line-tall"></div>
+      </div>
+    </div>
+
+    <div class="callback-box">
+      <strong>Callback Instructions:</strong><br>
+      If pest activity continues after _______ days, please call us immediately. Do not re-treat with other products. Keep pets and children away from treated areas for the time listed above.
+    </div>
+
+    <div class="card-footer">INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; agentatlasshop.etsy.com</div>
+  </div>
+
+</div><!-- end cards-wrapper -->
+
+</body>
+</html>

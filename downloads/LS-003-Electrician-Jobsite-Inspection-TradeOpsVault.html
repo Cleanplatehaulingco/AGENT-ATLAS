@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electrician Jobsite Inspection — LS-003</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 11pt; color: #111; background: #fff;
+    padding: 24px; max-width: 800px; margin: 0 auto;
+  }
+  .print-btn {
+    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
+    background: #1a56db; color: #fff; border: none; border-radius: 5px;
+    font-size: 11pt; cursor: pointer;
+  }
+  .print-btn:hover { background: #1345b7; }
+  @media print { .print-btn { display: none !important; } }
+
+  header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 2.5px solid #111; padding-bottom: 10px; margin-bottom: 18px;
+  }
+  .company-name {
+    font-size: 20pt; font-weight: 700; border: 2px dashed #bbb;
+    padding: 4px 12px; display: inline-block; min-width: 220px; min-height: 34px;
+  }
+  .company-sub { font-size: 8.5pt; color: #555; margin-top: 3px; }
+  .form-title { text-align: right; }
+  .form-title h1 { font-size: 15pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-id { font-size: 8.5pt; color: #666; margin-top: 2px; }
+
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 60px; padding: 3px; }
+
+  .section-title {
+    font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+    background: #f0f0f0; border-left: 3px solid #333; padding: 4px 8px; margin: 16px 0 10px 0;
+  }
+
+  .checkbox-grid { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 7px; font-size: 10pt; }
+  .cb { width: 15px; height: 15px; border: 1.5px solid #333; display: inline-block; flex-shrink: 0; border-radius: 2px; }
+
+  table.circuit-table {
+    width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10pt;
+  }
+  table.circuit-table th {
+    background: #f0f0f0; border: 1px solid #bbb; padding: 5px 8px;
+    text-align: left; font-size: 8pt; text-transform: uppercase;
+  }
+  table.circuit-table td { border: 1px solid #bbb; padding: 4px 8px; height: 24px; }
+  table.circuit-table td.center { text-align: center; }
+
+  .yn-row { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .yn-row .yn-label { font-size: 9.5pt; font-weight: 600; min-width: 220px; }
+  .yn-opt { display: flex; align-items: center; gap: 5px; font-size: 9.5pt; }
+
+  .sig-row { display: flex; gap: 24px; margin-top: 20px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 5px; }
+  .sig-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .sig-line { border-bottom: 1px solid #aaa; margin-top: 28px; }
+  .sig-sub { font-size: 7.5pt; color: #666; margin-top: 2px; }
+
+  footer {
+    margin-top: 28px; padding-top: 8px; border-top: 1px solid #ccc;
+    text-align: center; font-size: 7.5pt; color: #999;
+  }
+  @media print { body { padding: 16px; } @page { margin: 0.6in; size: letter; } }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
+
+<header>
+  <div>
+    <div class="company-name">&nbsp;</div>
+    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; Electrical License #: _________________</div>
+  </div>
+  <div class="form-title">
+    <h1>Electrician Jobsite Inspection</h1>
+    <div class="form-id">Form LS-003 &nbsp;|&nbsp; Inspection #: _______________</div>
+  </div>
+</header>
+
+<div class="row">
+  <div class="field">
+    <label>Inspection Date</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Inspector Name</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Inspector License #</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Permit #</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field" style="flex:3">
+    <label>Site / Job Address</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Unit / Suite</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Customer / Owner Name</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Phone</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Contractor / Company</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Job Type</div>
+
+<div class="checkbox-grid">
+  <div class="check-item"><div class="cb"></div> Residential</div>
+  <div class="check-item"><div class="cb"></div> Commercial</div>
+  <div class="check-item"><div class="cb"></div> Industrial</div>
+  <div class="check-item"><div class="cb"></div> New Construction</div>
+  <div class="check-item"><div class="cb"></div> Renovation / Upgrade</div>
+  <div class="check-item"><div class="cb"></div> Service Call / Repair</div>
+  <div class="check-item"><div class="cb"></div> Panel Upgrade</div>
+  <div class="check-item"><div class="cb"></div> EV Charger Install</div>
+  <div class="check-item"><div class="cb"></div> Solar / Inverter</div>
+  <div class="check-item"><div class="cb"></div> Other: _______________</div>
+</div>
+
+<div class="section-title">Panel Information</div>
+
+<div class="row">
+  <div class="field">
+    <label>Panel Make / Brand</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Panel Amperage</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Voltage (120V / 240V)</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Panel Location</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Main Breaker Size</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Number of Slots</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Slots Used</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Slots Available</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Circuits Checked</div>
+
+<table class="circuit-table">
+  <thead>
+    <tr>
+      <th style="width:8%">Circuit #</th>
+      <th style="width:28%">Description / Location</th>
+      <th style="width:10%">Breaker (A)</th>
+      <th style="width:10%">Wire Gauge</th>
+      <th style="width:10%">Voltage</th>
+      <th style="width:14%">GFCI / AFCI</th>
+      <th style="width:10%">Pass</th>
+      <th style="width:10%">Fail</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
+    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
+    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
+    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
+    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
+    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
+    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
+    <tr><td></td><td></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td><td class="center"></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Hazards Identified</div>
+
+<div class="row">
+  <div class="field">
+    <label>Hazard Description (location, nature, severity)</label>
+    <div class="line-tall"></div>
+  </div>
+</div>
+
+<div class="section-title">Code &amp; Compliance Notes</div>
+
+<div class="row">
+  <div class="field">
+    <label>NEC Code References / Violations</label>
+    <div class="line-tall"></div>
+  </div>
+</div>
+
+<div class="section-title">Work Completed</div>
+
+<div class="row">
+  <div class="field">
+    <label>Summary of Work Performed</label>
+    <div class="line-tall"></div>
+  </div>
+</div>
+
+<div class="section-title">Reinspection</div>
+
+<div class="yn-row">
+  <div class="yn-label">Reinspection Required?</div>
+  <div class="yn-opt"><div class="cb"></div> Yes</div>
+  <div class="yn-opt"><div class="cb"></div> No</div>
+  &nbsp;&nbsp;&nbsp;
+  <div class="yn-label" style="min-width:180px">If yes, scheduled date:</div>
+  <div style="flex:1; border-bottom:1.5px solid #333; min-height:22px;"></div>
+</div>
+
+<div class="yn-row">
+  <div class="yn-label">Approved to Energize?</div>
+  <div class="yn-opt"><div class="cb"></div> Yes</div>
+  <div class="yn-opt"><div class="cb"></div> No — Do Not Energize</div>
+</div>
+
+<div class="sig-row">
+  <div class="sig-block">
+    <div class="sig-label">Customer / Owner Signature</div>
+    <div class="sig-line"></div>
+    <div class="sig-sub">Owner acknowledges receipt of inspection findings.</div>
+  </div>
+  <div class="sig-block" style="max-width:150px">
+    <div class="sig-label">Date</div>
+    <div class="sig-line"></div>
+  </div>
+  <div class="sig-block">
+    <div class="sig-label">Inspector Signature</div>
+    <div class="sig-line"></div>
+    <div class="sig-sub">Inspector certifies accuracy of this report.</div>
+  </div>
+  <div class="sig-block" style="max-width:150px">
+    <div class="sig-label">Date</div>
+    <div class="sig-line"></div>
+  </div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-003 Electrician Jobsite Inspection &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+
+</body>
+</html>

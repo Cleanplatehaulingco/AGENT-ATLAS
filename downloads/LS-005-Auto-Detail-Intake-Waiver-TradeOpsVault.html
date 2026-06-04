@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto Detail Intake + Damage Waiver — LS-005</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 11pt; color: #111; background: #fff;
+    padding: 24px; max-width: 800px; margin: 0 auto;
+  }
+  .print-btn {
+    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
+    background: #1a56db; color: #fff; border: none; border-radius: 5px;
+    font-size: 11pt; cursor: pointer;
+  }
+  .print-btn:hover { background: #1345b7; }
+  @media print { .print-btn { display: none !important; } }
+
+  header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 2.5px solid #111; padding-bottom: 10px; margin-bottom: 18px;
+  }
+  .company-name {
+    font-size: 20pt; font-weight: 700; border: 2px dashed #bbb;
+    padding: 4px 12px; display: inline-block; min-width: 220px; min-height: 34px;
+  }
+  .company-sub { font-size: 8.5pt; color: #555; margin-top: 3px; }
+  .form-title { text-align: right; }
+  .form-title h1 { font-size: 15pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-id { font-size: 8.5pt; color: #666; margin-top: 2px; }
+
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 60px; padding: 3px; }
+
+  .section-title {
+    font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+    background: #f0f0f0; border-left: 3px solid #333; padding: 4px 8px; margin: 16px 0 10px 0;
+  }
+  .section-divider {
+    border: none; border-top: 2.5px solid #111; margin: 22px 0;
+  }
+  .part-label {
+    font-size: 12pt; font-weight: 700; text-align: center;
+    text-transform: uppercase; letter-spacing: 1px;
+    background: #111; color: #fff; padding: 6px 0; margin-bottom: 16px;
+  }
+
+  .services-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px 20px; margin-bottom: 14px;
+  }
+  .check-item { display: flex; align-items: center; gap: 7px; font-size: 10pt; }
+  .cb { width: 15px; height: 15px; border: 1.5px solid #333; display: inline-block; flex-shrink: 0; border-radius: 2px; }
+
+  /* Car diagram */
+  .car-diagram-wrapper {
+    border: 1.5px solid #bbb; padding: 12px 16px; margin-bottom: 14px;
+    background: #fafafa;
+  }
+  .car-diagram-title {
+    font-size: 8pt; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #444; margin-bottom: 8px;
+  }
+  .car-ascii {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 8.5pt; line-height: 1.4; color: #222;
+    white-space: pre;
+  }
+  .diagram-note {
+    font-size: 7.5pt; color: #666; margin-top: 6px;
+    font-style: italic;
+  }
+
+  .waiver-text {
+    font-size: 9pt; line-height: 1.55; color: #222;
+    border: 1.5px solid #bbb; padding: 10px 12px; background: #fafafa;
+    margin-bottom: 14px;
+  }
+
+  .sig-row { display: flex; gap: 24px; margin-top: 20px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 5px; }
+  .sig-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .sig-line { border-bottom: 1px solid #aaa; margin-top: 28px; }
+  .sig-sub { font-size: 7.5pt; color: #666; margin-top: 2px; }
+
+  footer {
+    margin-top: 28px; padding-top: 8px; border-top: 1px solid #ccc;
+    text-align: center; font-size: 7.5pt; color: #999;
+  }
+  @media print { body { padding: 16px; } @page { margin: 0.6in; size: letter; } }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
+
+<header>
+  <div>
+    <div class="company-name">&nbsp;</div>
+    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; Address: _________________________</div>
+  </div>
+  <div class="form-title">
+    <h1>Auto Detail Intake &amp; Waiver</h1>
+    <div class="form-id">Form LS-005 &nbsp;|&nbsp; Order #: _______________</div>
+  </div>
+</header>
+
+<!-- PART 1: INTAKE -->
+<div class="part-label">Part 1 — Customer &amp; Vehicle Intake</div>
+
+<div class="row">
+  <div class="field">
+    <label>Date</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Drop-Off Time</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Est. Pick-Up Time</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Detailer Assigned</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Customer Information</div>
+
+<div class="row">
+  <div class="field">
+    <label>Customer Name</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Phone</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Email</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Vehicle Information</div>
+
+<div class="row">
+  <div class="field">
+    <label>Year</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Make</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Model</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Color</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>License Plate</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>VIN (last 6 digits)</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Odometer</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Fuel Level</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Condition (1-10)</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Services Requested</div>
+
+<div class="services-grid">
+  <div class="check-item"><div class="cb"></div> Full Interior Detail</div>
+  <div class="check-item"><div class="cb"></div> Full Exterior Detail</div>
+  <div class="check-item"><div class="cb"></div> Full Detail (In + Out)</div>
+  <div class="check-item"><div class="cb"></div> Hand Wash &amp; Dry</div>
+  <div class="check-item"><div class="cb"></div> Wax / Sealant</div>
+  <div class="check-item"><div class="cb"></div> Paint Correction</div>
+  <div class="check-item"><div class="cb"></div> Ceramic Coating</div>
+  <div class="check-item"><div class="cb"></div> Headlight Restore</div>
+  <div class="check-item"><div class="cb"></div> Engine Bay Detail</div>
+  <div class="check-item"><div class="cb"></div> Carpet Shampoo</div>
+  <div class="check-item"><div class="cb"></div> Leather Clean &amp; Condition</div>
+  <div class="check-item"><div class="cb"></div> Odor Elimination</div>
+  <div class="check-item"><div class="cb"></div> Tire Dressing</div>
+  <div class="check-item"><div class="cb"></div> Window Tint (refer)</div>
+  <div class="check-item"><div class="cb"></div> Other: ____________</div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Special Instructions / Customer Requests</label>
+    <div class="line-tall"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Package / Service Tier</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Quoted Price</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Deposit Paid</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Balance Due</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- PART 2: DAMAGE WAIVER -->
+<div class="part-label">Part 2 — Pre-Existing Damage &amp; Liability Waiver</div>
+
+<div class="section-title">Pre-Existing Damage Diagram</div>
+
+<div class="car-diagram-wrapper">
+  <div class="car-diagram-title">Mark any pre-existing damage with an X or note below each area</div>
+  <div class="car-ascii">
+              FRONT
+         _______________
+        /               \
+       | [  ]       [  ] |   Hood: _______________________
+       |_________________|
+       |                 |   Windshield: __________________
+       | DR FL   DR FR   |
+       |  [  ]   [  ]   |   Driver Front Door: ___________
+       |_________________|   Passenger Front Door: ________
+       | DR RL   DR RR   |
+       |  [  ]   [  ]   |   Driver Rear Door: ____________
+       |_________________|   Passenger Rear Door: _________
+       |                 |
+       |  [  ]   [  ]   |   Rear Bumper: _________________
+        \_______________/
+              REAR             Roof: ______________________
+
+  LEFT SIDE (Driver)                    RIGHT SIDE (Passenger)
+  ___________________________           ___________________________
+  |                         |           |                         |
+  | Front Quarter: ________ |           | Front Quarter: ________ |
+  | Rocker Panel:  ________ |           | Rocker Panel:  ________ |
+  | Rear Quarter:  ________ |           | Rear Quarter:  ________ |
+  |_________________________|           |_________________________|
+  </div>
+  <div class="diagram-note">Use a pen to circle or mark actual damage locations. Note scratches (S), dents (D), chips (C), cracks (CR).</div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Additional Pre-Existing Damage Notes</label>
+    <div class="line-tall"></div>
+  </div>
+</div>
+
+<div class="section-title">Liability Waiver</div>
+
+<div class="waiver-text">
+  <strong>PLEASE READ CAREFULLY BEFORE SIGNING.</strong> By signing below, the customer ("Owner") acknowledges and agrees to the following:<br><br>
+  1. <strong>Pre-Existing Damage:</strong> The Owner confirms that all pre-existing damage to the vehicle has been noted on this form. The detailing company shall not be liable for any pre-existing scratches, dents, chips, cracks, or other damage documented above.<br><br>
+  2. <strong>Personal Items:</strong> The Owner is responsible for removing all personal valuables from the vehicle prior to service. The detailing company is not responsible for lost, stolen, or damaged personal items left in the vehicle.<br><br>
+  3. <strong>Sensitive Surfaces:</strong> Some vehicles contain surfaces (custom wraps, specialty paint, modified bodywork, aftermarket parts) that may react differently to detailing products. The Owner assumes all risk associated with pre-existing modifications or sensitive surfaces not disclosed at intake.<br><br>
+  4. <strong>Limitation of Liability:</strong> In the unlikely event of damage caused during the detailing process, liability is limited to the cost of the service rendered. The company reserves the right to inspect and assess any damage claims before agreeing to repair or compensation.<br><br>
+  5. <strong>Authorization:</strong> The Owner authorizes the detailing company to perform the requested services and to move the vehicle as necessary within the service facility.
+</div>
+
+<div class="sig-row">
+  <div class="sig-block">
+    <div class="sig-label">Customer / Owner Signature</div>
+    <div class="sig-line"></div>
+    <div class="sig-sub">I have read and agree to the terms of this waiver.</div>
+  </div>
+  <div class="sig-block" style="max-width:150px">
+    <div class="sig-label">Date</div>
+    <div class="sig-line"></div>
+  </div>
+  <div class="sig-block">
+    <div class="sig-label">Technician / Intake Staff</div>
+    <div class="sig-line"></div>
+    <div class="sig-sub">Staff confirms vehicle inspection completed at intake.</div>
+  </div>
+  <div class="sig-block" style="max-width:150px">
+    <div class="sig-label">Date</div>
+    <div class="sig-line"></div>
+  </div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-005 Auto Detail Intake + Damage Waiver &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+
+</body>
+</html>

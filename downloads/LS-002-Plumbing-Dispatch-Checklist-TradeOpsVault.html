@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plumbing Dispatch & Diagnosis — LS-002</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 11pt;
+    color: #111;
+    background: #fff;
+    padding: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .print-btn {
+    display: inline-block; margin-bottom: 18px; padding: 8px 22px;
+    background: #1a56db; color: #fff; border: none; border-radius: 5px;
+    font-size: 11pt; cursor: pointer;
+  }
+  .print-btn:hover { background: #1345b7; }
+  @media print { .print-btn { display: none !important; } }
+
+  header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 2.5px solid #111; padding-bottom: 10px; margin-bottom: 18px;
+  }
+  .company-name {
+    font-size: 20pt; font-weight: 700; border: 2px dashed #bbb;
+    padding: 4px 12px; display: inline-block; min-width: 220px; min-height: 34px;
+  }
+  .company-sub { font-size: 8.5pt; color: #555; margin-top: 3px; }
+  .form-title { text-align: right; }
+  .form-title h1 { font-size: 15pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-title .form-id { font-size: 8.5pt; color: #666; margin-top: 2px; }
+
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 60px; padding: 3px; }
+
+  .section-title {
+    font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+    background: #f0f0f0; border-left: 3px solid #333; padding: 4px 8px; margin: 16px 0 10px 0;
+  }
+
+  .checkbox-grid {
+    display: flex; flex-wrap: wrap; gap: 10px 24px; margin-bottom: 12px;
+  }
+  .check-item {
+    display: flex; align-items: center; gap: 7px; font-size: 10pt;
+  }
+  .cb {
+    width: 15px; height: 15px; border: 1.5px solid #333;
+    display: inline-block; flex-shrink: 0; border-radius: 2px;
+  }
+
+  table.mat-table {
+    width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10pt;
+  }
+  table.mat-table th {
+    background: #f0f0f0; border: 1px solid #bbb; padding: 5px 8px;
+    text-align: left; font-size: 8pt; text-transform: uppercase;
+  }
+  table.mat-table td { border: 1px solid #bbb; padding: 4px 8px; height: 24px; }
+
+  .sig-row { display: flex; gap: 24px; margin-top: 20px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 5px; }
+  .sig-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .sig-line { border-bottom: 1px solid #aaa; margin-top: 28px; }
+  .sig-sub { font-size: 7.5pt; color: #666; margin-top: 2px; }
+
+  footer {
+    margin-top: 28px; padding-top: 8px; border-top: 1px solid #ccc;
+    text-align: center; font-size: 7.5pt; color: #999;
+  }
+  @media print { body { padding: 16px; } @page { margin: 0.6in; size: letter; } }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
+
+<header>
+  <div>
+    <div class="company-name">&nbsp;</div>
+    <div class="company-sub">Phone: _________________ &nbsp;&nbsp; License #: _________________</div>
+  </div>
+  <div class="form-title">
+    <h1>Plumbing Dispatch &amp; Diagnosis</h1>
+    <div class="form-id">Form LS-002 &nbsp;|&nbsp; Dispatch #: _______________</div>
+  </div>
+</header>
+
+<div class="row">
+  <div class="field">
+    <label>Date</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Call Time</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Dispatcher Name</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Priority</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Technician Assigned</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Tech Phone / Radio</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Estimated Arrival</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Customer Information</div>
+
+<div class="row">
+  <div class="field">
+    <label>Customer Name</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Phone</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Alt. Phone</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field" style="flex:3">
+    <label>Service Address</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Apt / Unit</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>City</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>State</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Zip</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Issue Type (check all that apply)</div>
+
+<div class="checkbox-grid">
+  <div class="check-item"><div class="cb"></div> Leak / Burst Pipe</div>
+  <div class="check-item"><div class="cb"></div> No Hot Water</div>
+  <div class="check-item"><div class="cb"></div> Slow / Clogged Drain</div>
+  <div class="check-item"><div class="cb"></div> Sewer Backup</div>
+  <div class="check-item"><div class="cb"></div> Running Toilet</div>
+  <div class="check-item"><div class="cb"></div> Low Water Pressure</div>
+  <div class="check-item"><div class="cb"></div> Water Heater Issue</div>
+  <div class="check-item"><div class="cb"></div> Gas Line Issue</div>
+  <div class="check-item"><div class="cb"></div> Fixture Replacement</div>
+  <div class="check-item"><div class="cb"></div> Other (describe below)</div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Additional Issue Details</label>
+    <div class="line-tall"></div>
+  </div>
+</div>
+
+<div class="section-title">Diagnosis &amp; Findings</div>
+
+<div class="row">
+  <div class="field">
+    <label>Technician Diagnosis Notes</label>
+    <div class="line-tall" style="min-height:70px"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Parts / Materials Needed</label>
+    <div class="line-tall"></div>
+  </div>
+</div>
+
+<div class="section-title">Materials Used</div>
+
+<table class="mat-table">
+  <thead>
+    <tr>
+      <th style="width:15%">Item #</th>
+      <th style="width:40%">Material / Part Description</th>
+      <th style="width:15%">Qty</th>
+      <th style="width:15%">Unit Cost</th>
+      <th style="width:15%">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Time Log &amp; Job Status</div>
+
+<div class="row">
+  <div class="field">
+    <label>Time In</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Time Out</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Total Hours</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Labor Rate</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Total Invoice</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="section-title">Job Status</div>
+
+<div class="checkbox-grid" style="margin-bottom:14px">
+  <div class="check-item"><div class="cb"></div> Job Complete</div>
+  <div class="check-item"><div class="cb"></div> Parts on Order — Return Scheduled</div>
+  <div class="check-item"><div class="cb"></div> Referred to Specialist</div>
+  <div class="check-item"><div class="cb"></div> Awaiting Customer Approval</div>
+  <div class="check-item"><div class="cb"></div> Emergency Shut-Off Engaged</div>
+  <div class="check-item"><div class="cb"></div> Follow-Up Required</div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Follow-Up Notes / Return Date</label>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="sig-row">
+  <div class="sig-block">
+    <div class="sig-label">Customer Sign-Off</div>
+    <div class="sig-line"></div>
+    <div class="sig-sub">I authorize the work described and confirm it was completed satisfactorily.</div>
+  </div>
+  <div class="sig-block" style="max-width:150px">
+    <div class="sig-label">Date</div>
+    <div class="sig-line"></div>
+  </div>
+  <div class="sig-block">
+    <div class="sig-label">Technician Signature</div>
+    <div class="sig-line"></div>
+    <div class="sig-sub">Tech certifies accuracy of all information above.</div>
+  </div>
+  <div class="sig-block" style="max-width:150px">
+    <div class="sig-label">Date</div>
+    <div class="sig-line"></div>
+  </div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-002 Plumbing Dispatch &amp; Diagnosis &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+
+</body>
+</html>
