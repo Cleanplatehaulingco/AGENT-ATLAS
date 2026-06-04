@@ -140,19 +140,29 @@ var ShopMonitor = (function () {
     ;
 
     var inner = '(function(){'
-      // 1. Try window.name (set by Prepare Launch before navigating to Etsy)
       + fill
       + 'var d=null;'
-      + 'try{if(window.name&&window.name.charAt(0)==="{"){d=JSON.parse(window.name);}}catch(e){}'
-      + 'if(d&&d.title){run(d);}else{'
-      // 2. Fall back to relay API
-      + 'fetch(' + JSON.stringify(RELAY_URL) + ')'
-      + '.then(function(r){return r.json();})'
-      + '.then(function(res){'
-      +   'if(res.ok&&res.data&&res.data.title){run(res.data);}else{alert("No listing data found.\n\nSteps:\n1. Go back to Agent Atlas dashboard\n2. Listing Launcher → pick a listing\n3. Click Prepare Launch\n4. When Etsy opens, click this bookmark");}'
-      + '})'
-      + '.catch(function(){alert("No listing data found.\n\nSteps:\n1. Go back to Agent Atlas dashboard\n2. Listing Launcher → pick a listing\n3. Click Prepare Launch\n4. When Etsy opens, click this bookmark");})'
+      // 1. Try clipboard first (most reliable — set by Prepare Launch)
+      + 'function tryWindowName(){'
+      +   'try{if(window.name&&window.name.charAt(0)==="{"){d=JSON.parse(window.name);}}catch(e){}'
+      +   'if(d&&d.title){run(d);}else{tryRelay();}'
       + '}'
+      // 2. Fall back to relay API
+      + 'function tryRelay(){'
+      +   'fetch(' + JSON.stringify(RELAY_URL) + ')'
+      +   '.then(function(r){return r.json();})'
+      +   '.then(function(res){'
+      +     'if(res.ok&&res.data&&res.data.title){run(res.data);}else{alert("No listing data found. Go to Agent Atlas → Listing Launcher → Prepare Launch, then click this bookmark on the Etsy tab.");}'
+      +   '})'
+      +   '.catch(function(){alert("No listing data found. Go to Agent Atlas → Listing Launcher → Prepare Launch, then click this bookmark on the Etsy tab.");})'
+      + '}'
+      // Try clipboard first, fall through to window.name then relay
+      + 'if(navigator.clipboard&&navigator.clipboard.readText){'
+      +   'navigator.clipboard.readText().then(function(txt){'
+      +     'try{if(txt&&txt.charAt(0)==="{"){d=JSON.parse(txt);}}catch(e){}'
+      +     'if(d&&d.title){run(d);}else{tryWindowName();}'
+      +   '}).catch(function(){tryWindowName();});'
+      + '}else{tryWindowName();}'
       + '})();';
     return 'javascript:' + encodeURIComponent(inner);
   }
@@ -176,16 +186,22 @@ var ShopMonitor = (function () {
     var ETSY_NEW_LISTING = 'https://www.etsy.com/your/shops/me/listing-editor/create';
     var encoded = JSON.stringify(payload);
 
-    // PRIMARY: window.name survives navigation and works cross-origin — no server needed
+    // PRIMARY: Copy to clipboard — bookmarklet reads it on Etsy (most reliable cross-origin method)
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(encoded).catch(function(){});
+    }
+
+    // SECONDARY: window.name — open Etsy tab with data in window.name
     var w = window.open('about:blank', '_blank');
     if (w) {
       w.name = encoded;
-      w.location.href = ETSY_NEW_LISTING;
+      setTimeout(function(){ w.location.href = ETSY_NEW_LISTING; }, 100);
     } else {
+      window.open(ETSY_NEW_LISTING, '_blank');
       if (typeof toast === 'function') toast('Allow popups for this site, then try again', 'warn');
     }
 
-    // BACKGROUND: also push to relay so bookmarklet has a server fallback
+    // BACKGROUND: relay fallback
     fetch(RELAY_STORE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
