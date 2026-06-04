@@ -1,0 +1,4 @@
+node_modules/
+task-queue.json
+.env
+*.log

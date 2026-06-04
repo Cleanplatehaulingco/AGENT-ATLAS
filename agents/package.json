@@ -1,0 +1,17 @@
+{
+  "name": "tradeopsvault-agents",
+  "version": "1.0.0",
+  "description": "Autonomous multi-agent audit and improvement system for TradeOpsVault",
+  "main": "run.js",
+  "type": "module",
+  "scripts": {
+    "start": "node run.js",
+    "audit": "node run.js --mode=audit",
+    "watch": "node run.js --mode=watch"
+  },
+  "engines": { "node": ">=18.0.0" },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.53.0",
+    "dotenv": "^16.4.5"
+  }
+}
