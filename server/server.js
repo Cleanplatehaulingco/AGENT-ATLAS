@@ -24,6 +24,10 @@ const crypto      = require('crypto');
 // ─── App ──────────────────────────────────────────────────────────────────────
 const app = express();
 
+// Render sits behind a reverse proxy — trust it so express-rate-limit
+// reads the real client IP from X-Forwarded-For without validation errors.
+app.set('trust proxy', 1);
+
 // ─── Security: Helmet (API server — no HTML, no CSP needed) ──────────────────
 app.use(helmet({
   contentSecurityPolicy: false,   // API only, no HTML served
