@@ -37,11 +37,10 @@ async function generate() {
     const actualY = await page.evaluate(() => window.scrollY);
     console.log(`  scrolled to ${actualY}`);
 
-    // Capture the visible viewport after scroll
+    // Capture the correct section of the full page
     const raw = await page.screenshot({
       type: 'png',
-      fullPage: false,
-      clip: { x: 0, y: 0, width: 1200, height: s.h },
+      clip: { x: 0, y: s.y, width: 1200, height: s.h },
     });
 
     // Wrap it in a branded frame using a second page
