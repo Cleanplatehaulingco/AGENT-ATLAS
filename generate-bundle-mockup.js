@@ -42,13 +42,13 @@ async function generate() {
   const fanImgs = thumbs.map((b64, i) => {
     const total = thumbs.length;
     const center = (total - 1) / 2;
-    const angle = (i - center) * 7;
-    const tx = (i - center) * 60;
-    const ty = Math.abs(i - center) * 6;
+    const angle = (i - center) * 5;
+    const tx = (i - center) * 42;
+    const ty = Math.abs(i - center) * 3;
     const zIndex = i === Math.floor(center) ? 20 : 10 - Math.abs(i - center);
     return `<img src="data:image/png;base64,${b64}" style="
       position:absolute;
-      width:180px; height:233px;
+      width:200px; height:260px;
       border-radius:6px;
       border:1.5px solid #dde2f0;
       box-shadow:0 12px 32px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.1);
@@ -56,6 +56,7 @@ async function generate() {
       transform-origin:center bottom;
       object-fit:cover; object-position:top;
       z-index:${zIndex};
+      overflow:hidden;
     ">`;
   }).join('');
 
