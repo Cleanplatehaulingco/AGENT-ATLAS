@@ -8,6 +8,7 @@ const ETSY_CLIENT_ID  = process.env.ETSY_CLIENT_ID  || '';
 const ETSY_SHOP_ID    = process.env.ETSY_SHOP_ID    || '';
 const APP_URL         = process.env.APP_URL         || `http://localhost:${PORT}`;
 const FRONTEND_URL    = process.env.FRONTEND_URL    || 'https://cleanplatehaulingco.github.io';
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
 
 const ETSY_API_BASE   = 'https://openapi.etsy.com/v3';
 const ETSY_AUTH_BASE  = 'https://www.etsy.com/oauth/connect';
@@ -20,6 +21,7 @@ const helmet      = require('helmet');
 const cors        = require('cors');
 const rateLimit   = require('express-rate-limit');
 const crypto      = require('crypto');
+const Anthropic   = require('@anthropic-ai/sdk');
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 const app = express();
@@ -89,6 +91,31 @@ let _pkceStore = null;
  */
 const _relayStore = new Map();
 const RELAY_TTL_MS = 10 * 60 * 1000;  // 10 minutes
+
+/**
+ * _usageStore: Map<`${deviceId}-${year}-${month}`, count>
+ * Tracks AI analysis calls per device per month. Resets on server restart (acceptable for MVP).
+ */
+const _usageStore = new Map();
+const AI_FREE_CALLS_PER_MONTH = 5;
+
+// Clean up _usageStore entries older than 2 months to prevent unbounded growth.
+setInterval(() => {
+  const now = new Date();
+  const cutoff = new Date(now.getFullYear(), now.getMonth() - 2, 1);
+  for (const key of _usageStore.keys()) {
+    // Key format: `${deviceId}-${year}-${month}` — extract year-month suffix
+    const parts = key.split('-');
+    if (parts.length >= 2) {
+      const month = parseInt(parts[parts.length - 1], 10);
+      const year  = parseInt(parts[parts.length - 2], 10);
+      if (!isNaN(year) && !isNaN(month)) {
+        const entryDate = new Date(year, month - 1, 1);
+        if (entryDate < cutoff) _usageStore.delete(key);
+      }
+    }
+  }
+}, 24 * 60 * 60 * 1000);  // run daily
 
 // ─── PKCE helpers ─────────────────────────────────────────────────────────────
 function generateVerifier() {
@@ -533,6 +560,87 @@ app.get('/relay/load/:key', (req, res) => {
   }
 
   res.json({ ok: true, data: entry.data });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// AI ANALYSIS — no auth required, open CORS (used by locally-opened templates)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const _aiCors = cors({ origin: '*', methods: ['GET', 'POST', 'OPTIONS'], allowedHeaders: ['Content-Type'] });
+
+// ─── AI: analyze form ─────────────────────────────────────────────────────────
+app.post('/ai/analyze', _aiCors, async (req, res) => {
+  const { formType, formData, deviceId } = req.body || {};
+
+  if (!formType || !formData || !deviceId) {
+    return res.status(400).json({ ok: false, error: 'formType, formData, and deviceId are required' });
+  }
+
+  // Usage check
+  const now   = new Date();
+  const year  = now.getFullYear();
+  const month = now.getMonth() + 1;  // 1-based
+  const usageKey = `${deviceId}-${year}-${month}`;
+  const callsUsed = _usageStore.get(usageKey) || 0;
+
+  if (callsUsed >= AI_FREE_CALLS_PER_MONTH) {
+    return res.status(200).json({
+      ok:           false,
+      limitReached: true,
+      message:      "You've used your 5 free AI analyses this month. Upgrade at tradeopsvault.com for unlimited access.",
+    });
+  }
+
+  if (!ANTHROPIC_API_KEY) {
+    logError('POST /ai/analyze: ANTHROPIC_API_KEY not set');
+    return res.status(500).json({ ok: false, error: 'AI service not configured' });
+  }
+
+  try {
+    const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+
+    const message = await anthropic.messages.create({
+      model:      'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
+      system:     'You are a trade business advisor analyzing a completed job form. Give specific, actionable insights in 3-5 bullet points. Be direct and practical — your user is a working contractor, not an office worker. Focus on: missed revenue opportunities, follow-up actions, safety flags, and business improvement tips.',
+      messages: [
+        {
+          role:    'user',
+          content: `Form type: ${formType}\n\nForm data:\n${JSON.stringify(formData, null, 2)}`,
+        },
+      ],
+    });
+
+    // Increment usage after successful call
+    _usageStore.set(usageKey, callsUsed + 1);
+
+    const analysis      = message.content.find(b => b.type === 'text')?.text || '';
+    const newCallsUsed  = callsUsed + 1;
+    const callsRemaining = Math.max(0, AI_FREE_CALLS_PER_MONTH - newCallsUsed);
+
+    res.json({ ok: true, analysis, callsUsed: newCallsUsed, callsRemaining });
+
+  } catch (err) {
+    logError('POST /ai/analyze: Claude API error', { message: err.message });
+    res.status(500).json({ ok: false, error: 'AI analysis failed — please try again' });
+  }
+});
+
+// ─── AI: usage ────────────────────────────────────────────────────────────────
+app.get('/ai/usage/:deviceId', _aiCors, (req, res) => {
+  const { deviceId } = req.params;
+  const now   = new Date();
+  const year  = now.getFullYear();
+  const month = now.getMonth() + 1;  // 1-based
+
+  const usageKey    = `${deviceId}-${year}-${month}`;
+  const callsUsed   = _usageStore.get(usageKey) || 0;
+  const callsRemaining = Math.max(0, AI_FREE_CALLS_PER_MONTH - callsUsed);
+
+  // Reset date is the 1st of next month
+  const resetDate = new Date(year, month, 1).toISOString().slice(0, 10);
+
+  res.json({ callsUsed, callsRemaining, resetDate });
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
