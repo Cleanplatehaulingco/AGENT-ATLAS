@@ -567,6 +567,21 @@ app.listen(PORT, () => {
     appUrl:  APP_URL,
     frontend: FRONTEND_URL,
   });
+
+  // Self-ping every 10 minutes so Render free tier stays warm even when
+  // UptimeRobot has a gap or the dashboard tab is closed. Silently skipped
+  // in development to avoid unnecessary local noise.
+  if (process.env.NODE_ENV === 'production' && APP_URL) {
+    setInterval(() => {
+      const http = require('http');
+      const https = require('https');
+      const url = new URL('/health', APP_URL);
+      const lib = url.protocol === 'https:' ? https : http;
+      const req = lib.get(url.toString(), (res) => { res.resume(); });
+      req.on('error', () => {}); // silent — UptimeRobot is the real alert layer
+      req.setTimeout(8000, () => req.destroy());
+    }, 10 * 60 * 1000);
+  }
 });
 
 module.exports = app;  // Export for testing
