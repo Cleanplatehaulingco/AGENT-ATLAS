@@ -65,63 +65,68 @@ async function generate() {
 body {
   width:1500px; height:1500px;
   background:#fff;
-  display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
   font-family:'Segoe UI',Arial,sans-serif;
-  padding-top:80px;
+  padding:60px 80px;
+  gap:0;
 }
 .top-tag {
-  font-size:15px; font-weight:800; letter-spacing:4px;
-  text-transform:uppercase; color:#8899cc; margin-bottom:24px;
-}
-.fan {
-  position:relative; width:1400px; height:580px;
-  display:flex; align-items:flex-end; justify-content:center;
-  margin-bottom:50px;
+  font-size:14px; font-weight:800; letter-spacing:4px;
+  text-transform:uppercase; color:#8899cc; margin-bottom:18px;
 }
 h1 {
-  font-size:110px; font-weight:900; color:#0d1526;
+  font-size:100px; font-weight:900; color:#0d1526;
   text-transform:uppercase; letter-spacing:-3px;
-  text-align:center; line-height:0.95; margin-bottom:16px;
+  text-align:center; line-height:0.95; margin-bottom:14px;
+  position:relative; z-index:30;
 }
 h1 span { color:#e85d04; }
 .sub {
-  font-size:24px; color:#667; text-align:center;
-  margin-bottom:36px; font-weight:500;
+  font-size:22px; color:#667; text-align:center;
+  margin-bottom:30px; font-weight:500; position:relative; z-index:30;
+}
+.fan {
+  position:relative; width:1340px; height:520px;
+  display:flex; align-items:flex-end; justify-content:center;
+  margin-bottom:36px; flex-shrink:0;
 }
 .price-row {
-  display:flex; align-items:center; gap:24px; margin-bottom:36px;
+  display:flex; align-items:center; gap:24px; margin-bottom:28px;
+  position:relative; z-index:30;
 }
 .price {
-  font-size:100px; font-weight:900; color:#0d1526; line-height:1;
+  font-size:90px; font-weight:900; color:#0d1526; line-height:1;
 }
 .was {
-  font-size:32px; color:#ccc; text-decoration:line-through; font-weight:600;
+  font-size:30px; color:#ccc; text-decoration:line-through; font-weight:600;
 }
 .save-badge {
-  background:#e85d04; color:#fff; padding:14px 28px;
-  border-radius:40px; font-size:20px; font-weight:900;
+  background:#e85d04; color:#fff; padding:12px 26px;
+  border-radius:40px; font-size:18px; font-weight:900;
   letter-spacing:1px; text-transform:uppercase;
   box-shadow:0 8px 24px rgba(232,93,4,0.4);
 }
 .features {
   display:flex; gap:0; border:2px solid #eaecf4; border-radius:14px; overflow:hidden;
+  position:relative; z-index:30;
 }
 .feat {
-  padding:22px 48px; text-align:center; border-right:2px solid #eaecf4; flex:1;
+  padding:20px 44px; text-align:center; border-right:2px solid #eaecf4; flex:1;
 }
 .feat:last-child { border-right:none; }
-.feat-num { font-size:36px; font-weight:900; color:#0d1526; }
-.feat-label { font-size:13px; color:#8899cc; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:6px; }
+.feat-num { font-size:32px; font-weight:900; color:#0d1526; }
+.feat-label { font-size:12px; color:#8899cc; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:5px; }
 .bottom-tag {
-  margin-top:28px; font-size:15px; font-weight:800;
+  margin-top:22px; font-size:14px; font-weight:800;
   letter-spacing:2px; text-transform:uppercase; color:#0d1526;
+  position:relative; z-index:30;
 }
 .bottom-tag span { color:#e85d04; }
 </style></head><body>
 <div class="top-tag">TradeOpsVault · Complete Bundle · Instant Digital Download</div>
-<div class="fan">${fanImgs}</div>
 <h1>20 Trade Forms.<br><span>One Download.</span></h1>
 <div class="sub">Every template your contracting business needs — no software required</div>
+<div class="fan">${fanImgs}</div>
 <div class="price-row">
   <div class="price">$9.99</div>
   <div class="was">$79.80</div>
