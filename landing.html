@@ -79,14 +79,16 @@
     }
 
     .nav-mark {
-      width: 32px;
+      width: 46px;
       height: 32px;
-      background: linear-gradient(140deg, #4f7cff 0%, #7ba4ff 100%);
+      background: linear-gradient(140deg, #0d1526 0%, #111d35 100%);
+      border: 1px solid rgba(79,124,255,0.35);
       border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      box-shadow: 0 0 14px rgba(79,124,255,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
     }
 
     .nav-mark svg { display: block; }
@@ -538,17 +540,19 @@
     }
 
     .step-num-wrap {
-      width: 48px; height: 48px;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 50%;
+      width: 52px; height: 52px;
+      background: linear-gradient(140deg, #0d1526, #111d35);
+      border: 1px solid rgba(79,124,255,0.3);
+      border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
-      font-size: .78rem;
-      font-weight: 800;
+      font-size: .75rem;
+      font-weight: 900;
       color: var(--accent);
-      margin-bottom: 20px;
+      margin-bottom: 22px;
       position: relative;
       z-index: 1;
+      letter-spacing: .04em;
+      box-shadow: 0 0 20px rgba(79,124,255,0.12), inset 0 1px 0 rgba(255,255,255,0.04);
     }
 
     .step-title {
@@ -770,8 +774,9 @@
     }
 
     .footer-mark {
-      width: 26px; height: 26px;
-      background: linear-gradient(140deg, #4f7cff, #7ba4ff);
+      width: 36px; height: 26px;
+      background: linear-gradient(140deg, #0d1526, #111d35);
+      border: 1px solid rgba(79,124,255,0.25);
       border-radius: 7px;
       display: flex; align-items: center; justify-content: center;
     }
@@ -832,8 +837,14 @@
 <nav>
   <a href="#" class="nav-brand">
     <div class="nav-mark">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+      <!-- AA logomark: two A's sharing a single continuous crossbar slash -->
+      <svg width="22" height="18" viewBox="0 0 44 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Left A -->
+        <path d="M2 34 L11 4 L20 34" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <!-- Right A -->
+        <path d="M24 34 L33 4 L42 34" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <!-- Single continuous crossbar slashing through both A's -->
+        <line x1="0" y1="22" x2="44" y2="15" stroke="#7ba4ff" stroke-width="2.5" stroke-linecap="round"/>
       </svg>
     </div>
     <span class="nav-name">Agent Atlas</span>
@@ -910,7 +921,11 @@
         <div class="frame-sidebar">
           <div class="f-brand">
             <div class="f-mark">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>
+              <svg width="14" height="11" viewBox="0 0 44 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 34 L11 4 L20 34" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M24 34 L33 4 L42 34" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="0" y1="22" x2="44" y2="15" stroke="#7ba4ff" stroke-width="3" stroke-linecap="round"/>
+              </svg>
             </div>
             <div class="f-name">Agent Atlas</div>
           </div>
@@ -1000,8 +1015,14 @@
 
     <div class="feat-grid">
       <div class="feat">
-        <div class="feat-icon" style="background:rgba(79,124,255,0.08);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4f7cff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <div class="feat-icon" style="background:rgba(79,124,255,0.08);border-color:rgba(79,124,255,0.15);">
+          <!-- Listing management: stacked rows with status dot -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="18" height="4" rx="1.5" fill="rgba(79,124,255,0.25)" stroke="#4f7cff" stroke-width="1.5"/>
+            <rect x="3" y="10" width="18" height="4" rx="1.5" fill="rgba(79,124,255,0.12)" stroke="rgba(79,124,255,0.5)" stroke-width="1.5"/>
+            <rect x="3" y="17" width="18" height="4" rx="1.5" fill="rgba(79,124,255,0.06)" stroke="rgba(79,124,255,0.3)" stroke-width="1.5"/>
+            <circle cx="20.5" cy="5" r="2.5" fill="#10d97e"/>
+          </svg>
         </div>
         <div class="feat-title">Listing Management</div>
         <div class="feat-desc">Draft, edit, and publish all 20 listings to TradeOpsVault with consistent formatting, optimized titles, and full tag sets.</div>
@@ -1014,8 +1035,14 @@
       </div>
 
       <div class="feat">
-        <div class="feat-icon" style="background:rgba(241,90,34,0.08);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f15a22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div class="feat-icon" style="background:rgba(241,90,34,0.08);border-color:rgba(241,90,34,0.15);">
+          <!-- Image publishing: layered frames -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="5" width="14" height="14" rx="2" fill="rgba(241,90,34,0.15)" stroke="rgba(241,90,34,0.4)" stroke-width="1.5"/>
+            <rect x="2" y="2" width="14" height="14" rx="2" fill="rgba(241,90,34,0.1)" stroke="#f15a22" stroke-width="1.5"/>
+            <circle cx="6.5" cy="6.5" r="1.5" fill="#f15a22"/>
+            <path d="M2 13 L7 9 L11 12 L14 10 L16 12" stroke="#f15a22" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
         <div class="feat-title">Image Publishing</div>
         <div class="feat-desc">Generates and uploads up to 10 product images per listing using canvas compositing and DALL-E 3. Fills every Etsy image slot in the correct rank order.</div>
@@ -1028,8 +1055,14 @@
       </div>
 
       <div class="feat">
-        <div class="feat-icon" style="background:rgba(16,217,126,0.07);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10d97e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <div class="feat-icon" style="background:rgba(16,217,126,0.07);border-color:rgba(16,217,126,0.15);">
+          <!-- Revenue: upward bar chart -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="14" width="4" height="7" rx="1" fill="rgba(16,217,126,0.3)" stroke="#10d97e" stroke-width="1.5"/>
+            <rect x="10" y="9" width="4" height="12" rx="1" fill="rgba(16,217,126,0.5)" stroke="#10d97e" stroke-width="1.5"/>
+            <rect x="17" y="4" width="4" height="17" rx="1" fill="#10d97e" stroke="#10d97e" stroke-width="1.5"/>
+            <path d="M3 22 L21 22" stroke="rgba(16,217,126,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
         </div>
         <div class="feat-title">Revenue Tracking</div>
         <div class="feat-desc">Reads TradeOpsVault's own transaction history to track revenue against a 45-day $500 goal. No competitor data, no third-party shops.</div>
@@ -1042,8 +1075,15 @@
       </div>
 
       <div class="feat">
-        <div class="feat-icon" style="background:rgba(180,100,255,0.08);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b464ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <div class="feat-icon" style="background:rgba(180,100,255,0.08);border-color:rgba(180,100,255,0.15);">
+          <!-- Listing Launcher: cursor with spark -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 3 L4 20 L9 15 L13 22 L15 21 L11 14 L18 14 Z" fill="rgba(180,100,255,0.2)" stroke="#b464ff" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="19" cy="5" r="1.5" fill="#b464ff"/>
+            <line x1="19" y1="2" x2="19" y2="3" stroke="#b464ff" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="22" y1="5" x2="21" y2="5" stroke="#b464ff" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="21" y1="3" x2="20.3" y2="3.7" stroke="#b464ff" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
         </div>
         <div class="feat-title">Listing Launcher</div>
         <div class="feat-desc">A bookmarklet tool that auto-fills Etsy's add-listing form from prepared data — reducing manual entry from 10 minutes to under 30 seconds.</div>
@@ -1165,7 +1205,9 @@
     <div class="comp-grid">
       <div class="comp-item">
         <div class="comp-check">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10d97e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8.5 L6.5 12 L13 5" stroke="#10d97e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
         <div>
           <div class="comp-strong">Real operating shop</div>
@@ -1174,7 +1216,9 @@
       </div>
       <div class="comp-item">
         <div class="comp-check">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10d97e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8.5 L6.5 12 L13 5" stroke="#10d97e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
         <div>
           <div class="comp-strong">Deployed production tool</div>
@@ -1183,7 +1227,9 @@
       </div>
       <div class="comp-item">
         <div class="comp-check">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10d97e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8.5 L6.5 12 L13 5" stroke="#10d97e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
         <div>
           <div class="comp-strong">Single-seller only</div>
@@ -1192,7 +1238,9 @@
       </div>
       <div class="comp-item">
         <div class="comp-check">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10d97e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8.5 L6.5 12 L13 5" stroke="#10d97e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
         <div>
           <div class="comp-strong">Minimal permission scope</div>
@@ -1201,7 +1249,9 @@
       </div>
       <div class="comp-item">
         <div class="comp-check">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10d97e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8.5 L6.5 12 L13 5" stroke="#10d97e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
         <div>
           <div class="comp-strong">Low API volume</div>
@@ -1210,7 +1260,9 @@
       </div>
       <div class="comp-item">
         <div class="comp-check">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10d97e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8.5 L6.5 12 L13 5" stroke="#10d97e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
         <div>
           <div class="comp-strong">No data monetization</div>
@@ -1245,7 +1297,11 @@
 <footer>
   <div class="footer-left">
     <div class="footer-mark">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>
+      <svg width="16" height="13" viewBox="0 0 44 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 34 L11 4 L20 34" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M24 34 L33 4 L42 34" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="0" y1="22" x2="44" y2="15" stroke="#7ba4ff" stroke-width="3" stroke-linecap="round"/>
+      </svg>
     </div>
     Agent Atlas &nbsp;·&nbsp; TradeOpsVault Shop Manager &nbsp;·&nbsp; &copy; 2025
   </div>
