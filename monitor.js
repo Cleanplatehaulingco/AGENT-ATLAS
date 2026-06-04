@@ -96,77 +96,63 @@ var ShopMonitor = (function () {
   // Fixed key "atlas_launch_latest" so the bookmarklet never needs re-installing.
   function listingLauncherCode() {
     var RELAY_URL = RENDER_API + '/relay/load/atlas_launch_latest';
+    // The bookmarklet runs on etsy.com.
+    // Strategy: window.name is set by prepareLaunch before navigating — works cross-origin, no server needed.
+    // Relay fetch is a fallback if window.name is empty (e.g. user opened Etsy tab manually).
+    var fill = ''
+      + 'function sf(sel,val){'
+      +   'var el=document.querySelector(sel);if(!el)return false;'
+      +   'var ns=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),"value");'
+      +   'if(ns&&ns.set)ns.set.call(el,val);else el.value=val;'
+      +   'el.dispatchEvent(new Event("input",{bubbles:true}));'
+      +   'el.dispatchEvent(new Event("change",{bubbles:true}));'
+      +   'return true;'
+      + '}'
+      + 'function sl(txt,val){'
+      +   'var lbl=Array.from(document.querySelectorAll("label")).find(function(l){return l.textContent.toLowerCase().includes(txt.toLowerCase());});'
+      +   'if(!lbl)return false;'
+      +   'var id=lbl.htmlFor||lbl.getAttribute("for");'
+      +   'var el=id?document.getElementById(id):lbl.querySelector("input,textarea,select");'
+      +   'if(!el)return false;'
+      +   'var ns=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),"value");'
+      +   'if(ns&&ns.set)ns.set.call(el,val);else el.value=val;'
+      +   'el.dispatchEvent(new Event("input",{bubbles:true}));'
+      +   'el.dispatchEvent(new Event("change",{bubbles:true}));'
+      +   'return true;'
+      + '}'
+      + 'function run(d){'
+      +   'var n=0;'
+      +   'if(sl("title",d.title)||sf("[name=title]",d.title))n++;'
+      +   'if(sl("description",d.desc)||sf("[name=description],textarea",d.desc))n++;'
+      +   'if(d.price&&(sl("price",d.price)||sf("[name=price]",d.price)))n++;'
+      +   'var ti=document.querySelector("[placeholder*=tag i],[aria-label*=tag i],[name*=tag i]");'
+      +   'if(ti&&d.tags){'
+      +     'd.tags.split(",").map(function(t){return t.trim();}).filter(Boolean).slice(0,13).forEach(function(tag){'
+      +       'var ns=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(ti),"value");'
+      +       'if(ns&&ns.set)ns.set.call(ti,tag);else ti.value=tag;'
+      +       'ti.dispatchEvent(new Event("input",{bubbles:true}));'
+      +       'ti.dispatchEvent(new KeyboardEvent("keydown",{key:"Enter",keyCode:13,bubbles:true}));'
+      +       'ti.dispatchEvent(new KeyboardEvent("keyup",{key:"Enter",keyCode:13,bubbles:true}));'
+      +     '});n++;'
+      +   '}'
+      +   'alert("\u2713 Atlas filled "+n+" fields for:\n"+d.title.substring(0,70)+"\n\nUpload the .html file as the digital download, then Publish!");'
+      + '}'
+    ;
+
     var inner = '(function(){'
-      // Fetch from relay API — works cross-origin from etsy.com
+      // 1. Try window.name (set by Prepare Launch before navigating to Etsy)
+      + fill
+      + 'var d=null;'
+      + 'try{if(window.name&&window.name.charAt(0)==="{"){d=JSON.parse(window.name);}}catch(e){}'
+      + 'if(d&&d.title){run(d);}else{'
+      // 2. Fall back to relay API
       + 'fetch(' + JSON.stringify(RELAY_URL) + ')'
       + '.then(function(r){return r.json();})'
       + '.then(function(res){'
-      +   'if(!res.ok||!res.data){alert("No listing data. Go back to Atlas, pick a listing, click Prepare Launch, then try again.");return;}'
-      +   'var d=res.data;'
-
-      // Helper: find input/textarea by label text, aria-label, placeholder, or name
-      + 'function setField(sel,val){'
-      +   'var el=document.querySelector(sel);'
-      +   'if(!el)return false;'
-      +   'var nativeSetter=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,"value")||'
-      +     'Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype,"value");'
-      +   'if(nativeSetter&&nativeSetter.set)nativeSetter.set.call(el,val);'
-      +   'else el.value=val;'
-      +   'el.dispatchEvent(new Event("input",{bubbles:true}));'
-      +   'el.dispatchEvent(new Event("change",{bubbles:true}));'
-      +   'return true;'
-      + '}'
-      + 'function setByLabel(labelText,val){'
-      +   'var labels=Array.from(document.querySelectorAll("label"));'
-      +   'var lbl=labels.find(function(l){return l.textContent.toLowerCase().includes(labelText.toLowerCase());});'
-      +   'if(!lbl)return false;'
-      +   'var id=lbl.htmlFor||lbl.getAttribute("for");'
-      +   'var el=id?document.getElementById(id):lbl.querySelector("input,textarea");'
-      +   'if(!el)return false;'
-      +   'var nativeSetter=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),"value");'
-      +   'if(nativeSetter&&nativeSetter.set)nativeSetter.set.call(el,val);'
-      +   'else el.value=val;'
-      +   'el.dispatchEvent(new Event("input",{bubbles:true}));'
-      +   'el.dispatchEvent(new Event("change",{bubbles:true}));'
-      +   'return true;'
-      + '}'
-      // Fill title
-      + 'var filled=0;'
-      + 'if(setByLabel("listing title",d.title)||setField("[name=title],[placeholder*=title i],[aria-label*=title i]",d.title))filled++;'
-      // Fill description
-      + 'if(setByLabel("description",d.desc)||setField("[name=description],textarea[placeholder*=descri i]",d.desc))filled++;'
-      // Fill price
-      + 'if(d.price&&(setByLabel("price",d.price)||setField("[name=price],[aria-label*=price i]",d.price)))filled++;'
-      // Fill tags — Etsy uses a tag input where you type and press Enter/comma
-      + 'var tagInput=document.querySelector("[placeholder*=tag i],[aria-label*=tag i],[name*=tag i]");'
-      + 'if(tagInput&&d.tags){'
-      +   'var tags=d.tags.split(",").map(function(t){return t.trim();}).filter(Boolean).slice(0,13);'
-      +   'tags.forEach(function(tag){'
-      +     'var nativeSetter=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(tagInput),"value");'
-      +     'if(nativeSetter&&nativeSetter.set)nativeSetter.set.call(tagInput,tag);'
-      +     'tagInput.dispatchEvent(new Event("input",{bubbles:true}));'
-      +     'tagInput.dispatchEvent(new KeyboardEvent("keydown",{key:"Enter",code:"Enter",keyCode:13,bubbles:true}));'
-      +     'tagInput.dispatchEvent(new KeyboardEvent("keyup",{key:"Enter",code:"Enter",keyCode:13,bubbles:true}));'
-      +   '});'
-      +   'filled++;'
-      + '}'
-      + 'alert("✓ Atlas filled "+filled+" fields for:\\n"+d.title.substring(0,60)+"...\\n\\nReview everything, set your digital download file, then click Publish!");'
+      +   'if(res.ok&&res.data&&res.data.title){run(res.data);}else{alert("No listing data found.\n\nSteps:\n1. Go back to Agent Atlas dashboard\n2. Listing Launcher → pick a listing\n3. Click Prepare Launch\n4. When Etsy opens, click this bookmark");}'
       + '})'
-      + '.catch(function(){'
-      + '  var fb=null;try{fb=JSON.parse(localStorage.getItem("atlas_launch_fallback")||"null");}catch(e){}'
-      + '  if(fb&&fb.title){'
-      +     'var d=fb;'
-      +     'var filled=0;'
-      +     'function setField2(sel,val){var el=document.querySelector(sel);if(!el)return false;var ns=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),"value");if(ns&&ns.set)ns.set.call(el,val);else el.value=val;el.dispatchEvent(new Event("input",{bubbles:true}));el.dispatchEvent(new Event("change",{bubbles:true}));return true;}'
-      +     'function setByLabel2(labelText,val){var lbl=Array.from(document.querySelectorAll("label")).find(function(l){return l.textContent.toLowerCase().includes(labelText.toLowerCase());});if(!lbl)return false;var id=lbl.htmlFor||lbl.getAttribute("for");var el=id?document.getElementById(id):lbl.querySelector("input,textarea");if(!el)return false;return setField2(el.id?"#"+el.id:"input",val);}'
-      +     'if(setByLabel2("listing title",d.title)||setField2("[name=title]",d.title))filled++;'
-      +     'if(setByLabel2("description",d.desc)||setField2("[name=description],textarea",d.desc))filled++;'
-      +     'if(d.price&&(setByLabel2("price",d.price)||setField2("[name=price]",d.price)))filled++;'
-      +     'alert("✓ Atlas (offline mode) filled "+filled+" fields.\nServer was unreachable but local data worked.\n\n"+d.title.substring(0,60));'
-      +   '} else {'
-      +     'alert("Could not reach Atlas API server and no local data found.\nGo back to Agent Atlas, click Prepare Launch, then try the bookmarklet again.");'
-      +   '}'
-      + '});'
+      + '.catch(function(){alert("No listing data found.\n\nSteps:\n1. Go back to Agent Atlas dashboard\n2. Listing Launcher → pick a listing\n3. Click Prepare Launch\n4. When Etsy opens, click this bookmark");})'
+      + '}'
       + '})();';
     return 'javascript:' + encodeURIComponent(inner);
   }
@@ -188,32 +174,23 @@ var ShopMonitor = (function () {
 
     var RELAY_STORE_URL = RENDER_API + '/relay/store';
     var ETSY_NEW_LISTING = 'https://www.etsy.com/your/shops/me/listing-editor/create';
+    var encoded = JSON.stringify(payload);
 
-    // Always save to localStorage as instant fallback for the bookmarklet
-    try { localStorage.setItem('atlas_launch_fallback', JSON.stringify(payload)); } catch(e) {}
+    // PRIMARY: window.name survives navigation and works cross-origin — no server needed
+    var w = window.open('about:blank', '_blank');
+    if (w) {
+      w.name = encoded;
+      w.location.href = ETSY_NEW_LISTING;
+    } else {
+      if (typeof toast === 'function') toast('Allow popups for this site, then try again', 'warn');
+    }
 
-    // POST to relay, then open Etsy once we know the data is stored
+    // BACKGROUND: also push to relay so bookmarklet has a server fallback
     fetch(RELAY_STORE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ key: 'atlas_launch_latest', data: payload }),
-    })
-    .then(function(r) {
-      if (!r.ok) throw new Error('relay store failed: ' + r.status);
-      // Open Etsy in a new tab after relay confirms storage
-      window.open(ETSY_NEW_LISTING, '_blank');
-    })
-    .catch(function(err) {
-      // Fallback: relay unavailable — use window.name approach
-      if (typeof toast === 'function') toast('Relay API unreachable — using fallback window method', 'warn');
-      var w = window.open('about:blank', '_blank');
-      if (w) {
-        w.name = JSON.stringify(payload);
-        w.location.href = ETSY_NEW_LISTING;
-      } else {
-        if (typeof toast === 'function') toast('Allow popups for this site, then try again', 'warn');
-      }
-    });
+    }).catch(function(){});
 
     return payload;
   }
