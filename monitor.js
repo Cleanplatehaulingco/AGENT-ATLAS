@@ -152,7 +152,21 @@ var ShopMonitor = (function () {
       + '}'
       + 'alert("✓ Atlas filled "+filled+" fields for:\\n"+d.title.substring(0,60)+"...\\n\\nReview everything, set your digital download file, then click Publish!");'
       + '})'
-      + '.catch(function(){alert("Could not reach Atlas API server. Check your connection.");});'
+      + '.catch(function(){'
+      + '  var fb=null;try{fb=JSON.parse(localStorage.getItem("atlas_launch_fallback")||"null");}catch(e){}'
+      + '  if(fb&&fb.title){'
+      +     'var d=fb;'
+      +     'var filled=0;'
+      +     'function setField2(sel,val){var el=document.querySelector(sel);if(!el)return false;var ns=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),"value");if(ns&&ns.set)ns.set.call(el,val);else el.value=val;el.dispatchEvent(new Event("input",{bubbles:true}));el.dispatchEvent(new Event("change",{bubbles:true}));return true;}'
+      +     'function setByLabel2(labelText,val){var lbl=Array.from(document.querySelectorAll("label")).find(function(l){return l.textContent.toLowerCase().includes(labelText.toLowerCase());});if(!lbl)return false;var id=lbl.htmlFor||lbl.getAttribute("for");var el=id?document.getElementById(id):lbl.querySelector("input,textarea");if(!el)return false;return setField2(el.id?"#"+el.id:"input",val);}'
+      +     'if(setByLabel2("listing title",d.title)||setField2("[name=title]",d.title))filled++;'
+      +     'if(setByLabel2("description",d.desc)||setField2("[name=description],textarea",d.desc))filled++;'
+      +     'if(d.price&&(setByLabel2("price",d.price)||setField2("[name=price]",d.price)))filled++;'
+      +     'alert("✓ Atlas (offline mode) filled "+filled+" fields.\nServer was unreachable but local data worked.\n\n"+d.title.substring(0,60));'
+      +   '} else {'
+      +     'alert("Could not reach Atlas API server and no local data found.\nGo back to Agent Atlas, click Prepare Launch, then try the bookmarklet again.");'
+      +   '}'
+      + '});'
       + '})();';
     return 'javascript:' + encodeURIComponent(inner);
   }
@@ -174,6 +188,9 @@ var ShopMonitor = (function () {
 
     var RELAY_STORE_URL = RENDER_API + '/relay/store';
     var ETSY_NEW_LISTING = 'https://www.etsy.com/your/shops/me/listing-editor/create';
+
+    // Always save to localStorage as instant fallback for the bookmarklet
+    try { localStorage.setItem('atlas_launch_fallback', JSON.stringify(payload)); } catch(e) {}
 
     // POST to relay, then open Etsy once we know the data is stored
     fetch(RELAY_STORE_URL, {
