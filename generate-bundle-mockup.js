@@ -42,21 +42,20 @@ async function generate() {
   const fanImgs = thumbs.map((b64, i) => {
     const total = thumbs.length;
     const center = (total - 1) / 2;
-    const angle = (i - center) * 5;
-    const tx = (i - center) * 42;
-    const ty = Math.abs(i - center) * 3;
+    const angle = (i - center) * 6;
+    const tx = (i - center) * 80;
+    const ty = Math.abs(i - center) * 5;
     const zIndex = i === Math.floor(center) ? 20 : 10 - Math.abs(i - center);
     return `<img src="data:image/png;base64,${b64}" style="
       position:absolute;
-      width:200px; height:260px;
-      border-radius:6px;
-      border:1.5px solid #dde2f0;
-      box-shadow:0 12px 32px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.1);
+      width:320px; height:414px;
+      border-radius:8px;
+      border:2px solid #dde2f0;
+      box-shadow:0 20px 50px rgba(0,0,0,0.2), 0 4px 10px rgba(0,0,0,0.1);
       transform:rotate(${angle}deg) translateX(${tx}px) translateY(${ty}px);
       transform-origin:center bottom;
       object-fit:cover; object-position:top;
       z-index:${zIndex};
-      overflow:hidden;
     ">`;
   }).join('');
 
@@ -71,51 +70,50 @@ body {
   padding-top:80px;
 }
 .top-tag {
-  font-size:13px; font-weight:800; letter-spacing:4px;
-  text-transform:uppercase; color:#8899cc; margin-bottom:20px;
+  font-size:15px; font-weight:800; letter-spacing:4px;
+  text-transform:uppercase; color:#8899cc; margin-bottom:24px;
 }
 .fan {
-  position:relative; width:900px; height:380px;
+  position:relative; width:1400px; height:580px;
   display:flex; align-items:flex-end; justify-content:center;
-  margin-bottom:44px;
+  margin-bottom:50px;
 }
 h1 {
-  font-size:72px; font-weight:900; color:#0d1526;
-  text-transform:uppercase; letter-spacing:-2px;
-  text-align:center; line-height:1; margin-bottom:10px;
+  font-size:110px; font-weight:900; color:#0d1526;
+  text-transform:uppercase; letter-spacing:-3px;
+  text-align:center; line-height:0.95; margin-bottom:16px;
 }
 h1 span { color:#e85d04; }
 .sub {
-  font-size:20px; color:#667; text-align:center;
-  margin-bottom:32px; font-weight:500;
+  font-size:24px; color:#667; text-align:center;
+  margin-bottom:36px; font-weight:500;
 }
 .price-row {
-  display:flex; align-items:center; gap:20px; margin-bottom:32px;
+  display:flex; align-items:center; gap:24px; margin-bottom:36px;
 }
 .price {
-  font-size:80px; font-weight:900; color:#0d1526; line-height:1;
+  font-size:100px; font-weight:900; color:#0d1526; line-height:1;
 }
 .was {
-  font-size:28px; color:#ccc; text-decoration:line-through; font-weight:600;
+  font-size:32px; color:#ccc; text-decoration:line-through; font-weight:600;
 }
 .save-badge {
-  background:#e85d04; color:#fff; padding:10px 22px;
-  border-radius:30px; font-size:16px; font-weight:900;
+  background:#e85d04; color:#fff; padding:14px 28px;
+  border-radius:40px; font-size:20px; font-weight:900;
   letter-spacing:1px; text-transform:uppercase;
-  box-shadow:0 6px 20px rgba(232,93,4,0.35);
+  box-shadow:0 8px 24px rgba(232,93,4,0.4);
 }
 .features {
-  display:flex; gap:0; border:2px solid #eaecf4; border-radius:12px; overflow:hidden;
+  display:flex; gap:0; border:2px solid #eaecf4; border-radius:14px; overflow:hidden;
 }
 .feat {
-  padding:18px 32px; text-align:center; border-right:2px solid #eaecf4;
-  flex:1;
+  padding:22px 48px; text-align:center; border-right:2px solid #eaecf4; flex:1;
 }
 .feat:last-child { border-right:none; }
-.feat-num { font-size:30px; font-weight:900; color:#0d1526; }
-.feat-label { font-size:12px; color:#8899cc; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+.feat-num { font-size:36px; font-weight:900; color:#0d1526; }
+.feat-label { font-size:13px; color:#8899cc; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:6px; }
 .bottom-tag {
-  margin-top:28px; font-size:13px; font-weight:800;
+  margin-top:28px; font-size:15px; font-weight:800;
   letter-spacing:2px; text-transform:uppercase; color:#0d1526;
 }
 .bottom-tag span { color:#e85d04; }
