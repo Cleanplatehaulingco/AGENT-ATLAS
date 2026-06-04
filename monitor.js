@@ -11,7 +11,7 @@
  *   atlas_monitor_orders  — parsed CSV order rows
  */
 
-var RENDER_API = 'https://agent-atlas-api.onrender.com';
+var RENDER_API = 'https://agent-atlas.onrender.com';
 
 var ShopMonitor = (function () {
   'use strict';
@@ -173,7 +173,7 @@ var ShopMonitor = (function () {
     };
 
     var RELAY_STORE_URL = RENDER_API + '/relay/store';
-    var ETSY_NEW_LISTING = 'https://www.etsy.com/sell/add-listing';
+    var ETSY_NEW_LISTING = 'https://www.etsy.com/your/shops/me/listing-editor/create';
 
     // POST to relay, then open Etsy once we know the data is stored
     fetch(RELAY_STORE_URL, {
@@ -406,7 +406,7 @@ var ShopMonitor = (function () {
     <div class="section-header"><span class="section-title">🚀 Listing Launcher — Semi-Auto Publisher</span></div>
     <p style="font-size:.82rem;color:var(--muted);margin:0 0 14px;">
       No API needed. Pick a listing below → click <strong>Prepare Launch</strong> → go to
-      <code style="background:var(--panel2);padding:1px 5px;border-radius:3px;">etsy.com/sell/add-listing</code>
+      <code style="background:var(--panel2);padding:1px 5px;border-radius:3px;">etsy.com/your/shops/me/listing-editor/create</code>
       → click the bookmark. Every field fills automatically. You just review and hit Publish.
     </p>
 
@@ -568,7 +568,7 @@ shops_r — read my own shop info</div>
     if (status) {
       status.innerHTML = '<span style="color:var(--success);font-weight:700;">✓ Ready — ' + listingId + ' loaded</span>'
         + ' · <span style="color:var(--muted);">' + (payload.title||'').substring(0,60) + '…</span>'
-        + '<br><span style="color:var(--muted);">Now go to etsy.com/sell/add-listing and click ⚡ Atlas Launch Listing</span>';
+        + '<br><span style="color:var(--muted);">Now go to etsy.com/your/shops/me/listing-editor/create and click ⚡ Atlas Launch Listing</span>';
     }
     if (typeof toast === 'function') toast('✓ Etsy opening with ' + listingId + ' loaded — click ⚡ Atlas Launch Listing on that page', 'success');
   }
