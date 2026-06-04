@@ -2400,6 +2400,2297 @@ const TEMPLATES = {
 </html>`
   }
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-008 — Pressure Washing Route Sheet
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-008': {
+    id: 'LS-008',
+    title: 'Pressure Washing Route Sheet',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pressure Washing Route Sheet — LS-008</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; padding: 0; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; letter-spacing: 0.5px; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .cover-meta { display: flex; gap: 16px; margin-top: 14px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; cursor: default; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { body { padding: 0; } @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Pressure Washing Route Sheet</div>
+    <div class="form-label">Form LS-008 &nbsp;|&nbsp; Exterior Cleaning Business</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Pressure Washing<br>Route Sheet</h1>
+      <div class="form-id">Form LS-008 &nbsp;|&nbsp; Route #: ___________</div>
+    </div>
+  </div>
+  <div class="cover-meta">
+    <div class="row" style="flex:1;margin-bottom:0;">
+      <div class="field"><label>Route Date</label><div class="line"></div></div>
+      <div class="field"><label>Crew Lead</label><div class="line"></div></div>
+      <div class="field"><label>Truck / Unit #</label><div class="line"></div></div>
+      <div class="field"><label>Start Time</label><div class="line"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Equipment &amp; Chemical Pre-Check</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> Pressure washer — start tested</div>
+  <div class="check-item"><div class="check-box"></div> Surface cleaner attached &amp; clear</div>
+  <div class="check-item"><div class="check-box"></div> Water tank filled (gallons: _____)</div>
+  <div class="check-item"><div class="check-box"></div> Downstream injector primed</div>
+  <div class="check-item"><div class="check-box"></div> Soap / chemical mix ratio confirmed</div>
+  <div class="check-item"><div class="check-box"></div> Safety glasses, gloves on truck</div>
+  <div class="check-item"><div class="check-box"></div> Hose reel — no kinks or leaks</div>
+  <div class="check-item"><div class="check-box"></div> Wand tips (0°, 15°, 25°, 40°) present</div>
+</div>
+
+<div class="section-title">Stop Log — Today's Jobs</div>
+<table>
+  <thead><tr>
+    <th>#</th><th>Customer Name</th><th>Address</th><th>Service Type</th><th>PSI Setting</th><th>Chem Used</th><th>Arrived</th><th>Departed</th><th>Done?</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Job Notes / Issues</div>
+<div class="row"><div class="field"><label>Stop #</label><div class="line"></div></div><div class="field" style="flex:4"><label>Note / Issue</label><div class="line"></div></div></div>
+<div class="row"><div class="field"><label>Stop #</label><div class="line"></div></div><div class="field" style="flex:4"><label>Note / Issue</label><div class="line"></div></div></div>
+<div class="row"><div class="field"><label>Stop #</label><div class="line"></div></div><div class="field" style="flex:4"><label>Note / Issue</label><div class="line"></div></div></div>
+
+<div class="section-title">Chemical &amp; Supply Usage</div>
+<div class="row">
+  <div class="field"><label>Chemical / Product</label><div class="line"></div></div>
+  <div class="field"><label>Gallons Used</label><div class="line"></div></div>
+  <div class="field"><label>Chemical / Product</label><div class="line"></div></div>
+  <div class="field"><label>Gallons Used</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Total Water Used (gal)</label><div class="line"></div></div>
+  <div class="field"><label>Total Drive Miles</label><div class="line"></div></div>
+  <div class="field"><label>End Time</label><div class="line"></div></div>
+  <div class="field"><label>Total Hours</label><div class="line"></div></div>
+</div>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>Pressure Wash — Driveway</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Pressure Wash — House Exterior</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Deck / Patio Cleaning</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Roof Soft Wash</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Additional Service</td><td></td><td>$</td><td>$</td></tr>
+      <tr class="total-row"><td colspan="3" style="text-align:right;">Subtotal</td><td>$</td></tr>
+      <tr class="total-row"><td colspan="3" style="text-align:right;">Tax</td><td>$</td></tr>
+      <tr class="total-row"><td colspan="3" style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">End-of-Day Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> All jobs confirmed complete</div>
+  <div class="check-item"><div class="check-box"></div> Equipment rinsed and stored</div>
+  <div class="check-item"><div class="check-box"></div> Chemicals secured</div>
+  <div class="check-item"><div class="check-box"></div> Invoices collected / sent</div>
+  <div class="check-item"><div class="check-box"></div> Hoses drained and rolled</div>
+  <div class="check-item"><div class="check-box"></div> Route sheet submitted to office</div>
+</div>
+
+<div class="section-title">Satisfaction Rating &amp; Sign-Off</div>
+<div style="margin-bottom:10px;font-size:9pt;color:#555;">Customer satisfaction for final stop (circle or fill):</div>
+<div class="rating-row">
+  <div class="rating-star">&#9733;</div>
+  <div class="rating-star">&#9733;</div>
+  <div class="rating-star">&#9733;</div>
+  <div class="rating-star">&#9733;</div>
+  <div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Crew Lead Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Customer Signature (last stop) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-008 Pressure Washing Route Sheet &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-009 — Appliance Repair Parts Tracker
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-009': {
+    id: 'LS-009',
+    title: 'Appliance Repair Parts Tracker',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Appliance Repair Parts Tracker — LS-009</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Appliance Repair Parts Tracker</div>
+    <div class="form-label">Form LS-009 &nbsp;|&nbsp; Appliance Repair Tech</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Appliance Repair<br>Parts Tracker</h1>
+      <div class="form-id">Form LS-009 &nbsp;|&nbsp; Work Order #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Customer Name</label><div class="line"></div></div>
+    <div class="field"><label>Phone</label><div class="line"></div></div>
+    <div class="field"><label>Service Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Service Address</label><div class="line"></div></div>
+    <div class="field"><label>Technician</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Appliance Information</div>
+<div class="row">
+  <div class="field"><label>Appliance Type</label><div class="line"></div></div>
+  <div class="field"><label>Brand / Make</label><div class="line"></div></div>
+  <div class="field"><label>Model Number</label><div class="line"></div></div>
+  <div class="field"><label>Serial Number</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Age of Unit (years)</label><div class="line"></div></div>
+  <div class="field"><label>Warranty Status</label><div class="line"></div></div>
+  <div class="field"><label>Priority</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Diagnosis &amp; Fault Codes</div>
+<div class="row">
+  <div class="field"><label>Customer Reported Issue</label><div class="line-tall"></div></div>
+  <div class="field"><label>Tech Diagnosis</label><div class="line-tall"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Error / Fault Code(s)</label><div class="line"></div></div>
+  <div class="field"><label>Test Performed</label><div class="line"></div></div>
+  <div class="field"><label>Meter Reading</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Parts Log</div>
+<table>
+  <thead><tr>
+    <th>Part Name / Description</th><th>Part Number</th><th>Supplier</th><th>Ordered?</th><th>Arrived?</th><th>Installed?</th><th>Unit Cost</th><th>Qty</th><th>Total</th>
+  </tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>$</td><td></td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>$</td><td></td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>$</td><td></td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>$</td><td></td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>$</td><td></td><td>$</td></tr>
+    <tr><td colspan="8" style="text-align:right;font-weight:700;">Parts Subtotal</td><td>$</td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Labor</div>
+<div class="row">
+  <div class="field"><label>Labor Hours</label><div class="line"></div></div>
+  <div class="field"><label>Rate ($/hr)</label><div class="line"></div></div>
+  <div class="field"><label>Labor Total</label><div class="line"></div></div>
+  <div class="field"><label>Trip / Diagnostic Fee</label><div class="line"></div></div>
+</div>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Parts Total</td><td>$</td></tr>
+      <tr><td>Labor Total</td><td>$</td></tr>
+      <tr><td>Trip / Diagnostic Fee</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Job Complete Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> Repair tested — appliance operational</div>
+  <div class="check-item"><div class="check-box"></div> Old parts removed from site</div>
+  <div class="check-item"><div class="check-box"></div> Work area cleaned</div>
+  <div class="check-item"><div class="check-box"></div> Customer demonstrated repair</div>
+  <div class="check-item"><div class="check-box"></div> Warranty info provided</div>
+  <div class="check-item"><div class="check-box"></div> Invoice collected / sent</div>
+</div>
+
+<div class="section-title">Satisfaction &amp; Sign-Off</div>
+<div class="rating-row">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Technician Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Customer Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-009 Appliance Repair Parts Tracker &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-010 — Handyman Materials Reimbursement Sheet
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-010': {
+    id: 'LS-010',
+    title: 'Handyman Materials Reimbursement Sheet',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handyman Materials Reimbursement Sheet — LS-010</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Handyman Materials Reimbursement Sheet</div>
+    <div class="form-label">Form LS-010 &nbsp;|&nbsp; Solo Handyman</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Materials<br>Reimbursement Sheet</h1>
+      <div class="form-id">Form LS-010 &nbsp;|&nbsp; Job #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Client Name</label><div class="line"></div></div>
+    <div class="field"><label>Phone</label><div class="line"></div></div>
+    <div class="field"><label>Job Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Job Address</label><div class="line"></div></div>
+    <div class="field"><label>Handyman Name</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Job Description</div>
+<div class="row">
+  <div class="field"><label>Scope of Work</label><div class="line-tall"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Priority</label><div class="line"></div></div>
+  <div class="field"><label>Start Time</label><div class="line"></div></div>
+  <div class="field"><label>End Time</label><div class="line"></div></div>
+  <div class="field"><label>Total Hours</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Materials Purchased — Itemized</div>
+<table>
+  <thead><tr>
+    <th>#</th><th>Item / Description</th><th>Where Purchased</th><th>Date Purchased</th><th>Receipt #</th><th>Qty</th><th>Unit Cost</th><th>Total</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+    <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+    <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+    <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+    <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+    <tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+    <tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+    <tr><td colspan="7" style="text-align:right;font-weight:700;">Materials Subtotal</td><td>$</td></tr>
+    <tr><td colspan="7" style="text-align:right;font-weight:700;">Tax Paid</td><td>$</td></tr>
+    <tr><td colspan="7" style="text-align:right;font-weight:700;">Total Materials w/ Tax</td><td>$</td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Markup &amp; Reimbursement Policy</div>
+<div class="row">
+  <div class="field"><label>Markup % Applied</label><div class="line"></div></div>
+  <div class="field"><label>Markup Amount ($)</label><div class="line"></div></div>
+  <div class="field"><label>Total Reimbursement Due</label><div class="line"></div></div>
+</div>
+<div style="background:#fffbf0;border:1.5px solid #e0d080;padding:8px 12px;font-size:9pt;margin-bottom:14px;">
+  <strong>Policy Note:</strong> All materials are purchased on behalf of the client. Receipts attached. A ___% handling markup applies per our service agreement.
+</div>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Labor — ___ hrs @ $___/hr</td><td>$</td></tr>
+      <tr><td>Materials (with markup)</td><td>$</td></tr>
+      <tr><td>Trip / Haul Fee</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Job Complete Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> All tasks completed as scoped</div>
+  <div class="check-item"><div class="check-box"></div> Receipts attached to this sheet</div>
+  <div class="check-item"><div class="check-box"></div> Work area cleaned up</div>
+  <div class="check-item"><div class="check-box"></div> Client walked through completed work</div>
+  <div class="check-item"><div class="check-box"></div> Leftover materials returned or noted</div>
+  <div class="check-item"><div class="check-box"></div> Invoice collected / sent</div>
+</div>
+
+<div class="section-title">Satisfaction &amp; Sign-Off</div>
+<div class="rating-row">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Handyman Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Client Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-010 Handyman Materials Reimbursement Sheet &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-011 — Mobile Mechanic Service Summary Form
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-011': {
+    id: 'LS-011',
+    title: 'Mobile Mechanic Service Summary Form',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Mechanic Service Summary — LS-011</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Mobile Mechanic Service Summary Form</div>
+    <div class="form-label">Form LS-011 &nbsp;|&nbsp; Mobile Auto Repair</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Mobile Mechanic<br>Service Summary</h1>
+      <div class="form-id">Form LS-011 &nbsp;|&nbsp; RO #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Customer Name</label><div class="line"></div></div>
+    <div class="field"><label>Phone</label><div class="line"></div></div>
+    <div class="field"><label>Service Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Service Location / Address</label><div class="line"></div></div>
+    <div class="field"><label>Technician</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Vehicle Information</div>
+<div class="row">
+  <div class="field"><label>Year</label><div class="line"></div></div>
+  <div class="field"><label>Make</label><div class="line"></div></div>
+  <div class="field"><label>Model</label><div class="line"></div></div>
+  <div class="field"><label>Trim / Engine</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>VIN</label><div class="line"></div></div>
+  <div class="field"><label>License Plate</label><div class="line"></div></div>
+  <div class="field"><label>Odometer (mi)</label><div class="line"></div></div>
+  <div class="field"><label>Priority</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Complaint &amp; Diagnosis</div>
+<div class="row">
+  <div class="field"><label>Customer Complaint</label><div class="line-tall"></div></div>
+  <div class="field"><label>Tech Diagnosis</label><div class="line-tall"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>OBD Codes / Scan Results</label><div class="line"></div></div>
+  <div class="field"><label>Additional Findings</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Parts &amp; Labor</div>
+<table>
+  <thead><tr>
+    <th>Part / Service Description</th><th>Part #</th><th>Qty</th><th>Unit Cost</th><th>Labor Hrs</th><th>Total</th>
+  </tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td>$</td><td></td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td>$</td><td></td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td>$</td><td></td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td>$</td><td></td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td>$</td><td></td><td>$</td></tr>
+    <tr><td colspan="5" style="text-align:right;font-weight:700;">Parts Subtotal</td><td>$</td></tr>
+    <tr><td colspan="5" style="text-align:right;font-weight:700;">Labor Subtotal (___ hrs @ $___)</td><td>$</td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Recommended Future Services</div>
+<div class="row">
+  <div class="field"><label>Service Needed</label><div class="line"></div></div>
+  <div class="field"><label>Urgency</label><div class="line"></div></div>
+  <div class="field"><label>Est. Cost</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Service Needed</label><div class="line"></div></div>
+  <div class="field"><label>Urgency</label><div class="line"></div></div>
+  <div class="field"><label>Est. Cost</label><div class="line"></div></div>
+</div>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Parts Total</td><td>$</td></tr>
+      <tr><td>Labor Total</td><td>$</td></tr>
+      <tr><td>Diagnostic / Trip Fee</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Job Complete Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> Repair verified — vehicle started / tested</div>
+  <div class="check-item"><div class="check-box"></div> Test drive completed (if applicable)</div>
+  <div class="check-item"><div class="check-box"></div> Old parts shown to customer</div>
+  <div class="check-item"><div class="check-box"></div> Work area cleaned</div>
+  <div class="check-item"><div class="check-box"></div> Customer advised on recommendations</div>
+  <div class="check-item"><div class="check-box"></div> Invoice collected / sent</div>
+</div>
+
+<div class="section-title">Satisfaction &amp; Sign-Off</div>
+<div class="rating-row">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Technician Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Customer Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-011 Mobile Mechanic Service Summary &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-012 — Locksmith Job Authorization Form
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-012': {
+    id: 'LS-012',
+    title: 'Locksmith Job Authorization Form',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Locksmith Job Authorization Form — LS-012</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .auth-box { border: 2px solid #c00; background: #fff8f8; padding: 12px 16px; margin-bottom: 14px; font-size: 9.5pt; line-height: 1.6; }
+  .auth-box strong { color: #c00; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Locksmith Job Authorization Form</div>
+    <div class="form-label">Form LS-012 &nbsp;|&nbsp; Locksmith Operator</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Locksmith Job<br>Authorization Form</h1>
+      <div class="form-id">Form LS-012 &nbsp;|&nbsp; Job #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Customer Name</label><div class="line"></div></div>
+    <div class="field"><label>Phone</label><div class="line"></div></div>
+    <div class="field"><label>ID Type &amp; Number</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Service Address</label><div class="line"></div></div>
+    <div class="field"><label>Date / Time</label><div class="line"></div></div>
+    <div class="field"><label>Technician</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Property &amp; Lock Information</div>
+<div class="row">
+  <div class="field"><label>Property Type</label><div class="line"></div></div>
+  <div class="field"><label>Lock Brand / Type</label><div class="line"></div></div>
+  <div class="field"><label>Lock Location</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Service Type Requested</label><div class="line"></div></div>
+  <div class="field"><label>Priority / Emergency?</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Ownership Verification</div>
+<div class="row">
+  <div class="field"><label>Proof of Ownership / Tenancy Provided</label><div class="line"></div></div>
+  <div class="field"><label>ID Verified By</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Relationship to Property</label><div class="line"></div></div>
+  <div class="field"><label>Authorization Code (if dispatched)</label><div class="line"></div></div>
+</div>
+
+<div class="auth-box">
+  <strong>AUTHORIZATION STATEMENT:</strong> I, the undersigned, hereby authorize the above-named locksmith company to perform the requested locksmith services on the premises listed. I confirm I am the owner, tenant, or authorized agent of this property. I accept full responsibility for this request and agree to pay the quoted service fee upon completion.
+</div>
+
+<div class="section-title">Services Performed</div>
+<table>
+  <thead><tr><th>Service Description</th><th>Lock / Door</th><th>Keys Cut</th><th>Unit Price</th><th>Total</th></tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+    <tr><td></td><td></td><td></td><td>$</td><td>$</td></tr>
+  </tbody>
+</table>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Service / Labor</td><td>$</td></tr>
+      <tr><td>Parts / Hardware</td><td>$</td></tr>
+      <tr><td>Emergency / After-Hours Fee</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Job Complete Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> Lock/service tested and working</div>
+  <div class="check-item"><div class="check-box"></div> Keys provided to customer</div>
+  <div class="check-item"><div class="check-box"></div> ID and authorization verified</div>
+  <div class="check-item"><div class="check-box"></div> No forced entry damage left</div>
+  <div class="check-item"><div class="check-box"></div> Invoice collected / sent</div>
+  <div class="check-item"><div class="check-box"></div> Job record filed</div>
+</div>
+
+<div class="section-title">Satisfaction &amp; Sign-Off</div>
+<div class="rating-row">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Technician Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Customer Signature &amp; Printed Name &nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-012 Locksmith Job Authorization Form &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-014 — Snow Removal Service Trigger Checklist
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-014': {
+    id: 'LS-014',
+    title: 'Snow Removal Service Trigger Checklist',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snow Removal Service Trigger Checklist — LS-014</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .trigger-box { border: 2px solid #0f1f3d; background: #f0f4fb; padding: 12px 16px; margin-bottom: 14px; }
+  .trigger-box h3 { font-size: 10pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 8px; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Snow Removal Service Trigger Checklist</div>
+    <div class="form-label">Form LS-014 &nbsp;|&nbsp; Snow Removal Contractor</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Snow Removal<br>Service Trigger Checklist</h1>
+      <div class="form-id">Form LS-014 &nbsp;|&nbsp; Event #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Service Date</label><div class="line"></div></div>
+    <div class="field"><label>Storm / Event Description</label><div class="line"></div></div>
+    <div class="field"><label>Operator / Driver</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Snowfall Amount (in)</label><div class="line"></div></div>
+    <div class="field"><label>Temp at Service Time</label><div class="line"></div></div>
+    <div class="field"><label>Ice Present?</label><div class="line"></div></div>
+    <div class="field"><label>Priority Level</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Service Trigger Thresholds</div>
+<div class="trigger-box">
+  <h3>Dispatch Triggers (circle what applies)</h3>
+  <div class="check-grid">
+    <div class="check-item"><div class="check-box"></div> Snowfall &ge; 1 inch (standard)</div>
+    <div class="check-item"><div class="check-box"></div> Snowfall &ge; 2 inches (contract)</div>
+    <div class="check-item"><div class="check-box"></div> Ice / freezing rain present</div>
+    <div class="check-item"><div class="check-box"></div> Client requested early service</div>
+    <div class="check-item"><div class="check-box"></div> HOA / commercial contract triggered</div>
+    <div class="check-item"><div class="check-box"></div> Emergency call-in dispatch</div>
+  </div>
+</div>
+
+<div class="section-title">Site Stop Log</div>
+<table>
+  <thead><tr>
+    <th>#</th><th>Client / Property Name</th><th>Address</th><th>Service Type</th><th>Salt Applied (lbs)</th><th>Arrival</th><th>Departure</th><th>Done?</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Equipment &amp; Supply Usage</div>
+<div class="row">
+  <div class="field"><label>Truck / Unit #</label><div class="line"></div></div>
+  <div class="field"><label>Plow Blade Condition</label><div class="line"></div></div>
+  <div class="field"><label>Salt / De-Icer Used (lbs)</label><div class="line"></div></div>
+  <div class="field"><label>Sand Used (lbs)</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Total Miles Driven</label><div class="line"></div></div>
+  <div class="field"><label>Total Hours on Route</label><div class="line"></div></div>
+  <div class="field"><label>Fuel Used (gal)</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Issues / Damage Notes</div>
+<div class="row"><div class="field"><div class="line-tall"></div></div></div>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Qty / Hrs</th><th>Unit Price</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>Plowing — Driveway / Lot</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Salting / De-Icing</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Shoveling — Walkways</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Emergency / After-Hours Fee</td><td></td><td>$</td><td>$</td></tr>
+      <tr class="total-row"><td colspan="3" style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">End-of-Event Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> All sites confirmed clear</div>
+  <div class="check-item"><div class="check-box"></div> Salt bins restocked</div>
+  <div class="check-item"><div class="check-box"></div> Plow blade inspected</div>
+  <div class="check-item"><div class="check-box"></div> Damage documented (if any)</div>
+  <div class="check-item"><div class="check-box"></div> Photos taken at problem sites</div>
+  <div class="check-item"><div class="check-box"></div> Route sheet submitted</div>
+</div>
+
+<div class="rating-row" style="margin-top:14px;">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Client Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Operator Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Client Signature (if on-site) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-014 Snow Removal Service Trigger Checklist &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-015 — Window Cleaning Client Packet
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-015': {
+    id: 'LS-015',
+    title: 'Window Cleaning Client Packet',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Window Cleaning Client Packet — LS-015</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Window Cleaning Client Packet</div>
+    <div class="form-label">Form LS-015 &nbsp;|&nbsp; Window Cleaning Operator</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Window Cleaning<br>Client Packet</h1>
+      <div class="form-id">Form LS-015 &nbsp;|&nbsp; Job #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Client Name</label><div class="line"></div></div>
+    <div class="field"><label>Phone</label><div class="line"></div></div>
+    <div class="field"><label>Service Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Service Address</label><div class="line"></div></div>
+    <div class="field"><label>Technician</label><div class="line"></div></div>
+    <div class="field"><label>Priority</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Property &amp; Scope</div>
+<div class="row">
+  <div class="field"><label>Property Type</label><div class="line"></div></div>
+  <div class="field"><label>Floors / Stories</label><div class="line"></div></div>
+  <div class="field"><label>Total Windows</label><div class="line"></div></div>
+  <div class="field"><label>Interior &amp; Exterior?</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Special Conditions (hard water, screens, etc.)</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Window Count by Area</div>
+<table>
+  <thead><tr>
+    <th>Area / Zone</th><th>Window Count</th><th>Interior?</th><th>Exterior?</th><th>Screens Cleaned?</th><th>Condition Notes</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>Front Facade</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Rear / Back</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Left Side</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Right Side</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Skylights</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Other</td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Products &amp; Equipment Used</div>
+<div class="row">
+  <div class="field"><label>Squeegee Size(s)</label><div class="line"></div></div>
+  <div class="field"><label>Cleaning Solution</label><div class="line"></div></div>
+  <div class="field"><label>Water Fed Pole?</label><div class="line"></div></div>
+  <div class="field"><label>Ladder Type Used</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Pre-Existing Damage Notes</div>
+<div class="row"><div class="field"><div class="line-tall"></div></div></div>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>Exterior Windows</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Interior Windows</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Screen Cleaning</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Hard Water Treatment</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Additional Services</td><td></td><td>$</td><td>$</td></tr>
+      <tr class="total-row"><td colspan="3" style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Job Complete Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> All windows cleaned per scope</div>
+  <div class="check-item"><div class="check-box"></div> Screens cleaned and re-installed</div>
+  <div class="check-item"><div class="check-box"></div> Sills wiped down</div>
+  <div class="check-item"><div class="check-box"></div> No streaks — final inspection done</div>
+  <div class="check-item"><div class="check-box"></div> Interior surfaces protected</div>
+  <div class="check-item"><div class="check-box"></div> Invoice collected / sent</div>
+</div>
+
+<div class="rating-row" style="margin-top:14px;">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Technician Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Client Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-015 Window Cleaning Client Packet &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-016 — Pool Service Chemical Log
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-016': {
+    id: 'LS-016',
+    title: 'Pool Service Chemical Log',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pool Service Chemical Log — LS-016</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Pool Service Chemical Log</div>
+    <div class="form-label">Form LS-016 &nbsp;|&nbsp; Pool Service Technician</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Pool Service<br>Chemical Log</h1>
+      <div class="form-id">Form LS-016 &nbsp;|&nbsp; Service #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Client Name</label><div class="line"></div></div>
+    <div class="field"><label>Service Address</label><div class="line"></div></div>
+    <div class="field"><label>Service Date</label><div class="line"></div></div>
+    <div class="field"><label>Technician</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Pool Info</div>
+<div class="row">
+  <div class="field"><label>Pool Type (In-Ground / Above)</label><div class="line"></div></div>
+  <div class="field"><label>Gallons (approx)</label><div class="line"></div></div>
+  <div class="field"><label>Filter Type</label><div class="line"></div></div>
+  <div class="field"><label>Sanitizer System</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Water Test Results</div>
+<table>
+  <thead><tr>
+    <th>Parameter</th><th>Ideal Range</th><th>Reading</th><th>Action Taken</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>Free Chlorine (ppm)</td><td>1.0 – 3.0</td><td></td><td></td></tr>
+    <tr><td>Combined Chlorine (ppm)</td><td>&lt; 0.2</td><td></td><td></td></tr>
+    <tr><td>pH</td><td>7.4 – 7.6</td><td></td><td></td></tr>
+    <tr><td>Total Alkalinity (ppm)</td><td>80 – 120</td><td></td><td></td></tr>
+    <tr><td>Calcium Hardness (ppm)</td><td>200 – 400</td><td></td><td></td></tr>
+    <tr><td>Cyanuric Acid (ppm)</td><td>30 – 50</td><td></td><td></td></tr>
+    <tr><td>Salt (ppm) — if SWG</td><td>2700 – 3400</td><td></td><td></td></tr>
+    <tr><td>Phosphates (ppb)</td><td>&lt; 100</td><td></td><td></td></tr>
+    <tr><td>Total Dissolved Solids</td><td>&lt; 1500</td><td></td><td></td></tr>
+    <tr><td>Water Temp (°F)</td><td>—</td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Chemicals Added</div>
+<table>
+  <thead><tr>
+    <th>Chemical / Product</th><th>Brand</th><th>Amount Added</th><th>Unit</th><th>Purpose</th>
+  </tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Physical Maintenance</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> Skimmer baskets emptied</div>
+  <div class="check-item"><div class="check-box"></div> Pump basket emptied</div>
+  <div class="check-item"><div class="check-box"></div> Surface skimmed</div>
+  <div class="check-item"><div class="check-box"></div> Pool brushed</div>
+  <div class="check-item"><div class="check-box"></div> Vacuumed</div>
+  <div class="check-item"><div class="check-box"></div> Filter backwashed / cleaned</div>
+  <div class="check-item"><div class="check-box"></div> Equipment inspected</div>
+  <div class="check-item"><div class="check-box"></div> Waterline tiles cleaned</div>
+</div>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Weekly / Monthly Service Fee</td><td>$</td></tr>
+      <tr><td>Chemicals Used</td><td>$</td></tr>
+      <tr><td>Additional Repair / Parts</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Technician Notes &amp; Next Visit</div>
+<div class="row"><div class="field"><label>Notes / Issues</label><div class="line-tall"></div></div></div>
+<div class="row">
+  <div class="field"><label>Next Scheduled Service</label><div class="line"></div></div>
+  <div class="field"><label>Priority Items for Next Visit</label><div class="line"></div></div>
+</div>
+
+<div class="rating-row" style="margin-top:14px;">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Client Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Technician Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Client Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-016 Pool Service Chemical Log &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-017 — Flooring Estimate Scope Matrix
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-017': {
+    id: 'LS-017',
+    title: 'Flooring Estimate Scope Matrix',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flooring Estimate Scope Matrix — LS-017</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Flooring Estimate Scope Matrix</div>
+    <div class="form-label">Form LS-017 &nbsp;|&nbsp; Flooring Contractor</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Flooring Estimate<br>Scope Matrix</h1>
+      <div class="form-id">Form LS-017 &nbsp;|&nbsp; Estimate #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Client Name</label><div class="line"></div></div>
+    <div class="field"><label>Phone</label><div class="line"></div></div>
+    <div class="field"><label>Estimate Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Property Address</label><div class="line"></div></div>
+    <div class="field"><label>Sales Rep / Estimator</label><div class="line"></div></div>
+    <div class="field"><label>Priority</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Room-by-Room Scope Matrix</div>
+<table>
+  <thead><tr>
+    <th>Room / Area</th><th>Sq Ft</th><th>Flooring Type</th><th>Product / SKU</th><th>Removal?</th><th>Subfloor Work?</th><th>Mat'l Cost</th><th>Install Cost</th><th>Total</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>Living Room</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Master Bedroom</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Bedroom 2</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Kitchen</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Bathroom</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Hallway</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td>Other</td><td></td><td></td><td></td><td></td><td></td><td>$</td><td>$</td><td>$</td></tr>
+    <tr><td colspan="6" style="text-align:right;font-weight:700;">Totals</td><td>$</td><td>$</td><td>$</td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Materials &amp; Add-Ons</div>
+<div class="row">
+  <div class="field"><label>Underlayment Type</label><div class="line"></div></div>
+  <div class="field"><label>Transition Strips</label><div class="line"></div></div>
+  <div class="field"><label>Baseboard / Quarter Round</label><div class="line"></div></div>
+  <div class="field"><label>Adhesive / Fasteners</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Subfloor &amp; Demo Notes</div>
+<div class="row"><div class="field"><div class="line-tall"></div></div></div>
+
+<div class="section-title">Installation Notes &amp; Conditions</div>
+<div class="row">
+  <div class="field"><label>Acclimation Required?</label><div class="line"></div></div>
+  <div class="field"><label>Moisture Test Result</label><div class="line"></div></div>
+  <div class="field"><label>Install Pattern / Direction</label><div class="line"></div></div>
+</div>
+
+<div class="invoice-box">
+  <h2>Estimate / Invoice Summary</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Total Materials</td><td>$</td></tr>
+      <tr><td>Total Labor / Installation</td><td>$</td></tr>
+      <tr><td>Demo / Removal</td><td>$</td></tr>
+      <tr><td>Subfloor Repair</td><td>$</td></tr>
+      <tr><td>Miscellaneous / Disposal</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">ESTIMATE / INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Deposit Required</label><div class="line"></div></div>
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Job Complete Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> All rooms installed per scope</div>
+  <div class="check-item"><div class="check-box"></div> Transitions installed</div>
+  <div class="check-item"><div class="check-box"></div> Baseboards reinstalled / installed</div>
+  <div class="check-item"><div class="check-box"></div> Debris removed from site</div>
+  <div class="check-item"><div class="check-box"></div> Client walk-through completed</div>
+  <div class="check-item"><div class="check-box"></div> Final invoice collected</div>
+</div>
+
+<div class="rating-row" style="margin-top:14px;">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Contractor Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Client Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-017 Flooring Estimate Scope Matrix &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-018 — Contractor Daily Site Report
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-018': {
+    id: 'LS-018',
+    title: 'Contractor Daily Site Report',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contractor Daily Site Report — LS-018</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Contractor Daily Site Report</div>
+    <div class="form-label">Form LS-018 &nbsp;|&nbsp; General Contractor</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Contractor Daily<br>Site Report</h1>
+      <div class="form-id">Form LS-018 &nbsp;|&nbsp; Report #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Project Name</label><div class="line"></div></div>
+    <div class="field"><label>Site Address</label><div class="line"></div></div>
+    <div class="field"><label>Report Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Superintendent / GC</label><div class="line"></div></div>
+    <div class="field"><label>Project #</label><div class="line"></div></div>
+    <div class="field"><label>Weather Conditions</label><div class="line"></div></div>
+    <div class="field"><label>Temp (°F)</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Crew on Site</div>
+<table>
+  <thead><tr>
+    <th>Trade / Sub</th><th>Foreman / Lead</th><th>Crew Count</th><th>Hours on Site</th><th>Work Performed</th>
+  </tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Work Completed Today</div>
+<div class="row"><div class="field"><div class="line-tall"></div></div></div>
+
+<div class="section-title">Materials Delivered</div>
+<table>
+  <thead><tr><th>Material / Item</th><th>Supplier</th><th>Qty Delivered</th><th>PO / Ticket #</th><th>Condition</th></tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Issues, Delays &amp; Safety</div>
+<div class="row">
+  <div class="field"><label>Delays / Issues</label><div class="line-tall"></div></div>
+  <div class="field"><label>Safety Incidents / Near Misses</label><div class="line-tall"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Visitors / Inspectors on Site</label><div class="line"></div></div>
+  <div class="field"><label>Inspection Result</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Tomorrow's Plan</div>
+<div class="row"><div class="field"><div class="line-tall"></div></div></div>
+
+<div class="invoice-box">
+  <h2>Daily Cost Summary (T&amp;M)</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Hours / Qty</th><th>Rate</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>Labor — Crew 1</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Labor — Crew 2 / Sub</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Materials Used Today</td><td></td><td>$</td><td>$</td></tr>
+      <tr><td>Equipment / Rental</td><td></td><td>$</td><td>$</td></tr>
+      <tr class="total-row"><td colspan="3" style="text-align:right;">DAY TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Cumulative Project Cost to Date</label><div class="line"></div></div>
+    <div class="field"><label>Budget Remaining</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">End-of-Day Site Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> Site secured / locked</div>
+  <div class="check-item"><div class="check-box"></div> Tools stored</div>
+  <div class="check-item"><div class="check-box"></div> Debris removed or staged</div>
+  <div class="check-item"><div class="check-box"></div> Utilities shut off if needed</div>
+  <div class="check-item"><div class="check-box"></div> Safety hazards mitigated</div>
+  <div class="check-item"><div class="check-box"></div> Report submitted to owner</div>
+</div>
+
+<div class="sig-row" style="margin-top:14px;">
+  <div class="sig-block">Superintendent Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Owner / PM Acknowledgment &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-018 Contractor Daily Site Report &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-019 — Septic Service Pump Log
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-019': {
+    id: 'LS-019',
+    title: 'Septic Service Pump Log',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Septic Service Pump Log — LS-019</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Septic Service Pump Log</div>
+    <div class="form-label">Form LS-019 &nbsp;|&nbsp; Septic Service Tech</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Septic Service<br>Pump Log</h1>
+      <div class="form-id">Form LS-019 &nbsp;|&nbsp; Work Order #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Property Owner</label><div class="line"></div></div>
+    <div class="field"><label>Phone</label><div class="line"></div></div>
+    <div class="field"><label>Service Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Property Address</label><div class="line"></div></div>
+    <div class="field"><label>Technician</label><div class="line"></div></div>
+    <div class="field"><label>Priority</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">System Information</div>
+<div class="row">
+  <div class="field"><label>Tank Size (gallons)</label><div class="line"></div></div>
+  <div class="field"><label>Tank Material</label><div class="line"></div></div>
+  <div class="field"><label>Number of Tanks</label><div class="line"></div></div>
+  <div class="field"><label>System Type</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Last Pumped Date</label><div class="line"></div></div>
+  <div class="field"><label>Years Since Last Service</label><div class="line"></div></div>
+  <div class="field"><label>Permit / System ID #</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Tank Inspection &amp; Pump Log</div>
+<table>
+  <thead><tr>
+    <th>Tank #</th><th>Gallons Pumped</th><th>Scum Layer (in)</th><th>Sludge Layer (in)</th><th>Inlet Baffle OK?</th><th>Outlet Baffle OK?</th><th>Lid Condition</th><th>Notes</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Distribution Box &amp; Drain Field</div>
+<div class="row">
+  <div class="field"><label>D-Box Condition</label><div class="line"></div></div>
+  <div class="field"><label>Drain Field Signs of Saturation?</label><div class="line"></div></div>
+  <div class="field"><label>Effluent Filter — Cleaned?</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Pump Tank / Float Test (if applicable)</label><div class="line"></div></div>
+  <div class="field"><label>Alarm Functional?</label><div class="line"></div></div>
+</div>
+
+<div class="section-title">Findings &amp; Recommendations</div>
+<div class="row"><div class="field"><div class="line-tall"></div></div></div>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Pumping Service (___ gallons)</td><td>$</td></tr>
+      <tr><td>Inspection Fee</td><td>$</td></tr>
+      <tr><td>Filter Cleaning</td><td>$</td></tr>
+      <tr><td>Parts / Repairs</td><td>$</td></tr>
+      <tr><td>Disposal Fee</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Job Complete Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> All tanks pumped</div>
+  <div class="check-item"><div class="check-box"></div> Lids replaced and secured</div>
+  <div class="check-item"><div class="check-box"></div> Site cleaned — no spills</div>
+  <div class="check-item"><div class="check-box"></div> Service report provided to owner</div>
+  <div class="check-item"><div class="check-box"></div> Next recommended service noted</div>
+  <div class="check-item"><div class="check-box"></div> Invoice collected / sent</div>
+</div>
+
+<div class="rating-row" style="margin-top:14px;">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Technician Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Property Owner Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-019 Septic Service Pump Log &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-020 — Service Business Fee Transparency Addendum
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-020': {
+    id: 'LS-020',
+    title: 'Service Business Fee Transparency Addendum',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service Business Fee Transparency Addendum — LS-020</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .fee-row td { background: #fff !important; }
+  .fee-row.highlighted td { background: #fffbf0 !important; border-left: 3px solid #f0b800; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .policy-box { border: 1.5px solid #0f1f3d; background: #f0f4fb; padding: 14px 16px; margin-bottom: 14px; font-size: 9.5pt; line-height: 1.7; }
+  .policy-box h3 { font-size: 10pt; font-weight: 700; color: #0f1f3d; margin-bottom: 6px; text-transform: uppercase; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Service Business Fee Transparency Addendum</div>
+    <div class="form-label">Form LS-020 &nbsp;|&nbsp; Any Service Trade</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Fee Transparency<br>Addendum</h1>
+      <div class="form-id">Form LS-020 &nbsp;|&nbsp; Addendum to Invoice #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Client Name</label><div class="line"></div></div>
+    <div class="field"><label>Service Address</label><div class="line"></div></div>
+    <div class="field"><label>Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Service Provider</label><div class="line"></div></div>
+    <div class="field"><label>Trade / Service Type</label><div class="line"></div></div>
+    <div class="field"><label>Technician</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Purpose of This Addendum</div>
+<div class="policy-box">
+  <h3>About This Document</h3>
+  This Fee Transparency Addendum is provided alongside your service invoice to help you understand all charges, fees, and pricing policies that apply to this job. Our goal is clear communication — no surprises. Please review each section and sign at the bottom to confirm you have received and understood this information.
+</div>
+
+<div class="section-title">Standard Fee Schedule</div>
+<table>
+  <thead><tr><th>Fee Type</th><th>Description</th><th>Amount / Rate</th><th>Applied This Job?</th></tr></thead>
+  <tbody>
+    <tr class="fee-row"><td>Diagnostic / Trip Fee</td><td>Initial dispatch to assess job</td><td>$</td><td></td></tr>
+    <tr class="fee-row"><td>Hourly Labor Rate</td><td>Standard service labor</td><td>$___/hr</td><td></td></tr>
+    <tr class="fee-row highlighted"><td>After-Hours / Emergency Rate</td><td>Outside normal business hours</td><td>$___/hr</td><td></td></tr>
+    <tr class="fee-row"><td>Materials Markup</td><td>Handling fee on parts / materials</td><td>____%</td><td></td></tr>
+    <tr class="fee-row highlighted"><td>Minimum Service Charge</td><td>Minimum fee per visit</td><td>$</td><td></td></tr>
+    <tr class="fee-row"><td>Cancellation / No-Show Fee</td><td>Client cancels within ___ hrs</td><td>$</td><td></td></tr>
+    <tr class="fee-row"><td>Travel / Mileage (beyond zone)</td><td>Per mile beyond service zone</td><td>$___/mi</td><td></td></tr>
+    <tr class="fee-row"><td>Permit / Filing Fee</td><td>If applicable</td><td>$</td><td></td></tr>
+    <tr class="fee-row"><td>Warranty Labor Rate</td><td>Labor for warranty callbacks</td><td>$</td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Payment &amp; Billing Policy</div>
+<div class="policy-box">
+  <h3>Payment Terms</h3>
+  Payment is due upon completion of service unless a prior credit arrangement has been established. Accepted payment methods: ______________________________. Invoices unpaid after ___ days are subject to a late fee of ___% per month. Returned checks are subject to a $_____ returned check fee.
+</div>
+
+<div class="section-title">Warranty &amp; Callback Policy</div>
+<div class="policy-box">
+  <h3>Warranty Coverage</h3>
+  Labor performed by our technicians is warranted for _______ days from the date of service. Parts and materials carry manufacturer warranty only, unless otherwise noted in writing. Warranty is voided by tampering, misuse, or failure to follow provided instructions. Emergency/callback service outside warranty is billed at standard rates.
+</div>
+
+<div class="section-title">Additional Disclosures</div>
+<div class="row">
+  <div class="field"><label>State / Trade License #</label><div class="line"></div></div>
+  <div class="field"><label>Insurance Carrier</label><div class="line"></div></div>
+  <div class="field"><label>Policy #</label><div class="line"></div></div>
+</div>
+<div class="row">
+  <div class="field"><label>Any Additional Notes</label><div class="line-tall"></div></div>
+</div>
+
+<div class="invoice-box">
+  <h2>Invoice Summary (from attached invoice)</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Labor</td><td>$</td></tr>
+      <tr><td>Parts / Materials</td><td>$</td></tr>
+      <tr><td>Fees Applied (see above)</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Client Acknowledgment &amp; Sign-Off</div>
+<p style="font-size:9pt;margin-bottom:12px;">By signing below, I confirm that I have reviewed and understand the fee schedule, payment terms, and warranty policy described in this addendum. I authorize the charges on the attached invoice.</p>
+<div class="sig-row">
+  <div class="sig-block">Technician / Owner Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Client Signature &amp; Printed Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-020 Service Business Fee Transparency Addendum &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LS-013 — Painting Prep & Final Punch List
+  // ─────────────────────────────────────────────────────────────────────────
+  'LS-013': {
+    id: 'LS-013',
+    title: 'Painting Prep & Final Punch List',
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painting Prep &amp; Final Punch List — LS-013</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; font-size: 11pt; color: #111; background: #fff; max-width: 800px; margin: 0 auto; }
+  .toolbar { background: #0f1f3d; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+  .toolbar .brand { font-size: 13pt; font-weight: 700; }
+  .toolbar .form-label { font-size: 9pt; opacity: 0.75; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  .btn { padding: 7px 18px; border: none; border-radius: 4px; font-size: 10pt; cursor: pointer; }
+  .btn-print { background: #fff; color: #0f1f3d; font-weight: 700; }
+  .btn-save { background: #2563eb; color: #fff; font-weight: 700; }
+  @media print { .toolbar { display: none !important; } }
+  .page { padding: 24px; }
+  .cover { border: 2.5px solid #0f1f3d; padding: 18px 20px; margin-bottom: 20px; }
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .company-name { font-size: 18pt; font-weight: 700; border: 2px dashed #bbb; padding: 4px 12px; min-width: 200px; min-height: 32px; display: inline-block; }
+  .form-title-block { text-align: right; }
+  .form-title-block h1 { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #0f1f3d; }
+  .form-id { font-size: 8pt; color: #666; margin-top: 2px; }
+  .row { display: flex; gap: 16px; margin-bottom: 12px; }
+  .field { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .field label { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: #444; }
+  .line { border-bottom: 1.5px solid #333; min-height: 22px; }
+  .line-tall { border: 1.5px solid #333; min-height: 64px; padding: 3px; }
+  .section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; background: #e8edf5; border-left: 3px solid #0f1f3d; padding: 4px 8px; margin: 16px 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10pt; }
+  th { background: #0f1f3d; color: #fff; padding: 6px 8px; text-align: left; font-size: 8.5pt; }
+  td { border: 1px solid #ccc; padding: 5px 8px; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin-bottom: 12px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 10pt; }
+  .check-box { width: 16px; height: 16px; border: 1.5px solid #333; flex-shrink: 0; }
+  .invoice-box { border: 2px solid #0f1f3d; padding: 16px; margin-top: 18px; }
+  .invoice-box h2 { font-size: 11pt; font-weight: 700; text-transform: uppercase; color: #0f1f3d; margin-bottom: 12px; border-bottom: 1.5px solid #0f1f3d; padding-bottom: 6px; }
+  .total-row td { font-weight: 700; background: #e8edf5 !important; }
+  .sig-row { display: flex; gap: 24px; margin-top: 18px; }
+  .sig-block { flex: 1; border-top: 1.5px solid #333; padding-top: 6px; font-size: 8.5pt; color: #555; }
+  .rating-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rating-star { width: 28px; height: 28px; border: 1.5px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 14pt; }
+  footer { margin-top: 24px; font-size: 7.5pt; color: #999; text-align: center; border-top: 1px solid #ddd; padding-top: 8px; }
+  @media print { @page { margin: 0.5in; size: letter; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="brand">Painting Prep &amp; Final Punch List</div>
+    <div class="form-label">Form LS-013 &nbsp;|&nbsp; Painting Contractor</div>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn btn-print" onclick="window.print()">Print</button>
+    <button class="btn btn-save" onclick="window.print()">Save PDF</button>
+  </div>
+</div>
+<div class="page">
+
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="company-name">&nbsp;</div>
+      <div style="font-size:8.5pt;color:#555;margin-top:4px;">Phone: _________________________ &nbsp; License #: _____________</div>
+    </div>
+    <div class="form-title-block">
+      <h1>Painting Prep &amp;<br>Final Punch List</h1>
+      <div class="form-id">Form LS-013 &nbsp;|&nbsp; Job #: ___________</div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px;">
+    <div class="field"><label>Client Name</label><div class="line"></div></div>
+    <div class="field"><label>Phone</label><div class="line"></div></div>
+    <div class="field"><label>Job Start Date</label><div class="line"></div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Job Address</label><div class="line"></div></div>
+    <div class="field"><label>Lead Painter</label><div class="line"></div></div>
+    <div class="field"><label>Priority</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Scope of Work</div>
+<div class="row">
+  <div class="field"><label>Areas to be Painted</label><div class="line-tall"></div></div>
+  <div class="field"><label>Special Instructions</label><div class="line-tall"></div></div>
+</div>
+
+<div class="section-title">Paint &amp; Materials Spec</div>
+<table>
+  <thead><tr>
+    <th>Area / Surface</th><th>Paint Brand</th><th>Color / Code</th><th>Finish</th><th>Coats</th><th>Gallons</th>
+  </tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Prep Checklist</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> Furniture moved / covered</div>
+  <div class="check-item"><div class="check-box"></div> Drop cloths placed</div>
+  <div class="check-item"><div class="check-box"></div> Walls washed / cleaned</div>
+  <div class="check-item"><div class="check-box"></div> Cracks &amp; holes patched</div>
+  <div class="check-item"><div class="check-box"></div> Sanding complete</div>
+  <div class="check-item"><div class="check-box"></div> Primer applied where needed</div>
+  <div class="check-item"><div class="check-box"></div> Tape and masking applied</div>
+  <div class="check-item"><div class="check-box"></div> Trim / fixtures protected</div>
+</div>
+
+<div class="section-title">Final Punch List</div>
+<table>
+  <thead><tr><th>Area</th><th>Item / Touch-Up Needed</th><th>Painter</th><th>Done?</th></tr></thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="invoice-box">
+  <h2>Service Invoice</h2>
+  <table>
+    <thead><tr><th>Description</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Labor — ___ hrs @ $___/hr</td><td>$</td></tr>
+      <tr><td>Paint &amp; Materials</td><td>$</td></tr>
+      <tr><td>Primer / Supplies</td><td>$</td></tr>
+      <tr><td>Tax</td><td>$</td></tr>
+      <tr class="total-row"><td style="text-align:right;">INVOICE TOTAL</td><td>$</td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="field"><label>Payment Method</label><div class="line"></div></div>
+    <div class="field"><label>Payment Status</label><div class="line"></div></div>
+    <div class="field"><label>Invoice #</label><div class="line"></div></div>
+  </div>
+</div>
+
+<div class="section-title">Final Walk-Through &amp; Sign-Off</div>
+<div class="check-grid">
+  <div class="check-item"><div class="check-box"></div> All areas painted per spec</div>
+  <div class="check-item"><div class="check-box"></div> Punch list items resolved</div>
+  <div class="check-item"><div class="check-box"></div> Tape removed — no bleed</div>
+  <div class="check-item"><div class="check-box"></div> Drop cloths removed, floors clean</div>
+  <div class="check-item"><div class="check-box"></div> Client walk-through completed</div>
+  <div class="check-item"><div class="check-box"></div> Leftover paint labeled and given to client</div>
+</div>
+<div class="rating-row" style="margin-top:14px;">
+  <div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div><div class="rating-star">&#9733;</div>
+  <span style="margin-left:10px;font-size:9pt;align-self:center;">Comments: ___________________________________</span>
+</div>
+<div class="sig-row">
+  <div class="sig-block">Lead Painter Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+  <div class="sig-block">Client Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date</div>
+</div>
+
+<footer>INSTANT DOWNLOAD — Agent Atlas &nbsp;|&nbsp; Form LS-013 Painting Prep &amp; Final Punch List &nbsp;|&nbsp; agentatlasshop.etsy.com</footer>
+</div>
+</body>
+</html>`
+  },
+
 }; // end TEMPLATES
 
 
