@@ -299,7 +299,15 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: top;
       display: block;
+    }
+    .product-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(13,21,38,.45) 0%, transparent 40%);
+      pointer-events: none;
     }
     .product-thumb-placeholder {
       width: 100%;
@@ -312,17 +320,19 @@
     }
     .product-trade-badge {
       position: absolute;
-      top: .75rem;
-      left: .75rem;
-      font-size: .5625rem;
-      font-weight: 800;
-      letter-spacing: .08em;
+      top: .625rem;
+      left: .625rem;
+      z-index: 2;
+      font-size: .5rem;
+      font-weight: 700;
+      letter-spacing: .1em;
       text-transform: uppercase;
-      background: var(--navy);
+      background: rgba(13,21,38,.85);
       color: var(--text-muted);
-      border: 1px solid var(--navy-border);
+      border: 1px solid rgba(255,255,255,.1);
       padding: .2rem .5rem;
       border-radius: 2px;
+      backdrop-filter: blur(4px);
     }
     .product-body {
       padding: 1.25rem;
