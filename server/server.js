@@ -12,6 +12,8 @@ const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 const STRIPE_PRICE_ID   = process.env.STRIPE_PRICE_ID   || ''; // $14.99/mo recurring price ID
+const META_PIXEL_ID     = process.env.META_PIXEL_ID     || '1566084278857732';
+const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || '';
 
 const ETSY_API_BASE   = 'https://openapi.etsy.com/v3';
 const ETSY_AUTH_BASE  = 'https://www.etsy.com/oauth/connect';
@@ -822,6 +824,58 @@ const LISTING_DATA = {
   'LS-020': { title:'Service Fee Transparency Addendum | AI-Powered Fillable PDF | Service Business Template', price:'3.99', tags:'service fee form,contractor fee schedule,service pricing form,business fee template,contractor pricing form,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,fee disclosure', desc:`Professional Service Fee Transparency addendum — fillable in browser, print as PDF.\n\n✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES\n\nIncludes current fee schedule, payment methods, payment terms, client acknowledgment.\n\nTradeOpsVault · tradeopsvault.com` },
   'LS-BUNDLE': { title:'All 20 Trades Business Forms – Complete Bundle | AI-Powered Fillable PDF Templates', price:'9.99', tags:'trades business forms,contractor form bundle,small business templates,digital download bundle,fillable pdf bundle,hvac plumbing forms,electrician forms,contractor templates,trades invoice bundle,business form set,ai powered forms,printable form bundle,instant download', desc:`Get all 20 professional trade business templates in one instant download — AI-powered, smart auto-calculating, available in 4 languages.\n\n✦ AI analysis on every form\n⚡ Auto-calculating invoices\n🌐 English, Español, Français, Português\n📊 CSV export, Zapier, CRM\n\n20 TRADES: HVAC · Plumbing · Electrical · Lawn Care · Auto Detail · Pest Control · Roofing · Pressure Washing · Appliance Repair · Handyman · Mobile Mechanic · Locksmith · Painting · Snow Removal · Window Cleaning · Pool Service · Flooring · Contractor · Septic · Service Fee\n\nTradeOpsVault · tradeopsvault.com` },
 };
+
+// ─── Meta Conversions API ─────────────────────────────────────────────────────
+// Server-side event firing — works even when browser blocks the Pixel
+app.post('/meta/event', async (req, res) => {
+  if (!META_ACCESS_TOKEN) return res.json({ ok: false, error: 'Meta not configured' });
+  const { eventName, eventData = {} } = req.body;
+  if (!eventName) return res.status(400).json({ ok: false, error: 'eventName required' });
+
+  const payload = {
+    data: [{
+      event_name: eventName,
+      event_time: Math.floor(Date.now() / 1000),
+      action_source: 'website',
+      event_source_url: eventData.url || 'https://tradeopsvault.com',
+      user_data: {
+        client_ip_address: req.ip,
+        client_user_agent: req.headers['user-agent'] || '',
+        ...(eventData.email ? { em: [require('crypto').createHash('sha256').update(eventData.email.toLowerCase().trim()).digest('hex')] } : {}),
+      },
+      custom_data: {
+        currency: 'USD',
+        value: eventData.value || 0,
+        content_name: eventData.contentName || '',
+        content_type: 'product',
+      },
+    }],
+  };
+
+  try {
+    const https = require('https');
+    const body = JSON.stringify(payload);
+    const options = {
+      hostname: 'graph.facebook.com',
+      path: `/v19.0/${META_PIXEL_ID}/events?access_token=${META_ACCESS_TOKEN}`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+    };
+    const result = await new Promise((resolve, reject) => {
+      const r = https.request(options, (resp) => {
+        let d = '';
+        resp.on('data', chunk => d += chunk);
+        resp.on('end', () => resolve(JSON.parse(d)));
+      });
+      r.on('error', reject);
+      r.write(body);
+      r.end();
+    });
+    res.json({ ok: true, result });
+  } catch (err) {
+    res.json({ ok: false, error: err.message });
+  }
+});
 
 // Open CORS for the bookmarklet (runs on etsy.com — no Origin header match needed)
 app.get('/listings/:id', (req, res) => {
