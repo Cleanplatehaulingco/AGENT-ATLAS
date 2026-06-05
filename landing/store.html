@@ -349,8 +349,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: .5rem;
+      gap: .75rem;
       flex-shrink: 0;
+      overflow: hidden;
     }
     .product-price {
       font-size: .75rem;
@@ -361,13 +362,16 @@
       border: 1px solid var(--navy-border);
       padding: .25rem .625rem;
       border-radius: 3px;
+      flex-shrink: 0;
     }
-    .product-actions { display: flex; gap: .5rem; align-items: center; }
+    .product-actions { display: flex; gap: .5rem; align-items: center; flex-shrink: 0; }
+    .product-actions .btn-ghost { display: none; }
+    @media (min-width: 1100px) { .product-actions .btn-ghost { display: inline-flex; } }
     .hidden { display: none !important; }
 
-    @media (max-width: 1100px) { .products-grid { grid-template-columns: repeat(3,1fr); } }
-    @media (max-width: 768px) { .products-grid { grid-template-columns: repeat(2,1fr); } }
-    @media (max-width: 480px) { .products-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 1280px) { .products-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (max-width: 900px)  { .products-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 480px)  { .products-grid { grid-template-columns: 1fr; } }
 
     /* ── PRO UPGRADE BANNER ── */
     .pro-banner {
