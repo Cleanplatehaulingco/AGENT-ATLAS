@@ -27,6 +27,8 @@ const helmet      = require('helmet');
 const cors        = require('cors');
 const rateLimit   = require('express-rate-limit');
 const crypto      = require('crypto');
+const fs          = require('fs');
+const path        = require('path');
 const Anthropic   = require('@anthropic-ai/sdk');
 const Stripe      = require('stripe');
 
@@ -102,9 +104,29 @@ const _relayStore = new Map();
 
 /**
  * _downloadTokens: Map<token, { listingId, email, expiresAt, downloadCount, maxDownloads }>
- * Signed download tokens issued after a successful template purchase.
+ * Persisted to disk so tokens survive Render restarts.
  */
-const _downloadTokens = new Map();
+const TOKENS_FILE = path.join(__dirname, 'download-tokens.json');
+
+function _loadTokens() {
+  try {
+    const raw = fs.readFileSync(TOKENS_FILE, 'utf8');
+    const obj = JSON.parse(raw);
+    const map = new Map(Object.entries(obj));
+    // Drop already-expired tokens on load
+    const now = Date.now();
+    for (const [k, v] of map) if (v.expiresAt < now) map.delete(k);
+    return map;
+  } catch { return new Map(); }
+}
+
+function _saveTokens(map) {
+  try {
+    fs.writeFileSync(TOKENS_FILE, JSON.stringify(Object.fromEntries(map)), 'utf8');
+  } catch (e) { console.error('[tokens] save failed:', e.message); }
+}
+
+const _downloadTokens = _loadTokens();
 const RELAY_TTL_MS = 10 * 60 * 1000;  // 10 minutes
 
 /**
@@ -147,10 +169,11 @@ function generateDownloadToken(listingId, email) {
   _downloadTokens.set(token, {
     listingId,
     email,
-    expiresAt:     Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+    expiresAt:     Date.now() + 24 * 60 * 60 * 1000,
     downloadCount: 0,
-    maxDownloads:  5, // allow re-download up to 5 times
+    maxDownloads:  5,
   });
+  _saveTokens(_downloadTokens);
   return token;
 }
 
@@ -953,12 +976,11 @@ app.get('/shop/download/:token', async (req, res) => {
   }
 
   const { listingId } = entry;
-  const fs   = require('fs');
-  const path = require('path');
 
   // Bundle: return JSON listing individual download tokens for each of the 20 templates
   if (listingId === 'LS-BUNDLE') {
     entry.downloadCount++;
+    _saveTokens(_downloadTokens);
     const bundleTokens = {};
     for (let i = 1; i <= 20; i++) {
       const id  = `LS-${String(i).padStart(3, '0')}`;
@@ -988,6 +1010,7 @@ app.get('/shop/download/:token', async (req, res) => {
   }
 
   entry.downloadCount++;
+  _saveTokens(_downloadTokens);
   const filename = path.basename(filePath).replace(/\.html$/, '') + '-TradeOpsVault.html';
   res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
   res.setHeader('Content-Type', 'text/html');
@@ -1087,8 +1110,6 @@ app.post('/crm/leads', _aiCors, (req, res) => {
 
   // Append to outreach tracker log (best-effort)
   try {
-    const fs   = require('fs');
-    const path = require('path');
     const logDir  = path.join(__dirname, 'outreach');
     const logFile = path.join(logDir, 'leads.log');
     if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
