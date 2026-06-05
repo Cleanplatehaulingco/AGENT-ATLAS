@@ -938,24 +938,53 @@ function checkCode() {
 // ── DASHBOARD INIT ──
 let jobs = [];
 
+const CRM_API = 'https://agent-atlas.onrender.com';
+
+function getDeviceId() {
+  let id = localStorage.getItem('tov_device_id');
+  if (!id) { id = 'dev_' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('tov_device_id', id); }
+  return id;
+}
+
 function getJobs() {
-  try {
-    return JSON.parse(localStorage.getItem('tov_crm_jobs') || '[]');
-  } catch { return []; }
+  try { return JSON.parse(localStorage.getItem('tov_crm_jobs') || '[]'); } catch { return []; }
 }
 
 function saveJobs(arr) {
   localStorage.setItem('tov_crm_jobs', JSON.stringify(arr));
+  // Sync to server in background — silent fail is fine, localStorage is source of truth
+  fetch(`${CRM_API}/crm/jobs`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ deviceId: getDeviceId(), jobs: arr })
+  }).catch(() => {});
 }
 
-function initDashboard() {
-  jobs = getJobs();
+async function syncJobsFromServer() {
+  try {
+    const r = await fetch(`${CRM_API}/crm/jobs/${getDeviceId()}`);
+    const d = await r.json();
+    if (d.ok && d.jobs.length > 0) {
+      // Merge server jobs with local — server wins on conflict
+      const local = getJobs();
+      const merged = [...d.jobs];
+      local.forEach(lj => { if (!merged.find(sj => sj.id === lj.id)) merged.push(lj); });
+      localStorage.setItem('tov_crm_jobs', JSON.stringify(merged));
+      return merged;
+    }
+  } catch {}
+  return getJobs();
+}
+
+async function initDashboard() {
+  jobs = await syncJobsFromServer();
   populateTradeFilter();
   renderStats();
   renderTable();
-  // Set default date to today
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('job-date').value = today;
+  // Load outreach stats in background
+  loadCampaignStats();
 }
 
 function renderStats() {
