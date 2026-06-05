@@ -37,6 +37,14 @@ async function getTrackerModule() {
   return _trackerModule;
 }
 
+let _intelligenceModule = null;
+async function getIntelligenceModule() {
+  if (!_intelligenceModule) {
+    _intelligenceModule = await import('./intelligence.js');
+  }
+  return _intelligenceModule;
+}
+
 // ─── Singleton campaign manager instance ─────────────────────────────────────
 // Created on first use; config is pulled from environment variables.
 
@@ -226,6 +234,80 @@ router.post('/outreach/log/:id', async (req, res) => {
   } catch (err) {
     console.error(`[server-routes] Outreach update error for ${id}: ${err.message}`);
     res.status(500).json({ error: 'Failed to update outreach record' });
+  }
+});
+
+// ─── Intelligence Routes ──────────────────────────────────────────────────────
+
+/**
+ * GET /outreach/intelligence/insights
+ * Returns latest AI insights from intelligence-log.json
+ */
+router.get('/outreach/intelligence/insights', async (req, res) => {
+  try {
+    const { getLatestInsights } = await getIntelligenceModule();
+    const insights = getLatestInsights();
+    if (!insights) {
+      return res.json({ ok: true, insights: null, message: 'No analysis has been run yet.' });
+    }
+    res.json({ ok: true, insights });
+  } catch (err) {
+    console.error(`[server-routes] Intelligence insights error: ${err.message}`);
+    res.status(500).json({ error: 'Failed to retrieve insights' });
+  }
+});
+
+/**
+ * GET /outreach/intelligence/score
+ * Scores a single lead on demand.
+ * Query params: name, trade, city, website
+ */
+router.get('/outreach/intelligence/score', async (req, res) => {
+  const { name, trade, city, website } = req.query;
+
+  if (!name || !trade || !city) {
+    return res.status(400).json({ error: 'name, trade, and city query params are required' });
+  }
+
+  try {
+    const { scoreLead } = await getIntelligenceModule();
+    const lead = {
+      name: name || '',
+      trade: trade || '',
+      city: city || '',
+      website: website || null,
+      rating: parseFloat(req.query.rating) || null,
+      reviewCount: parseInt(req.query.reviewCount, 10) || null,
+      isHiring: req.query.isHiring === 'true',
+      facebookFound: req.query.facebookFound === 'true',
+      decisionMakerFound: req.query.decisionMakerFound === 'true',
+      websiteLive: req.query.websiteLive !== 'false',
+    };
+    const result = await scoreLead(lead);
+    res.json({ ok: true, lead: { name, trade, city }, score: result });
+  } catch (err) {
+    console.error(`[server-routes] Lead score error: ${err.message}`);
+    res.status(500).json({ error: `Failed to score lead: ${err.message}` });
+  }
+});
+
+/**
+ * POST /outreach/intelligence/analyze
+ * Triggers weekly AI analysis manually.
+ */
+router.post('/outreach/intelligence/analyze', async (req, res) => {
+  try {
+    const manager = await getManager();
+    // Run analysis in background
+    const analysisPromise = manager.runWeeklyAnalysis();
+    res.status(202).json({ ok: true, message: 'Analysis started. Check intelligence-log.json for results.' });
+    // Log any errors after response sent
+    analysisPromise.catch((err) => {
+      console.error(`[server-routes] Weekly analysis error: ${err.message}`);
+    });
+  } catch (err) {
+    console.error(`[server-routes] Analyze route error: ${err.message}`);
+    res.status(500).json({ error: `Failed to start analysis: ${err.message}` });
   }
 });
 
