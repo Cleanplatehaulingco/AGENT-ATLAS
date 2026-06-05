@@ -541,6 +541,7 @@
       <li><a href="/landing/index.html#pricing">Pricing</a></li>
       <li><a href="/landing/store.html">Templates</a></li>
       <li><a href="/landing/crm.html" class="active">CRM</a></li>
+      <li><a href="#outreach" onclick="showOutreachPanel()">Outreach</a></li>
     </ul>
     <div class="nav-ctas">
       <a href="/landing/store.html" class="btn btn-ghost">Browse Templates</a>
@@ -636,6 +637,47 @@
       <div class="cloud-banner">
         <p>📡 <strong>Local mode:</strong> Your data is saved in this browser only. <strong>Cloud sync</strong> across all devices is coming in Pro v2.</p>
         <button class="btn btn-ghost btn-sm" onclick="alert('Cloud sync is coming soon in Pro v2. Your data is safe in this browser.')">Learn More</button>
+      </div>
+
+      <!-- Outreach Campaign Panel -->
+      <div id="outreach-panel" style="display:none;background:var(--navy-card);border:1px solid var(--navy-border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+          <div>
+            <div style="font-size:1rem;font-weight:700;color:var(--white);">🎯 Outreach Campaign</div>
+            <div style="font-size:.8125rem;color:var(--text-dim);margin-top:.25rem;">Find contractors, write AI emails, send automatically</div>
+          </div>
+          <button onclick="document.getElementById('outreach-panel').style.display='none'" style="background:none;border:none;color:var(--text-muted);font-size:1.25rem;cursor:pointer;">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:.75rem;align-items:end;margin-bottom:1rem;">
+          <div>
+            <label style="display:block;font-size:.75rem;font-weight:600;color:var(--text-muted);margin-bottom:.375rem;text-transform:uppercase;letter-spacing:.05em;">Trade</label>
+            <select id="oc-trade" style="width:100%;background:var(--navy-mid);border:1px solid var(--navy-border);border-radius:var(--radius);padding:.5rem .75rem;color:var(--text);font-family:inherit;font-size:.875rem;">
+              <option value="HVAC">HVAC</option>
+              <option value="plumbing">Plumbing</option>
+              <option value="electrical">Electrical</option>
+              <option value="roofing">Roofing</option>
+              <option value="flooring">Flooring</option>
+              <option value="lawn care">Lawn Care</option>
+              <option value="painting">Painting</option>
+              <option value="pest control">Pest Control</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block;font-size:.75rem;font-weight:600;color:var(--text-muted);margin-bottom:.375rem;text-transform:uppercase;letter-spacing:.05em;">City</label>
+            <input id="oc-city" type="text" placeholder="e.g. Austin" style="width:100%;background:var(--navy-mid);border:1px solid var(--navy-border);border-radius:var(--radius);padding:.5rem .75rem;color:var(--text);font-family:inherit;font-size:.875rem;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="display:block;font-size:.75rem;font-weight:600;color:var(--text-muted);margin-bottom:.375rem;text-transform:uppercase;letter-spacing:.05em;">State</label>
+            <input id="oc-state" type="text" placeholder="e.g. TX" maxlength="2" style="width:100%;background:var(--navy-mid);border:1px solid var(--navy-border);border-radius:var(--radius);padding:.5rem .75rem;color:var(--text);font-family:inherit;font-size:.875rem;box-sizing:border-box;">
+          </div>
+          <button onclick="previewLeads()" class="btn btn-ghost btn-sm" style="white-space:nowrap;">Preview Leads</button>
+        </div>
+        <div id="oc-preview" style="display:none;margin-bottom:1rem;background:var(--navy-mid);border-radius:var(--radius);padding:1rem;font-size:.8125rem;color:var(--text-muted);max-height:180px;overflow-y:auto;"></div>
+        <div style="display:flex;gap:.75rem;align-items:center;">
+          <button onclick="startCampaign()" class="btn btn-orange" style="font-size:.875rem;">🚀 Start Campaign</button>
+          <div id="oc-status" style="font-size:.8125rem;color:var(--text-dim);"></div>
+        </div>
+        <div id="oc-stats" style="display:none;margin-top:1rem;display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;"></div>
       </div>
 
       <!-- Add Job Form -->
@@ -1099,6 +1141,81 @@ if (params.get('pro') === 'success') {
 
 // ── INIT ──
 initPage();
+
+// ── OUTREACH ──
+const API = 'https://agent-atlas.onrender.com';
+
+function showOutreachPanel() {
+  const p = document.getElementById('outreach-panel');
+  p.style.display = p.style.display === 'none' ? 'block' : 'none';
+  p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function previewLeads() {
+  const trade = document.getElementById('oc-trade').value;
+  const city  = document.getElementById('oc-city').value.trim();
+  const state = document.getElementById('oc-state').value.trim();
+  const preview = document.getElementById('oc-preview');
+  if (!city || !state) { alert('Enter a city and state first.'); return; }
+  preview.style.display = 'block';
+  preview.innerHTML = '⏳ Finding leads...';
+  try {
+    const r = await fetch(`${API}/outreach/leads/preview?trade=${encodeURIComponent(trade)}&city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}`);
+    const d = await r.json();
+    if (!d.ok) { preview.innerHTML = '⚠ ' + (d.error || 'Error finding leads'); return; }
+    preview.innerHTML = d.leads.map(l =>
+      `<div style="padding:.375rem 0;border-bottom:1px solid var(--navy-border);">
+        <strong style="color:var(--white)">${l.name}</strong>
+        <span style="margin-left:.5rem">${l.address}</span>
+        ${l.rating ? `<span style="margin-left:.5rem;color:var(--orange)">★ ${l.rating}</span>` : ''}
+      </div>`
+    ).join('') || '0 leads found — try a different city.';
+  } catch(e) { preview.innerHTML = '⚠ Could not connect to server.'; }
+}
+
+async function startCampaign() {
+  const trade = document.getElementById('oc-trade').value;
+  const city  = document.getElementById('oc-city').value.trim();
+  const state = document.getElementById('oc-state').value.trim();
+  const status = document.getElementById('oc-status');
+  if (!city || !state) { alert('Enter a city and state first.'); return; }
+  status.textContent = '⏳ Starting campaign...';
+  try {
+    const r = await fetch(`${API}/outreach/campaign/start`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trades: [trade], cities: [{ city, state }], dailyTarget: 20 })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      status.innerHTML = `✅ Campaign started — <strong>ID: ${d.campaignId}</strong>. Sending up to 20 emails/day.`;
+      loadCampaignStats();
+    } else {
+      status.textContent = '⚠ ' + (d.error || 'Failed to start campaign');
+    }
+  } catch(e) { status.textContent = '⚠ Could not connect to server.'; }
+}
+
+async function loadCampaignStats() {
+  const statsEl = document.getElementById('oc-stats');
+  try {
+    const r = await fetch(`${API}/outreach/campaign/stats`);
+    const d = await r.json();
+    if (!d.ok) return;
+    const s = d.stats;
+    statsEl.style.display = 'grid';
+    statsEl.innerHTML = [
+      ['📤 Sent', s.sent || 0],
+      ['📬 Opened', s.opened || 0],
+      ['💬 Replied', s.replied || 0],
+      ['🚀 Converted', s.converted || 0],
+    ].map(([label, val]) => `
+      <div style="background:var(--navy-mid);border-radius:var(--radius);padding:.75rem;text-align:center;">
+        <div style="font-size:1.25rem;font-weight:800;color:var(--white)">${val}</div>
+        <div style="font-size:.75rem;color:var(--text-dim);margin-top:.125rem">${label}</div>
+      </div>`).join('');
+  } catch(e) {}
+}
 </script>
 </body>
 </html>
