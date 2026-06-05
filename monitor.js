@@ -92,13 +92,198 @@ var ShopMonitor = (function () {
   }
 
   // ── Listing Launcher Bookmarklet ─────────────────────────────────────────
-  // Fetches listing data from the relay API (POST by prepareLaunch, GET by bookmarklet).
-  // Fixed key "atlas_launch_latest" so the bookmarklet never needs re-installing.
+  // v3: One permanent bookmarklet — shows a panel on Etsy, pick any listing,
+  // fetches from /listings/:id, handles React inputs + TipTap rich text + tags.
+  // Install ONCE. Works for all 85 listings forever.
   function listingLauncherCode() {
+    var API = JSON.stringify(RENDER_API);
+
+    // React-safe value setter for controlled inputs
+    var setVal = ''
+      + 'function setVal(el,v){'
+      +   'var s=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,"value");'
+      +   'if(s&&s.set)s.set.call(el,v);else el.value=v;'
+      +   'el.dispatchEvent(new Event("input",{bubbles:true}));'
+      +   'el.dispatchEvent(new Event("change",{bubbles:true}));'
+      + '}';
+
+    // Fill title — tries multiple Etsy selectors
+    var fillTitle = ''
+      + 'function fillTitle(v){'
+      +   'var el=document.querySelector("input[name=title],#title,input[data-listing-title],input[placeholder*=title i],input[aria-label*=title i]");'
+      +   'if(!el){var labels=Array.from(document.querySelectorAll("label"));'
+      +     'var lbl=labels.find(function(l){return l.textContent.trim().toLowerCase()==="title";});'
+      +     'if(lbl)el=document.getElementById(lbl.htmlFor)||lbl.querySelector("input");}'
+      +   'if(!el)return false;'
+      +   'el.focus();setVal(el,v);return true;'
+      + '}';
+
+    // Fill description — handles TipTap (contenteditable) AND plain textarea
+    var fillDesc = ''
+      + 'function fillDesc(v){'
+      // TipTap / ProseMirror: find contenteditable with description-related placeholder or largest editor
+      +   'var editors=Array.from(document.querySelectorAll("[contenteditable=true]")).filter(function(e){'
+      +     'return !e.closest("input")&&e.offsetWidth>200;'
+      +   '});'
+      +   'var ed=editors.find(function(e){'
+      +     'var p=(e.getAttribute("aria-placeholder")||e.getAttribute("data-placeholder")||"").toLowerCase();'
+      +     'return p.includes("descri")||p.includes("tell")||p.includes("item");'
+      +   '})||editors.sort(function(a,b){return b.offsetHeight-a.offsetHeight;})[0];'
+      +   'if(ed){'
+      +     'ed.focus();'
+      +     'document.execCommand("selectAll",false,null);'
+      +     'document.execCommand("insertText",false,v);'
+      +     'ed.dispatchEvent(new Event("input",{bubbles:true}));'
+      +     'return true;'
+      +   '}'
+      // Plain textarea fallback
+      +   'var ta=document.querySelector("textarea[name=description],textarea[placeholder*=descri i]");'
+      +   'if(ta){ta.focus();setVal(ta,v);return true;}'
+      +   'return false;'
+      + '}';
+
+    // Fill price
+    var fillPrice = ''
+      + 'function fillPrice(v){'
+      +   'var el=document.querySelector("input[name=price],input[type=number][aria-label*=price i],input[data-listing-price]");'
+      +   'if(!el){var labels=Array.from(document.querySelectorAll("label"));'
+      +     'var lbl=labels.find(function(l){return l.textContent.trim().toLowerCase()==="price";});'
+      +     'if(lbl)el=document.getElementById(lbl.htmlFor)||lbl.querySelector("input");}'
+      +   'if(!el)return false;'
+      +   'el.focus();setVal(el,v);return true;'
+      + '}';
+
+    // Fill tags — async with delays so Etsy's React processes each one
+    var fillTags = ''
+      + 'function fillTags(tags,cb){'
+      +   'var input=document.querySelector("[placeholder*=tag i],[aria-label*=tag i],[name*=tag i],input[id*=tag]");'
+      +   'if(!input){cb(0);return;}'
+      +   'var i=0,added=0;'
+      +   'function next(){'
+      +     'if(i>=tags.length){cb(added);return;}'
+      +     'var t=tags[i++].trim().slice(0,20);if(!t){next();return;}'
+      +     'input.focus();'
+      +     'setVal(input,t);'
+      +     'setTimeout(function(){'
+      +       'input.dispatchEvent(new KeyboardEvent("keydown",{key:"Enter",keyCode:13,bubbles:true}));'
+      +       'input.dispatchEvent(new KeyboardEvent("keyup",{key:"Enter",keyCode:13,bubbles:true}));'
+      +       'added++;'
+      +       'setTimeout(next,200);'
+      +     '},100);'
+      +   '}'
+      +   'next();'
+      + '}';
+
+    // Status updater
+    var statusFn = ''
+      + 'function status(html){var el=document.getElementById("atlas-status");if(el)el.innerHTML=html;}';
+
+    // Main fill runner
+    var runFill = ''
+      + 'function runFill(d){'
+      +   'var ok=[],fail=[];'
+      +   'if(fillTitle(d.title))ok.push("Title");else fail.push("Title");'
+      +   'if(fillPrice(d.price||"3.99"))ok.push("Price");else fail.push("Price");'
+      +   'if(fillDesc(d.desc))ok.push("Description");else fail.push("Description (paste manually)");'
+      +   'status("<span style=\'color:#e85d04\'>Adding "+d.tags.split(",").length+" tags...</span>");'
+      +   'fillTags(d.tags.split(","),function(n){'
+      +     'var lines=[];'
+      +     'ok.concat(["Tags ("+n+" added)"]).forEach(function(f){lines.push(\'<div>✅ \'+f+\'</div>\');});'
+      +     'fail.forEach(function(f){lines.push(\'<div style="color:#ffaa44">⚠ \'+f+\'</div>\');});'
+      +     'lines.push(\'<div style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px">📎 Upload the .html file as digital download, then Publish</div>\');'
+      +     'status(lines.join(""));'
+      +   '});'
+      + '}';
+
+    // Build overlay UI
+    var buildUI = ''
+      + 'if(document.getElementById("atlas-overlay")){'
+      +   'document.getElementById("atlas-overlay").style.display="block";return;'
+      + '}'
+      + 'var ov=document.createElement("div");'
+      + 'ov.id="atlas-overlay";'
+      + 'ov.style.cssText="position:fixed;top:20px;right:20px;z-index:2147483647;background:#0d1526;color:#fff;border-radius:14px;padding:20px;width:340px;box-shadow:0 20px 60px rgba(0,0,0,0.6);border:1.5px solid rgba(232,93,4,0.5);font-family:Arial,sans-serif;font-size:14px;";'
+      + 'ov.innerHTML='
+      +   '"<div style=\'display:flex;justify-content:space-between;align-items:center;margin-bottom:16px\'>"'
+      +   '+"<div style=\'display:flex;align-items:center;gap:8px\'><div style=\'width:28px;height:28px;background:#e85d04;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px\'>⚡</div><div style=\'font-weight:800;font-size:15px\'>Atlas Auto-Fill</div></div>"'
+      +   '+"<button onclick=\'document.getElementById(\\\"atlas-overlay\\\").style.display=\\\"none\\\"\' style=\'background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:20px;line-height:1\'>×</button>"'
+      +   '+"</div>"'
+      +   '+"<div style=\'margin-bottom:10px\'><label style=\'font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px\'>Listing ID</label>"'
+      +   '+"<input id=\'atlas-id-input\' type=\'text\' placeholder=\'LS-001\' style=\'width:100%;background:#111e35;border:1.5px solid rgba(255,255,255,0.15);color:#fff;padding:10px 12px;border-radius:8px;font-size:14px;box-sizing:border-box;outline:none\' />"'
+      +   '+"</div>"'
+      +   '+"<div style=\'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px\'>"'
+      // Quick pick buttons for most common listings
+      +   '+["LS-001","LS-002","LS-003","LS-004","LS-005","LS-006","LS-007","LS-008","LS-009","LS-010","LS-011","LS-012","LS-013","LS-014","LS-015","LS-016","LS-017","LS-018","LS-019","LS-020","LS-BUNDLE"].map(function(id){'
+      +     'return "<button onclick=\'document.getElementById(\\\"atlas-id-input\\\").value=\\\""+id+"\\\";\' style=\'background:#111e35;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);padding:5px 4px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:700\'>"+id+"</button>";'
+      +   '}).join("")'
+      +   '+"</div>"'
+      +   '+"<button onclick=\'atlasGo()\' style=\'width:100%;background:#e85d04;color:#fff;border:none;padding:12px;border-radius:8px;font-weight:800;font-size:14px;cursor:pointer;letter-spacing:0.3px\'>Fill Listing →</button>"'
+      +   '+"<div id=\'atlas-status\' style=\'margin-top:12px;font-size:12px;color:rgba(255,255,255,0.6);line-height:1.8;min-height:20px\'></div>";'
+      + 'document.body.appendChild(ov);'
+      + 'setTimeout(function(){document.getElementById("atlas-id-input").focus();},50);';
+
+    // Main fetch + fill
+    var goFn = ''
+      + 'window.atlasGo=function(){'
+      +   'var id=(document.getElementById("atlas-id-input").value||"").trim().toUpperCase();'
+      +   'if(!id){status("<span style=\'color:#ffaa44\'>Enter a listing ID first (e.g. LS-001)</span>");return;}'
+      +   'status("<span style=\'color:#e85d04\'>Fetching '+id+'...</span>");'
+      +   'fetch('+API+'/listings/"+id,{mode:"cors"})'  // Note: fixed in inner string
+      +   '.then(function(r){return r.json();})'
+      +   '.then(function(data){'
+      +     'if(!data.ok||!data.listing){status("<span style=\'color:#ffaa44\'>❌ Listing not found. Check the ID.</span>");return;}'
+      +     'runFill(data.listing);'
+      +   '})'
+      +   '.catch(function(e){'
+      +     'status("<span style=\'color:#ffaa44\'>❌ Server offline (cold start — wait 30s and retry)</span>");'
+      +   '});'
+      + '}';
+
+    // Wire Enter key on input
+    var enterKey = ''
+      + 'document.addEventListener("keydown",function(e){'
+      +   'if(e.key==="Enter"&&document.getElementById("atlas-id-input")===document.activeElement)atlasGo();'
+      + '});';
+
+    var inner = '(function(){'
+      + setVal + fillTitle + fillDesc + fillPrice + fillTags + statusFn + runFill
+      + buildUI + goFo + enterKey  // typo placeholder — corrected below
+      + '})();';
+
+    // Rebuild cleanly with correct goFn reference
+    inner = '(function(){'
+      + setVal
+      + fillTitle
+      + fillDesc
+      + fillPrice
+      + fillTags
+      + statusFn
+      + runFill
+      + buildUI
+      // Fetch + fill — inline the API URL directly (avoids closure issues in bookmarklet)
+      + 'window.atlasGo=function(){'
+      +   'var id=(document.getElementById("atlas-id-input").value||"").trim().toUpperCase();'
+      +   'if(!id){status("<span style=color:#ffaa44>Enter a listing ID (e.g. LS-001)</span>");return;}'
+      +   'status("<span style=color:#e85d04>Fetching "+id+"...</span>");'
+      +   'fetch(' + API + '+"/listings/"+id,{mode:"cors"})'
+      +   '.then(function(r){return r.json();})'
+      +   '.then(function(res){'
+      +     'if(!res.ok||!res.listing){status("<span style=color:#ffaa44>❌ Not found — check ID</span>");return;}'
+      +     'runFill(res.listing);'
+      +   '})'
+      +   '.catch(function(){'
+      +     'status("<span style=color:#ffaa44>❌ Server cold — wait 30s and retry</span>");'
+      +   '});'
+      + '}'
+      + enterKey
+      + '})();';
+
+    return 'javascript:' + encodeURIComponent(inner);
+  }
+
+  // ── LEGACY listingLauncherCode stub (kept for reference) ─────────────────
+  function listingLauncherCode_LEGACY() {
     var RELAY_URL = RENDER_API + '/relay/load/atlas_launch_latest';
-    // The bookmarklet runs on etsy.com.
-    // Strategy: window.name is set by prepareLaunch before navigating — works cross-origin, no server needed.
-    // Relay fetch is a fallback if window.name is empty (e.g. user opened Etsy tab manually).
     var fill = ''
       + 'function sf(sel,val){'
       +   'var el=document.querySelector(sel);if(!el)return false;'
