@@ -668,7 +668,7 @@ app.post('/ai/analyze', _aiCors, async (req, res) => {
     const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
 
     const message = await anthropic.messages.create({
-      model:      'claude-haiku-4-5-20251001',
+      model:      'claude-haiku-4-5',
       max_tokens: 1024,
       system:     'You are a trade business advisor analyzing a completed job form. Give specific, actionable insights in 3-5 bullet points. Be direct and practical — your user is a working contractor, not an office worker. Focus on: missed revenue opportunities, follow-up actions, safety flags, and business improvement tips.',
       messages: [
