@@ -73,7 +73,7 @@ async function getManager() {
  * Body: { trades: string[], cities: [{ city, state }][], dailyTarget: number }
  * Starts the campaign in the background and returns a campaignId.
  */
-router.post('/outreach/campaign/start', async (req, res) => {
+router.post('/campaign/start', async (req, res) => {
   const { trades, cities, dailyTarget } = req.body || {};
 
   if (!Array.isArray(trades) || trades.length === 0) {
@@ -111,7 +111,7 @@ router.post('/outreach/campaign/start', async (req, res) => {
  * GET /outreach/campaign/stats
  * Returns aggregate stats from the campaign log.
  */
-router.get('/outreach/campaign/stats', async (req, res) => {
+router.get('/campaign/stats', async (req, res) => {
   try {
     const manager = await getManager();
     const stats = manager.getCampaignStats();
@@ -126,7 +126,7 @@ router.get('/outreach/campaign/stats', async (req, res) => {
  * POST /outreach/unsubscribe/:token
  * Marks the email (base64-decoded from :token) as unsubscribed.
  */
-router.post('/outreach/unsubscribe/:token', async (req, res) => {
+router.post('/unsubscribe/:token', async (req, res) => {
   const { token } = req.params;
 
   let email;
@@ -153,7 +153,7 @@ router.post('/outreach/unsubscribe/:token', async (req, res) => {
  * Query params: trade (default "HVAC"), city (default "Austin"), state (default "TX")
  * No emails are sent.
  */
-router.get('/outreach/leads/preview', async (req, res) => {
+router.get('/leads/preview', async (req, res) => {
   const trade = req.query.trade || 'HVAC';
   const city = req.query.city || 'Austin';
   const state = req.query.state || 'TX';
@@ -186,7 +186,7 @@ router.get('/outreach/leads/preview', async (req, res) => {
  * GET /outreach/warmup-status
  * Returns the current warmup day, daily send limit, and emails sent today.
  */
-router.get('/outreach/warmup-status', async (req, res) => {
+router.get('/warmup-status', async (req, res) => {
   try {
     const manager = await getManager();
     const status = manager.getWarmupStatus();
@@ -201,7 +201,7 @@ router.get('/outreach/warmup-status', async (req, res) => {
  * GET /outreach/log
  * Returns all outreach records from the tracker log.
  */
-router.get('/outreach/log', async (req, res) => {
+router.get('/log', async (req, res) => {
   try {
     const { getOutreachLog } = await getTrackerModule();
     const records = getOutreachLog();
@@ -217,7 +217,7 @@ router.get('/outreach/log', async (req, res) => {
  * Updates a specific outreach record by id.
  * Body: partial record fields to merge (e.g. { notes, emailStatus, repliedAt })
  */
-router.post('/outreach/log/:id', async (req, res) => {
+router.post('/log/:id', async (req, res) => {
   const { id } = req.params;
   const updates = req.body || {};
 
@@ -243,7 +243,7 @@ router.post('/outreach/log/:id', async (req, res) => {
  * GET /outreach/intelligence/insights
  * Returns latest AI insights from intelligence-log.json
  */
-router.get('/outreach/intelligence/insights', async (req, res) => {
+router.get('/intelligence/insights', async (req, res) => {
   try {
     const { getLatestInsights } = await getIntelligenceModule();
     const insights = getLatestInsights();
@@ -262,7 +262,7 @@ router.get('/outreach/intelligence/insights', async (req, res) => {
  * Scores a single lead on demand.
  * Query params: name, trade, city, website
  */
-router.get('/outreach/intelligence/score', async (req, res) => {
+router.get('/intelligence/score', async (req, res) => {
   const { name, trade, city, website } = req.query;
 
   if (!name || !trade || !city) {
@@ -295,7 +295,7 @@ router.get('/outreach/intelligence/score', async (req, res) => {
  * POST /outreach/intelligence/analyze
  * Triggers weekly AI analysis manually.
  */
-router.post('/outreach/intelligence/analyze', async (req, res) => {
+router.post('/intelligence/analyze', async (req, res) => {
   try {
     const manager = await getManager();
     // Run analysis in background
