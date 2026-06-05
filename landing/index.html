@@ -305,37 +305,146 @@
     }
 
     /* ── FEATURES STRIP ── */
+    /* ── PRODUCT SHOWCASE ── */
     .features-strip {
-      background: var(--navy-mid);
-      padding: clamp(4rem,8vw,7rem) 0;
+      background: var(--navy);
+      padding: clamp(5rem,10vw,9rem) 0;
       border-bottom: 1px solid var(--navy-border);
     }
+    .product-hero-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem,6vw,7rem);
+      align-items: center;
+      margin-bottom: clamp(4rem,8vw,7rem);
+    }
+    .product-hero-copy .section-label { margin-bottom: 1.25rem; }
+    .product-hero-headline {
+      font-size: clamp(2rem,4vw,3.25rem);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -.03em;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+    .product-hero-headline em { color: var(--orange); font-style: normal; }
+    .product-hero-body {
+      font-size: 1.0625rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      max-width: 480px;
+    }
+    .product-proof-row {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .product-proof-item {
+      display: flex;
+      flex-direction: column;
+      gap: .2rem;
+    }
+    .product-proof-num {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -.03em;
+    }
+    .product-proof-num span { color: var(--orange); }
+    .product-proof-label {
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .product-hero-visual {
+      position: relative;
+    }
+    .product-hero-visual::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--orange-glow), transparent 60%);
+      z-index: 0;
+    }
+    .product-hero-img {
+      position: relative;
+      z-index: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--navy-border);
+      box-shadow: 0 32px 80px rgba(0,0,0,.5);
+    }
+    .product-hero-img img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .product-hero-badge {
+      position: absolute;
+      bottom: -1rem;
+      right: -1rem;
+      z-index: 2;
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 10px;
+      padding: .875rem 1.25rem;
+      box-shadow: 0 16px 40px rgba(0,0,0,.4);
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .product-hero-badge-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 8px;
+      background: var(--orange-dim);
+      border: 1px solid var(--orange-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    .product-hero-badge-text { display: flex; flex-direction: column; gap: .1rem; }
+    .product-hero-badge-title { font-size: .875rem; font-weight: 700; color: var(--white); }
+    .product-hero-badge-sub { font-size: .75rem; color: var(--text-muted); }
+
     .features-strip-grid {
       display: grid;
       grid-template-columns: repeat(4,1fr);
-      gap: 0;
+      gap: 1px;
+      background: var(--navy-border);
       border: 1px solid var(--navy-border);
       border-radius: var(--radius-md);
       overflow: hidden;
     }
     .feat-card {
       padding: 2.5rem 2rem;
-      border-right: 1px solid var(--navy-border);
+      background: var(--navy-card);
       transition: background .2s;
     }
-    .feat-card:last-child { border-right: none; }
-    .feat-card:hover { background: rgba(255,255,255,.025); }
-    .feat-icon {
-      font-size: 1.75rem;
+    .feat-card:hover { background: var(--navy-light); }
+    .feat-icon-wrap {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 10px;
+      background: var(--orange-dim);
+      border: 1px solid var(--orange-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
       margin-bottom: 1.25rem;
-      display: block;
-      line-height: 1;
     }
+    .feat-icon { display: block; line-height: 1; }
     .feat-title {
-      font-size: 1.0625rem;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--white);
-      margin-bottom: .625rem;
+      margin-bottom: .5rem;
       letter-spacing: -.01em;
     }
     .feat-desc {
@@ -343,28 +452,28 @@
       color: var(--text-muted);
       line-height: 1.6;
     }
+    @media (max-width: 1024px) {
+      .product-hero-split { grid-template-columns: 1fr; }
+      .product-hero-visual { display: none; }
+    }
     @media (max-width: 900px) {
       .features-strip-grid { grid-template-columns: repeat(2,1fr); }
-      .feat-card:nth-child(2) { border-right: none; }
-      .feat-card:nth-child(1),
-      .feat-card:nth-child(2) { border-bottom: 1px solid var(--navy-border); }
     }
     @media (max-width: 480px) {
       .features-strip-grid { grid-template-columns: 1fr; }
-      .feat-card { border-right: none; border-bottom: 1px solid var(--navy-border); }
-      .feat-card:last-child { border-bottom: none; }
     }
 
     /* ── HOW IT WORKS ── */
     .how {
-      background: var(--navy-light);
+      background: var(--navy-mid);
       padding: var(--section-v) 0;
       border-bottom: 1px solid var(--navy-border);
     }
     .section-header {
       margin-bottom: 4rem;
+      text-align: center;
     }
-    .section-header .tag { display: block; }
+    .section-header .tag { display: inline-block; }
     .section-title {
       font-size: clamp(1.75rem, 3.5vw, 2.75rem);
       font-weight: 800;
@@ -372,98 +481,109 @@
       letter-spacing: -.025em;
       line-height: 1.15;
       max-width: 680px;
+      margin: 0 auto;
     }
     .section-sub {
       font-size: 1.0625rem;
       color: var(--text-muted);
       margin-top: .875rem;
       max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .how-steps {
       display: grid;
       grid-template-columns: repeat(3,1fr);
-      gap: 0;
+      gap: 2rem;
       position: relative;
-    }
-    .how-steps::before {
-      content: '';
-      position: absolute;
-      top: 2rem;
-      left: calc(33.33% / 2);
-      right: calc(33.33% / 2);
-      height: 1px;
-      background: var(--navy-border);
-      z-index: 0;
     }
     .how-step {
-      padding: 0 2rem 0 0;
-      position: relative;
-      z-index: 1;
-    }
-    .how-step:last-child { padding-right: 0; }
-    .how-num {
-      width: 4rem;
-      height: 4rem;
-      border-radius: 50%;
+      background: var(--navy-card);
       border: 1px solid var(--navy-border);
-      background: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--orange);
-      margin-bottom: 1.75rem;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .how-step:hover { border-color: rgba(232,93,4,.3); transform: translateY(-3px); }
+    .how-step-img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      background: var(--navy-light);
       position: relative;
     }
-    .how-num::after {
+    .how-step-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+    .how-step-img::after {
       content: '';
       position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      border: 1px solid var(--orange-dim);
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(to bottom, transparent, var(--navy-card));
+    }
+    .how-step-body {
+      padding: 1.5rem;
+    }
+    .how-num {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 7px;
+      background: var(--orange-dim);
+      border: 1px solid var(--orange-glow);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .875rem;
+      font-weight: 800;
+      color: var(--orange);
+      margin-bottom: 1rem;
     }
     .how-step-title {
-      font-size: 1.125rem;
+      font-size: 1.0625rem;
       font-weight: 700;
       color: var(--white);
-      margin-bottom: .625rem;
+      margin-bottom: .5rem;
       letter-spacing: -.01em;
     }
     .how-step-desc {
-      font-size: .9375rem;
+      font-size: .875rem;
       color: var(--text-muted);
       line-height: 1.65;
     }
     .how-step-details {
       list-style: none;
-      margin-top: 1rem;
+      margin-top: .875rem;
       display: flex;
       flex-direction: column;
-      gap: .4rem;
+      gap: .375rem;
     }
     .how-step-details li {
-      font-size: .875rem;
+      font-size: .8125rem;
       color: var(--text-dim);
       padding-left: 1rem;
       position: relative;
     }
     .how-step-details li::before {
-      content: '—';
+      content: '✓';
       position: absolute;
       left: 0;
       color: var(--orange);
-      font-size: .75rem;
+      font-size: .7rem;
     }
     @media (max-width: 768px) {
-      .how-steps { grid-template-columns: 1fr; gap: 3rem; }
-      .how-steps::before { display: none; }
-      .how-step { padding: 0; }
+      .how-steps { grid-template-columns: 1fr; gap: 1.5rem; }
     }
 
     /* ── TEMPLATES GRID ── */
     .templates {
-      background: var(--navy);
+      background: var(--navy-light);
       padding: var(--section-v) 0;
       border-bottom: 1px solid var(--navy-border);
     }
@@ -478,48 +598,68 @@
     .templates-grid {
       display: grid;
       grid-template-columns: repeat(4,1fr);
-      gap: 1px;
-      background: var(--navy-border);
-      border: 1px solid var(--navy-border);
-      border-radius: var(--radius-md);
-      overflow: hidden;
+      gap: 1.25rem;
     }
     .trade-card {
       background: var(--navy-card);
-      padding: 1.75rem 1.5rem;
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: .625rem;
-      transition: background .18s;
+      transition: border-color .18s, transform .18s;
     }
-    .trade-card:hover { background: var(--navy-light); }
-    .trade-icon {
-      font-size: 1.875rem;
-      line-height: 1;
-      margin-bottom: .25rem;
+    .trade-card:hover { border-color: rgba(232,93,4,.3); transform: translateY(-2px); }
+    .trade-thumb {
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      position: relative;
+      background: var(--navy-light);
+    }
+    .trade-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+    .trade-thumb-icon {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--navy-light), var(--navy-card));
+    }
+    .trade-body {
+      padding: 1rem 1.25rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .375rem;
     }
     .trade-name {
-      font-size: 1rem;
+      font-size: .9375rem;
       font-weight: 700;
       color: var(--white);
       letter-spacing: -.01em;
     }
     .trade-desc {
-      font-size: .8125rem;
+      font-size: .8rem;
       color: var(--text-muted);
-      line-height: 1.55;
+      line-height: 1.5;
       flex-grow: 1;
     }
     .trade-footer {
+      padding: .75rem 1.25rem;
+      border-top: 1px solid var(--navy-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: .75rem;
-      padding-top: .875rem;
-      border-top: 1px solid var(--navy-border);
     }
     .trade-price {
-      font-size: .9375rem;
+      font-size: .875rem;
       font-weight: 700;
       color: var(--orange);
     }
@@ -527,14 +667,14 @@
       font-size: .75rem;
       font-weight: 600;
       color: var(--text-muted);
-      padding: .375rem .75rem;
+      padding: .35rem .75rem;
       border: 1px solid var(--navy-border);
       border-radius: var(--radius);
+      text-decoration: none;
       transition: border-color .15s, color .15s;
-      cursor: pointer;
     }
     .trade-btn:hover { border-color: var(--orange); color: var(--orange); }
-    @media (max-width: 1024px) {
+    @media (max-width: 1100px) {
       .templates-grid { grid-template-columns: repeat(3,1fr); }
     }
     @media (max-width: 768px) {
@@ -1074,29 +1214,66 @@
 <!-- ─────────────── FEATURES STRIP ─────────────── -->
 <section class="features-strip" id="features">
   <div class="container">
-    <div class="section-label">Core capabilities</div>
-    <div class="features-strip-grid">
-      <div class="feat-card">
-        <span class="feat-icon">✦</span>
-        <div class="feat-title">AI Analysis</div>
-        <p class="feat-desc">Paste your completed form into the built-in AI panel and receive actionable business insights in seconds.</p>
+
+    <!-- Split hero: copy + real screenshot -->
+    <div class="product-hero-split">
+      <div class="product-hero-copy">
+        <div class="section-label">Built for the field</div>
+        <h2 class="product-hero-headline">Every form does the<br><em>work for you.</em></h2>
+        <p class="product-hero-body">Open in any browser. Fill out the job. The form auto-calculates parts, labor, and totals — then gives you AI-powered margin analysis before you leave the driveway.</p>
+        <div class="product-proof-row">
+          <div class="product-proof-item">
+            <div class="product-proof-num">20<span>+</span></div>
+            <div class="product-proof-label">Trade Templates</div>
+          </div>
+          <div class="product-proof-item">
+            <div class="product-proof-num"><span>$</span>0</div>
+            <div class="product-proof-label">Software to Install</div>
+          </div>
+          <div class="product-proof-item">
+            <div class="product-proof-num">4</div>
+            <div class="product-proof-label">Languages Built In</div>
+          </div>
+        </div>
       </div>
-      <div class="feat-card">
-        <span class="feat-icon">⚡</span>
-        <div class="feat-title">Smart Calculations</div>
-        <p class="feat-desc">Labor, materials, and totals auto-calculate as you type — no spreadsheet juggling, no arithmetic errors.</p>
-      </div>
-      <div class="feat-card">
-        <span class="feat-icon">⬇</span>
-        <div class="feat-title">Export &amp; Integrate</div>
-        <p class="feat-desc">Print to PDF, copy for email, or push data to your existing workflow via Zapier webhooks (Pro).</p>
-      </div>
-      <div class="feat-card">
-        <span class="feat-icon">🌐</span>
-        <div class="feat-title">4 Languages</div>
-        <p class="feat-desc">English, Spanish, French, and Portuguese — every template ships with full multilingual support built in.</p>
+      <div class="product-hero-visual">
+        <div class="product-hero-img">
+          <img src="../mockups/LS-001/LS-001-2-Service-Form.png" alt="HVAC Service Call Form" />
+        </div>
+        <div class="product-hero-badge">
+          <div class="product-hero-badge-icon">✦</div>
+          <div class="product-hero-badge-text">
+            <div class="product-hero-badge-title">AI Analysis Ready</div>
+            <div class="product-hero-badge-sub">Instant margin breakdown</div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- 4 capability cards -->
+    <div class="features-strip-grid">
+      <div class="feat-card">
+        <div class="feat-icon-wrap"><span class="feat-icon">✦</span></div>
+        <div class="feat-title">AI Analysis</div>
+        <p class="feat-desc">Complete a job form, click Analyze — get an instant breakdown of your margins, pricing gaps, and inefficiencies.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon-wrap"><span class="feat-icon">⚡</span></div>
+        <div class="feat-title">Auto-Calculates</div>
+        <p class="feat-desc">Parts, labor, tax, and totals update live as you type. No spreadsheet. No math errors. Invoice is done when the job is done.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon-wrap"><span class="feat-icon">📤</span></div>
+        <div class="feat-title">Export Anywhere</div>
+        <p class="feat-desc">Print to PDF, email the client, or push job data to your CRM or Zapier workflow in one click.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon-wrap"><span class="feat-icon">🌐</span></div>
+        <div class="feat-title">4 Languages</div>
+        <p class="feat-desc">English, Spanish, French, and Portuguese — every template ships with full multilingual support baked in.</p>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1107,38 +1284,53 @@
       <span class="tag">How it works</span>
       <div class="divider"></div>
       <h2 class="section-title">From job site to paid invoice in three steps.</h2>
-      <p class="section-sub">No app download. No account required. Open in any browser and start working immediately.</p>
+      <p class="section-sub">No app download. No account needed. Works on any phone, tablet, or laptop — right in the browser.</p>
     </div>
     <div class="how-steps">
       <div class="how-step">
-        <div class="how-num">01</div>
-        <div class="how-step-title">Open in your browser</div>
-        <p class="how-step-desc">Every template is a single HTML file. Open it on your phone, tablet, or laptop — it works offline once loaded.</p>
-        <ul class="how-step-details">
-          <li>No install required</li>
-          <li>Works on iOS &amp; Android</li>
-          <li>Instant access, instant load</li>
-        </ul>
+        <div class="how-step-img">
+          <img src="../mockups/LS-001/LS-001-1-Cover-Page.png" alt="Open template in browser" />
+        </div>
+        <div class="how-step-body">
+          <div class="how-num">01</div>
+          <div class="how-step-title">Open in your browser</div>
+          <p class="how-step-desc">Buy once, download instantly. One HTML file — open it on your phone, tablet, or laptop. Works offline once loaded.</p>
+          <ul class="how-step-details">
+            <li>No install, no account</li>
+            <li>Works on iOS &amp; Android</li>
+            <li>Instant load, offline-ready</li>
+          </ul>
+        </div>
       </div>
       <div class="how-step">
-        <div class="how-num">02</div>
-        <div class="how-step-title">Fill the form — totals auto-calculate</div>
-        <p class="how-step-desc">Enter job details, parts, and labor. Every line item calculates automatically. Your total is always accurate.</p>
-        <ul class="how-step-details">
-          <li>Smart line-item math</li>
-          <li>Tax &amp; markup fields</li>
-          <li>Client signature ready</li>
-        </ul>
+        <div class="how-step-img">
+          <img src="../mockups/LS-001/LS-001-2-Invoice.png" alt="Fill form with auto-calculations" />
+        </div>
+        <div class="how-step-body">
+          <div class="how-num">02</div>
+          <div class="how-step-title">Fill it out — math is automatic</div>
+          <p class="how-step-desc">Enter job details, parts, and hours. Every line item calculates live. Invoice total is always accurate when you're done.</p>
+          <ul class="how-step-details">
+            <li>Smart line-item math</li>
+            <li>Tax &amp; markup fields</li>
+            <li>Typed digital signature</li>
+          </ul>
+        </div>
       </div>
       <div class="how-step">
-        <div class="how-num">03</div>
-        <div class="how-step-title">Analyze with AI · Export · Print</div>
-        <p class="how-step-desc">Tap Analyze to get an instant business breakdown. Then print to PDF, email the client, or send to CRM.</p>
-        <ul class="how-step-details">
-          <li>5 free AI analyses/month</li>
-          <li>Clean print-ready layout</li>
-          <li>Send to CRM (Pro)</li>
-        </ul>
+        <div class="how-step-img">
+          <img src="../mockups/LS-001/LS-001-5-Value-Props.png" alt="AI analysis and export" />
+        </div>
+        <div class="how-step-body">
+          <div class="how-num">03</div>
+          <div class="how-step-title">Analyze with AI · Print · Get paid</div>
+          <p class="how-step-desc">Tap Analyze for an instant margin and pricing breakdown. Then print to PDF, email the client, or push to your CRM.</p>
+          <ul class="how-step-details">
+            <li>5 free AI analyses/month</li>
+            <li>Clean print-ready layout</li>
+            <li>Send to CRM via Zapier</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -1159,202 +1351,242 @@
     <div class="templates-grid" id="templates-grid">
 
       <div class="trade-card">
-        <div class="trade-icon">🌡️</div>
-        <div class="trade-name">HVAC</div>
-        <div class="trade-desc">Service call notes, diagnostic checklist, parts &amp; labor breakdown.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-001/LS-001-1-Cover-Page.png" alt="HVAC" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🌡️</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">HVAC</div>
+          <div class="trade-desc">Service call notes, diagnostic checklist, parts &amp; labor breakdown.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-001-HVAC-Service-Call-Notes-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-001-HVAC-Service-Call-Notes-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🔧</div>
-        <div class="trade-name">Plumbing</div>
-        <div class="trade-desc">Dispatch checklist, repair log, customer sign-off, materials tracker.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-002/LS-002-1-Cover---Setup.png" alt="Plumbing" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🔧</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Plumbing</div>
+          <div class="trade-desc">Dispatch checklist, repair log, customer sign-off, materials tracker.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-002-Plumbing-Dispatch-Checklist-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-002-Plumbing-Dispatch-Checklist-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">⚡</div>
-        <div class="trade-name">Electrician</div>
-        <div class="trade-desc">Jobsite inspection report, code compliance notes, circuit log.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-003/LS-003-1-Cover---Setup.png" alt="Electrician" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>⚡</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Electrician</div>
+          <div class="trade-desc">Jobsite inspection, code compliance notes, circuit log.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-003-Electrician-Jobsite-Inspection-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-003-Electrician-Jobsite-Inspection-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🌿</div>
-        <div class="trade-name">Lawn Care</div>
-        <div class="trade-desc">Weekly crew planner, service schedule, property condition notes.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-004/LS-004-1-Cover---Setup.png" alt="Lawn Care" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🌿</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Lawn Care</div>
+          <div class="trade-desc">Weekly crew planner, service schedule, property condition notes.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-004-Lawn-Care-Weekly-Crew-Planner-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-004-Lawn-Care-Weekly-Crew-Planner-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🚗</div>
-        <div class="trade-name">Auto Detail</div>
-        <div class="trade-desc">Intake waiver, vehicle condition checklist, service package pricing.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-005/LS-005-1-Cover---Setup.png" alt="Auto Detail" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🚗</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Auto Detail</div>
+          <div class="trade-desc">Intake waiver, vehicle condition checklist, service package pricing.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-005-Auto-Detail-Intake-Waiver-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-005-Auto-Detail-Intake-Waiver-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🐛</div>
-        <div class="trade-name">Pest Control</div>
-        <div class="trade-desc">Follow-up cards, treatment log, chemical usage, re-inspection schedule.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-006/LS-006-1-Cover---Setup.png" alt="Pest Control" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🐛</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Pest Control</div>
+          <div class="trade-desc">Follow-up cards, treatment log, chemical usage, re-inspection schedule.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-006-Pest-Control-Follow-Up-Cards-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-006-Pest-Control-Follow-Up-Cards-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🏠</div>
-        <div class="trade-name">Roofing</div>
-        <div class="trade-desc">Change order approval, material list, warranty documentation, punch list.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-007/LS-007-1-Cover---Setup.png" alt="Roofing" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🏠</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Roofing</div>
+          <div class="trade-desc">Change order approval, material list, warranty documentation.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-007-Roofing-Change-Order-Approval-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-007-Roofing-Change-Order-Approval-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">💦</div>
-        <div class="trade-name">Pressure Washing</div>
-        <div class="trade-desc">Route sheet, surface log, chemical concentrations, before/after notes.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-008/LS-008-1-Cover---Setup.png" alt="Pressure Washing" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>💦</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Pressure Washing</div>
+          <div class="trade-desc">Route sheet, surface log, chemical concentrations, before/after notes.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-008-Pressure-Washing-Route-Sheet-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-008-Pressure-Washing-Route-Sheet-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🔩</div>
-        <div class="trade-name">Appliance Repair</div>
-        <div class="trade-desc">Parts tracker, model/serial log, diagnostic notes, repair authorization.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-009/LS-009-1-Cover---Setup.png" alt="Appliance Repair" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🔩</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Appliance Repair</div>
+          <div class="trade-desc">Parts tracker, model/serial log, diagnostic notes, repair authorization.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-009-Appliance-Repair-Parts-Tracker-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-009-Appliance-Repair-Parts-Tracker-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🛠️</div>
-        <div class="trade-name">Handyman</div>
-        <div class="trade-desc">Materials reimbursement sheet, multi-task log, labor hours breakdown.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-010/LS-010-1-Cover---Setup.png" alt="Handyman" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🛠️</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Handyman</div>
+          <div class="trade-desc">Materials reimbursement, multi-task log, labor hours breakdown.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-010-Handyman-Materials-Reimbursement-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-010-Handyman-Materials-Reimbursement-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🔑</div>
-        <div class="trade-name">Mobile Mechanic</div>
-        <div class="trade-desc">Service summary, on-site repair log, parts sourcing, mileage tracking.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-011/LS-011-1-Cover---Setup.png" alt="Mobile Mechanic" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🔑</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Mobile Mechanic</div>
+          <div class="trade-desc">Service summary, on-site repair log, parts sourcing, mileage tracking.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-011-Mobile-Mechanic-Service-Summary-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-011-Mobile-Mechanic-Service-Summary-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🗝️</div>
-        <div class="trade-name">Locksmith</div>
-        <div class="trade-desc">Job authorization form, key log, security assessment, liability waiver.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-012/LS-012-1-Cover---Setup.png" alt="Locksmith" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🗝️</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Locksmith</div>
+          <div class="trade-desc">Job authorization, key log, security assessment, liability waiver.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-012-Locksmith-Job-Authorization-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-012-Locksmith-Job-Authorization-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🎨</div>
-        <div class="trade-name">Painting</div>
-        <div class="trade-desc">Prep &amp; final punch list, paint spec sheet, surface condition log.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-013/LS-013-1-Cover---Setup.png" alt="Painting" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🎨</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Painting</div>
+          <div class="trade-desc">Prep &amp; final punch list, paint spec sheet, surface condition log.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-013-Painting-Prep-Final-Punch-List-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-013-Painting-Prep-Final-Punch-List-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">❄️</div>
-        <div class="trade-name">Snow Removal</div>
-        <div class="trade-desc">Service checklist, de-icing log, property map notes, seasonal contract tracker.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-014/LS-014-1-Cover---Setup.png" alt="Snow Removal" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>❄️</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Snow Removal</div>
+          <div class="trade-desc">Service checklist, de-icing log, property map notes, contract tracker.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-014-Snow-Removal-Service-Checklist-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-014-Snow-Removal-Service-Checklist-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🪟</div>
-        <div class="trade-name">Window Cleaning</div>
-        <div class="trade-desc">Client packet, window count log, chemical use record, access notes.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-015/LS-015-1-Cover---Setup.png" alt="Window Cleaning" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🪟</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Window Cleaning</div>
+          <div class="trade-desc">Client packet, window count log, chemical use record, access notes.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-015-Window-Cleaning-Client-Packet-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-015-Window-Cleaning-Client-Packet-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🏊</div>
-        <div class="trade-name">Pool Service</div>
-        <div class="trade-desc">Chemical log, equipment inspection, weekly service record, client sign-off.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-016/LS-016-1-Cover---Setup.png" alt="Pool Service" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🏊</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Pool Service</div>
+          <div class="trade-desc">Chemical log, equipment inspection, weekly service record, sign-off.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-016-Pool-Service-Chemical-Log-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-016-Pool-Service-Chemical-Log-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🏗️</div>
-        <div class="trade-name">Flooring</div>
-        <div class="trade-desc">Estimate &amp; scope matrix, material calculation, subfloor condition notes.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-017/LS-017-1-Cover---Setup.png" alt="Flooring" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🏗️</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Flooring</div>
+          <div class="trade-desc">Estimate &amp; scope matrix, material calculation, subfloor condition.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-017-Flooring-Estimate-Scope-Matrix-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-017-Flooring-Estimate-Scope-Matrix-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">👷</div>
-        <div class="trade-name">Contractor</div>
-        <div class="trade-desc">Daily site report, crew log, safety checklist, progress documentation.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-018/LS-018-1-Cover---Setup.png" alt="Contractor" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>👷</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Contractor</div>
+          <div class="trade-desc">Daily site report, crew log, safety checklist, progress documentation.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-018-Contractor-Daily-Site-Report-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-018-Contractor-Daily-Site-Report-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">🚛</div>
-        <div class="trade-name">Septic</div>
-        <div class="trade-desc">Service pump log, tank condition record, regulatory compliance notes.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-019/LS-019-1-Cover---Setup.png" alt="Septic" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>🚛</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Septic</div>
+          <div class="trade-desc">Service pump log, tank condition record, regulatory compliance notes.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-019-Septic-Service-Pump-Log-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-019-Septic-Service-Pump-Log-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
       <div class="trade-card">
-        <div class="trade-icon">📋</div>
-        <div class="trade-name">Service Fee Addendum</div>
-        <div class="trade-desc">Transparent fee disclosure, client acknowledgment, add-on authorization form.</div>
+        <div class="trade-thumb"><img src="../mockups/LS-020/LS-020-1-Cover---Setup.png" alt="Service Fee Addendum" onerror="this.parentElement.innerHTML='<div class=\'trade-thumb-icon\'>📋</div>'"></div>
+        <div class="trade-body">
+          <div class="trade-name">Service Fee Addendum</div>
+          <div class="trade-desc">Transparent fee disclosure, client acknowledgment, add-on authorization.</div>
+        </div>
         <div class="trade-footer">
           <span class="trade-price">$3.99</span>
-          <a href="../downloads/LS-020-Service-Fee-Transparency-Addendum-TradeOpsVault.html" class="trade-btn">View Template</a>
+          <a href="../downloads/LS-020-Service-Fee-Transparency-Addendum-TradeOpsVault.html" class="trade-btn">Preview</a>
         </div>
       </div>
 
