@@ -1486,22 +1486,34 @@ async function loadCampaignStats() {
 // ── OUTREACH TRACKER ──
 let _trackerRecords = [];
 
+async function fetchWithTimeout(url, ms = 15000) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
+  try { const r = await fetch(url, { signal: ctrl.signal }); clearTimeout(t); return r; }
+  catch(e) { clearTimeout(t); throw e; }
+}
+
 async function refreshTrackerData() {
   const wrapper = document.getElementById('tracker-table-wrapper');
-  wrapper.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⏳</div><div class="empty-state-title">Loading…</div></div>`;
+  wrapper.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⏳</div><div class="empty-state-title">Loading outreach data…</div><div class="empty-state-desc">Waking up server, this takes up to 15 seconds on first load.</div></div>`;
   try {
-    const r = await fetch(`${API}/outreach/log`);
+    const r = await fetchWithTimeout(`${API}/outreach/log`, 15000);
     const d = await r.json();
     if (!d.ok && !Array.isArray(d.records)) {
-      wrapper.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Failed to load data</div><div class="empty-state-desc">${escHtml(d.error || 'Server error')}</div></div>`;
+      wrapper.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Failed to load data</div><div class="empty-state-desc">${d.error || 'Server error'}</div></div>`;
       return;
     }
     _trackerRecords = d.records || [];
+    if (_trackerRecords.length === 0) {
+      wrapper.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-title">No outreach yet</div><div class="empty-state-desc">Start a campaign above — contacts will appear here automatically.</div></div>`;
+      renderTrackerStats([]);
+      return;
+    }
     populateTrackerTradeFilter();
     renderTrackerStats(_trackerRecords);
     renderTrackerTable();
   } catch(e) {
-    wrapper.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Could not connect to server</div><div class="empty-state-desc">Make sure the API server is running.</div></div>`;
+    wrapper.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⏳</div><div class="empty-state-title">Server is waking up</div><div class="empty-state-desc">Render free tier sleeps after inactivity. <a href="#" onclick="refreshTrackerData();return false;" style="color:var(--orange)">Click to retry</a> in 30 seconds.</div></div>`;
   }
 }
 
