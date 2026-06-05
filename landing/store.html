@@ -275,14 +275,14 @@
     }
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 1.5rem;
     }
     .product-card {
       background: var(--navy-card);
       border: 1px solid var(--navy-border);
       border-radius: var(--radius-md);
-      overflow: visible;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       transition: border-color .18s, transform .18s;
@@ -294,7 +294,6 @@
       overflow: hidden;
       position: relative;
       background: var(--navy-light);
-      border-radius: var(--radius-md) var(--radius-md) 0 0;
     }
     .product-thumb img {
       width: 100%;
@@ -307,7 +306,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(13,21,38,.45) 0%, transparent 40%);
+      background: linear-gradient(to bottom, rgba(8,13,25,.92) 0%, rgba(8,13,25,.6) 25%, transparent 55%);
       pointer-events: none;
     }
     .product-thumb-placeholder {
@@ -380,7 +379,7 @@
     @media (min-width: 1100px) { .product-actions .btn-ghost { display: inline-flex; } }
     .hidden { display: none !important; }
 
-    
+    @media (max-width: 1280px) { .products-grid { grid-template-columns: repeat(3,1fr); } }
     @media (max-width: 900px)  { .products-grid { grid-template-columns: repeat(2,1fr); } }
     @media (max-width: 480px)  { .products-grid { grid-template-columns: 1fr; } }
 
@@ -1030,7 +1029,7 @@
       if (d.url) {
         window.location.href = d.url;
       } else {
-        alert('Checkout error: ' + (d.error || 'unknown'));
+        alert('Could not start checkout. Please try again.');
         btn.textContent = 'Get Template';
         btn.disabled = false;
       }
@@ -1059,7 +1058,7 @@
       if (d.url) {
         window.location.href = d.url;
       } else {
-        alert('Checkout error: ' + (d.error || 'unknown'));
+        alert('Could not start checkout. Please try again.');
         btn.textContent = 'Get Complete Bundle';
         btn.disabled = false;
       }
