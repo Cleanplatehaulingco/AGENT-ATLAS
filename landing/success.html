@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Download Ready — TradeOpsVault</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Meta Pixel -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1566084278857732');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1566084278857732&ev=PageView&noscript=1"/></noscript>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:        #0d1526;
+      --navy-mid:    #111e35;
+      --navy-light:  #162240;
+      --navy-card:   #0f1c32;
+      --navy-border: #1e2f4a;
+      --orange:      #e85d04;
+      --orange-h:    #ff6a10;
+      --orange-dim:  rgba(232,93,4,0.12);
+      --green:       #22c55e;
+      --green-dim:   rgba(34,197,94,0.12);
+      --text:        #e8edf5;
+      --text-muted:  #7d92b0;
+      --text-dim:    #4a5e7a;
+      --white:       #ffffff;
+      --radius:      4px;
+      --radius-md:   8px;
+      --max:         1280px;
+      --gutter:      clamp(1.5rem, 5vw, 4rem);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      font-family: inherit;
+      font-size: .9375rem;
+      font-weight: 600;
+      line-height: 1;
+      padding: .875rem 1.75rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background .18s, color .18s, border-color .18s, transform .14s;
+      border: 2px solid transparent;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-orange {
+      background: var(--orange);
+      color: #fff;
+      border-color: var(--orange);
+    }
+    .btn-orange:hover { background: var(--orange-h); border-color: var(--orange-h); }
+    .btn-orange:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--navy-border);
+    }
+    .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+    .btn-lg { font-size: 1.125rem; padding: 1.125rem 2.5rem; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(13,21,38,.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--navy-border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      height: 64px;
+      gap: 2rem;
+    }
+    .nav-logo {
+      font-size: 1.0625rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.01em;
+      flex-shrink: 0;
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      margin-left: .5rem;
+    }
+    .nav-links a {
+      display: block;
+      padding: .5rem .9rem;
+      font-size: .875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color .15s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-ctas {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-left: auto;
+    }
+    .nav-ctas .btn { padding: .5625rem 1.125rem; font-size: .875rem; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-ctas { display: none; }
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem var(--gutter);
+    }
+
+    .success-wrap {
+      width: 100%;
+      max-width: 640px;
+      text-align: center;
+    }
+
+    /* Loading state */
+    .state-loading { display: block; }
+    .state-success { display: none; }
+    .state-error   { display: none; }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--navy-border);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Checkmark */
+    .check-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--green-dim);
+      border: 2px solid var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.75rem;
+      font-size: 2.25rem;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .success-headline {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: .75rem;
+      letter-spacing: -.02em;
+    }
+
+    .success-sub {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: .5rem;
+    }
+
+    .success-email {
+      font-size: .9375rem;
+      color: var(--text-muted);
+      margin-bottom: 2.25rem;
+    }
+    .success-email strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .download-btn-wrap {
+      margin-bottom: 1rem;
+    }
+
+    .download-meta {
+      font-size: .8125rem;
+      color: var(--text-dim);
+      margin-bottom: 3rem;
+    }
+    .download-meta span { margin: 0 .375rem; }
+
+    /* Included section */
+    .included-card {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+    .included-title {
+      font-size: .6875rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1rem;
+    }
+    .included-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .625rem;
+    }
+    .included-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: .625rem;
+      font-size: .9375rem;
+      color: var(--text);
+    }
+    .included-list li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: .05em;
+    }
+
+    /* Upsell card */
+    .upsell-card {
+      background: var(--orange-dim);
+      border: 1px solid rgba(232,93,4,.35);
+      border-radius: 12px;
+      padding: 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      text-align: left;
+    }
+    .upsell-text { flex: 1; min-width: 0; }
+    .upsell-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: .375rem;
+    }
+    .upsell-headline {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: .25rem;
+    }
+    .upsell-desc {
+      font-size: .875rem;
+      color: var(--text-muted);
+    }
+    @media (max-width: 480px) {
+      .upsell-card { flex-direction: column; }
+    }
+
+    /* Error state */
+    .error-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(239,68,68,.12);
+      border: 2px solid #ef4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.75rem;
+      font-size: 2rem;
+      color: #ef4444;
+    }
+    .error-headline {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: .75rem;
+    }
+    .error-sub {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .error-support {
+      font-size: .875rem;
+      color: var(--text-dim);
+    }
+    .error-support a { color: var(--orange); }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--navy-border);
+      padding: 2rem 0;
+    }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      font-size: .8125rem;
+      color: var(--text-dim);
+    }
+    .footer-copy a { color: var(--text-muted); }
+    .footer-copy a:hover { color: var(--orange); }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="/landing/index.html" class="nav-logo">TradeOps<span>Vault</span></a>
+    <ul class="nav-links">
+      <li><a href="/landing/index.html#features">Product</a></li>
+      <li><a href="/landing/index.html#pricing">Pricing</a></li>
+      <li><a href="/landing/store.html">Templates</a></li>
+      <li><a href="/landing/crm.html">CRM</a></li>
+    </ul>
+    <div class="nav-ctas">
+      <a href="/landing/store.html" class="btn btn-ghost">Browse Templates</a>
+      <a href="/landing/store.html#bundle" class="btn btn-orange">Get Bundle</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main>
+  <div class="success-wrap">
+
+    <!-- Loading state -->
+    <div id="state-loading" class="state-loading">
+      <div class="spinner"></div>
+      <p style="color:var(--text-muted);font-size:1rem;">Confirming your payment&hellip;</p>
+    </div>
+
+    <!-- Success state -->
+    <div id="state-success" class="state-success">
+      <div class="check-circle">&#10003;</div>
+      <h1 class="success-headline">Your download is ready</h1>
+      <p class="success-sub">Payment confirmed. Your template is waiting.</p>
+      <p class="success-email" id="email-line"></p>
+
+      <div class="download-btn-wrap">
+        <button class="btn btn-orange btn-lg" id="download-btn" onclick="doDownload()">
+          Download Now
+        </button>
+      </div>
+      <p class="download-meta">
+        Link also sent to your email
+        <span>&bull;</span>
+        Expires in 24 hours
+        <span>&bull;</span>
+        Up to 5 downloads
+      </p>
+
+      <div class="included-card" id="included-card">
+        <div class="included-title">What&rsquo;s Included</div>
+        <ul class="included-list">
+          <li>Professional trade business form — fillable directly in your browser</li>
+          <li>AI-powered analysis button — instant professional feedback &amp; suggestions</li>
+          <li>Smart auto-calculating invoice &bull; CSV export &bull; 4 languages</li>
+        </ul>
+      </div>
+
+      <div class="upsell-card" id="upsell-card">
+        <div class="upsell-text">
+          <div class="upsell-label">Complete Bundle</div>
+          <div class="upsell-headline">Get all 20 templates &mdash; $9.99</div>
+          <div class="upsell-desc">Every trade covered. Every feature included. Under $10.</div>
+        </div>
+        <a href="/landing/store.html#bundle" class="btn btn-orange" style="flex-shrink:0;">View Bundle</a>
+      </div>
+    </div>
+
+    <!-- Error state -->
+    <div id="state-error" class="state-error">
+      <div class="error-icon">&#33;</div>
+      <h1 class="error-headline">Something went wrong</h1>
+      <p class="error-sub" id="error-message">We couldn&rsquo;t confirm your download. This can happen if the link has expired or the session is invalid.</p>
+      <p class="error-support">
+        Questions? Email us at <a href="mailto:mgleichner@tradeopsvault.com">mgleichner@tradeopsvault.com</a><br>
+        or <a href="/landing/store.html">return to the store</a>.
+      </p>
+    </div>
+
+  </div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2025 <a href="https://tradeopsvault.com">TradeOpsVault</a>. All rights reserved.</p>
+      <p class="footer-copy">Built for the trades. Powered by AI.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const API = 'https://agent-atlas.onrender.com';
+  let _token = null;
+
+  function showState(name) {
+    ['loading', 'success', 'error'].forEach(s => {
+      document.getElementById('state-' + s).style.display = s === name ? 'block' : 'none';
+    });
+  }
+
+  async function init() {
+    showState('loading');
+
+    const params     = new URLSearchParams(window.location.search);
+    const sessionId  = params.get('session_id');
+    const listingId  = params.get('listing');
+
+    if (!sessionId || !listingId) {
+      showState('error');
+      document.getElementById('error-message').textContent =
+        'Missing session or listing information in the URL.';
+      return;
+    }
+
+    try {
+      const r = await fetch(
+        `${API}/shop/success?session_id=${encodeURIComponent(sessionId)}&listing=${encodeURIComponent(listingId)}`
+      );
+      const d = await r.json();
+
+      if (!d.ok) {
+        showState('error');
+        document.getElementById('error-message').textContent =
+          d.error || 'Payment verification failed.';
+        return;
+      }
+
+      _token = d.token;
+
+      // Show email
+      if (d.email) {
+        document.getElementById('email-line').innerHTML =
+          'Sent to: <strong>' + escHtml(d.email) + '</strong>';
+      }
+
+      // Hide upsell for bundle purchase
+      if ((listingId || '').toUpperCase() === 'LS-BUNDLE') {
+        document.getElementById('upsell-card').style.display = 'none';
+      }
+
+      // Fire Meta Purchase event
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'Purchase', {
+          value:        listingId.toUpperCase() === 'LS-BUNDLE' ? 9.99 : 3.99,
+          currency:     'USD',
+          content_name: d.title || listingId,
+        });
+      }
+
+      showState('success');
+    } catch (err) {
+      showState('error');
+      document.getElementById('error-message').textContent =
+        'Connection error — please check your internet and try again.';
+    }
+  }
+
+  async function doDownload() {
+    if (!_token) return;
+    const btn = document.getElementById('download-btn');
+    btn.textContent = 'Starting download…';
+    btn.disabled = true;
+
+    try {
+      // Verify token is still valid before redirecting
+      const r = await fetch(`${API}/shop/verify/${_token}`);
+      const d = await r.json();
+
+      if (!d.ok) {
+        btn.textContent = 'Link expired';
+        showState('error');
+        document.getElementById('error-message').textContent =
+          d.error || 'Download link is no longer valid.';
+        return;
+      }
+
+      // Redirect to download endpoint — browser handles the file save
+      window.location.href = `${API}/shop/download/${_token}`;
+
+      setTimeout(() => {
+        btn.textContent = 'Download Now';
+        btn.disabled = false;
+      }, 3000);
+    } catch (err) {
+      btn.textContent = 'Download Now';
+      btn.disabled = false;
+      alert('Connection error. Please try again.');
+    }
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  init();
+</script>
+</body>
+</html>

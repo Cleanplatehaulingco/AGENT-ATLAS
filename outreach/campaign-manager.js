@@ -11,12 +11,16 @@
 import fs from 'fs';
 import path from 'path';
 import { findLeads } from './lead-finder.js';
-import { enrichLead } from './email-enricher.js';
+import { enrichLead as emailEnrichLead } from './email-enricher.js';
 import { writeEmail } from './email-writer.js';
 import { sendEmail, getDailyLimit } from './sender.js';
+import { logOutreach, verifyBusinessLive, searchFacebookPage } from './tracker.js';
+import { scoreLead, generatePersonalizedEmail, analyzeAndAdapt, getLatestInsights } from './intelligence.js';
+import { enrichLead as socialEnrichLead } from './social-searcher.js';
 
 const LOG_FILE = path.resolve('./campaign-log.json');
 const SUPPRESSIONS_FILE = path.resolve('./suppressions.json');
+const ADAPTED_TEMPLATES_FILE = path.resolve('./outreach/adapted-templates.json');
 
 // Auto-pause thresholds (CAN-SPAM / deliverability best practices)
 const MAX_BOUNCE_RATE = 0.05;   // 5%
@@ -230,21 +234,68 @@ export class CampaignManager {
             continue;
           }
 
-          // 3. Write personalized email via Claude
+          // 3a. Verify business website is live — skip if down
+          const liveStatus = await verifyBusinessLive(lead.website);
+          if (liveStatus === 'down') {
+            console.log(`[campaign-manager] Skipping ${lead.name} — website appears down (${lead.website})`);
+            stats.skipped++;
+            contactedDomains.add(domain.toLowerCase());
+            continue;
+          }
+
+          // 3b. Search for Facebook page (best-effort)
+          const fbResult = await searchFacebookPage(lead.name, city);
+
+          // 3c. Social enrichment — decision maker, hiring status, LinkedIn
+          let socialData = {};
+          try {
+            const basicLead = { ...lead, trade, city };
+            socialData = await socialEnrichLead(basicLead);
+          } catch (err) {
+            console.warn(`[campaign-manager] Social enrichment failed for ${lead.name}: ${err.message}`);
+          }
+
+          // 3d. Score the lead — skip if score < 4
           const enrichedLead = {
             ...lead,
             trade,
             city,
             firstName: contact.firstName,
+            ...socialData,
+            websiteLive: liveStatus === 'live',
+            facebookFound: fbResult.found,
           };
+
+          let leadScore = { score: 5, reason: '', priority: 'medium' };
+          try {
+            leadScore = await scoreLead(enrichedLead);
+            console.log(`[campaign-manager] Lead score for ${lead.name}: ${leadScore.score}/10 (${leadScore.priority})`);
+          } catch (err) {
+            console.warn(`[campaign-manager] Lead scoring failed for ${lead.name}: ${err.message}`);
+          }
+
+          if (leadScore.score < 4) {
+            console.log(`[campaign-manager] Skipping ${lead.name} — low score (${leadScore.score}/10): ${leadScore.reason}`);
+            stats.skipped++;
+            contactedDomains.add(domain.toLowerCase());
+            continue;
+          }
+
+          // 3. Write personalized email via Claude AI (with insights)
+          const latestInsights = getLatestInsights()?.result || null;
 
           let emailContent;
           try {
-            emailContent = await writeEmail(enrichedLead, fromName);
+            emailContent = await generatePersonalizedEmail(enrichedLead, latestInsights);
           } catch (err) {
-            console.error(`[campaign-manager] Email writing failed for ${lead.name}: ${err.message}`);
-            stats.errors++;
-            continue;
+            console.warn(`[campaign-manager] AI email generation failed for ${lead.name}, falling back: ${err.message}`);
+            try {
+              emailContent = await writeEmail(enrichedLead, fromName);
+            } catch (fallbackErr) {
+              console.error(`[campaign-manager] Email writing failed for ${lead.name}: ${fallbackErr.message}`);
+              stats.errors++;
+              continue;
+            }
           }
 
           // 4. Build unsubscribe URL
@@ -270,8 +321,9 @@ export class CampaignManager {
           }
 
           // 6. Log the result
+          const nowIso = new Date().toISOString();
           const logEntry = {
-            sentAt: new Date().toISOString(),
+            sentAt: nowIso,
             domain,
             email: contact.email,
             firstName: contact.firstName,
@@ -290,9 +342,38 @@ export class CampaignManager {
             replied: false,
             unsubscribed: false,
             warmupDay: day,
+            // Intelligence enrichment data
+            leadScore: leadScore.score,
+            leadPriority: leadScore.priority,
+            scoreReason: leadScore.reason,
+            decisionMaker: enrichedLead.decisionMaker || null,
+            isHiring: enrichedLead.isHiring || false,
+            jobTitle: enrichedLead.jobTitle || null,
+            linkedIn: enrichedLead.linkedIn || null,
           };
 
           appendToLog(logEntry);
+
+          // Also log to outreach tracker
+          logOutreach({
+            businessName:   lead.name,
+            trade,
+            city,
+            state,
+            email:          contact.email,
+            phone:          lead.phone    || null,
+            website:        lead.website  || null,
+            googleRating:   lead.rating   ?? null,
+            googleReviews:  lead.reviewCount ?? null,
+            businessStatus: liveStatus === 'live' ? 'verified_live' : 'unverified',
+            facebookPage:   fbResult.url  || null,
+            facebookStatus: fbResult.found ? 'found' : 'not_found',
+            emailSentAt:    sendResult.sent ? nowIso : null,
+            emailSubject:   emailContent.subject,
+            emailStatus:    sendResult.sent ? 'sent' : 'queued',
+            campaignId:     `campaign_day${day}`,
+          });
+
           contactedDomains.add(domain.toLowerCase());
 
           if (sendResult.sent) {
@@ -374,6 +455,92 @@ export class CampaignManager {
     }
 
     console.log(`[campaign-manager] Unsubscribed: ${normalized}`);
+  }
+
+  /**
+   * Runs weekly AI analysis on campaign performance and saves adapted templates.
+   * @returns {Promise<object>} intelligence insights
+   */
+  async runWeeklyAnalysis() {
+    const log = readJsonFile(LOG_FILE, []);
+    const stats = this.getCampaignStats();
+
+    // Build campaign stats breakdown by trade/city/subject
+    const byTrade = {};
+    const byCity = {};
+    const bySubject = {};
+    for (const entry of log.filter((e) => e.sent)) {
+      if (entry.trade) {
+        if (!byTrade[entry.trade]) byTrade[entry.trade] = { sent: 0, opened: 0, replied: 0 };
+        byTrade[entry.trade].sent++;
+        if (entry.opened) byTrade[entry.trade].opened++;
+        if (entry.replied) byTrade[entry.trade].replied++;
+      }
+      if (entry.city) {
+        if (!byCity[entry.city]) byCity[entry.city] = { sent: 0, opened: 0, replied: 0 };
+        byCity[entry.city].sent++;
+        if (entry.opened) byCity[entry.city].opened++;
+        if (entry.replied) byCity[entry.city].replied++;
+      }
+      if (entry.subject) {
+        const key = entry.subject.slice(0, 60);
+        if (!bySubject[key]) bySubject[key] = { sent: 0, opened: 0, replied: 0 };
+        bySubject[key].sent++;
+        if (entry.opened) bySubject[key].opened++;
+        if (entry.replied) bySubject[key].replied++;
+      }
+    }
+
+    const campaignStats = {
+      ...stats,
+      byTrade,
+      byCity,
+      bySubject,
+    };
+
+    // Use last 100 emails as sample
+    const last100 = log
+      .filter((e) => e.sent && e.subject)
+      .slice(-100)
+      .map((e) => ({
+        subject: e.subject,
+        trade: e.trade,
+        city: e.city,
+        opened: e.opened,
+        replied: e.replied,
+        converted: e.replied,
+      }));
+
+    console.log('[campaign-manager] Running weekly AI analysis...');
+    const insights = await analyzeAndAdapt(campaignStats, last100);
+
+    // Log insights to console
+    if (insights.insights && insights.insights.length) {
+      console.log('[campaign-manager] AI Insights:');
+      insights.insights.forEach((i) => console.log(`  • ${i}`));
+    }
+    if (insights.worstPerformers && insights.worstPerformers.length) {
+      console.log('[campaign-manager] Worst performers:');
+      insights.worstPerformers.forEach((w) => console.log(`  ⚠ ${w.trade}/${w.city}: ${w.reason}`));
+    }
+
+    // Save adapted templates
+    if (insights.rewrittenTemplates && insights.rewrittenTemplates.length) {
+      try {
+        const existing = readJsonFile(ADAPTED_TEMPLATES_FILE, []);
+        const newEntry = {
+          analyzedAt: new Date().toISOString(),
+          templates: insights.rewrittenTemplates,
+        };
+        existing.push(newEntry);
+        fs.writeFileSync(ADAPTED_TEMPLATES_FILE, JSON.stringify(existing, null, 2), 'utf8');
+        console.log(`[campaign-manager] Saved ${insights.rewrittenTemplates.length} adapted templates to adapted-templates.json`);
+      } catch (err) {
+        console.error(`[campaign-manager] Failed to save adapted templates: ${err.message}`);
+      }
+    }
+
+    return insights;
   }
 
   /**
