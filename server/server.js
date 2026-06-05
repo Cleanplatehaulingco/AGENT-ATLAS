@@ -840,6 +840,45 @@ app.get('/crm/jobs/:deviceId', _aiCors, (req, res) => {
   res.json({ ok: true, jobs });
 });
 
+// ─── CRM Leads (Business tier inbound) ───────────────────────────────────────
+const _leadStore = [];
+
+app.post('/crm/leads', _aiCors, (req, res) => {
+  const { name, businessName, trade, phone, email, message } = req.body || {};
+  if (!name || !email) {
+    return res.status(400).json({ ok: false, error: 'name and email are required' });
+  }
+
+  const lead = {
+    id:           _leadStore.length + 1,
+    name,
+    businessName: businessName || '',
+    trade:        trade || '',
+    phone:        phone || '',
+    email,
+    message:      message || '',
+    receivedAt:   new Date().toISOString(),
+  };
+
+  _leadStore.push(lead);
+
+  // Append to outreach tracker log (best-effort)
+  try {
+    const fs   = require('fs');
+    const path = require('path');
+    const logDir  = path.join(__dirname, 'outreach');
+    const logFile = path.join(logDir, 'leads.log');
+    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+    const line = `[${lead.receivedAt}] LEAD #${lead.id} — ${lead.name} | ${lead.businessName} | ${lead.trade} | ${lead.phone} | ${lead.email}\n`;
+    fs.appendFileSync(logFile, line, 'utf8');
+  } catch (logErr) {
+    logError('crm/leads: could not append to leads.log', { message: logErr.message });
+  }
+
+  logInfo('crm/leads: new lead received', { id: lead.id, trade: lead.trade, email: lead.email });
+  res.json({ ok: true, id: lead.id });
+});
+
 // ─── Outreach Campaign Routes ─────────────────────────────────────────────────
 app.use('/outreach', require('./outreach/server-routes'));
 
