@@ -825,6 +825,21 @@ const LISTING_DATA = {
   'LS-BUNDLE': { title:'All 20 Trades Business Forms – Complete Bundle | AI-Powered Fillable PDF Templates', price:'9.99', tags:'trades business forms,contractor form bundle,small business templates,digital download bundle,fillable pdf bundle,hvac plumbing forms,electrician forms,contractor templates,trades invoice bundle,business form set,ai powered forms,printable form bundle,instant download', desc:`Get all 20 professional trade business templates in one instant download — AI-powered, smart auto-calculating, available in 4 languages.\n\n✦ AI analysis on every form\n⚡ Auto-calculating invoices\n🌐 English, Español, Français, Português\n📊 CSV export, Zapier, CRM\n\n20 TRADES: HVAC · Plumbing · Electrical · Lawn Care · Auto Detail · Pest Control · Roofing · Pressure Washing · Appliance Repair · Handyman · Mobile Mechanic · Locksmith · Painting · Snow Removal · Window Cleaning · Pool Service · Flooring · Contractor · Septic · Service Fee\n\nTradeOpsVault · tradeopsvault.com` },
 };
 
+// ─── CRM Jobs (server-side sync) ─────────────────────────────────────────────
+const _jobStore = new Map();
+
+app.post('/crm/jobs', _aiCors, (req, res) => {
+  const { deviceId, jobs } = req.body;
+  if (!deviceId || !Array.isArray(jobs)) return res.status(400).json({ ok: false, error: 'deviceId and jobs[] required' });
+  _jobStore.set(deviceId, jobs);
+  res.json({ ok: true, saved: jobs.length });
+});
+
+app.get('/crm/jobs/:deviceId', _aiCors, (req, res) => {
+  const jobs = _jobStore.get(req.params.deviceId) || [];
+  res.json({ ok: true, jobs });
+});
+
 // ─── Outreach Campaign Routes ─────────────────────────────────────────────────
 app.use('/outreach', require('./outreach/server-routes'));
 
