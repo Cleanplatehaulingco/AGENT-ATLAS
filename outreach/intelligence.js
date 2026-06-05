@@ -183,7 +183,7 @@ RULES (non-negotiable):
 2. Body: 80-120 words MAXIMUM. Every sentence must earn its place.
 3. BANNED phrases: "I hope this finds you well", "just reaching out", "touch base", "streamline", "solution", "game-changer", "leverage", "utilize", "I wanted to", "I came across"
 4. One CTA only: reply OR visit the link. Not both.
-5. Sign off: just "— Michael" on its own line
+5. Sign off: exactly this two-line format — "— Michael\nTradeOpsVault · tradeopsvault.com" — nothing else
 6. PS line required: adds new value, does not repeat the CTA
 7. Plain text only — no HTML, no bullets, no markdown
 8. "TradeOpsVault" appears maximum once total
@@ -216,7 +216,7 @@ Return ONLY valid JSON:
     const firstName = lead.decisionMaker?.name?.split(' ')[0] || 'there';
     return {
       subject: `Quick question about ${lead.name}'s paperwork`,
-      body: `Hi ${firstName},\n\nI came across ${lead.name} while researching top-rated ${lead.trade} contractors in ${lead.city}.\n\nWe make digital job forms for trade contractors — estimates, invoices, inspection checklists — for $9.99 each. One-time purchase, yours to use forever.\n\nWould it be worth a quick look?\n\nBest,\nTradeOpsVault`,
+      body: `Hi ${firstName},\n\nI came across ${lead.name} while researching top-rated ${lead.trade} contractors in ${lead.city}.\n\nWe make digital job forms for trade contractors — estimates, invoices, inspection checklists — for $9.99 each. One-time purchase, yours to use forever.\n\nWould it be worth a quick look?\n\n— Michael\nTradeOpsVault · tradeopsvault.com`,
       previewText: `Saw your ${lead.trade} business in ${lead.city} — quick question`,
     };
   }

@@ -104,7 +104,10 @@ HARD RULES — breaking any of these means the email fails:
 2. Body: 80-130 words MAX. Count them. Cut anything that does not earn its place.
 3. Zero corporate phrases: no "I hope this finds you well", no "just reaching out", no "touch base", no "at your earliest convenience", no "I wanted to", no "I came across your company"
 4. One ask only — reply OR visit the link. Never both. Never "feel free to".
-5. Sign off: just "— ${senderName}" on its own line. Nothing before it.
+5. Sign off: use exactly this two-line format:
+   — ${senderName}
+   TradeOpsVault · tradeopsvault.com
+   Nothing else above or below the sign off.
 6. PS line (required): one sentence that adds a new piece of value or curiosity — not a repeat of the CTA. If they are hiring, reference growth. If strong reviews, reference that customers already trust them and the tech should match. If unknown, make it a provocative question.
 7. Plain text only — no HTML, no bullet points, no markdown in the body.
 8. The product name "TradeOpsVault" appears maximum once in the entire email.
