@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TradeOpsVault CRM — Job Dashboard</title>
+  <meta name="description" content="TradeOpsVault Pro CRM — track jobs, clients, and revenue from every trade template in one dashboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Meta Pixel — replace PIXEL_ID_HERE with your actual Pixel ID -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'PIXEL_ID_HERE');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=PIXEL_ID_HERE&ev=PageView&noscript=1"/></noscript>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:        #0d1526;
+      --navy-mid:    #111e35;
+      --navy-light:  #162240;
+      --navy-card:   #0f1c32;
+      --navy-border: #1e2f4a;
+      --orange:      #e85d04;
+      --orange-h:    #ff6a10;
+      --orange-dim:  rgba(232,93,4,0.12);
+      --text:        #e8edf5;
+      --text-muted:  #7d92b0;
+      --text-dim:    #4a5e7a;
+      --white:       #ffffff;
+      --green:       #10b981;
+      --green-dim:   rgba(16,185,129,.12);
+      --red:         #ef4444;
+      --red-dim:     rgba(239,68,68,.12);
+      --yellow:      #f59e0b;
+      --radius:      4px;
+      --radius-md:   8px;
+      --max:         1280px;
+      --gutter:      clamp(1.5rem, 5vw, 4rem);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      font-family: inherit;
+      font-size: .9375rem;
+      font-weight: 600;
+      line-height: 1;
+      padding: .875rem 1.75rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background .18s, color .18s, border-color .18s, transform .14s;
+      border: 2px solid transparent;
+      white-space: nowrap;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-orange { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .btn-orange:hover { background: var(--orange-h); border-color: var(--orange-h); }
+    .btn-ghost { background: transparent; color: var(--text); border-color: var(--navy-border); }
+    .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+    .btn-sm { font-size: .8125rem; padding: .5625rem 1rem; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(13,21,38,.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--navy-border);
+    }
+    .nav-inner { display: flex; align-items: center; height: 64px; gap: 2rem; }
+    .nav-logo { font-size: 1.0625rem; font-weight: 800; color: var(--white); letter-spacing: -.01em; flex-shrink: 0; }
+    .nav-logo span { color: var(--orange); }
+    .nav-links { display: flex; align-items: center; gap: 0; list-style: none; margin-left: .5rem; }
+    .nav-links a { display: block; padding: .5rem .9rem; font-size: .875rem; font-weight: 500; color: var(--text-muted); transition: color .15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-ctas { display: flex; align-items: center; gap: .75rem; margin-left: auto; }
+    .nav-ctas .btn { padding: .5625rem 1.125rem; font-size: .875rem; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .5rem; margin-left: auto; background: none; border: none; }
+    .nav-hamburger span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; display: block; }
+    .nav-mobile { display: none; flex-direction: column; background: var(--navy-mid); border-top: 1px solid var(--navy-border); padding: 1rem var(--gutter) 1.5rem; gap: .25rem; }
+    .nav-mobile a { display: block; padding: .625rem 0; font-size: .9375rem; font-weight: 500; color: var(--text-muted); border-bottom: 1px solid var(--navy-border); }
+    .nav-mobile-ctas { display: flex; gap: .75rem; margin-top: 1rem; }
+    .nav-mobile-ctas .btn { flex: 1; }
+    .nav-mobile.open { display: flex; }
+    @media (max-width: 768px) {
+      .nav-links, .nav-ctas { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+
+    /* ── UPGRADE WALL ── */
+    #upgrade-wall {
+      display: none;
+      min-height: calc(100vh - 64px);
+      align-items: center;
+      justify-content: center;
+      padding: 4rem var(--gutter);
+    }
+    #upgrade-wall.visible { display: flex; }
+    .upgrade-card {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-top: 3px solid var(--orange);
+      border-radius: var(--radius-md);
+      padding: 3.5rem;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+    }
+    .upgrade-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+    .upgrade-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.025em;
+      margin-bottom: .875rem;
+    }
+    .upgrade-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+    .upgrade-features {
+      list-style: none;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: .625rem;
+      margin-bottom: 2.25rem;
+      background: var(--navy-light);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+    }
+    .upgrade-features li {
+      font-size: .875rem;
+      color: var(--text-muted);
+      padding-left: 1.25rem;
+      position: relative;
+    }
+    .upgrade-features li::before { content: '✓'; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+    .upgrade-price {
+      font-size: .875rem;
+      color: var(--text-dim);
+      margin-top: 1rem;
+    }
+
+    /* ── CRM DASHBOARD ── */
+    #crm-dashboard {
+      display: none;
+    }
+    #crm-dashboard.visible { display: block; }
+
+    .crm-header {
+      background: var(--navy-mid);
+      border-bottom: 1px solid var(--navy-border);
+      padding: 2.5rem 0;
+    }
+    .crm-header-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .crm-header-eyebrow {
+      font-size: .6875rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: .5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .crm-header-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+    .crm-header h1 {
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.025em;
+      line-height: 1.15;
+    }
+    .crm-header-actions { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
+
+    /* ── STATS BAR ── */
+    .crm-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--navy-border);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+    .crm-stat {
+      background: var(--navy-card);
+      padding: 1.75rem;
+      position: relative;
+    }
+    .crm-stat-label {
+      font-size: .6875rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: .5rem;
+    }
+    .crm-stat-val {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.03em;
+      line-height: 1;
+    }
+    .crm-stat-sub {
+      font-size: .75rem;
+      color: var(--text-dim);
+      margin-top: .375rem;
+    }
+    .crm-stat-icon {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 1.25rem;
+      opacity: .35;
+    }
+    @media (max-width: 900px) { .crm-stats { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 480px) { .crm-stats { grid-template-columns: 1fr; } }
+
+    /* ── SECTION HEADER ── */
+    .section-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .section-row-title {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -.01em;
+    }
+    .section-row-sub { font-size: .8125rem; color: var(--text-dim); margin-top: .125rem; }
+
+    /* ── CLOUD SYNC BANNER ── */
+    .cloud-banner {
+      background: var(--orange-dim);
+      border: 1px solid rgba(232,93,4,.2);
+      border-radius: var(--radius);
+      padding: .875rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .cloud-banner p { font-size: .875rem; color: var(--text-muted); }
+    .cloud-banner strong { color: var(--orange); }
+
+    /* ── JOBS TABLE ── */
+    .jobs-table-wrapper {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      overflow-x: auto;
+    }
+    .jobs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .875rem;
+      min-width: 680px;
+    }
+    .jobs-table thead {
+      background: var(--navy-light);
+      border-bottom: 1px solid var(--navy-border);
+    }
+    .jobs-table th {
+      padding: .875rem 1.25rem;
+      text-align: left;
+      font-size: .6875rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+    .jobs-table td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--navy-border);
+      color: var(--text-muted);
+      vertical-align: middle;
+    }
+    .jobs-table tbody tr:last-child td { border-bottom: none; }
+    .jobs-table tbody tr:hover td { background: rgba(255,255,255,.02); }
+    .td-date { color: var(--text-dim); font-size: .8125rem; }
+    .td-client { color: var(--text); font-weight: 600; }
+    .td-trade {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .25rem .625rem;
+      background: var(--navy-light);
+      border: 1px solid var(--navy-border);
+      border-radius: 2px;
+    }
+    .td-amount { color: var(--orange); font-weight: 700; }
+    .status-badge {
+      font-size: .625rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .25rem .625rem;
+      border-radius: 2px;
+    }
+    .status-paid { background: var(--green-dim); color: var(--green); }
+    .status-pending { background: var(--orange-dim); color: var(--orange); }
+    .status-invoiced { background: rgba(245,158,11,.12); color: var(--yellow); }
+    .status-cancelled { background: var(--red-dim); color: var(--red); }
+    .td-actions { display: flex; gap: .5rem; align-items: center; }
+    .icon-btn {
+      background: none;
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius);
+      padding: .375rem .625rem;
+      cursor: pointer;
+      color: var(--text-dim);
+      font-size: .75rem;
+      transition: border-color .15s, color .15s;
+      font-family: inherit;
+    }
+    .icon-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+    .empty-state-icon { font-size: 3rem; margin-bottom: 1.25rem; opacity: .4; }
+    .empty-state-title { font-size: 1.0625rem; font-weight: 700; color: var(--text-muted); margin-bottom: .5rem; }
+    .empty-state-desc { font-size: .875rem; color: var(--text-dim); max-width: 380px; margin: 0 auto 1.5rem; line-height: 1.65; }
+
+    /* ── ADD JOB FORM ── */
+    .add-job-section {
+      margin: 2rem 0;
+    }
+    .add-job-toggle {
+      display: flex;
+      align-items: center;
+      gap: .625rem;
+      background: none;
+      border: 1px dashed var(--navy-border);
+      border-radius: var(--radius-md);
+      width: 100%;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      color: var(--text-dim);
+      font-family: inherit;
+      font-size: .875rem;
+      font-weight: 500;
+      transition: border-color .15s, color .15s;
+    }
+    .add-job-toggle:hover { border-color: var(--orange); color: var(--orange); }
+    .add-job-form {
+      display: none;
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      margin-top: .75rem;
+    }
+    .add-job-form.open { display: block; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) auto;
+      gap: .75rem;
+      align-items: end;
+    }
+    .form-field label {
+      display: block;
+      font-size: .6875rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: .375rem;
+    }
+    .form-field input,
+    .form-field select {
+      width: 100%;
+      background: var(--navy);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius);
+      padding: .6875rem .875rem;
+      color: var(--text);
+      font-family: inherit;
+      font-size: .875rem;
+      transition: border-color .15s;
+    }
+    .form-field input::placeholder { color: var(--text-dim); }
+    .form-field input:focus,
+    .form-field select:focus { outline: none; border-color: var(--orange); }
+    .form-field select option { background: var(--navy-mid); }
+    @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } }
+
+    /* ── COMING SOON BANNER ── */
+    .coming-soon-banner {
+      background: var(--navy-light);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+    .coming-soon-icon { font-size: 2rem; }
+    .coming-soon-text h4 { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: .25rem; }
+    .coming-soon-text p { font-size: .875rem; color: var(--text-muted); }
+    .coming-soon-badge {
+      font-size: .5625rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      background: var(--navy-border);
+      color: var(--text-dim);
+      padding: .25rem .625rem;
+      border-radius: 2px;
+      margin-left: auto;
+    }
+
+    /* ── MAIN CONTENT AREA ── */
+    .crm-content { padding: 2rem 0 5rem; }
+
+    /* ── FOOTER ── */
+    .footer { background: var(--navy-mid); border-top: 1px solid var(--navy-border); padding: 5rem 0 2.5rem; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: clamp(2rem,4vw,4rem); padding-bottom: 4rem; border-bottom: 1px solid var(--navy-border); margin-bottom: 2.5rem; }
+    .footer-brand p { font-size: .875rem; color: var(--text-muted); line-height: 1.7; margin-top: .875rem; max-width: 280px; }
+    .footer-col-title { font-size: .6875rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.25rem; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: .625rem; }
+    .footer-links a { font-size: .875rem; color: var(--text-muted); transition: color .15s; }
+    .footer-links a:hover { color: var(--orange); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-copy { font-size: .8125rem; color: var(--text-dim); }
+    .footer-copy a { color: var(--text-muted); }
+    .footer-copy a:hover { color: var(--orange); }
+    @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } .footer-brand { grid-column: 1 / -1; } }
+    @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
+
+    /* ── PRINT STYLES ── */
+    @media print {
+      .nav, .footer, .crm-header-actions, .add-job-section,
+      .cloud-banner, .coming-soon-banner, #upgrade-wall { display: none !important; }
+      body { background: #fff; color: #000; }
+      .crm-stat { background: #f5f5f5; }
+      .jobs-table-wrapper { border: 1px solid #ccc; }
+      .jobs-table thead { background: #eee; }
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      max-width: 480px;
+      width: 100%;
+    }
+    .modal h3 { font-size: 1.125rem; font-weight: 700; color: var(--white); margin-bottom: 1rem; }
+    .modal p { font-size: .875rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .modal-actions { display: flex; gap: .75rem; justify-content: flex-end; }
+    .modal-close { background: none; border: none; color: var(--text-dim); font-size: 1.25rem; cursor: pointer; position: absolute; top: 1rem; right: 1rem; }
+  </style>
+</head>
+<body>
+
+<!-- ─────────────── NAV ─────────────── -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="/landing/index.html" class="nav-logo">TradeOps<span>Vault</span></a>
+    <ul class="nav-links">
+      <li><a href="/landing/index.html#features">Product</a></li>
+      <li><a href="/landing/index.html#pricing">Pricing</a></li>
+      <li><a href="/landing/store.html">Templates</a></li>
+      <li><a href="/landing/crm.html" class="active">CRM</a></li>
+    </ul>
+    <div class="nav-ctas">
+      <a href="/landing/store.html" class="btn btn-ghost">Browse Templates</a>
+      <a href="/landing/store.html#bundle" class="btn btn-orange">Try Free</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="/landing/index.html#features">Product</a>
+    <a href="/landing/index.html#pricing">Pricing</a>
+    <a href="/landing/store.html">Templates</a>
+    <a href="/landing/crm.html">CRM</a>
+    <div class="nav-mobile-ctas">
+      <a href="/landing/store.html" class="btn btn-ghost">Browse Templates</a>
+      <a href="/landing/store.html#bundle" class="btn btn-orange">Try Free</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─────────────── UPGRADE WALL ─────────────── -->
+<div id="upgrade-wall">
+  <div class="upgrade-card">
+    <span class="upgrade-icon">🔒</span>
+    <h2 class="upgrade-title">Pro Feature</h2>
+    <p class="upgrade-sub">The CRM dashboard is available to TradeOpsVault Pro subscribers. Track jobs, clients, and revenue across all your trade templates in one place.</p>
+    <ul class="upgrade-features">
+      <li>Unlimited AI analyses</li>
+      <li>Full job history dashboard</li>
+      <li>Revenue tracking by trade</li>
+      <li>Client database with notes</li>
+      <li>Zapier webhook integration</li>
+      <li>Priority email support</li>
+    </ul>
+    <button class="btn btn-orange" style="width:100%;font-size:1rem;" onclick="initiateUpgrade()">Upgrade to Pro — $14.99/mo</button>
+    <p class="upgrade-price">Billed monthly · Cancel anytime</p>
+    <p style="margin-top:1.5rem;font-size:.8125rem;color:var(--text-dim);">Already have Pro? <a href="#" onclick="showDevUnlock(event)" style="color:var(--orange);">Sign in</a></p>
+  </div>
+</div>
+
+<!-- ─────────────── CRM DASHBOARD ─────────────── -->
+<div id="crm-dashboard">
+
+  <!-- Dashboard Header -->
+  <div class="crm-header">
+    <div class="container">
+      <div class="crm-header-inner">
+        <div>
+          <div class="crm-header-eyebrow">Pro Dashboard · Local Mode</div>
+          <h1>Job Dashboard</h1>
+        </div>
+        <div class="crm-header-actions">
+          <button class="btn btn-ghost btn-sm" onclick="exportCSV()">⬇ Export CSV</button>
+          <button class="btn btn-orange btn-sm" onclick="toggleAddJob()">+ Add Job</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="crm-content">
+    <div class="container">
+
+      <!-- Stats Bar -->
+      <div class="crm-stats" id="stats-bar">
+        <div class="crm-stat">
+          <div class="crm-stat-icon">📋</div>
+          <div class="crm-stat-label">Total Jobs</div>
+          <div class="crm-stat-val" id="stat-jobs">0</div>
+          <div class="crm-stat-sub">all time</div>
+        </div>
+        <div class="crm-stat">
+          <div class="crm-stat-icon">💰</div>
+          <div class="crm-stat-label">Total Revenue</div>
+          <div class="crm-stat-val" id="stat-revenue">$0</div>
+          <div class="crm-stat-sub">all time</div>
+        </div>
+        <div class="crm-stat">
+          <div class="crm-stat-icon">📈</div>
+          <div class="crm-stat-label">Avg Job Value</div>
+          <div class="crm-stat-val" id="stat-avg">$0</div>
+          <div class="crm-stat-sub">per job</div>
+        </div>
+        <div class="crm-stat">
+          <div class="crm-stat-icon">👥</div>
+          <div class="crm-stat-label">Active Clients</div>
+          <div class="crm-stat-val" id="stat-clients">0</div>
+          <div class="crm-stat-sub">unique names</div>
+        </div>
+      </div>
+
+      <!-- Cloud Sync Banner -->
+      <div class="cloud-banner">
+        <p>📡 <strong>Local mode:</strong> Your data is saved in this browser only. <strong>Cloud sync</strong> across all devices is coming in Pro v2.</p>
+        <button class="btn btn-ghost btn-sm" onclick="alert('Cloud sync is coming soon in Pro v2. Your data is safe in this browser.')">Learn More</button>
+      </div>
+
+      <!-- Add Job Form -->
+      <div class="add-job-section">
+        <button class="add-job-toggle" id="add-job-toggle" onclick="toggleAddJob()">
+          <span>+</span> Add a job manually
+        </button>
+        <div class="add-job-form" id="add-job-form">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="job-date">Date</label>
+              <input type="date" id="job-date" />
+            </div>
+            <div class="form-field">
+              <label for="job-client">Client Name</label>
+              <input type="text" id="job-client" placeholder="e.g. Martinez Heating" />
+            </div>
+            <div class="form-field">
+              <label for="job-trade">Trade</label>
+              <select id="job-trade">
+                <option value="">Select trade…</option>
+                <option>HVAC</option>
+                <option>Plumbing</option>
+                <option>Electrician</option>
+                <option>Lawn Care</option>
+                <option>Auto Detail</option>
+                <option>Pest Control</option>
+                <option>Roofing</option>
+                <option>Pressure Washing</option>
+                <option>Appliance Repair</option>
+                <option>Handyman</option>
+                <option>Mobile Mechanic</option>
+                <option>Locksmith</option>
+                <option>Painting</option>
+                <option>Snow Removal</option>
+                <option>Window Cleaning</option>
+                <option>Pool Service</option>
+                <option>Flooring</option>
+                <option>Contractor</option>
+                <option>Septic</option>
+                <option>Service Fee Addendum</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="job-amount">Amount ($)</label>
+              <input type="number" id="job-amount" placeholder="0.00" step="0.01" min="0" />
+            </div>
+            <div class="form-field">
+              <label for="job-status">Status</label>
+              <select id="job-status">
+                <option value="pending">Pending</option>
+                <option value="invoiced">Invoiced</option>
+                <option value="paid">Paid</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="job-notes">Notes</label>
+              <input type="text" id="job-notes" placeholder="Optional notes…" />
+            </div>
+            <div style="display:flex;gap:.5rem;align-items:flex-end;">
+              <button class="btn btn-orange btn-sm" onclick="saveJob()" style="white-space:nowrap;">Save Job</button>
+              <button class="btn btn-ghost btn-sm" onclick="toggleAddJob()">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jobs Table -->
+      <div class="section-row">
+        <div>
+          <div class="section-row-title">Job History</div>
+          <div class="section-row-sub">All jobs saved in this browser. <span id="job-count-label">0 jobs</span></div>
+        </div>
+        <div style="display:flex;gap:.5rem;">
+          <select id="filter-status" onchange="renderTable()" style="background:var(--navy-card);border:1px solid var(--navy-border);border-radius:var(--radius);padding:.4375rem .75rem;color:var(--text-muted);font-family:inherit;font-size:.8125rem;cursor:pointer;">
+            <option value="all">All Statuses</option>
+            <option value="paid">Paid</option>
+            <option value="pending">Pending</option>
+            <option value="invoiced">Invoiced</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <select id="filter-trade" onchange="renderTable()" style="background:var(--navy-card);border:1px solid var(--navy-border);border-radius:var(--radius);padding:.4375rem .75rem;color:var(--text-muted);font-family:inherit;font-size:.8125rem;cursor:pointer;">
+            <option value="all">All Trades</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="jobs-table-wrapper" id="jobs-table-wrapper">
+        <!-- populated by JS -->
+      </div>
+
+      <!-- Coming Soon Banner -->
+      <div class="coming-soon-banner">
+        <div class="coming-soon-icon">🚀</div>
+        <div class="coming-soon-text">
+          <h4>Cloud sync, client profiles, and follow-up reminders</h4>
+          <p>These features are coming in Pro v2. Your data will sync across all your devices automatically.</p>
+        </div>
+        <span class="coming-soon-badge">Coming Soon</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────── FOOTER ─────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="font-size:1.125rem;font-weight:800;color:var(--white);">TradeOps<span style="color:var(--orange)">Vault</span></div>
+        <p>The professional operating system for trade businesses. AI-powered forms, instant calculations, and business intelligence.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Product</div>
+        <ul class="footer-links">
+          <li><a href="/landing/index.html#features">Features</a></li>
+          <li><a href="/landing/index.html#how">How It Works</a></li>
+          <li><a href="/landing/store.html">Templates</a></li>
+          <li><a href="/landing/index.html#pricing">Pricing</a></li>
+          <li><a href="/landing/crm.html">CRM Dashboard</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Languages</div>
+        <ul class="footer-links">
+          <li><a href="#">English</a></li>
+          <li><a href="#">Español</a></li>
+          <li><a href="#">Français</a></li>
+          <li><a href="#">Português</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="https://tradeopsvault.com" target="_blank" rel="noopener">tradeopsvault.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2025 <a href="https://tradeopsvault.com">TradeOpsVault</a>. All rights reserved.</p>
+      <p class="footer-copy">Built for the trades. Powered by AI.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ─────────────── STRIPE MODAL ─────────────── -->
+<div class="modal-overlay" id="stripe-modal">
+  <div class="modal" style="position:relative;">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>Upgrade to Pro</h3>
+    <p>You'll be redirected to our secure Stripe checkout. $14.99/month — cancel anytime. After payment you'll receive access credentials via email.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-orange btn-sm" onclick="goToStripe()">Continue to Checkout →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────── DEV UNLOCK MODAL ─────────────── -->
+<div class="modal-overlay" id="unlock-modal">
+  <div class="modal" style="position:relative;">
+    <button class="modal-close" onclick="closeUnlockModal()">✕</button>
+    <h3>Pro Access</h3>
+    <p style="margin-bottom:1rem;">Enter your Pro access code to unlock the dashboard.</p>
+    <div class="form-field" style="margin-bottom:1rem;">
+      <label for="unlock-code">Access Code</label>
+      <input type="text" id="unlock-code" placeholder="TOV-PRO-XXXX" style="width:100%;background:var(--navy);border:1px solid var(--navy-border);border-radius:var(--radius);padding:.6875rem .875rem;color:var(--text);font-family:inherit;font-size:.875rem;" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" onclick="closeUnlockModal()">Cancel</button>
+      <button class="btn btn-orange btn-sm" onclick="checkCode()">Unlock Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── NAV ──
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-mobile').classList.toggle('open');
+});
+
+// ── AUTH CHECK ──
+function isPro() {
+  return localStorage.getItem('tov_is_pro') === 'true';
+}
+
+function initPage() {
+  if (isPro()) {
+    document.getElementById('upgrade-wall').classList.remove('visible');
+    document.getElementById('crm-dashboard').classList.add('visible');
+    initDashboard();
+  } else {
+    document.getElementById('upgrade-wall').classList.add('visible');
+    document.getElementById('crm-dashboard').classList.remove('visible');
+  }
+}
+
+// ── STRIPE REDIRECT ──
+function initiateUpgrade() {
+  document.getElementById('stripe-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('stripe-modal').classList.remove('open');
+}
+
+async function goToStripe() {
+  const btn = document.querySelector('#stripe-modal .btn-orange');
+  btn.textContent = 'Redirecting…';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://agent-atlas.onrender.com/subscribe/create-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan: 'pro', price: 14.99 })
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert('Could not start checkout. Please try again or contact support.');
+      btn.textContent = 'Continue to Checkout →';
+      btn.disabled = false;
+    }
+  } catch (err) {
+    alert('Could not reach checkout server. Please try again later.');
+    btn.textContent = 'Continue to Checkout →';
+    btn.disabled = false;
+  }
+}
+
+// ── DEV UNLOCK (for testing / customer support) ──
+function showDevUnlock(e) {
+  e.preventDefault();
+  document.getElementById('unlock-modal').classList.add('open');
+}
+function closeUnlockModal() {
+  document.getElementById('unlock-modal').classList.remove('open');
+}
+function checkCode() {
+  const code = document.getElementById('unlock-code').value.trim().toUpperCase();
+  // Simple passphrase-based unlock — replace 'TOV-PRO-2025' with your actual code
+  if (code === 'TOV-PRO-2025' || code === 'TOV-PRO-ACCESS') {
+    localStorage.setItem('tov_is_pro', 'true');
+    closeUnlockModal();
+    initPage();
+  } else {
+    alert('Invalid access code. Please check your confirmation email or contact support@tradeopsvault.com.');
+  }
+}
+
+// ── DASHBOARD INIT ──
+let jobs = [];
+
+function getJobs() {
+  try {
+    return JSON.parse(localStorage.getItem('tov_crm_jobs') || '[]');
+  } catch { return []; }
+}
+
+function saveJobs(arr) {
+  localStorage.setItem('tov_crm_jobs', JSON.stringify(arr));
+}
+
+function initDashboard() {
+  jobs = getJobs();
+  populateTradeFilter();
+  renderStats();
+  renderTable();
+  // Set default date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('job-date').value = today;
+}
+
+function renderStats() {
+  const total = jobs.length;
+  const revenue = jobs.reduce((s, j) => s + (parseFloat(j.amount) || 0), 0);
+  const avg = total ? revenue / total : 0;
+  const clients = new Set(jobs.map(j => (j.client || '').trim().toLowerCase()).filter(Boolean)).size;
+
+  document.getElementById('stat-jobs').textContent = total;
+  document.getElementById('stat-revenue').textContent = '$' + revenue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  document.getElementById('stat-avg').textContent = '$' + avg.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  document.getElementById('stat-clients').textContent = clients;
+  document.getElementById('job-count-label').textContent = total + ' job' + (total !== 1 ? 's' : '');
+}
+
+function populateTradeFilter() {
+  const trades = [...new Set(jobs.map(j => j.trade).filter(Boolean))].sort();
+  const sel = document.getElementById('filter-trade');
+  sel.innerHTML = '<option value="all">All Trades</option>';
+  trades.forEach(t => {
+    const o = document.createElement('option');
+    o.value = t;
+    o.textContent = t;
+    sel.appendChild(o);
+  });
+}
+
+function renderTable() {
+  const statusFilter = document.getElementById('filter-status').value;
+  const tradeFilter = document.getElementById('filter-trade').value;
+
+  let filtered = jobs.filter(j => {
+    const s = statusFilter === 'all' || (j.status || 'pending') === statusFilter;
+    const t = tradeFilter === 'all' || j.trade === tradeFilter;
+    return s && t;
+  });
+
+  const wrapper = document.getElementById('jobs-table-wrapper');
+
+  if (jobs.length === 0) {
+    wrapper.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <div class="empty-state-title">No jobs yet</div>
+        <div class="empty-state-desc">Fill out a template and click "Send to CRM" to see your jobs here, or add one manually using the button above.</div>
+        <a href="/landing/store.html" class="btn btn-orange btn-sm">Browse Templates</a>
+      </div>`;
+    return;
+  }
+
+  if (filtered.length === 0) {
+    wrapper.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">🔍</div>
+        <div class="empty-state-title">No matching jobs</div>
+        <div class="empty-state-desc">Try changing the filter above to see more results.</div>
+      </div>`;
+    return;
+  }
+
+  // Sort newest first
+  filtered = [...filtered].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+  let rows = filtered.map((j, i) => {
+    const realIdx = jobs.indexOf(j);
+    const statusClass = {
+      paid: 'status-paid',
+      pending: 'status-pending',
+      invoiced: 'status-invoiced',
+      cancelled: 'status-cancelled'
+    }[j.status || 'pending'] || 'status-pending';
+    const statusLabel = (j.status || 'pending').charAt(0).toUpperCase() + (j.status || 'pending').slice(1);
+    const amount = parseFloat(j.amount) || 0;
+    const dateStr = j.date ? new Date(j.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+    return `
+      <tr>
+        <td class="td-date">${escHtml(dateStr)}</td>
+        <td class="td-client">${escHtml(j.client || '—')}</td>
+        <td><span class="td-trade">${escHtml(j.trade || '—')}</span></td>
+        <td class="td-amount">$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+        <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+        <td class="td-actions">
+          ${j.notes ? `<button class="icon-btn" title="${escHtml(j.notes)}" onclick="alert('${escHtml(j.notes)}')">📝</button>` : ''}
+          <button class="icon-btn" onclick="deleteJob(${realIdx})">✕</button>
+        </td>
+      </tr>`;
+  }).join('');
+
+  wrapper.innerHTML = `
+    <table class="jobs-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Client</th>
+          <th>Trade</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ── ADD JOB ──
+function toggleAddJob() {
+  const form = document.getElementById('add-job-form');
+  form.classList.toggle('open');
+}
+
+function saveJob() {
+  const date = document.getElementById('job-date').value;
+  const client = document.getElementById('job-client').value.trim();
+  const trade = document.getElementById('job-trade').value;
+  const amount = document.getElementById('job-amount').value;
+  const status = document.getElementById('job-status').value;
+  const notes = document.getElementById('job-notes').value.trim();
+
+  if (!client) { alert('Please enter a client name.'); return; }
+  if (!trade) { alert('Please select a trade.'); return; }
+
+  const job = { date, client, trade, amount: parseFloat(amount) || 0, status, notes, created: Date.now() };
+  jobs.push(job);
+  saveJobs(jobs);
+  populateTradeFilter();
+  renderStats();
+  renderTable();
+  toggleAddJob();
+
+  // Reset form
+  document.getElementById('job-client').value = '';
+  document.getElementById('job-trade').value = '';
+  document.getElementById('job-amount').value = '';
+  document.getElementById('job-status').value = 'pending';
+  document.getElementById('job-notes').value = '';
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('job-date').value = today;
+}
+
+// ── DELETE JOB ──
+function deleteJob(idx) {
+  if (!confirm('Delete this job entry? This cannot be undone.')) return;
+  jobs.splice(idx, 1);
+  saveJobs(jobs);
+  populateTradeFilter();
+  renderStats();
+  renderTable();
+}
+
+// ── EXPORT CSV ──
+function exportCSV() {
+  if (jobs.length === 0) { alert('No jobs to export yet.'); return; }
+  const header = ['Date', 'Client', 'Trade', 'Amount', 'Status', 'Notes'];
+  const rows = jobs.map(j => [
+    j.date || '',
+    '"' + (j.client || '').replace(/"/g,'""') + '"',
+    '"' + (j.trade || '').replace(/"/g,'""') + '"',
+    j.amount || 0,
+    j.status || '',
+    '"' + (j.notes || '').replace(/"/g,'""') + '"'
+  ].join(','));
+  const csv = [header.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'tradeopsvault-jobs-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── HANDLE STRIPE CALLBACK ──
+// If redirected back from Stripe with ?pro=success
+const params = new URLSearchParams(window.location.search);
+if (params.get('pro') === 'success') {
+  localStorage.setItem('tov_is_pro', 'true');
+  history.replaceState({}, '', window.location.pathname);
+}
+
+// ── INIT ──
+initPage();
+</script>
+</body>
+</html>

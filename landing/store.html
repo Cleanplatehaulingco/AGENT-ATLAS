@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TradeOpsVault Store — Professional Trade Templates</title>
+  <meta name="description" content="Browse and purchase all 20 professional trade templates. AI-powered, multilingual, instant download. Single templates $3.99 or get the complete bundle for $9.99." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Meta Pixel — replace PIXEL_ID_HERE with your actual Pixel ID -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'PIXEL_ID_HERE');
+  fbq('track', 'PageView');
+  fbq('track', 'ViewContent', { content_name: 'Store Page', content_category: 'Trade Templates' });
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=PIXEL_ID_HERE&ev=PageView&noscript=1"/></noscript>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:        #0d1526;
+      --navy-mid:    #111e35;
+      --navy-light:  #162240;
+      --navy-card:   #0f1c32;
+      --navy-border: #1e2f4a;
+      --orange:      #e85d04;
+      --orange-h:    #ff6a10;
+      --orange-dim:  rgba(232,93,4,0.12);
+      --text:        #e8edf5;
+      --text-muted:  #7d92b0;
+      --text-dim:    #4a5e7a;
+      --white:       #ffffff;
+      --radius:      4px;
+      --radius-md:   8px;
+      --max:         1280px;
+      --gutter:      clamp(1.5rem, 5vw, 4rem);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      font-family: inherit;
+      font-size: .9375rem;
+      font-weight: 600;
+      line-height: 1;
+      padding: .875rem 1.75rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background .18s, color .18s, border-color .18s, transform .14s;
+      border: 2px solid transparent;
+      white-space: nowrap;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-orange { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .btn-orange:hover { background: var(--orange-h); border-color: var(--orange-h); }
+    .btn-ghost { background: transparent; color: var(--text); border-color: var(--navy-border); }
+    .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+    .btn-sm { font-size: .8125rem; padding: .5625rem 1rem; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(13,21,38,.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--navy-border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      height: 64px;
+      gap: 2rem;
+    }
+    .nav-logo { font-size: 1.0625rem; font-weight: 800; color: var(--white); letter-spacing: -.01em; flex-shrink: 0; }
+    .nav-logo span { color: var(--orange); }
+    .nav-links { display: flex; align-items: center; gap: 0; list-style: none; margin-left: .5rem; }
+    .nav-links a { display: block; padding: .5rem .9rem; font-size: .875rem; font-weight: 500; color: var(--text-muted); transition: color .15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-ctas { display: flex; align-items: center; gap: .75rem; margin-left: auto; }
+    .nav-ctas .btn { padding: .5625rem 1.125rem; font-size: .875rem; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .5rem; margin-left: auto; background: none; border: none; }
+    .nav-hamburger span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; display: block; transition: transform .2s, opacity .2s; }
+    .nav-mobile { display: none; flex-direction: column; background: var(--navy-mid); border-top: 1px solid var(--navy-border); padding: 1rem var(--gutter) 1.5rem; gap: .25rem; }
+    .nav-mobile a { display: block; padding: .625rem 0; font-size: .9375rem; font-weight: 500; color: var(--text-muted); border-bottom: 1px solid var(--navy-border); }
+    .nav-mobile-ctas { display: flex; gap: .75rem; margin-top: 1rem; }
+    .nav-mobile-ctas .btn { flex: 1; }
+    .nav-mobile.open { display: flex; }
+    @media (max-width: 768px) {
+      .nav-links, .nav-ctas { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+
+    /* ── STORE HERO ── */
+    .store-hero {
+      background: var(--navy-mid);
+      border-bottom: 1px solid var(--navy-border);
+      padding: clamp(4rem, 8vw, 7rem) 0 clamp(3rem, 6vw, 5rem);
+    }
+    .store-hero-eyebrow {
+      font-size: .6875rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: .625rem;
+    }
+    .store-hero-eyebrow::before { content: ''; display: inline-block; width: 1.75rem; height: 2px; background: var(--orange); }
+    .store-hero h1 {
+      font-size: clamp(2.25rem, 5vw, 3.75rem);
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.03em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .store-hero p {
+      font-size: clamp(1rem, 2vw, 1.1875rem);
+      color: var(--text-muted);
+      max-width: 540px;
+      line-height: 1.65;
+    }
+
+    /* ── BUNDLE CARD ── */
+    .bundle-section {
+      padding: clamp(3rem, 6vw, 5.5rem) 0;
+      border-bottom: 1px solid var(--navy-border);
+    }
+    .bundle-card {
+      background: var(--navy-light);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0;
+    }
+    .bundle-card-body {
+      padding: 2.5rem 3rem;
+      border-right: 1px solid var(--navy-border);
+    }
+    .bundle-badge {
+      display: inline-block;
+      font-size: .625rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--navy);
+      background: var(--orange);
+      padding: .25rem .625rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+    .bundle-title {
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.025em;
+      line-height: 1.15;
+      margin-bottom: .625rem;
+    }
+    .bundle-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+    .bundle-features {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .5rem 2rem;
+    }
+    .bundle-features li {
+      font-size: .875rem;
+      color: var(--text-muted);
+      padding-left: 1.25rem;
+      position: relative;
+    }
+    .bundle-features li::before { content: '✓'; position: absolute; left: 0; color: var(--orange); font-weight: 700; font-size: .75rem; }
+    .bundle-card-cta {
+      padding: 2.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      min-width: 240px;
+    }
+    .bundle-price {
+      text-align: center;
+    }
+    .bundle-price-num {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.04em;
+      line-height: 1;
+    }
+    .bundle-price-note { font-size: .8125rem; color: var(--text-dim); margin-top: .25rem; }
+    @media (max-width: 768px) {
+      .bundle-card { grid-template-columns: 1fr; }
+      .bundle-card-body { border-right: none; border-bottom: 1px solid var(--navy-border); }
+      .bundle-features { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .bundle-card-body { padding: 1.75rem; }
+      .bundle-card-cta { padding: 1.75rem; }
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      padding: 2rem 0 0;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--navy-border);
+      padding-bottom: 0;
+    }
+    .filter-btn {
+      font-family: inherit;
+      font-size: .8125rem;
+      font-weight: 600;
+      padding: .5625rem 1.125rem;
+      border-radius: var(--radius) var(--radius) 0 0;
+      border: 1px solid transparent;
+      border-bottom: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color .15s, background .15s;
+      margin-bottom: -1px;
+      position: relative;
+    }
+    .filter-btn:hover { color: var(--white); }
+    .filter-btn.active {
+      background: var(--navy-light);
+      border-color: var(--navy-border);
+      border-bottom: 1px solid var(--navy-light);
+      color: var(--white);
+    }
+
+    /* ── PRODUCT GRID ── */
+    .products-section {
+      padding: 3rem 0 clamp(4rem, 8vw, 7rem);
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color .18s, transform .18s;
+    }
+    .product-card:hover { border-color: rgba(232,93,4,.35); transform: translateY(-2px); }
+    .product-thumb {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+      background: var(--navy-light);
+    }
+    .product-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .product-thumb-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--navy-light) 0%, var(--navy-card) 100%);
+    }
+    .product-trade-badge {
+      position: absolute;
+      top: .75rem;
+      left: .75rem;
+      font-size: .5625rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      background: var(--navy);
+      color: var(--text-muted);
+      border: 1px solid var(--navy-border);
+      padding: .2rem .5rem;
+      border-radius: 2px;
+    }
+    .product-body {
+      padding: 1.25rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .375rem;
+    }
+    .product-name {
+      font-size: .9375rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -.01em;
+    }
+    .product-desc {
+      font-size: .8125rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      flex-grow: 1;
+    }
+    .product-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--navy-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+    .product-price { font-size: 1.0625rem; font-weight: 800; color: var(--orange); }
+    .product-actions { display: flex; gap: .5rem; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 1100px) { .products-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (max-width: 768px) { .products-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 480px) { .products-grid { grid-template-columns: 1fr; } }
+
+    /* ── PRO UPGRADE BANNER ── */
+    .pro-banner {
+      background: var(--navy-light);
+      border: 1px solid var(--navy-border);
+      border-top: 3px solid var(--orange);
+      border-radius: var(--radius-md);
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin: 0 0 clamp(3rem, 6vw, 5rem);
+    }
+    .pro-banner-text h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.01em;
+      margin-bottom: .375rem;
+    }
+    .pro-banner-text p { font-size: .9375rem; color: var(--text-muted); }
+
+    /* ── FOOTER ── */
+    .footer { background: var(--navy-mid); border-top: 1px solid var(--navy-border); padding: 5rem 0 2.5rem; }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: clamp(2rem,4vw,4rem);
+      padding-bottom: 4rem;
+      border-bottom: 1px solid var(--navy-border);
+      margin-bottom: 2.5rem;
+    }
+    .footer-brand p { font-size: .875rem; color: var(--text-muted); line-height: 1.7; margin-top: .875rem; max-width: 280px; }
+    .footer-col-title { font-size: .6875rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.25rem; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: .625rem; }
+    .footer-links a { font-size: .875rem; color: var(--text-muted); transition: color .15s; }
+    .footer-links a:hover { color: var(--orange); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-copy { font-size: .8125rem; color: var(--text-dim); }
+    .footer-copy a { color: var(--text-muted); }
+    .footer-copy a:hover { color: var(--orange); }
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+    @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
+
+    .section-label {
+      font-size: .6875rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--navy-border); }
+  </style>
+</head>
+<body>
+
+<!-- ─────────────── NAV ─────────────── -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="/landing/index.html" class="nav-logo">TradeOps<span>Vault</span></a>
+    <ul class="nav-links">
+      <li><a href="/landing/index.html#features">Product</a></li>
+      <li><a href="/landing/index.html#pricing">Pricing</a></li>
+      <li><a href="/landing/store.html" class="active">Templates</a></li>
+      <li><a href="/landing/crm.html">CRM</a></li>
+    </ul>
+    <div class="nav-ctas">
+      <a href="/landing/store.html" class="btn btn-ghost">Browse Templates</a>
+      <a href="#bundle" class="btn btn-orange" onclick="fbq&&fbq('track','InitiateCheckout')">Try Free</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="/landing/index.html#features">Product</a>
+    <a href="/landing/index.html#pricing">Pricing</a>
+    <a href="/landing/store.html">Templates</a>
+    <a href="/landing/crm.html">CRM</a>
+    <div class="nav-mobile-ctas">
+      <a href="/landing/store.html" class="btn btn-ghost">Browse Templates</a>
+      <a href="#bundle" class="btn btn-orange" onclick="fbq&&fbq('track','InitiateCheckout')">Try Free</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─────────────── STORE HERO ─────────────── -->
+<section class="store-hero">
+  <div class="container">
+    <div class="store-hero-eyebrow">TradeOpsVault Store</div>
+    <h1>Professional trade forms.<br>AI-powered. Instant download.</h1>
+    <p>Browser-based templates built for real tradespeople. Auto-calculating fields, multilingual support, and an AI analysis panel — no account required.</p>
+  </div>
+</section>
+
+<!-- ─────────────── BUNDLE CARD ─────────────── -->
+<section class="bundle-section" id="bundle">
+  <div class="container">
+    <div class="section-label">Best value</div>
+    <div class="bundle-card">
+      <div class="bundle-card-body">
+        <span class="bundle-badge">Most Popular</span>
+        <h2 class="bundle-title">Complete Bundle — All 20 Templates</h2>
+        <p class="bundle-sub">Every trade covered. Every feature included. Under $10.</p>
+        <ul class="bundle-features">
+          <li>All 20 professional templates</li>
+          <li>AI analysis on every template</li>
+          <li>4 languages (EN/ES/FR/PT)</li>
+          <li>Auto-calculating line items</li>
+          <li>Print-ready PDF layout</li>
+          <li>Instant download, no account</li>
+        </ul>
+      </div>
+      <div class="bundle-card-cta">
+        <div class="bundle-price">
+          <div class="bundle-price-num">$9.99</div>
+          <div class="bundle-price-note">one-time · all 20 templates</div>
+        </div>
+        <a href="#" class="btn btn-orange" style="width:100%;" onclick="trackBundleCTA(event)">Get Complete Bundle</a>
+        <p style="font-size:.75rem;color:var(--text-dim);text-align:center;">Delivered via Etsy · Instant access</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────── PRODUCT GRID ─────────────── -->
+<section class="products-section" id="products">
+  <div class="container">
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Templates</button>
+      <button class="filter-btn" data-filter="hvac-mechanical">HVAC &amp; Mechanical</button>
+      <button class="filter-btn" data-filter="lawn-exterior">Lawn &amp; Exterior</button>
+      <button class="filter-btn" data-filter="auto-vehicle">Auto &amp; Vehicle</button>
+      <button class="filter-btn" data-filter="construction">Construction</button>
+      <button class="filter-btn" data-filter="operations">Operations</button>
+    </div>
+
+    <div class="products-grid" id="products-grid" style="margin-top:2rem;">
+
+      <!-- 001 HVAC -->
+      <div class="product-card" data-category="hvac-mechanical">
+        <div class="product-thumb">
+          <img src="../mockups/LS-001/LS-001-1-Cover-Page.png" alt="HVAC Service Call Template" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🌡️</div>'" />
+          <span class="product-trade-badge">HVAC &amp; Mechanical</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">HVAC Service Call Notes</div>
+          <div class="product-desc">Diagnostic checklist, parts &amp; labor breakdown, customer sign-off. AI-powered margin analysis.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-001-HVAC-Service-Call-Notes-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'HVAC Service Call Notes')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 002 Plumbing -->
+      <div class="product-card" data-category="hvac-mechanical">
+        <div class="product-thumb">
+          <img src="../mockups/LS-002/LS-002-1-Cover-Page.png" alt="Plumbing Dispatch Checklist" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🔧</div>'" />
+          <span class="product-trade-badge">HVAC &amp; Mechanical</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Plumbing Dispatch Checklist</div>
+          <div class="product-desc">Dispatch log, repair documentation, materials tracker, and client sign-off fields.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-002-Plumbing-Dispatch-Checklist-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Plumbing Dispatch Checklist')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 003 Electrician -->
+      <div class="product-card" data-category="hvac-mechanical">
+        <div class="product-thumb">
+          <img src="../mockups/LS-003/LS-003-1-Cover-Page.png" alt="Electrician Jobsite Inspection" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>⚡</div>'" />
+          <span class="product-trade-badge">HVAC &amp; Mechanical</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Electrician Jobsite Inspection</div>
+          <div class="product-desc">Code compliance notes, circuit log, safety checklist, and inspector sign-off.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-003-Electrician-Jobsite-Inspection-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Electrician Jobsite Inspection')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 004 Lawn Care -->
+      <div class="product-card" data-category="lawn-exterior">
+        <div class="product-thumb">
+          <img src="../mockups/LS-004/LS-004-1-Cover-Page.png" alt="Lawn Care Weekly Crew Planner" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🌿</div>'" />
+          <span class="product-trade-badge">Lawn &amp; Exterior</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Lawn Care Weekly Crew Planner</div>
+          <div class="product-desc">Weekly schedule, route planning, crew assignments, and property condition log.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-004-Lawn-Care-Weekly-Crew-Planner-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Lawn Care Weekly Crew Planner')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 005 Auto Detail -->
+      <div class="product-card" data-category="auto-vehicle">
+        <div class="product-thumb">
+          <img src="../mockups/LS-005/LS-005-1-Cover-Page.png" alt="Auto Detail Intake Waiver" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🚗</div>'" />
+          <span class="product-trade-badge">Auto &amp; Vehicle</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Auto Detail Intake Waiver</div>
+          <div class="product-desc">Vehicle condition inspection, service package selection, liability waiver, pricing breakdown.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-005-Auto-Detail-Intake-Waiver-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Auto Detail Intake Waiver')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 006 Pest Control -->
+      <div class="product-card" data-category="lawn-exterior">
+        <div class="product-thumb">
+          <img src="../mockups/LS-006/LS-006-1-Cover-Page.png" alt="Pest Control Follow-Up Cards" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🐛</div>'" />
+          <span class="product-trade-badge">Lawn &amp; Exterior</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Pest Control Follow-Up Cards</div>
+          <div class="product-desc">Treatment log, chemical usage record, re-inspection schedule, follow-up reminders.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-006-Pest-Control-Follow-Up-Cards-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Pest Control Follow-Up Cards')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 007 Roofing -->
+      <div class="product-card" data-category="construction">
+        <div class="product-thumb">
+          <img src="../mockups/LS-007/LS-007-1-Cover-Page.png" alt="Roofing Change Order Approval" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🏠</div>'" />
+          <span class="product-trade-badge">Construction</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Roofing Change Order Approval</div>
+          <div class="product-desc">Change order form, material list, warranty documentation, final punch list.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-007-Roofing-Change-Order-Approval-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Roofing Change Order Approval')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 008 Pressure Washing -->
+      <div class="product-card" data-category="lawn-exterior">
+        <div class="product-thumb">
+          <img src="../mockups/LS-008/LS-008-1-Cover-Page.png" alt="Pressure Washing Route Sheet" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>💦</div>'" />
+          <span class="product-trade-badge">Lawn &amp; Exterior</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Pressure Washing Route Sheet</div>
+          <div class="product-desc">Daily route log, surface type tracking, chemical concentrations, before/after notes.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-008-Pressure-Washing-Route-Sheet-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Pressure Washing Route Sheet')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 009 Appliance Repair -->
+      <div class="product-card" data-category="hvac-mechanical">
+        <div class="product-thumb">
+          <img src="../mockups/LS-009/LS-009-1-Cover-Page.png" alt="Appliance Repair Parts Tracker" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🔩</div>'" />
+          <span class="product-trade-badge">HVAC &amp; Mechanical</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Appliance Repair Parts Tracker</div>
+          <div class="product-desc">Model &amp; serial log, parts sourcing tracker, diagnostic notes, repair authorization.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-009-Appliance-Repair-Parts-Tracker-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Appliance Repair Parts Tracker')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 010 Handyman -->
+      <div class="product-card" data-category="construction">
+        <div class="product-thumb">
+          <img src="../mockups/LS-010/LS-010-1-Cover-Page.png" alt="Handyman Materials Reimbursement" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🛠️</div>'" />
+          <span class="product-trade-badge">Construction</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Handyman Materials Reimbursement</div>
+          <div class="product-desc">Multi-task log, materials list, labor hours breakdown, client reimbursement form.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-010-Handyman-Materials-Reimbursement-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Handyman Materials Reimbursement')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 011 Mobile Mechanic -->
+      <div class="product-card" data-category="auto-vehicle">
+        <div class="product-thumb">
+          <img src="../mockups/LS-011/LS-011-1-Cover-Page.png" alt="Mobile Mechanic Service Summary" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🔑</div>'" />
+          <span class="product-trade-badge">Auto &amp; Vehicle</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Mobile Mechanic Service Summary</div>
+          <div class="product-desc">On-site repair log, parts sourcing record, mileage tracking, service authorization.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-011-Mobile-Mechanic-Service-Summary-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Mobile Mechanic Service Summary')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 012 Locksmith -->
+      <div class="product-card" data-category="operations">
+        <div class="product-thumb">
+          <img src="../mockups/LS-012/LS-012-1-Cover-Page.png" alt="Locksmith Job Authorization" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🗝️</div>'" />
+          <span class="product-trade-badge">Operations</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Locksmith Job Authorization</div>
+          <div class="product-desc">Job authorization form, key log, security assessment notes, liability waiver.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-012-Locksmith-Job-Authorization-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Locksmith Job Authorization')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 013 Painting -->
+      <div class="product-card" data-category="construction">
+        <div class="product-thumb">
+          <img src="../mockups/LS-013/LS-013-1-Cover-Page.png" alt="Painting Prep Final Punch List" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🎨</div>'" />
+          <span class="product-trade-badge">Construction</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Painting Prep &amp; Final Punch List</div>
+          <div class="product-desc">Surface prep checklist, paint spec sheet, punch list, and final walkthrough sign-off.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-013-Painting-Prep-Final-Punch-List-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Painting Prep Final Punch List')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 014 Snow Removal -->
+      <div class="product-card" data-category="lawn-exterior">
+        <div class="product-thumb">
+          <img src="../mockups/LS-014/LS-014-1-Cover-Page.png" alt="Snow Removal Service Checklist" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>❄️</div>'" />
+          <span class="product-trade-badge">Lawn &amp; Exterior</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Snow Removal Service Checklist</div>
+          <div class="product-desc">De-icing log, property map notes, seasonal contract tracker, service confirmation.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-014-Snow-Removal-Service-Checklist-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Snow Removal Service Checklist')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 015 Window Cleaning -->
+      <div class="product-card" data-category="lawn-exterior">
+        <div class="product-thumb">
+          <img src="../mockups/LS-015/LS-015-1-Cover-Page.png" alt="Window Cleaning Client Packet" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🪟</div>'" />
+          <span class="product-trade-badge">Lawn &amp; Exterior</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Window Cleaning Client Packet</div>
+          <div class="product-desc">Window count log, chemical use record, access notes, and client satisfaction form.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-015-Window-Cleaning-Client-Packet-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Window Cleaning Client Packet')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 016 Pool Service -->
+      <div class="product-card" data-category="lawn-exterior">
+        <div class="product-thumb">
+          <img src="../mockups/LS-016/LS-016-1-Cover-Page.png" alt="Pool Service Chemical Log" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🏊</div>'" />
+          <span class="product-trade-badge">Lawn &amp; Exterior</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Pool Service Chemical Log</div>
+          <div class="product-desc">Chemical readings log, equipment inspection checklist, weekly service record, sign-off.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-016-Pool-Service-Chemical-Log-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Pool Service Chemical Log')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 017 Flooring -->
+      <div class="product-card" data-category="construction">
+        <div class="product-thumb">
+          <img src="../mockups/LS-017/LS-017-1-Cover-Page.png" alt="Flooring Estimate Scope Matrix" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🏗️</div>'" />
+          <span class="product-trade-badge">Construction</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Flooring Estimate &amp; Scope Matrix</div>
+          <div class="product-desc">Room-by-room estimate builder, material calculation, subfloor condition notes.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-017-Flooring-Estimate-Scope-Matrix-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Flooring Estimate Scope Matrix')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 018 Contractor -->
+      <div class="product-card" data-category="construction">
+        <div class="product-thumb">
+          <img src="../mockups/LS-018/LS-018-1-Cover-Page.png" alt="Contractor Daily Site Report" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>👷</div>'" />
+          <span class="product-trade-badge">Construction</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Contractor Daily Site Report</div>
+          <div class="product-desc">Crew log, safety checklist, work progress documentation, site conditions record.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-018-Contractor-Daily-Site-Report-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Contractor Daily Site Report')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 019 Septic -->
+      <div class="product-card" data-category="operations">
+        <div class="product-thumb">
+          <img src="../mockups/LS-019/LS-019-1-Cover-Page.png" alt="Septic Service Pump Log" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>🚛</div>'" />
+          <span class="product-trade-badge">Operations</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Septic Service Pump Log</div>
+          <div class="product-desc">Tank condition record, pump-out log, regulatory compliance notes, service history.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-019-Septic-Service-Pump-Log-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Septic Service Pump Log')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 020 Service Fee -->
+      <div class="product-card" data-category="operations">
+        <div class="product-thumb">
+          <img src="../mockups/LS-020/LS-020-1-Cover-Page.png" alt="Service Fee Transparency Addendum" onerror="this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>📋</div>'" />
+          <span class="product-trade-badge">Operations</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Service Fee Transparency Addendum</div>
+          <div class="product-desc">Clear fee disclosure form, add-on authorization, client acknowledgment &amp; signature.</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">$3.99</span>
+          <div class="product-actions">
+            <a href="../downloads/LS-020-Service-Fee-Transparency-Addendum-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
+            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Service Fee Transparency Addendum')">Get Template</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /products-grid -->
+
+    <!-- Pro Upgrade Banner -->
+    <div class="pro-banner" style="margin-top:4rem;">
+      <div class="pro-banner-text">
+        <h3>Need unlimited AI + CRM?</h3>
+        <p>Upgrade to Pro — get unlimited AI analyses, a full CRM dashboard, Zapier webhooks, and priority support.</p>
+      </div>
+      <a href="/landing/crm.html" class="btn btn-orange">Upgrade to Pro — $14.99/mo</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─────────────── FOOTER ─────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="font-size:1.125rem;font-weight:800;color:var(--white);">TradeOps<span style="color:var(--orange)">Vault</span></div>
+        <p>The professional operating system for trade businesses. AI-powered forms, instant calculations, and business intelligence — in a single file.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Product</div>
+        <ul class="footer-links">
+          <li><a href="/landing/index.html#features">Features</a></li>
+          <li><a href="/landing/index.html#how">How It Works</a></li>
+          <li><a href="/landing/store.html">Templates</a></li>
+          <li><a href="/landing/index.html#pricing">Pricing</a></li>
+          <li><a href="/landing/crm.html">CRM Dashboard</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Languages</div>
+        <ul class="footer-links">
+          <li><a href="#">English</a></li>
+          <li><a href="#">Español</a></li>
+          <li><a href="#">Français</a></li>
+          <li><a href="#">Português</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="https://tradeopsvault.com" target="_blank" rel="noopener">tradeopsvault.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2025 <a href="https://tradeopsvault.com">TradeOpsVault</a>. All rights reserved.</p>
+      <p class="footer-copy">Built for the trades. Powered by AI.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Hamburger nav ──
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('nav-mobile').classList.toggle('open');
+  });
+
+  // ── Filter tabs ──
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const productCards = document.querySelectorAll('.product-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+      productCards.forEach(card => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  // ── Meta Pixel: AddToCart ──
+  function trackAddToCart(e, name) {
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'AddToCart', { content_name: name, value: 3.99, currency: 'USD' });
+    }
+  }
+
+  function trackBundleCTA(e) {
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'InitiateCheckout', { content_name: 'Complete Bundle', value: 9.99, currency: 'USD', num_items: 20 });
+    }
+  }
+
+  // ── Hash routing: open bundle anchor ──
+  if (window.location.hash === '#bundle') {
+    setTimeout(() => {
+      document.getElementById('bundle').scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  }
+</script>
+</body>
+</html>
