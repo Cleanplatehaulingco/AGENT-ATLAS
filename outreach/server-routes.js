@@ -6,8 +6,14 @@
 
 'use strict';
 
-const express = require('express');
-const router = express.Router();
+// express is passed in from server.js to avoid node_modules resolution issues
+// across directories. Falls back to require() for local dev.
+let express;
+try { express = require('express'); } catch (_) {}
+
+module.exports = function(expressInstance) {
+  if (expressInstance) express = expressInstance;
+  const router = express.Router();
 
 // ─── Lazy-load ES module campaign manager ────────────────────────────────────
 // The rest of the outreach system uses ES modules. We bridge them here via
@@ -311,4 +317,6 @@ router.post('/intelligence/analyze', async (req, res) => {
   }
 });
 
-module.exports = router;
+  return router;
+};
+

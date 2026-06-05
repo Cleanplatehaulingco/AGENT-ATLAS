@@ -1106,7 +1106,7 @@ app.post('/crm/leads', _aiCors, (req, res) => {
 });
 
 // ─── Outreach Campaign Routes ─────────────────────────────────────────────────
-app.use('/outreach', require('../outreach/server-routes'));
+app.use('/outreach', require('../outreach/server-routes')(express));
 
 // ─── Meta Conversions API ─────────────────────────────────────────────────────
 // Server-side event firing — works even when browser blocks the Pixel

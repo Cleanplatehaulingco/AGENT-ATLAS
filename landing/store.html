@@ -80,7 +80,7 @@
     .btn-orange:hover { background: var(--orange-h); border-color: var(--orange-h); }
     .btn-ghost { background: transparent; color: var(--text); border-color: var(--navy-border); }
     .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
-    .btn-sm { font-size: .8125rem; padding: .5625rem 1rem; }
+    .btn-sm { font-size: .75rem; padding: .5rem .875rem; white-space: nowrap; }
 
     /* ── NAV ── */
     .nav {
@@ -286,6 +286,7 @@
       display: flex;
       flex-direction: column;
       transition: border-color .18s, transform .18s;
+      min-width: 0;
     }
     .product-card:hover { border-color: rgba(232,93,4,.35); transform: translateY(-2px); }
     .product-thumb {
@@ -348,7 +349,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: .75rem;
+      gap: .5rem;
+      flex-shrink: 0;
+      flex-wrap: wrap;
     }
     .product-price { font-size: 1.0625rem; font-weight: 800; color: var(--orange); }
     .product-actions { display: flex; gap: .5rem; }
