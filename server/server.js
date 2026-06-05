@@ -6,14 +6,15 @@ require('dotenv').config();
 const PORT              = process.env.PORT              || 3000;
 const ETSY_CLIENT_ID    = process.env.ETSY_CLIENT_ID    || '';
 const ETSY_SHOP_ID      = process.env.ETSY_SHOP_ID      || '';
-const APP_URL           = process.env.APP_URL           || `http://localhost:${PORT}`;
-const FRONTEND_URL      = process.env.FRONTEND_URL      || 'https://cleanplatehaulingco.github.io';
+const APP_URL           = process.env.APP_URL           || 'https://agent-atlas.onrender.com';
+const FRONTEND_URL      = process.env.FRONTEND_URL      || 'https://tradeopsvault.com';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 const STRIPE_PRICE_ID   = process.env.STRIPE_PRICE_ID   || ''; // $14.99/mo recurring price ID
 const META_PIXEL_ID     = process.env.META_PIXEL_ID     || '1566084278857732';
 const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || '';
+const SENDGRID_API_KEY  = process.env.SENDGRID_API_KEY  || '';
 
 const ETSY_API_BASE   = 'https://openapi.etsy.com/v3';
 const ETSY_AUTH_BASE  = 'https://www.etsy.com/oauth/connect';
@@ -98,6 +99,12 @@ let _pkceStore = null;
  * _relayStore: Map<key, { data, expiresAt }>
  */
 const _relayStore = new Map();
+
+/**
+ * _downloadTokens: Map<token, { listingId, email, expiresAt, downloadCount, maxDownloads }>
+ * Signed download tokens issued after a successful template purchase.
+ */
+const _downloadTokens = new Map();
 const RELAY_TTL_MS = 10 * 60 * 1000;  // 10 minutes
 
 /**
@@ -132,6 +139,47 @@ function generateVerifier() {
 
 function generateChallenge(verifier) {
   return crypto.createHash('sha256').update(verifier).digest('base64url');
+}
+
+// ─── Download token helpers ───────────────────────────────────────────────────
+function generateDownloadToken(listingId, email) {
+  const token = crypto.randomBytes(32).toString('hex');
+  _downloadTokens.set(token, {
+    listingId,
+    email,
+    expiresAt:     Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+    downloadCount: 0,
+    maxDownloads:  5, // allow re-download up to 5 times
+  });
+  return token;
+}
+
+async function sendDownloadEmail(email, listingId, downloadUrl, listingTitle) {
+  if (!SENDGRID_API_KEY) return;
+  const body = {
+    personalizations: [{ to: [{ email }] }],
+    from: { email: 'mgleichner@tradeopsvault.com', name: 'TradeOpsVault' },
+    subject: `Your download is ready — ${listingTitle}`,
+    content: [{
+      type: 'text/html',
+      value: `
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0d1526;color:#e2e8f0;padding:40px;border-radius:12px;">
+          <div style="font-size:22px;font-weight:800;color:#ffffff;margin-bottom:8px;">TradeOps<span style="color:#e85d04">Vault</span></div>
+          <h2 style="color:#ffffff;margin:24px 0 8px;">Your download is ready</h2>
+          <p style="color:#94a3b8;margin:0 0 24px;">Thanks for your purchase. Click the button below to download your template. This link expires in 24 hours.</p>
+          <a href="${downloadUrl}" style="display:inline-block;background:#e85d04;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:700;font-size:16px;margin-bottom:24px;">Download ${listingTitle}</a>
+          <p style="color:#64748b;font-size:13px;margin:0;">Link expires in 24 hours. You can download up to 5 times.<br>Questions? Reply to this email or visit <a href="https://tradeopsvault.com" style="color:#e85d04;">tradeopsvault.com</a></p>
+        </div>
+      `
+    }]
+  };
+  try {
+    await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method:  'POST',
+      headers: { 'Authorization': `Bearer ${SENDGRID_API_KEY}`, 'Content-Type': 'application/json' },
+      body:    JSON.stringify(body),
+    });
+  } catch (e) { console.error('[email] SendGrid error:', e.message); }
 }
 
 // ─── Etsy fetch helper with auto token refresh ────────────────────────────────
@@ -714,16 +762,29 @@ app.post('/webhook/stripe', express.raw({ type: 'application/json' }), (req, res
   const obj = event.data.object;
 
   if (event.type === 'checkout.session.completed') {
-    const deviceId = obj.client_reference_id || obj.metadata?.deviceId;
-    if (deviceId) {
-      _proStore.set(deviceId, {
-        status:         'active',
-        stripeCustomerId: obj.customer,
-        subscriptionId: obj.subscription,
-        email:          obj.customer_details?.email || '',
-        activatedAt:    new Date().toISOString(),
-      });
-      logInfo('Pro subscriber activated', { deviceId });
+    const listingId = obj.metadata?.listingId;
+
+    if (listingId) {
+      // ── Template purchase (shop) ──
+      const email    = obj.customer_details?.email || '';
+      const token    = generateDownloadToken(listingId, email);
+      const listing  = LISTING_DATA[listingId] || {};
+      const downloadUrl = `${APP_URL}/shop/download/${token}`;
+      sendDownloadEmail(email, listingId, downloadUrl, listing.title || listingId).catch(() => {});
+      logInfo('webhook: template purchase — download token issued', { listingId, email: email.slice(0, 4) + '…' });
+    } else {
+      // ── Pro subscription ──
+      const deviceId = obj.client_reference_id || obj.metadata?.deviceId;
+      if (deviceId) {
+        _proStore.set(deviceId, {
+          status:           'active',
+          stripeCustomerId: obj.customer,
+          subscriptionId:   obj.subscription,
+          email:            obj.customer_details?.email || '',
+          activatedAt:      new Date().toISOString(),
+        });
+        logInfo('Pro subscriber activated', { deviceId });
+      }
     }
   }
 
@@ -769,6 +830,171 @@ h1{color:#e85d04;font-size:2rem;margin-bottom:12px;}p{color:rgba(255,255,255,0.7
 app.get('/subscribe/status/:deviceId', _aiCors, (req, res) => {
   const sub = _proStore.get(req.params.deviceId);
   res.json({ isPro: !!(sub && sub.status === 'active'), status: sub?.status || 'free' });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SHOP — Template purchase, download tokens, file delivery
+// ═══════════════════════════════════════════════════════════════════════════════
+// NOTE: Stripe Tax must be enabled in Stripe Dashboard → Tax → Enable automatic
+// tax collection. Once enabled, automatic_tax: { enabled: true } handles US
+// sales tax, EU VAT, UK VAT, and Canadian GST automatically.
+
+// ─── POST /shop/checkout — create Stripe checkout session ────────────────────
+app.post('/shop/checkout', _aiCors, async (req, res) => {
+  if (!STRIPE_SECRET_KEY) {
+    return res.status(503).json({ ok: false, error: 'Payment not yet configured — STRIPE_SECRET_KEY is missing.' });
+  }
+
+  const { listingId } = req.body || {};
+  if (!listingId) return res.status(400).json({ ok: false, error: 'listingId required' });
+
+  const listing = LISTING_DATA[listingId.toUpperCase().trim()];
+  if (!listing) return res.status(404).json({ ok: false, error: `Listing ${listingId} not found` });
+
+  const priceInCents = Math.round(parseFloat(listing.price) * 100); // e.g. 3.99 → 399
+
+  try {
+    const stripe  = Stripe(STRIPE_SECRET_KEY);
+    const session = await stripe.checkout.sessions.create({
+      mode:                 'payment',
+      payment_method_types: ['card'],
+      line_items: [{
+        quantity:   1,
+        price_data: {
+          currency:     'usd',
+          unit_amount:  priceInCents,
+          product_data: { name: listing.title },
+        },
+      }],
+      success_url:             `${FRONTEND_URL}/landing/success.html?session_id={CHECKOUT_SESSION_ID}&listing=${listingId.toUpperCase().trim()}`,
+      cancel_url:              `${FRONTEND_URL}/landing/store.html`,
+      customer_email:          undefined,    // collected by Stripe on the checkout page
+      customer_creation:       'always',
+      automatic_tax:           { enabled: true },
+      metadata:                { listingId: listingId.toUpperCase().trim() },
+      allow_promotion_codes:   true,
+    });
+
+    logInfo('shop/checkout: session created', { listingId, priceInCents });
+    res.json({ ok: true, url: session.url });
+  } catch (err) {
+    logError('POST /shop/checkout failed', { message: err.message });
+    res.status(500).json({ ok: false, error: 'Could not create checkout session' });
+  }
+});
+
+// ─── GET /shop/success — called after payment to generate download token ──────
+app.get('/shop/success', _aiCors, async (req, res) => {
+  if (!STRIPE_SECRET_KEY) {
+    return res.status(503).json({ ok: false, error: 'Payment not configured' });
+  }
+
+  const { session_id, listing } = req.query;
+  if (!session_id || !listing) {
+    return res.status(400).json({ ok: false, error: 'session_id and listing query params required' });
+  }
+
+  const listingId = listing.toUpperCase().trim();
+  const listingData = LISTING_DATA[listingId];
+  if (!listingData) return res.status(404).json({ ok: false, error: `Listing ${listingId} not found` });
+
+  try {
+    const stripe  = Stripe(STRIPE_SECRET_KEY);
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+
+    if (session.payment_status !== 'paid') {
+      return res.status(402).json({ ok: false, error: 'Payment not completed' });
+    }
+
+    const email = session.customer_details?.email || session.customer_email || '';
+    const token = generateDownloadToken(listingId, email);
+    const downloadUrl = `${APP_URL}/shop/download/${token}`;
+
+    // Fire-and-forget email
+    sendDownloadEmail(email, listingId, downloadUrl, listingData.title).catch(() => {});
+
+    logInfo('shop/success: download token issued', { listingId, email: email.slice(0, 4) + '…' });
+    res.json({
+      ok:        true,
+      token,
+      listingId,
+      email,
+      title:     listingData.title,
+      expiresAt: _downloadTokens.get(token).expiresAt,
+    });
+  } catch (err) {
+    logError('GET /shop/success failed', { message: err.message });
+    res.status(500).json({ ok: false, error: 'Could not verify payment session' });
+  }
+});
+
+// ─── GET /shop/verify/:token — lightweight token validity check ───────────────
+app.get('/shop/verify/:token', _aiCors, (req, res) => {
+  const entry = _downloadTokens.get(req.params.token);
+  if (!entry) return res.status(404).json({ ok: false, error: 'Token not found' });
+  if (Date.now() > entry.expiresAt) return res.status(410).json({ ok: false, error: 'Download link has expired' });
+  if (entry.downloadCount >= entry.maxDownloads) return res.status(410).json({ ok: false, error: 'Download limit reached' });
+
+  const listingData = LISTING_DATA[entry.listingId] || {};
+  res.json({
+    ok:                true,
+    listingId:         entry.listingId,
+    title:             listingData.title || entry.listingId,
+    email:             entry.email,
+    expiresAt:         entry.expiresAt,
+    downloadsRemaining: entry.maxDownloads - entry.downloadCount,
+  });
+});
+
+// ─── GET /shop/download/:token — stream the actual file ──────────────────────
+app.get('/shop/download/:token', async (req, res) => {
+  const entry = _downloadTokens.get(req.params.token);
+  if (!entry) return res.status(404).json({ ok: false, error: 'Token not found' });
+  if (Date.now() > entry.expiresAt) return res.status(410).json({ ok: false, error: 'Download link has expired' });
+  if (entry.downloadCount >= entry.maxDownloads) {
+    return res.status(410).json({ ok: false, error: `Download limit reached (max ${entry.maxDownloads})` });
+  }
+
+  const { listingId } = entry;
+  const fs   = require('fs');
+  const path = require('path');
+
+  // Bundle: return JSON listing individual download tokens for each of the 20 templates
+  if (listingId === 'LS-BUNDLE') {
+    entry.downloadCount++;
+    const bundleTokens = {};
+    for (let i = 1; i <= 20; i++) {
+      const id  = `LS-${String(i).padStart(3, '0')}`;
+      const tok = generateDownloadToken(id, entry.email);
+      bundleTokens[id] = {
+        title:       (LISTING_DATA[id] || {}).title || id,
+        downloadUrl: `${APP_URL}/shop/download/${tok}`,
+        verifyUrl:   `${APP_URL}/shop/verify/${tok}`,
+      };
+    }
+    return res.json({ ok: true, bundle: true, downloads: bundleTokens });
+  }
+
+  // Individual template: find matching HTML file in /downloads/
+  const downloadsDir = path.join(__dirname, '..', 'downloads');
+  let filePath = null;
+  try {
+    const files = fs.readdirSync(downloadsDir);
+    const match = files.find(f => f.startsWith(listingId + '-') && f.endsWith('.html'));
+    if (match) filePath = path.join(downloadsDir, match);
+  } catch (fsErr) {
+    logError('shop/download: could not read downloads dir', { message: fsErr.message });
+  }
+
+  if (!filePath || !fs.existsSync(filePath)) {
+    return res.status(404).json({ ok: false, error: `File for ${listingId} not found on server` });
+  }
+
+  entry.downloadCount++;
+  const filename = path.basename(filePath).replace(/\.html$/, '') + '-TradeOpsVault.html';
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.setHeader('Content-Type', 'text/html');
+  fs.createReadStream(filePath).pipe(res);
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
