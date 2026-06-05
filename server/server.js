@@ -868,9 +868,6 @@ app.post('/shop/checkout', _aiCors, async (req, res) => {
       }],
       success_url:             `${FRONTEND_URL}/landing/success.html?session_id={CHECKOUT_SESSION_ID}&listing=${listingId.toUpperCase().trim()}`,
       cancel_url:              `${FRONTEND_URL}/landing/store.html`,
-      customer_email:          undefined,    // collected by Stripe on the checkout page
-      customer_creation:       'always',
-      automatic_tax:           { enabled: true },
       metadata:                { listingId: listingId.toUpperCase().trim() },
       allow_promotion_codes:   true,
     });
@@ -878,8 +875,8 @@ app.post('/shop/checkout', _aiCors, async (req, res) => {
     logInfo('shop/checkout: session created', { listingId, priceInCents });
     res.json({ ok: true, url: session.url });
   } catch (err) {
-    logError('POST /shop/checkout failed', { message: err.message });
-    res.status(500).json({ ok: false, error: 'Could not create checkout session' });
+    logError('POST /shop/checkout failed', { message: err.message, type: err.type, code: err.code });
+    res.status(500).json({ ok: false, error: err.message || 'Could not create checkout session' });
   }
 });
 
