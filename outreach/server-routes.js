@@ -29,6 +29,14 @@ async function getLeadFinderModule() {
   return _leadFinderModule;
 }
 
+let _trackerModule = null;
+async function getTrackerModule() {
+  if (!_trackerModule) {
+    _trackerModule = await import('./tracker.js');
+  }
+  return _trackerModule;
+}
+
 // ─── Singleton campaign manager instance ─────────────────────────────────────
 // Created on first use; config is pulled from environment variables.
 
@@ -178,6 +186,46 @@ router.get('/outreach/warmup-status', async (req, res) => {
   } catch (err) {
     console.error(`[server-routes] Warmup status error: ${err.message}`);
     res.status(500).json({ error: 'Failed to retrieve warmup status' });
+  }
+});
+
+/**
+ * GET /outreach/log
+ * Returns all outreach records from the tracker log.
+ */
+router.get('/outreach/log', async (req, res) => {
+  try {
+    const { getOutreachLog } = await getTrackerModule();
+    const records = getOutreachLog();
+    res.json({ ok: true, count: records.length, records });
+  } catch (err) {
+    console.error(`[server-routes] Outreach log error: ${err.message}`);
+    res.status(500).json({ error: 'Failed to retrieve outreach log' });
+  }
+});
+
+/**
+ * POST /outreach/log/:id
+ * Updates a specific outreach record by id.
+ * Body: partial record fields to merge (e.g. { notes, emailStatus, repliedAt })
+ */
+router.post('/outreach/log/:id', async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body || {};
+
+  // Disallow overwriting the id itself
+  delete updates.id;
+
+  try {
+    const { updateOutreach } = await getTrackerModule();
+    const updated = updateOutreach(id, updates);
+    if (!updated) {
+      return res.status(404).json({ error: `Record ${id} not found` });
+    }
+    res.json({ ok: true, record: updated });
+  } catch (err) {
+    console.error(`[server-routes] Outreach update error for ${id}: ${err.message}`);
+    res.status(500).json({ error: 'Failed to update outreach record' });
   }
 });
 

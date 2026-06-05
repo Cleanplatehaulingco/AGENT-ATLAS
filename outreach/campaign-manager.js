@@ -14,6 +14,7 @@ import { findLeads } from './lead-finder.js';
 import { enrichLead } from './email-enricher.js';
 import { writeEmail } from './email-writer.js';
 import { sendEmail, getDailyLimit } from './sender.js';
+import { logOutreach, verifyBusinessLive, searchFacebookPage } from './tracker.js';
 
 const LOG_FILE = path.resolve('./campaign-log.json');
 const SUPPRESSIONS_FILE = path.resolve('./suppressions.json');
@@ -230,6 +231,18 @@ export class CampaignManager {
             continue;
           }
 
+          // 3a. Verify business website is live — skip if down
+          const liveStatus = await verifyBusinessLive(lead.website);
+          if (liveStatus === 'down') {
+            console.log(`[campaign-manager] Skipping ${lead.name} — website appears down (${lead.website})`);
+            stats.skipped++;
+            contactedDomains.add(domain.toLowerCase());
+            continue;
+          }
+
+          // 3b. Search for Facebook page (best-effort)
+          const fbResult = await searchFacebookPage(lead.name, city);
+
           // 3. Write personalized email via Claude
           const enrichedLead = {
             ...lead,
@@ -270,8 +283,9 @@ export class CampaignManager {
           }
 
           // 6. Log the result
+          const nowIso = new Date().toISOString();
           const logEntry = {
-            sentAt: new Date().toISOString(),
+            sentAt: nowIso,
             domain,
             email: contact.email,
             firstName: contact.firstName,
@@ -293,6 +307,27 @@ export class CampaignManager {
           };
 
           appendToLog(logEntry);
+
+          // Also log to outreach tracker
+          logOutreach({
+            businessName:   lead.name,
+            trade,
+            city,
+            state,
+            email:          contact.email,
+            phone:          lead.phone    || null,
+            website:        lead.website  || null,
+            googleRating:   lead.rating   ?? null,
+            googleReviews:  lead.reviewCount ?? null,
+            businessStatus: liveStatus === 'live' ? 'verified_live' : 'unverified',
+            facebookPage:   fbResult.url  || null,
+            facebookStatus: fbResult.found ? 'found' : 'not_found',
+            emailSentAt:    sendResult.sent ? nowIso : null,
+            emailSubject:   emailContent.subject,
+            emailStatus:    sendResult.sent ? 'sent' : 'queued',
+            campaignId:     `campaign_day${day}`,
+          });
+
           contactedDomains.add(domain.toLowerCase());
 
           if (sendResult.sent) {
