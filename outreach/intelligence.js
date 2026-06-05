@@ -163,25 +163,35 @@ export async function generatePersonalizedEmail(lead, insights) {
     ? `Their Google rating is ${lead.rating} stars — you can mention it ("your ${lead.rating} stars on Google says it all").`
     : '';
 
-  const prompt = `You are a B2B sales copywriter for TradeOpsVault, a company selling $9.99 digital job forms to trade contractors (HVAC, plumbing, electrical, etc.).
+  const prompt = `You are writing a cold outreach email for Michael at TradeOpsVault. You are not a marketer — you are a real person who helps trade contractors stop drowning in paperwork.
 
-Write a cold outreach email for this lead. It must feel like a real person wrote it — no corporate fluff. Max 180 words for the body.
-
-Lead details:
+LEAD:
 - Business: ${lead.name}
-- Trade: ${lead.trade}
+- Trade: ${lead.trade} contractor
 - City: ${lead.city}
-- Google Rating: ${lead.rating || 'unknown'} (${lead.reviewCount || 0} reviews)
-- Website: ${lead.website || 'unknown'}
-
-Personalization rules:
+- Google: ${lead.rating ? `${lead.rating} stars, ${lead.reviewCount} reviews` : 'unknown'}
+- Website: ${lead.website || 'none found'}
 - ${decisionMakerLine}
 ${hiringLine ? `- ${hiringLine}` : ''}
 ${ratingLine ? `- ${ratingLine}` : ''}
-${insightSummary}
+${insightSummary ? `\nWHAT HAS WORKED IN PAST CAMPAIGNS:\n${insightSummary}` : ''}
 
-Return JSON only: { "subject": "...", "body": "...", "previewText": "..." }
-The previewText should be 50-90 chars shown in email clients before opening.`;
+PRODUCT: TradeOpsVault — digital forms for field techs. Auto-calculates invoices, works on any phone, free trial at tradeopsvault.com/business.
+
+RULES (non-negotiable):
+1. Subject: max 7 words, no exclamation marks, no "TradeOpsVault" in subject, sounds like a human sent it
+2. Body: 80-120 words MAXIMUM. Every sentence must earn its place.
+3. BANNED phrases: "I hope this finds you well", "just reaching out", "touch base", "streamline", "solution", "game-changer", "leverage", "utilize", "I wanted to", "I came across"
+4. One CTA only: reply OR visit the link. Not both.
+5. Sign off: just "— Michael" on its own line
+6. PS line required: adds new value, does not repeat the CTA
+7. Plain text only — no HTML, no bullets, no markdown
+8. "TradeOpsVault" appears maximum once total
+9. If no first name known: skip greeting, open cold with first sentence
+10. First line must make them stop scrolling — a specific insight, not a compliment
+
+Return ONLY valid JSON:
+{ "subject": "...", "body": "...", "previewText": "40-80 char preview that creates curiosity" }`;
 
   try {
     const response = await client.messages.create({
