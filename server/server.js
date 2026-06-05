@@ -169,9 +169,9 @@ function generateDownloadToken(listingId, email) {
   _downloadTokens.set(token, {
     listingId,
     email,
-    expiresAt:     Date.now() + 24 * 60 * 60 * 1000,
+    expiresAt:     Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
     downloadCount: 0,
-    maxDownloads:  5,
+    maxDownloads:  Infinity,
   });
   _saveTokens(_downloadTokens);
   return token;
@@ -189,9 +189,9 @@ async function sendDownloadEmail(email, listingId, downloadUrl, listingTitle) {
         <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0d1526;color:#e2e8f0;padding:40px;border-radius:12px;">
           <div style="font-size:22px;font-weight:800;color:#ffffff;margin-bottom:8px;">TradeOps<span style="color:#e85d04">Vault</span></div>
           <h2 style="color:#ffffff;margin:24px 0 8px;">Your download is ready</h2>
-          <p style="color:#94a3b8;margin:0 0 24px;">Thanks for your purchase. Click the button below to download your template. This link expires in 24 hours.</p>
+          <p style="color:#94a3b8;margin:0 0 24px;">Thanks for your purchase. Click the button below to download your template. This link expires in 7 days.</p>
           <a href="${downloadUrl}" style="display:inline-block;background:#e85d04;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:700;font-size:16px;margin-bottom:24px;">Download ${listingTitle}</a>
-          <p style="color:#64748b;font-size:13px;margin:0;">Link expires in 24 hours. You can download up to 5 times.<br>Questions? Reply to this email or visit <a href="https://tradeopsvault.com" style="color:#e85d04;">tradeopsvault.com</a></p>
+          <p style="color:#64748b;font-size:13px;margin:0;">Link expires in 7 days. Download as many times as you need.<br>Questions? Reply to this email or visit <a href="https://tradeopsvault.com" style="color:#e85d04;">tradeopsvault.com</a></p>
         </div>
       `
     }]
@@ -953,7 +953,6 @@ app.get('/shop/verify/:token', _aiCors, (req, res) => {
   const entry = _downloadTokens.get(req.params.token);
   if (!entry) return res.status(404).json({ ok: false, error: 'Token not found' });
   if (Date.now() > entry.expiresAt) return res.status(410).json({ ok: false, error: 'Download link has expired' });
-  if (entry.downloadCount >= entry.maxDownloads) return res.status(410).json({ ok: false, error: 'Download limit reached' });
 
   const listingData = LISTING_DATA[entry.listingId] || {};
   res.json({
@@ -971,9 +970,6 @@ app.get('/shop/download/:token', async (req, res) => {
   const entry = _downloadTokens.get(req.params.token);
   if (!entry) return res.status(404).json({ ok: false, error: 'Token not found' });
   if (Date.now() > entry.expiresAt) return res.status(410).json({ ok: false, error: 'Download link has expired' });
-  if (entry.downloadCount >= entry.maxDownloads) {
-    return res.status(410).json({ ok: false, error: `Download limit reached (max ${entry.maxDownloads})` });
-  }
 
   const { listingId } = entry;
 
