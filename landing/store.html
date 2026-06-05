@@ -80,7 +80,7 @@
     .btn-orange:hover { background: var(--orange-h); border-color: var(--orange-h); }
     .btn-ghost { background: transparent; color: var(--text); border-color: var(--navy-border); }
     .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
-    .btn-sm { font-size: .8125rem; padding: .5625rem 1rem; }
+    .btn-sm { font-size: .75rem; padding: .5rem .875rem; white-space: nowrap; }
 
     /* ── NAV ── */
     .nav {
@@ -286,6 +286,7 @@
       display: flex;
       flex-direction: column;
       transition: border-color .18s, transform .18s;
+      min-width: 0;
     }
     .product-card:hover { border-color: rgba(232,93,4,.35); transform: translateY(-2px); }
     .product-thumb {
@@ -348,7 +349,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: .75rem;
+      gap: .5rem;
+      flex-shrink: 0;
+      flex-wrap: wrap;
     }
     .product-price { font-size: 1.0625rem; font-weight: 800; color: var(--orange); }
     .product-actions { display: flex; gap: .5rem; }
@@ -484,8 +487,8 @@
           <div class="bundle-price-num">$9.99</div>
           <div class="bundle-price-note">one-time · all 20 templates</div>
         </div>
-        <a href="#" class="btn btn-orange" style="width:100%;" onclick="trackBundleCTA(event)">Get Complete Bundle</a>
-        <p style="font-size:.75rem;color:var(--text-dim);text-align:center;">Delivered via Etsy · Instant access</p>
+        <button class="btn btn-orange" style="width:100%;" onclick="buyBundle(this)">Get Complete Bundle</button>
+        <p style="font-size:.75rem;color:var(--text-dim);text-align:center;">Instant download · Secure checkout</p>
       </div>
     </div>
   </div>
@@ -521,7 +524,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-001-HVAC-Service-Call-Notes-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'HVAC Service Call Notes')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-001', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -540,7 +543,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-002-Plumbing-Dispatch-Checklist-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Plumbing Dispatch Checklist')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-002', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -559,7 +562,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-003-Electrician-Jobsite-Inspection-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Electrician Jobsite Inspection')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-003', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -578,7 +581,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-004-Lawn-Care-Weekly-Crew-Planner-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Lawn Care Weekly Crew Planner')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-004', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -597,7 +600,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-005-Auto-Detail-Intake-Waiver-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Auto Detail Intake Waiver')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-005', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -616,7 +619,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-006-Pest-Control-Follow-Up-Cards-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Pest Control Follow-Up Cards')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-006', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -635,7 +638,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-007-Roofing-Change-Order-Approval-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Roofing Change Order Approval')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-007', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -654,7 +657,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-008-Pressure-Washing-Route-Sheet-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Pressure Washing Route Sheet')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-008', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -673,7 +676,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-009-Appliance-Repair-Parts-Tracker-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Appliance Repair Parts Tracker')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-009', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -692,7 +695,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-010-Handyman-Materials-Reimbursement-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Handyman Materials Reimbursement')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-010', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -711,7 +714,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-011-Mobile-Mechanic-Service-Summary-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Mobile Mechanic Service Summary')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-011', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -730,7 +733,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-012-Locksmith-Job-Authorization-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Locksmith Job Authorization')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-012', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -749,7 +752,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-013-Painting-Prep-Final-Punch-List-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Painting Prep Final Punch List')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-013', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -768,7 +771,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-014-Snow-Removal-Service-Checklist-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Snow Removal Service Checklist')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-014', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -787,7 +790,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-015-Window-Cleaning-Client-Packet-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Window Cleaning Client Packet')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-015', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -806,7 +809,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-016-Pool-Service-Chemical-Log-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Pool Service Chemical Log')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-016', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -825,7 +828,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-017-Flooring-Estimate-Scope-Matrix-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Flooring Estimate Scope Matrix')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-017', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -844,7 +847,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-018-Contractor-Daily-Site-Report-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Contractor Daily Site Report')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-018', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -863,7 +866,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-019-Septic-Service-Pump-Log-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Septic Service Pump Log')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-019', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -882,7 +885,7 @@
           <span class="product-price">$3.99</span>
           <div class="product-actions">
             <a href="../downloads/LS-020-Service-Fee-Transparency-Addendum-TradeOpsVault.html" class="btn btn-ghost btn-sm">Preview</a>
-            <a href="#" class="btn btn-orange btn-sm" onclick="trackAddToCart(event,'Service Fee Transparency Addendum')">Get Template</a>
+            <button class="btn btn-orange btn-sm" onclick="buyTemplate('LS-020', this)">Get Template</button>
           </div>
         </div>
       </div>
@@ -972,7 +975,7 @@
     });
   });
 
-  // ── Meta Pixel: AddToCart ──
+  // ── Meta Pixel: AddToCart (kept for analytics only) ──
   function trackAddToCart(e, name) {
     if (typeof fbq !== 'undefined') {
       fbq('track', 'AddToCart', { content_name: name, value: 3.99, currency: 'USD' });
@@ -982,6 +985,65 @@
   function trackBundleCTA(e) {
     if (typeof fbq !== 'undefined') {
       fbq('track', 'InitiateCheckout', { content_name: 'Complete Bundle', value: 9.99, currency: 'USD', num_items: 20 });
+    }
+  }
+
+  // ── Stripe checkout ──
+  async function buyTemplate(listingId, btn) {
+    if (!btn) btn = document.querySelector(`[onclick*="${listingId}"]`);
+    btn.textContent = 'Loading…';
+    btn.disabled = true;
+    try {
+      const r = await fetch('https://agent-atlas.onrender.com/shop/checkout', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          listingId,
+          successUrl: window.location.origin + '/landing/success.html',
+          cancelUrl:  window.location.href,
+        }),
+      });
+      const d = await r.json();
+      if (d.url) {
+        window.location.href = d.url;
+      } else {
+        alert('Could not start checkout. Please try again.');
+        btn.textContent = 'Get Template';
+        btn.disabled = false;
+      }
+    } catch (e) {
+      alert('Connection error. Please try again.');
+      btn.textContent = 'Get Template';
+      btn.disabled = false;
+    }
+  }
+
+  async function buyBundle(btn) {
+    if (!btn) btn = document.querySelector('[onclick*="buyBundle"]');
+    btn.textContent = 'Loading…';
+    btn.disabled = true;
+    try {
+      const r = await fetch('https://agent-atlas.onrender.com/shop/checkout', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          listingId:  'LS-BUNDLE',
+          successUrl: window.location.origin + '/landing/success.html',
+          cancelUrl:  window.location.href,
+        }),
+      });
+      const d = await r.json();
+      if (d.url) {
+        window.location.href = d.url;
+      } else {
+        alert('Could not start checkout. Please try again.');
+        btn.textContent = 'Get Complete Bundle';
+        btn.disabled = false;
+      }
+    } catch (e) {
+      alert('Connection error. Please try again.');
+      btn.textContent = 'Get Complete Bundle';
+      btn.disabled = false;
     }
   }
 
