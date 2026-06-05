@@ -1220,6 +1220,8 @@ async function initDashboard() {
   loadCampaignStats();
   // Load outreach tracker data in background
   refreshTrackerData();
+  // Load AI intelligence insights in background
+  loadIntelligenceInsights();
 }
 
 function renderStats() {
@@ -1572,12 +1574,21 @@ function renderTrackerTable() {
     const { label, cls } = displayStatus(r);
     const live = r.businessStatus === 'verified_live' ? '✅' : r.businessStatus === 'permanently_closed' ? '🚫' : '❓';
     const fb   = r.facebookStatus === 'found' ? '✅' : '—';
+    // Lead score badge
+    let scoreBadge = '—';
+    if (r.leadScore != null) {
+      const sc = Number(r.leadScore);
+      const scCls = sc >= 7 ? 'score-high' : sc >= 4 ? 'score-med' : 'score-low';
+      const scEmoji = sc >= 7 ? '🟢' : sc >= 4 ? '🟡' : '🔴';
+      scoreBadge = `<span class="score-badge ${scCls}" title="${escHtml(r.scoreReason || '')}">${scEmoji} ${sc}</span>`;
+    }
     return `
       <tr>
         <td class="tracker-biz">${escHtml(r.businessName || '—')}</td>
         <td><span class="td-trade">${escHtml(r.trade || '—')}</span></td>
         <td>${escHtml(r.city || '—')}${r.state ? ', ' + escHtml(r.state) : ''}</td>
         <td><span class="status-badge ${cls}">${label}</span></td>
+        <td style="text-align:center">${scoreBadge}</td>
         <td style="text-align:center">${live}</td>
         <td style="text-align:center">${fb}</td>
         <td class="td-date">${fmtDate(r.emailSentAt)}</td>
@@ -1597,6 +1608,7 @@ function renderTrackerTable() {
           <th>Trade</th>
           <th>City</th>
           <th>Status</th>
+          <th>Score</th>
           <th>Biz Live</th>
           <th>Facebook</th>
           <th>Email Sent</th>
@@ -1624,6 +1636,76 @@ function openTrackerNotes(id) {
     body: JSON.stringify({ notes: note })
   }).catch(() => {});
   renderTrackerTable();
+}
+
+// ── INTELLIGENCE PANEL ──────────────────────────────────────────────────────
+
+async function loadIntelligenceInsights() {
+  const insightsEl = document.getElementById('intel-insights-content');
+  const topEl = document.getElementById('intel-top-content');
+  if (!insightsEl || !topEl) return;
+
+  try {
+    const r = await fetch(`${API}/outreach/intelligence/insights`);
+    const d = await r.json();
+
+    if (!d.insights || !d.insights.result) {
+      insightsEl.innerHTML = `<div style="color:var(--text-dim);">No analysis run yet. Click <strong>Run Analysis</strong> after sending some campaigns.</div>`;
+      topEl.innerHTML = `<div style="color:var(--text-dim);">Run an analysis to see top performers.</div>`;
+      return;
+    }
+
+    const result = d.insights.result;
+    const ts = d.insights.timestamp ? new Date(d.insights.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+
+    // Insights list
+    const insights = result.insights || [];
+    if (insights.length) {
+      insightsEl.innerHTML = `
+        <div style="font-size:.75rem;color:var(--text-dim);margin-bottom:.5rem;">Based on ${ts ? 'analysis from ' + ts : 'latest analysis'}:</div>
+        ${insights.slice(0, 5).map(i => `<div class="intel-insight-item">• ${escHtml(i)}</div>`).join('')}`;
+    } else {
+      insightsEl.innerHTML = `<div style="color:var(--text-dim);">No insights yet.</div>`;
+    }
+
+    // Top performers — build from worst performers inversely + best subject patterns
+    const worst = result.worstPerformers || [];
+    const bestSubjects = result.bestSubjectPatterns || [];
+    let topHtml = '';
+    if (bestSubjects.length) {
+      topHtml += `<div style="font-size:.75rem;color:var(--text-dim);margin-bottom:.375rem;">Best subject patterns:</div>`;
+      topHtml += bestSubjects.slice(0, 3).map(s => `<div class="intel-insight-item">✓ ${escHtml(s)}</div>`).join('');
+    }
+    if (worst.length) {
+      topHtml += `<div style="font-size:.75rem;color:var(--text-dim);margin:.75rem 0 .375rem;">Underperformers to avoid:</div>`;
+      topHtml += worst.slice(0, 3).map(w => `<div class="intel-insight-item" style="color:var(--red)">⚠ ${escHtml(w.trade || '')}${w.city ? '/' + escHtml(w.city) : ''}: ${escHtml(w.reason || '')}</div>`).join('');
+    }
+    topEl.innerHTML = topHtml || `<div style="color:var(--text-dim);">No top performer data yet.</div>`;
+
+  } catch (err) {
+    insightsEl.innerHTML = `<div style="color:var(--text-dim);">Could not connect to server.</div>`;
+    topEl.innerHTML = `<div style="color:var(--text-dim);">Could not connect to server.</div>`;
+  }
+}
+
+async function runIntelligenceAnalysis() {
+  const btn = document.getElementById('intel-analyze-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Running…'; }
+  try {
+    const r = await fetch(`${API}/outreach/intelligence/analyze`, { method: 'POST' });
+    const d = await r.json();
+    if (d.ok) {
+      // Reload insights after a short delay to let analysis run
+      setTimeout(() => loadIntelligenceInsights(), 4000);
+      alert('AI analysis started. Insights will update in a few seconds.');
+    } else {
+      alert('Analysis failed: ' + (d.error || 'Unknown error'));
+    }
+  } catch {
+    alert('Could not connect to the server.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Run Analysis'; }
+  }
 }
 
 
