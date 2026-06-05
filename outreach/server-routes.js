@@ -6,14 +6,8 @@
 
 'use strict';
 
-// express is passed in from server.js to avoid node_modules resolution issues
-// across directories. Falls back to require() for local dev.
-let express;
-try { express = require('express'); } catch (_) {}
-
-module.exports = function(expressInstance) {
-  if (expressInstance) express = expressInstance;
-  const router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 // ─── Lazy-load ES module campaign manager ────────────────────────────────────
 // The rest of the outreach system uses ES modules. We bridge them here via
@@ -33,22 +27,6 @@ async function getLeadFinderModule() {
     _leadFinderModule = await import('./lead-finder.js');
   }
   return _leadFinderModule;
-}
-
-let _trackerModule = null;
-async function getTrackerModule() {
-  if (!_trackerModule) {
-    _trackerModule = await import('./tracker.js');
-  }
-  return _trackerModule;
-}
-
-let _intelligenceModule = null;
-async function getIntelligenceModule() {
-  if (!_intelligenceModule) {
-    _intelligenceModule = await import('./intelligence.js');
-  }
-  return _intelligenceModule;
 }
 
 // ─── Singleton campaign manager instance ─────────────────────────────────────
@@ -79,7 +57,7 @@ async function getManager() {
  * Body: { trades: string[], cities: [{ city, state }][], dailyTarget: number }
  * Starts the campaign in the background and returns a campaignId.
  */
-router.post('/campaign/start', async (req, res) => {
+router.post('/outreach/campaign/start', async (req, res) => {
   const { trades, cities, dailyTarget } = req.body || {};
 
   if (!Array.isArray(trades) || trades.length === 0) {
@@ -117,7 +95,7 @@ router.post('/campaign/start', async (req, res) => {
  * GET /outreach/campaign/stats
  * Returns aggregate stats from the campaign log.
  */
-router.get('/campaign/stats', async (req, res) => {
+router.get('/outreach/campaign/stats', async (req, res) => {
   try {
     const manager = await getManager();
     const stats = manager.getCampaignStats();
@@ -132,7 +110,7 @@ router.get('/campaign/stats', async (req, res) => {
  * POST /outreach/unsubscribe/:token
  * Marks the email (base64-decoded from :token) as unsubscribed.
  */
-router.post('/unsubscribe/:token', async (req, res) => {
+router.post('/outreach/unsubscribe/:token', async (req, res) => {
   const { token } = req.params;
 
   let email;
@@ -159,7 +137,7 @@ router.post('/unsubscribe/:token', async (req, res) => {
  * Query params: trade (default "HVAC"), city (default "Austin"), state (default "TX")
  * No emails are sent.
  */
-router.get('/leads/preview', async (req, res) => {
+router.get('/outreach/leads/preview', async (req, res) => {
   const trade = req.query.trade || 'HVAC';
   const city = req.query.city || 'Austin';
   const state = req.query.state || 'TX';
@@ -192,7 +170,7 @@ router.get('/leads/preview', async (req, res) => {
  * GET /outreach/warmup-status
  * Returns the current warmup day, daily send limit, and emails sent today.
  */
-router.get('/warmup-status', async (req, res) => {
+router.get('/outreach/warmup-status', async (req, res) => {
   try {
     const manager = await getManager();
     const status = manager.getWarmupStatus();
@@ -203,120 +181,4 @@ router.get('/warmup-status', async (req, res) => {
   }
 });
 
-/**
- * GET /outreach/log
- * Returns all outreach records from the tracker log.
- */
-router.get('/log', async (req, res) => {
-  try {
-    const { getOutreachLog } = await getTrackerModule();
-    const records = getOutreachLog();
-    res.json({ ok: true, count: records.length, records });
-  } catch (err) {
-    console.error(`[server-routes] Outreach log error: ${err.message}`);
-    res.status(500).json({ error: 'Failed to retrieve outreach log' });
-  }
-});
-
-/**
- * POST /outreach/log/:id
- * Updates a specific outreach record by id.
- * Body: partial record fields to merge (e.g. { notes, emailStatus, repliedAt })
- */
-router.post('/log/:id', async (req, res) => {
-  const { id } = req.params;
-  const updates = req.body || {};
-
-  // Disallow overwriting the id itself
-  delete updates.id;
-
-  try {
-    const { updateOutreach } = await getTrackerModule();
-    const updated = updateOutreach(id, updates);
-    if (!updated) {
-      return res.status(404).json({ error: `Record ${id} not found` });
-    }
-    res.json({ ok: true, record: updated });
-  } catch (err) {
-    console.error(`[server-routes] Outreach update error for ${id}: ${err.message}`);
-    res.status(500).json({ error: 'Failed to update outreach record' });
-  }
-});
-
-// ─── Intelligence Routes ──────────────────────────────────────────────────────
-
-/**
- * GET /outreach/intelligence/insights
- * Returns latest AI insights from intelligence-log.json
- */
-router.get('/intelligence/insights', async (req, res) => {
-  try {
-    const { getLatestInsights } = await getIntelligenceModule();
-    const insights = getLatestInsights();
-    if (!insights) {
-      return res.json({ ok: true, insights: null, message: 'No analysis has been run yet.' });
-    }
-    res.json({ ok: true, insights });
-  } catch (err) {
-    console.error(`[server-routes] Intelligence insights error: ${err.message}`);
-    res.status(500).json({ error: 'Failed to retrieve insights' });
-  }
-});
-
-/**
- * GET /outreach/intelligence/score
- * Scores a single lead on demand.
- * Query params: name, trade, city, website
- */
-router.get('/intelligence/score', async (req, res) => {
-  const { name, trade, city, website } = req.query;
-
-  if (!name || !trade || !city) {
-    return res.status(400).json({ error: 'name, trade, and city query params are required' });
-  }
-
-  try {
-    const { scoreLead } = await getIntelligenceModule();
-    const lead = {
-      name: name || '',
-      trade: trade || '',
-      city: city || '',
-      website: website || null,
-      rating: parseFloat(req.query.rating) || null,
-      reviewCount: parseInt(req.query.reviewCount, 10) || null,
-      isHiring: req.query.isHiring === 'true',
-      facebookFound: req.query.facebookFound === 'true',
-      decisionMakerFound: req.query.decisionMakerFound === 'true',
-      websiteLive: req.query.websiteLive !== 'false',
-    };
-    const result = await scoreLead(lead);
-    res.json({ ok: true, lead: { name, trade, city }, score: result });
-  } catch (err) {
-    console.error(`[server-routes] Lead score error: ${err.message}`);
-    res.status(500).json({ error: `Failed to score lead: ${err.message}` });
-  }
-});
-
-/**
- * POST /outreach/intelligence/analyze
- * Triggers weekly AI analysis manually.
- */
-router.post('/intelligence/analyze', async (req, res) => {
-  try {
-    const manager = await getManager();
-    // Run analysis in background
-    const analysisPromise = manager.runWeeklyAnalysis();
-    res.status(202).json({ ok: true, message: 'Analysis started. Check intelligence-log.json for results.' });
-    // Log any errors after response sent
-    analysisPromise.catch((err) => {
-      console.error(`[server-routes] Weekly analysis error: ${err.message}`);
-    });
-  } catch (err) {
-    console.error(`[server-routes] Analyze route error: ${err.message}`);
-    res.status(500).json({ error: `Failed to start analysis: ${err.message}` });
-  }
-});
-
-  return router;
-};
-
+module.exports = router;
