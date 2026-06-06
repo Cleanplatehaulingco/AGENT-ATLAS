@@ -1037,71 +1037,139 @@
     }
     .crm-input::placeholder { color: var(--text-dim); }
     .crm-input:focus { outline: none; border-color: var(--orange); }
+    /* ── CRM MOCK — Agent Atlas dashboard style ── */
     .crm-mock {
-      background: var(--navy-card);
-      border: 1px solid var(--navy-border);
+      background: #0f1623;
+      border: 1px solid rgba(255,255,255,0.07);
       border-radius: var(--radius-md);
       overflow: hidden;
-    }
-    .crm-mock-bar {
-      background: var(--navy-light);
-      border-bottom: 1px solid var(--navy-border);
-      padding: .75rem 1.25rem;
       display: flex;
-      gap: .5rem;
-      align-items: center;
+      font-size: .75rem;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
     }
-    .crm-mock-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
+    .crm-sidebar {
+      width: 140px;
+      flex-shrink: 0;
+      background: #0b1120;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      padding: 14px 0;
     }
-    .crm-mock-stats {
-      display: grid;
-      grid-template-columns: repeat(2,1fr);
-      gap: 1px;
-      background: var(--navy-border);
-      border-bottom: 1px solid var(--navy-border);
-    }
-    .crm-mock-stat {
-      background: var(--navy-card);
-      padding: 1.25rem 1.5rem;
-    }
-    .crm-mock-stat-val {
-      font-size: 1.5rem;
+    .crm-sidebar-logo {
+      padding: 0 14px 14px;
+      font-size: .7rem;
       font-weight: 800;
-      color: var(--white);
+      letter-spacing: -.01em;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 10px;
+    }
+    .crm-sidebar-logo span { color: #e85d04; }
+    .crm-sidebar-item {
+      padding: 7px 14px;
+      color: rgba(255,255,255,0.4);
+      font-size: .65rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: default;
+    }
+    .crm-sidebar-item.active {
+      background: rgba(232,93,4,0.1);
+      color: #fff;
+      border-left: 2px solid #e85d04;
+      padding-left: 12px;
+    }
+    .crm-sidebar-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      flex-shrink: 0;
+    }
+    .crm-sidebar-dot.active { background: #e85d04; }
+    .crm-main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .crm-topbar {
+      background: #0f1623;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .crm-topbar-title { font-weight: 700; font-size: .7rem; color: #fff; }
+    .crm-topbar-badge {
+      background: rgba(232,93,4,0.15);
+      color: #e85d04;
+      font-size: .55rem;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 4px;
+      letter-spacing: .04em;
+    }
+    .crm-metrics {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .crm-metric {
+      background: #0f1623;
+      padding: 10px 12px;
+    }
+    .crm-metric-lbl {
+      font-size: .55rem;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 4px;
+    }
+    .crm-metric-val {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
       letter-spacing: -.02em;
       line-height: 1;
     }
-    .crm-mock-stat-lbl {
-      font-size: .6875rem;
-      color: var(--text-dim);
-      margin-top: .25rem;
-      letter-spacing: .04em;
-    }
-    .crm-mock-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: .875rem 1.5rem;
-      border-bottom: 1px solid var(--navy-border);
-      font-size: .8125rem;
-    }
-    .crm-mock-row:last-child { border-bottom: none; }
-    .crm-mock-row-client { color: var(--text); font-weight: 500; }
-    .crm-mock-row-trade { color: var(--text-muted); }
-    .crm-mock-row-amt { color: var(--orange); font-weight: 600; }
-    .crm-mock-row-status {
-      font-size: .625rem;
+    .crm-metric-val.orange { color: #e85d04; }
+    .crm-metric-sub { font-size: .55rem; color: rgba(255,255,255,0.3); margin-top: 2px; }
+    .crm-section-label {
+      padding: 10px 14px 4px;
+      font-size: .55rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .08em;
-      padding: .2rem .5rem;
-      border-radius: 2px;
+      color: rgba(255,255,255,0.3);
     }
-    .status-paid { background: rgba(16,185,129,.12); color: #10b981; }
-    .status-pending { background: rgba(232,93,4,.12); color: var(--orange); }
+    .crm-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: .65rem;
+    }
+    .crm-row:last-child { border-bottom: none; }
+    .crm-row-client { color: #fff; font-weight: 600; min-width: 90px; }
+    .crm-row-trade { color: rgba(255,255,255,0.4); min-width: 55px; }
+    .crm-row-amt { color: #e85d04; font-weight: 700; min-width: 40px; text-align: right; }
+    .crm-row-status {
+      font-size: .5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: 2px 6px;
+      border-radius: 3px;
+      min-width: 46px;
+      text-align: center;
+    }
+    .crm-status-paid { background: rgba(16,185,129,.15); color: #10b981; }
+    .crm-status-pending { background: rgba(232,93,4,.15); color: #e85d04; }
     @media (max-width: 900px) {
       .crm-inner { grid-template-columns: 1fr; }
     }
@@ -1783,53 +1851,66 @@
         </form>
       </div>
       <div class="crm-mock">
-        <div class="crm-mock-bar">
-          <div class="crm-mock-dot" style="background:#ef4444"></div>
-          <div class="crm-mock-dot" style="background:#f59e0b"></div>
-          <div class="crm-mock-dot" style="background:#10b981"></div>
-          <span style="font-size:.6875rem;color:var(--text-dim);margin-left:.5rem;letter-spacing:.04em;">TradeOpsVault CRM</span>
+        <!-- Sidebar -->
+        <div class="crm-sidebar">
+          <div class="crm-sidebar-logo">Agent<span>Atlas</span></div>
+          <div class="crm-sidebar-item active"><div class="crm-sidebar-dot active"></div>Dashboard</div>
+          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Opportunities</div>
+          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Listings</div>
+          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Revenue</div>
+          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Ads Strategy</div>
+          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Post-Close</div>
+          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Compliance</div>
+          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Monitor</div>
         </div>
-        <div class="crm-mock-stats">
-          <div class="crm-mock-stat">
-            <div class="crm-mock-stat-val">47</div>
-            <div class="crm-mock-stat-lbl">Total Jobs</div>
+        <!-- Main panel -->
+        <div class="crm-main">
+          <div class="crm-topbar">
+            <span class="crm-topbar-title">Autonomous Operator Console</span>
+            <span class="crm-topbar-badge">● 1 pending</span>
           </div>
-          <div class="crm-mock-stat">
-            <div class="crm-mock-stat-val">$8,340</div>
-            <div class="crm-mock-stat-lbl">Revenue MTD</div>
+          <div class="crm-metrics">
+            <div class="crm-metric">
+              <div class="crm-metric-lbl">Revenue Earned</div>
+              <div class="crm-metric-val orange">$133.87</div>
+              <div class="crm-metric-sub">of $500 goal</div>
+            </div>
+            <div class="crm-metric">
+              <div class="crm-metric-lbl">Live Listings</div>
+              <div class="crm-metric-val">4</div>
+              <div class="crm-metric-sub">2 ready to upload</div>
+            </div>
+            <div class="crm-metric">
+              <div class="crm-metric-lbl">Est. Monthly</div>
+              <div class="crm-metric-val">$166</div>
+              <div class="crm-metric-sub">projected run-rate</div>
+            </div>
           </div>
-          <div class="crm-mock-stat">
-            <div class="crm-mock-stat-val">$177</div>
-            <div class="crm-mock-stat-lbl">Avg Job Value</div>
+          <div class="crm-section-label">Recent Jobs</div>
+          <div class="crm-row">
+            <span class="crm-row-client">Martinez Heating</span>
+            <span class="crm-row-trade">HVAC</span>
+            <span class="crm-row-amt">$685</span>
+            <span class="crm-row-status crm-status-paid">Paid</span>
           </div>
-          <div class="crm-mock-stat">
-            <div class="crm-mock-stat-val">23</div>
-            <div class="crm-mock-stat-lbl">Active Clients</div>
+          <div class="crm-row">
+            <span class="crm-row-client">Rivera Plumbing Co.</span>
+            <span class="crm-row-trade">Plumbing</span>
+            <span class="crm-row-amt">$310</span>
+            <span class="crm-row-status crm-status-paid">Paid</span>
           </div>
-        </div>
-        <div class="crm-mock-row">
-          <span class="crm-mock-row-client">Martinez Heating</span>
-          <span class="crm-mock-row-trade">HVAC</span>
-          <span class="crm-mock-row-amt">$685</span>
-          <span class="crm-mock-row-status status-paid">Paid</span>
-        </div>
-        <div class="crm-mock-row">
-          <span class="crm-mock-row-client">Rivera Plumbing Co.</span>
-          <span class="crm-mock-row-trade">Plumbing</span>
-          <span class="crm-mock-row-amt">$310</span>
-          <span class="crm-mock-row-status status-paid">Paid</span>
-        </div>
-        <div class="crm-mock-row">
-          <span class="crm-mock-row-client">Green Valley Lawn</span>
-          <span class="crm-mock-row-trade">Lawn Care</span>
-          <span class="crm-mock-row-amt">$195</span>
-          <span class="crm-mock-row-status status-pending">Pending</span>
-        </div>
-        <div class="crm-mock-row">
-          <span class="crm-mock-row-client">Apex Electrical</span>
-          <span class="crm-mock-row-trade">Electrician</span>
-          <span class="crm-mock-row-amt">$520</span>
-          <span class="crm-mock-row-status status-paid">Paid</span>
+          <div class="crm-row">
+            <span class="crm-row-client">Green Valley Lawn</span>
+            <span class="crm-row-trade">Lawn Care</span>
+            <span class="crm-row-amt">$195</span>
+            <span class="crm-row-status crm-status-pending">Pending</span>
+          </div>
+          <div class="crm-row">
+            <span class="crm-row-client">Apex Electrical</span>
+            <span class="crm-row-trade">Electrician</span>
+            <span class="crm-row-amt">$520</span>
+            <span class="crm-row-status crm-status-paid">Paid</span>
+          </div>
         </div>
       </div>
     </div>
