@@ -6,15 +6,14 @@ require('dotenv').config();
 const PORT              = process.env.PORT              || 3000;
 const ETSY_CLIENT_ID    = process.env.ETSY_CLIENT_ID    || '';
 const ETSY_SHOP_ID      = process.env.ETSY_SHOP_ID      || '';
-const APP_URL           = process.env.APP_URL           || 'https://agent-atlas.onrender.com';
-const FRONTEND_URL      = process.env.FRONTEND_URL      || 'https://tradeopsvault.com';
+const APP_URL           = process.env.APP_URL           || `http://localhost:${PORT}`;
+const FRONTEND_URL      = process.env.FRONTEND_URL      || 'https://cleanplatehaulingco.github.io';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 const STRIPE_PRICE_ID   = process.env.STRIPE_PRICE_ID   || ''; // $14.99/mo recurring price ID
 const META_PIXEL_ID     = process.env.META_PIXEL_ID     || '1566084278857732';
 const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || '';
-const SENDGRID_API_KEY  = process.env.SENDGRID_API_KEY  || '';
 
 const ETSY_API_BASE   = 'https://openapi.etsy.com/v3';
 const ETSY_AUTH_BASE  = 'https://www.etsy.com/oauth/connect';
@@ -27,8 +26,6 @@ const helmet      = require('helmet');
 const cors        = require('cors');
 const rateLimit   = require('express-rate-limit');
 const crypto      = require('crypto');
-const fs          = require('fs');
-const path        = require('path');
 const Anthropic   = require('@anthropic-ai/sdk');
 const Stripe      = require('stripe');
 
@@ -101,32 +98,6 @@ let _pkceStore = null;
  * _relayStore: Map<key, { data, expiresAt }>
  */
 const _relayStore = new Map();
-
-/**
- * _downloadTokens: Map<token, { listingId, email, expiresAt, downloadCount, maxDownloads }>
- * Persisted to disk so tokens survive Render restarts.
- */
-const TOKENS_FILE = path.join(__dirname, 'download-tokens.json');
-
-function _loadTokens() {
-  try {
-    const raw = fs.readFileSync(TOKENS_FILE, 'utf8');
-    const obj = JSON.parse(raw);
-    const map = new Map(Object.entries(obj));
-    // Drop already-expired tokens on load
-    const now = Date.now();
-    for (const [k, v] of map) if (v.expiresAt < now) map.delete(k);
-    return map;
-  } catch { return new Map(); }
-}
-
-function _saveTokens(map) {
-  try {
-    fs.writeFileSync(TOKENS_FILE, JSON.stringify(Object.fromEntries(map)), 'utf8');
-  } catch (e) { console.error('[tokens] save failed:', e.message); }
-}
-
-const _downloadTokens = _loadTokens();
 const RELAY_TTL_MS = 10 * 60 * 1000;  // 10 minutes
 
 /**
@@ -161,48 +132,6 @@ function generateVerifier() {
 
 function generateChallenge(verifier) {
   return crypto.createHash('sha256').update(verifier).digest('base64url');
-}
-
-// ─── Download token helpers ───────────────────────────────────────────────────
-function generateDownloadToken(listingId, email) {
-  const token = crypto.randomBytes(32).toString('hex');
-  _downloadTokens.set(token, {
-    listingId,
-    email,
-    expiresAt:     Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
-    downloadCount: 0,
-    maxDownloads:  Infinity,
-  });
-  _saveTokens(_downloadTokens);
-  return token;
-}
-
-async function sendDownloadEmail(email, listingId, downloadUrl, listingTitle) {
-  if (!SENDGRID_API_KEY) return;
-  const body = {
-    personalizations: [{ to: [{ email }] }],
-    from: { email: 'mgleichner@tradeopsvault.com', name: 'TradeOpsVault' },
-    subject: `Your download is ready — ${listingTitle}`,
-    content: [{
-      type: 'text/html',
-      value: `
-        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0d1526;color:#e2e8f0;padding:40px;border-radius:12px;">
-          <div style="font-size:22px;font-weight:800;color:#ffffff;margin-bottom:8px;">TradeOps<span style="color:#e85d04">Vault</span></div>
-          <h2 style="color:#ffffff;margin:24px 0 8px;">Your download is ready</h2>
-          <p style="color:#94a3b8;margin:0 0 24px;">Thanks for your purchase. Click the button below to download your template. This link expires in 7 days.</p>
-          <a href="${downloadUrl}" style="display:inline-block;background:#e85d04;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:700;font-size:16px;margin-bottom:24px;">Download ${listingTitle}</a>
-          <p style="color:#64748b;font-size:13px;margin:0;">Link expires in 7 days. Download as many times as you need.<br>Questions? Reply to this email or visit <a href="https://tradeopsvault.com" style="color:#e85d04;">tradeopsvault.com</a></p>
-        </div>
-      `
-    }]
-  };
-  try {
-    await fetch('https://api.sendgrid.com/v3/mail/send', {
-      method:  'POST',
-      headers: { 'Authorization': `Bearer ${SENDGRID_API_KEY}`, 'Content-Type': 'application/json' },
-      body:    JSON.stringify(body),
-    });
-  } catch (e) { console.error('[email] SendGrid error:', e.message); }
 }
 
 // ─── Etsy fetch helper with auto token refresh ────────────────────────────────
@@ -692,18 +621,37 @@ app.post('/ai/analyze', _aiCors, async (req, res) => {
 
     const message = await anthropic.messages.create({
       model:      'claude-haiku-4-5',
-      max_tokens: 1024,
-      system:     'You are a trade business advisor analyzing a completed job form. Give specific, actionable insights in 3-5 bullet points. Be direct and practical — your user is a working contractor, not an office worker. Focus on: missed revenue opportunities, follow-up actions, safety flags, and business improvement tips.',
+      max_tokens: 1400,
+      system:     `You are a professional quality-control assistant helping a trade business review completed job forms. Your role is to help contractors catch issues before they leave the job site — not to judge or accuse them of mistakes.
+
+Use cautious, professional language throughout: "may indicate," "possible issue," "verify before finalizing," "consider documenting," "this could suggest," "review with licensed trade judgment." Avoid absolute claims unless data is mathematically impossible or clearly missing.
+
+Return your analysis in exactly this structure:
+
+**1. Data Red Flags**
+Identify impossible, inconsistent, missing, or suspicious entries. Explain why they may matter. If the data looks clean, say so briefly.
+
+**2. Safety / Liability Notes**
+Flag anything involving injury, property damage, unsafe conditions, pets, customer conflict, access issues, or hazardous work. Recommend documentation steps where relevant. If nothing flags, say so.
+
+**3. Missing Documentation**
+Point out missing units, photos, notes, signatures, model/serial numbers, approvals, or vague values.
+
+**4. Pricing & Revenue Opportunities**
+Suggest practical, trade-specific follow-up work: maintenance plans, warranties, replacement quotes, tune-ups, inspections, or upsells. Keep it realistic — do not over-sell.
+
+**5. Suggested Next Steps**
+Give a short checklist the technician or business owner should follow before closing the job.
+
+End every analysis with this exact line on its own:
+"⚠️ AI review only — verify with licensed trade judgment before making technical, safety, pricing, or legal decisions."`,
       messages: [
         {
           role:    'user',
-          content: `Form type: ${formType}\n\nForm data:\n${JSON.stringify(formData, null, 2)}`,
+          content: `Trade form type: ${formType}\n\nForm data:\n${JSON.stringify(formData, null, 2)}\n\nPlease run a full AI Job Review on this form.`,
         },
       ],
     });
-
-    // Increment usage after successful call
-    _usageStore.set(usageKey, callsUsed + 1);
 
     const analysis      = message.content.find(b => b.type === 'text')?.text || '';
     const newCallsUsed  = isPro ? callsUsed : callsUsed + 1;
@@ -733,6 +681,184 @@ app.get('/ai/usage/:deviceId', _aiCors, (req, res) => {
   const resetDate = new Date(year, month, 1).toISOString().slice(0, 10);
 
   res.json({ callsUsed, callsRemaining, resetDate });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SHOP — INDIVIDUAL TEMPLATE PURCHASES ($3.99 / $9.99 bundle)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const path = require('path');
+const fs   = require('fs');
+
+// Download-token store persisted to disk so it survives Render restarts
+const TOKENS_FILE = path.join(__dirname, 'download-tokens.json');
+function _loadTokens() {
+  try {
+    const raw = fs.readFileSync(TOKENS_FILE, 'utf8');
+    return new Map(Object.entries(JSON.parse(raw)));
+  } catch { return new Map(); }
+}
+function _saveTokens(map) {
+  try { fs.writeFileSync(TOKENS_FILE, JSON.stringify(Object.fromEntries(map)), 'utf8'); } catch(e) { logError('_saveTokens failed', { message: e.message }); }
+}
+const _downloadTokens = _loadTokens();
+
+// Template filename map (listingId → filename in /downloads/)
+const TEMPLATE_FILES = {
+  'LS-001': 'LS-001-HVAC-Service-Call-Notes-TradeOpsVault.html',
+  'LS-002': 'LS-002-Plumbing-Dispatch-Checklist-TradeOpsVault.html',
+  'LS-003': 'LS-003-Electrician-Jobsite-Inspection-TradeOpsVault.html',
+  'LS-004': 'LS-004-Lawn-Care-Weekly-Crew-Planner-TradeOpsVault.html',
+  'LS-005': 'LS-005-Auto-Detail-Intake-Waiver-TradeOpsVault.html',
+  'LS-006': 'LS-006-Pest-Control-Follow-Up-Cards-TradeOpsVault.html',
+  'LS-007': 'LS-007-Roofing-Change-Order-Approval-TradeOpsVault.html',
+  'LS-008': 'LS-008-Pressure-Washing-Route-Sheet-TradeOpsVault.html',
+  'LS-009': 'LS-009-Appliance-Repair-Parts-Tracker-TradeOpsVault.html',
+  'LS-010': 'LS-010-Handyman-Materials-Reimbursement-TradeOpsVault.html',
+  'LS-011': 'LS-011-Mobile-Mechanic-Service-Summary-TradeOpsVault.html',
+  'LS-012': 'LS-012-Locksmith-Job-Authorization-TradeOpsVault.html',
+  'LS-013': 'LS-013-Painting-Prep-Final-Punch-List-TradeOpsVault.html',
+  'LS-014': 'LS-014-Snow-Removal-Service-Checklist-TradeOpsVault.html',
+  'LS-015': 'LS-015-Window-Cleaning-Client-Packet-TradeOpsVault.html',
+  'LS-016': 'LS-016-Pool-Service-Chemical-Log-TradeOpsVault.html',
+  'LS-017': 'LS-017-Flooring-Estimate-Scope-Matrix-TradeOpsVault.html',
+  'LS-018': 'LS-018-Contractor-Daily-Site-Report-TradeOpsVault.html',
+  'LS-019': 'LS-019-Septic-Service-Pump-Log-TradeOpsVault.html',
+  'LS-020': 'LS-020-Service-Fee-Transparency-Addendum-TradeOpsVault.html',
+};
+
+function generateDownloadToken(listingId, items) {
+  const token = crypto.randomBytes(24).toString('hex');
+  const entry = {
+    listingId,
+    items,   // array of listingIds included in this purchase
+    createdAt:  Date.now(),
+    expiresAt:  Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxDownloads: Infinity,
+    downloadCount: 0,
+  };
+  _downloadTokens.set(token, entry);
+  _saveTokens(_downloadTokens);
+  return token;
+}
+
+// ─── Create Stripe checkout session for template purchase ─────────────────────
+app.post('/shop/checkout', _aiCors, async (req, res) => {
+  if (!STRIPE_SECRET_KEY) return res.status(503).json({ ok: false, error: 'Payments not configured' });
+
+  const { listingId } = req.body || {};
+  if (!listingId) return res.status(400).json({ ok: false, error: 'listingId required' });
+
+  const id = listingId.toUpperCase().trim();
+  const listing = LISTING_DATA[id];
+  if (!listing) return res.status(404).json({ ok: false, error: `Unknown listing: ${id}` });
+
+  // Bundle: include all 20 templates; single: just the one
+  const items = id === 'LS-BUNDLE' ? Object.keys(TEMPLATE_FILES) : [id];
+
+  try {
+    const stripe = Stripe(STRIPE_SECRET_KEY);
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          unit_amount: Math.round(parseFloat(listing.price) * 100),
+          product_data: { name: listing.title.split('|')[0].trim() },
+        },
+        quantity: 1,
+      }],
+      customer_email: undefined, // Stripe will ask for email at checkout
+      collect_shipping_address: false,
+      metadata: { listingId: id, items: items.join(',') },
+      success_url: `${APP_URL}/shop/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url:  `https://tradeopsvault.com/landing/store.html?cancelled=1`,
+    });
+    res.json({ ok: true, url: session.url });
+  } catch (err) {
+    logError('POST /shop/checkout failed', { message: err.message });
+    res.status(500).json({ ok: false, error: 'Could not create checkout session' });
+  }
+});
+
+// ─── Post-payment redirect — generate token, bounce to success page ───────────
+app.get('/shop/success', async (req, res) => {
+  const { session_id } = req.query;
+  if (!session_id || !STRIPE_SECRET_KEY) {
+    return res.redirect('https://tradeopsvault.com/landing/store.html');
+  }
+
+  try {
+    const stripe = Stripe(STRIPE_SECRET_KEY);
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+
+    if (session.payment_status !== 'paid') {
+      return res.redirect('https://tradeopsvault.com/landing/store.html?payment_pending=1');
+    }
+
+    const listingId = session.metadata?.listingId || 'LS-001';
+    const items     = (session.metadata?.items || listingId).split(',');
+    const token     = generateDownloadToken(listingId, items);
+    const name      = encodeURIComponent((LISTING_DATA[listingId]?.title || '').split('|')[0].trim());
+
+    res.redirect(`https://tradeopsvault.com/landing/success.html?token=${token}&name=${name}&items=${items.length}`);
+  } catch (err) {
+    logError('GET /shop/success failed', { message: err.message });
+    res.redirect('https://tradeopsvault.com/landing/store.html?error=1');
+  }
+});
+
+// ─── Download template by token ───────────────────────────────────────────────
+app.get('/shop/download/:token', (req, res) => {
+  const entry = _downloadTokens.get(req.params.token);
+
+  if (!entry) return res.status(404).json({ ok: false, error: 'Token not found or expired' });
+  if (Date.now() > entry.expiresAt) {
+    _downloadTokens.delete(req.params.token);
+    _saveTokens(_downloadTokens);
+    return res.status(410).json({ ok: false, error: 'Download link expired (7 days)' });
+  }
+
+  // Which file to serve: for bundle serve a zip if available, else serve first item
+  const listingId = entry.listingId;
+
+  if (listingId === 'LS-BUNDLE') {
+    // Bundle: serve a simple HTML index page that links all 20 items via new tokens
+    const links = entry.items.map(id => {
+      const fname = TEMPLATE_FILES[id];
+      const t2 = crypto.randomBytes(24).toString('hex');
+      _downloadTokens.set(t2, { listingId: id, items: [id], createdAt: Date.now(), expiresAt: entry.expiresAt, maxDownloads: Infinity, downloadCount: 0 });
+      return `<li><a href="/shop/download/${t2}" style="color:#e85d04;font-weight:600;">${fname.replace('-TradeOpsVault.html','').replace(/-/g,' ')}</a></li>`;
+    }).join('\n');
+    _saveTokens(_downloadTokens);
+
+    res.setHeader('Content-Type', 'text/html');
+    return res.send(`<!DOCTYPE html><html><head><title>TradeOpsVault Bundle — All 20 Templates</title>
+<style>body{font-family:Segoe UI,Arial,sans-serif;background:#0d1526;color:#fff;max-width:700px;margin:60px auto;padding:0 20px;}
+h1{color:#e85d04;}ul{list-style:none;padding:0;}li{margin:12px 0;}a{color:#e85d04;text-decoration:none;font-size:16px;}
+a:hover{text-decoration:underline;}.note{color:rgba(255,255,255,0.5);font-size:13px;margin-top:32px;}</style>
+</head><body>
+<h1>✦ Your Bundle is Ready</h1>
+<p>Click each template below to open it in your browser. Save the page (Ctrl+S / Cmd+S) to keep it forever.</p>
+<ul>${links}</ul>
+<p class="note">Links valid for 7 days · Unlimited downloads</p>
+</body></html>`);
+  }
+
+  // Single template
+  const filename = TEMPLATE_FILES[listingId];
+  if (!filename) return res.status(404).json({ ok: false, error: 'Template not found' });
+
+  const filePath = path.join(__dirname, '..', 'downloads', filename);
+  if (!fs.existsSync(filePath)) return res.status(404).json({ ok: false, error: 'File not found on server' });
+
+  entry.downloadCount = (entry.downloadCount || 0) + 1;
+  _saveTokens(_downloadTokens);
+
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.setHeader('Content-Type', 'text/html');
+  res.sendFile(filePath);
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -785,29 +911,16 @@ app.post('/webhook/stripe', express.raw({ type: 'application/json' }), (req, res
   const obj = event.data.object;
 
   if (event.type === 'checkout.session.completed') {
-    const listingId = obj.metadata?.listingId;
-
-    if (listingId) {
-      // ── Template purchase (shop) ──
-      const email    = obj.customer_details?.email || '';
-      const token    = generateDownloadToken(listingId, email);
-      const listing  = LISTING_DATA[listingId] || {};
-      const downloadUrl = `${APP_URL}/shop/download/${token}`;
-      sendDownloadEmail(email, listingId, downloadUrl, listing.title || listingId).catch(() => {});
-      logInfo('webhook: template purchase — download token issued', { listingId, email: email.slice(0, 4) + '…' });
-    } else {
-      // ── Pro subscription ──
-      const deviceId = obj.client_reference_id || obj.metadata?.deviceId;
-      if (deviceId) {
-        _proStore.set(deviceId, {
-          status:           'active',
-          stripeCustomerId: obj.customer,
-          subscriptionId:   obj.subscription,
-          email:            obj.customer_details?.email || '',
-          activatedAt:      new Date().toISOString(),
-        });
-        logInfo('Pro subscriber activated', { deviceId });
-      }
+    const deviceId = obj.client_reference_id || obj.metadata?.deviceId;
+    if (deviceId) {
+      _proStore.set(deviceId, {
+        status:         'active',
+        stripeCustomerId: obj.customer,
+        subscriptionId: obj.subscription,
+        email:          obj.customer_details?.email || '',
+        activatedAt:    new Date().toISOString(),
+      });
+      logInfo('Pro subscriber activated', { deviceId });
     }
   }
 
@@ -853,164 +966,6 @@ h1{color:#e85d04;font-size:2rem;margin-bottom:12px;}p{color:rgba(255,255,255,0.7
 app.get('/subscribe/status/:deviceId', _aiCors, (req, res) => {
   const sub = _proStore.get(req.params.deviceId);
   res.json({ isPro: !!(sub && sub.status === 'active'), status: sub?.status || 'free' });
-});
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// SHOP — Template purchase, download tokens, file delivery
-// ═══════════════════════════════════════════════════════════════════════════════
-// NOTE: Stripe Tax must be enabled in Stripe Dashboard → Tax → Enable automatic
-// tax collection. Once enabled, automatic_tax: { enabled: true } handles US
-// sales tax, EU VAT, UK VAT, and Canadian GST automatically.
-
-// ─── POST /shop/checkout — create Stripe checkout session ────────────────────
-app.post('/shop/checkout', _aiCors, async (req, res) => {
-  if (!STRIPE_SECRET_KEY) {
-    return res.status(503).json({ ok: false, error: 'Payment not yet configured — STRIPE_SECRET_KEY is missing.' });
-  }
-
-  const { listingId } = req.body || {};
-  if (!listingId) return res.status(400).json({ ok: false, error: 'listingId required' });
-
-  const listing = LISTING_DATA[listingId.toUpperCase().trim()];
-  if (!listing) return res.status(404).json({ ok: false, error: `Listing ${listingId} not found` });
-
-  const priceInCents = Math.round(parseFloat(listing.price) * 100); // e.g. 3.99 → 399
-
-  try {
-    const stripe  = Stripe(STRIPE_SECRET_KEY);
-    const session = await stripe.checkout.sessions.create({
-      mode:                 'payment',
-      payment_method_types: ['card'],
-      line_items: [{
-        quantity:   1,
-        price_data: {
-          currency:     'usd',
-          unit_amount:  priceInCents,
-          product_data: { name: listing.title },
-        },
-      }],
-      success_url:             `${FRONTEND_URL}/landing/success.html?session_id={CHECKOUT_SESSION_ID}&listing=${listingId.toUpperCase().trim()}`,
-      cancel_url:              `${FRONTEND_URL}/landing/store.html`,
-      metadata:                { listingId: listingId.toUpperCase().trim() },
-      allow_promotion_codes:   true,
-    });
-
-    logInfo('shop/checkout: session created', { listingId, priceInCents });
-    res.json({ ok: true, url: session.url });
-  } catch (err) {
-    logError('POST /shop/checkout failed', { message: err.message, type: err.type, code: err.code });
-    res.status(500).json({ ok: false, error: err.message || 'Could not create checkout session' });
-  }
-});
-
-// ─── GET /shop/success — called after payment to generate download token ──────
-app.get('/shop/success', _aiCors, async (req, res) => {
-  if (!STRIPE_SECRET_KEY) {
-    return res.status(503).json({ ok: false, error: 'Payment not configured' });
-  }
-
-  const { session_id, listing } = req.query;
-  if (!session_id || !listing) {
-    return res.status(400).json({ ok: false, error: 'session_id and listing query params required' });
-  }
-
-  const listingId = listing.toUpperCase().trim();
-  const listingData = LISTING_DATA[listingId];
-  if (!listingData) return res.status(404).json({ ok: false, error: `Listing ${listingId} not found` });
-
-  try {
-    const stripe  = Stripe(STRIPE_SECRET_KEY);
-    const session = await stripe.checkout.sessions.retrieve(session_id);
-
-    if (session.payment_status !== 'paid') {
-      return res.status(402).json({ ok: false, error: 'Payment not completed' });
-    }
-
-    const email = session.customer_details?.email || session.customer_email || '';
-    const token = generateDownloadToken(listingId, email);
-    const downloadUrl = `${APP_URL}/shop/download/${token}`;
-
-    // Fire-and-forget email
-    sendDownloadEmail(email, listingId, downloadUrl, listingData.title).catch(() => {});
-
-    logInfo('shop/success: download token issued', { listingId, email: email.slice(0, 4) + '…' });
-    res.json({
-      ok:        true,
-      token,
-      listingId,
-      email,
-      title:     listingData.title,
-      expiresAt: _downloadTokens.get(token).expiresAt,
-    });
-  } catch (err) {
-    logError('GET /shop/success failed', { message: err.message });
-    res.status(500).json({ ok: false, error: 'Could not verify payment session' });
-  }
-});
-
-// ─── GET /shop/verify/:token — lightweight token validity check ───────────────
-app.get('/shop/verify/:token', _aiCors, (req, res) => {
-  const entry = _downloadTokens.get(req.params.token);
-  if (!entry) return res.status(404).json({ ok: false, error: 'Token not found' });
-  if (Date.now() > entry.expiresAt) return res.status(410).json({ ok: false, error: 'Download link has expired' });
-
-  const listingData = LISTING_DATA[entry.listingId] || {};
-  res.json({
-    ok:                true,
-    listingId:         entry.listingId,
-    title:             listingData.title || entry.listingId,
-    email:             entry.email,
-    expiresAt:         entry.expiresAt,
-    downloadsRemaining: entry.maxDownloads - entry.downloadCount,
-  });
-});
-
-// ─── GET /shop/download/:token — stream the actual file ──────────────────────
-app.get('/shop/download/:token', async (req, res) => {
-  const entry = _downloadTokens.get(req.params.token);
-  if (!entry) return res.status(404).json({ ok: false, error: 'Token not found' });
-  if (Date.now() > entry.expiresAt) return res.status(410).json({ ok: false, error: 'Download link has expired' });
-
-  const { listingId } = entry;
-
-  // Bundle: return JSON listing individual download tokens for each of the 20 templates
-  if (listingId === 'LS-BUNDLE') {
-    entry.downloadCount++;
-    _saveTokens(_downloadTokens);
-    const bundleTokens = {};
-    for (let i = 1; i <= 20; i++) {
-      const id  = `LS-${String(i).padStart(3, '0')}`;
-      const tok = generateDownloadToken(id, entry.email);
-      bundleTokens[id] = {
-        title:       (LISTING_DATA[id] || {}).title || id,
-        downloadUrl: `${APP_URL}/shop/download/${tok}`,
-        verifyUrl:   `${APP_URL}/shop/verify/${tok}`,
-      };
-    }
-    return res.json({ ok: true, bundle: true, downloads: bundleTokens });
-  }
-
-  // Individual template: find matching HTML file in /downloads/
-  const downloadsDir = path.join(__dirname, '..', 'downloads');
-  let filePath = null;
-  try {
-    const files = fs.readdirSync(downloadsDir);
-    const match = files.find(f => f.startsWith(listingId + '-') && f.endsWith('.html'));
-    if (match) filePath = path.join(downloadsDir, match);
-  } catch (fsErr) {
-    logError('shop/download: could not read downloads dir', { message: fsErr.message });
-  }
-
-  if (!filePath || !fs.existsSync(filePath)) {
-    return res.status(404).json({ ok: false, error: `File for ${listingId} not found on server` });
-  }
-
-  entry.downloadCount++;
-  _saveTokens(_downloadTokens);
-  const filename = path.basename(filePath).replace(/\.html$/, '') + '-TradeOpsVault.html';
-  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-  res.setHeader('Content-Type', 'text/html');
-  fs.createReadStream(filePath).pipe(res);
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1067,60 +1022,8 @@ const LISTING_DATA = {
   'LS-BUNDLE': { title:'All 20 Trades Business Forms – Complete Bundle | AI-Powered Fillable PDF Templates', price:'9.99', tags:'trades business forms,contractor form bundle,small business templates,digital download bundle,fillable pdf bundle,hvac plumbing forms,electrician forms,contractor templates,trades invoice bundle,business form set,ai powered forms,printable form bundle,instant download', desc:`Get all 20 professional trade business templates in one instant download — AI-powered, smart auto-calculating, available in 4 languages.\n\n✦ AI analysis on every form\n⚡ Auto-calculating invoices\n🌐 English, Español, Français, Português\n📊 CSV export, Zapier, CRM\n\n20 TRADES: HVAC · Plumbing · Electrical · Lawn Care · Auto Detail · Pest Control · Roofing · Pressure Washing · Appliance Repair · Handyman · Mobile Mechanic · Locksmith · Painting · Snow Removal · Window Cleaning · Pool Service · Flooring · Contractor · Septic · Service Fee\n\nTradeOpsVault · tradeopsvault.com` },
 };
 
-// ─── CRM Jobs (server-side sync) ─────────────────────────────────────────────
-const _jobStore = new Map();
-
-app.post('/crm/jobs', _aiCors, (req, res) => {
-  const { deviceId, jobs } = req.body;
-  if (!deviceId || !Array.isArray(jobs)) return res.status(400).json({ ok: false, error: 'deviceId and jobs[] required' });
-  _jobStore.set(deviceId, jobs);
-  res.json({ ok: true, saved: jobs.length });
-});
-
-app.get('/crm/jobs/:deviceId', _aiCors, (req, res) => {
-  const jobs = _jobStore.get(req.params.deviceId) || [];
-  res.json({ ok: true, jobs });
-});
-
-// ─── CRM Leads (Business tier inbound) ───────────────────────────────────────
-const _leadStore = [];
-
-app.post('/crm/leads', _aiCors, (req, res) => {
-  const { name, businessName, trade, phone, email, message } = req.body || {};
-  if (!name || !email) {
-    return res.status(400).json({ ok: false, error: 'name and email are required' });
-  }
-
-  const lead = {
-    id:           _leadStore.length + 1,
-    name,
-    businessName: businessName || '',
-    trade:        trade || '',
-    phone:        phone || '',
-    email,
-    message:      message || '',
-    receivedAt:   new Date().toISOString(),
-  };
-
-  _leadStore.push(lead);
-
-  // Append to outreach tracker log (best-effort)
-  try {
-    const logDir  = path.join(__dirname, 'outreach');
-    const logFile = path.join(logDir, 'leads.log');
-    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
-    const line = `[${lead.receivedAt}] LEAD #${lead.id} — ${lead.name} | ${lead.businessName} | ${lead.trade} | ${lead.phone} | ${lead.email}\n`;
-    fs.appendFileSync(logFile, line, 'utf8');
-  } catch (logErr) {
-    logError('crm/leads: could not append to leads.log', { message: logErr.message });
-  }
-
-  logInfo('crm/leads: new lead received', { id: lead.id, trade: lead.trade, email: lead.email });
-  res.json({ ok: true, id: lead.id });
-});
-
 // ─── Outreach Campaign Routes ─────────────────────────────────────────────────
-app.use('/outreach', require('../outreach/server-routes')(express));
+app.use('/outreach', require('./outreach/server-routes'));
 
 // ─── Meta Conversions API ─────────────────────────────────────────────────────
 // Server-side event firing — works even when browser blocks the Pixel
