@@ -14,6 +14,8 @@ const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 const STRIPE_PRICE_ID   = process.env.STRIPE_PRICE_ID   || ''; // $14.99/mo recurring price ID
 const META_PIXEL_ID     = process.env.META_PIXEL_ID     || '1566084278857732';
 const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || '';
+const SENDGRID_API_KEY  = process.env.SENDGRID_API_KEY  || '';
+const FROM_EMAIL        = process.env.FROM_EMAIL        || 'hello@tradeopsvault.com';
 
 const ETSY_API_BASE   = 'https://openapi.etsy.com/v3';
 const ETSY_AUTH_BASE  = 'https://www.etsy.com/oauth/connect';
@@ -742,6 +744,186 @@ function generateDownloadToken(listingId, items) {
   return token;
 }
 
+// ─── Branded download email ───────────────────────────────────────────────────
+async function sendDownloadEmail(toEmail, templateName, downloadUrl, isBundle) {
+  if (!SENDGRID_API_KEY) return;
+
+  const subject = isBundle
+    ? `Your TradeOpsVault Bundle is ready — all 20 templates`
+    : `Your download is ready — ${templateName}`;
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${subject}</title>
+</head>
+<body style="margin:0;padding:0;background:#0d1526;font-family:'Segoe UI',Arial,Helvetica,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1526;padding:40px 0;">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+
+      <!-- HEADER -->
+      <tr>
+        <td style="background:#111e35;border:1px solid #1e2f4a;border-radius:12px 12px 0 0;padding:32px 40px;text-align:center;border-bottom:none;">
+          <div style="font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-0.02em;">
+            TradeOps<span style="color:#e85d04;">Vault</span>
+          </div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#4a5e7a;margin-top:6px;">
+            Professional Trade Forms
+          </div>
+        </td>
+      </tr>
+
+      <!-- HERO BAND -->
+      <tr>
+        <td style="background:linear-gradient(135deg,#1a2e50 0%,#0f1c32 100%);border-left:1px solid #1e2f4a;border-right:1px solid #1e2f4a;padding:0;">
+          <div style="height:3px;background:linear-gradient(90deg,#e85d04,#ff6a10,#e85d04);"></div>
+        </td>
+      </tr>
+
+      <!-- BODY -->
+      <tr>
+        <td style="background:#111e35;border:1px solid #1e2f4a;border-top:none;border-bottom:none;padding:40px 40px 32px;">
+
+          <!-- Check icon -->
+          <div style="text-align:center;margin-bottom:28px;">
+            <div style="display:inline-block;width:64px;height:64px;border-radius:50%;background:rgba(232,93,4,0.12);border:2px solid #e85d04;text-align:center;line-height:64px;font-size:28px;">
+              ✓
+            </div>
+          </div>
+
+          <h1 style="margin:0 0 8px;font-size:26px;font-weight:800;color:#ffffff;text-align:center;letter-spacing:-0.025em;">
+            Payment confirmed.<br>Your template is ready.
+          </h1>
+          <p style="margin:0 0 32px;font-size:15px;color:#7d92b0;text-align:center;line-height:1.6;">
+            ${isBundle ? 'All 20 TradeOpsVault templates are ready to download.' : `<strong style="color:#e8edf5;">${templateName}</strong> is ready to download.`}
+          </p>
+
+          <!-- Download button -->
+          <div style="text-align:center;margin-bottom:12px;">
+            <a href="${downloadUrl}" style="display:inline-block;background:#e85d04;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;padding:16px 40px;border-radius:6px;letter-spacing:-0.01em;">
+              ${isBundle ? 'Download All 20 Templates →' : 'Download Your Template →'}
+            </a>
+          </div>
+          <p style="margin:0 0 40px;font-size:12px;color:#4a5e7a;text-align:center;">
+            Link valid for 7 days · Unlimited downloads · No account needed
+          </p>
+
+          <!-- Divider -->
+          <div style="border-top:1px solid #1e2f4a;margin-bottom:36px;"></div>
+
+          <!-- Tips section -->
+          <h2 style="margin:0 0 20px;font-size:14px;font-weight:700;color:#e85d04;letter-spacing:0.08em;text-transform:uppercase;">
+            3 Tips to Get the Most Out of It
+          </h2>
+
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="padding-bottom:20px;vertical-align:top;">
+                <table cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="width:36px;vertical-align:top;padding-top:1px;">
+                      <div style="width:26px;height:26px;border-radius:50%;background:rgba(232,93,4,0.12);border:1px solid rgba(232,93,4,0.3);text-align:center;line-height:26px;font-size:12px;font-weight:800;color:#e85d04;">1</div>
+                    </td>
+                    <td style="padding-left:12px;">
+                      <div style="font-size:14px;font-weight:700;color:#ffffff;margin-bottom:3px;">Open in Chrome or Edge</div>
+                      <div style="font-size:13px;color:#7d92b0;line-height:1.5;">Save the file (Ctrl+S / Cmd+S) then double-click to open in your browser. Works completely offline once loaded.</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-bottom:20px;vertical-align:top;">
+                <table cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="width:36px;vertical-align:top;padding-top:1px;">
+                      <div style="width:26px;height:26px;border-radius:50%;background:rgba(232,93,4,0.12);border:1px solid rgba(232,93,4,0.3);text-align:center;line-height:26px;font-size:12px;font-weight:800;color:#e85d04;">2</div>
+                    </td>
+                    <td style="padding-left:12px;">
+                      <div style="font-size:14px;font-weight:700;color:#ffffff;margin-bottom:3px;">Click any field to type — math is automatic</div>
+                      <div style="font-size:13px;color:#7d92b0;line-height:1.5;">All text boxes are editable. Parts, labor, and totals calculate live as you type. Type your name in the signature field for a digital signature.</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-bottom:4px;vertical-align:top;">
+                <table cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="width:36px;vertical-align:top;padding-top:1px;">
+                      <div style="width:26px;height:26px;border-radius:50%;background:rgba(232,93,4,0.12);border:1px solid rgba(232,93,4,0.3);text-align:center;line-height:26px;font-size:12px;font-weight:800;color:#e85d04;">3</div>
+                    </td>
+                    <td style="padding-left:12px;">
+                      <div style="font-size:14px;font-weight:700;color:#ffffff;margin-bottom:3px;">Hit "Run AI Job Review" before you leave the site</div>
+                      <div style="font-size:13px;color:#7d92b0;line-height:1.5;">Get an instant review of your job notes — red flags, missing documentation, and revenue opportunities. 5 free analyses per month included.</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+
+      <!-- FOOTER -->
+      <tr>
+        <td style="background:#0d1526;border:1px solid #1e2f4a;border-top:none;border-radius:0 0 12px 12px;padding:24px 40px;text-align:center;">
+          <p style="margin:0 0 8px;font-size:12px;color:#4a5e7a;">
+            Questions? Reply to this email or reach us at
+            <a href="mailto:hello@tradeopsvault.com" style="color:#7d92b0;text-decoration:none;">hello@tradeopsvault.com</a>
+          </p>
+          <p style="margin:0;font-size:11px;color:#2a3a52;">
+            © ${new Date().getFullYear()} TradeOpsVault · Built for the trades ·
+            <a href="https://tradeopsvault.com" style="color:#2a3a52;text-decoration:none;">tradeopsvault.com</a>
+          </p>
+        </td>
+      </tr>
+
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>`;
+
+  try {
+    const https = require('https');
+    const body  = JSON.stringify({
+      personalizations: [{ to: [{ email: toEmail }] }],
+      from:    { email: FROM_EMAIL, name: 'TradeOpsVault' },
+      subject,
+      content: [{ type: 'text/html', value: html }],
+    });
+
+    await new Promise((resolve, reject) => {
+      const req = https.request({
+        hostname: 'api.sendgrid.com',
+        path:     '/v3/mail/send',
+        method:   'POST',
+        headers:  {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${SENDGRID_API_KEY}`,
+          'Content-Length': Buffer.byteLength(body),
+        },
+      }, (res) => {
+        res.resume();
+        res.statusCode < 300 ? resolve() : reject(new Error(`SendGrid ${res.statusCode}`));
+      });
+      req.on('error', reject);
+      req.write(body);
+      req.end();
+    });
+
+    logInfo('Download email sent', { to: toEmail, template: templateName });
+  } catch (err) {
+    logError('sendDownloadEmail failed', { message: err.message });
+  }
+}
+
 // ─── Create Stripe checkout session for template purchase ─────────────────────
 app.post('/shop/checkout', _aiCors, async (req, res) => {
   if (!STRIPE_SECRET_KEY) return res.status(503).json({ ok: false, error: 'Payments not configured' });
@@ -769,7 +951,6 @@ app.post('/shop/checkout', _aiCors, async (req, res) => {
         },
         quantity: 1,
       }],
-      customer_email: undefined, // Stripe will ask for email at checkout
       collect_shipping_address: false,
       metadata: { listingId: id, items: items.join(',') },
       success_url: `${APP_URL}/shop/success?session_id={CHECKOUT_SESSION_ID}`,
@@ -797,10 +978,19 @@ app.get('/shop/success', async (req, res) => {
       return res.redirect('https://tradeopsvault.com/landing/store.html?payment_pending=1');
     }
 
-    const listingId = session.metadata?.listingId || 'LS-001';
-    const items     = (session.metadata?.items || listingId).split(',');
-    const token     = generateDownloadToken(listingId, items);
-    const name      = encodeURIComponent((LISTING_DATA[listingId]?.title || '').split('|')[0].trim());
+    const listingId    = session.metadata?.listingId || 'LS-001';
+    const items        = (session.metadata?.items || listingId).split(',');
+    const token        = generateDownloadToken(listingId, items);
+    const templateName = (LISTING_DATA[listingId]?.title || '').split('|')[0].trim();
+    const name         = encodeURIComponent(templateName);
+    const isBundle     = listingId === 'LS-BUNDLE';
+    const downloadUrl  = `${APP_URL}/shop/download/${token}`;
+    const customerEmail = session.customer_details?.email;
+
+    // Fire-and-forget — don't block the redirect on email delivery
+    if (customerEmail) {
+      sendDownloadEmail(customerEmail, templateName, downloadUrl, isBundle).catch(() => {});
+    }
 
     res.redirect(`https://tradeopsvault.com/landing/success.html?token=${token}&name=${name}&items=${items.length}`);
   } catch (err) {
