@@ -1284,6 +1284,25 @@ app.get('/listings', (_req, res) => {
   res.json({ ok: true, listings: all });
 });
 
+// ─── Waitlist ─────────────────────────────────────────────────────────────────
+const WAITLIST_FILE = path.join(__dirname, 'waitlist.json');
+function loadWaitlist() {
+  try { return JSON.parse(fs.readFileSync(WAITLIST_FILE, 'utf8')); } catch { return []; }
+}
+app.post('/waitlist', _aiCors, (req, res) => {
+  const { email, source } = req.body || {};
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ ok: false, error: 'Invalid email' });
+  }
+  const list = loadWaitlist();
+  if (!list.find(e => e.email === email)) {
+    list.push({ email, source: source || 'unknown', ts: Date.now() });
+    try { fs.writeFileSync(WAITLIST_FILE, JSON.stringify(list, null, 2)); } catch {}
+  }
+  logInfo('Waitlist signup', { email, source });
+  res.json({ ok: true });
+});
+
 // ─── Start ────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   logInfo(`Agent Atlas API listening on port ${PORT}`, {
