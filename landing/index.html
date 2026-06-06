@@ -676,21 +676,19 @@
       border-top: 1px solid var(--navy-border);
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: .5rem;
     }
-    .trade-price {
-      font-size: .875rem;
-      font-weight: 700;
-      color: var(--orange);
-    }
+    .trade-price { display: none; }
     .trade-btn {
+      flex: 1;
       font-size: .75rem;
       font-weight: 600;
       color: var(--text-muted);
-      padding: .35rem .75rem;
+      padding: .4rem 0;
       border: 1px solid var(--navy-border);
       border-radius: var(--radius);
       text-decoration: none;
+      text-align: center;
       transition: border-color .15s, color .15s;
       cursor: pointer;
       background: none;
@@ -698,15 +696,17 @@
     }
     .trade-btn:hover { border-color: var(--orange); color: var(--orange); }
     .trade-btn-buy {
+      flex: 1.4;
       font-size: .75rem;
       font-weight: 700;
       color: #fff;
-      padding: .35rem .875rem;
+      padding: .4rem 0;
       border: none;
       border-radius: var(--radius);
       background: var(--orange);
       cursor: pointer;
       font-family: inherit;
+      text-align: center;
       transition: background .15s;
     }
     .trade-btn-buy:hover { background: var(--orange-h); }
@@ -1466,7 +1466,6 @@
           <div class="trade-desc">Service call notes, diagnostic checklist, parts &amp; labor breakdown.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-001-HVAC-Service-Call-Notes-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-001','HVAC Service Call Notes')">Get — $3.99</button>
         </div>
@@ -1479,7 +1478,6 @@
           <div class="trade-desc">Dispatch checklist, repair log, customer sign-off, materials tracker.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-002-Plumbing-Dispatch-Checklist-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-002','Plumbing Dispatch Checklist')">Get — $3.99</button>
         </div>
@@ -1492,7 +1490,6 @@
           <div class="trade-desc">Jobsite inspection, code compliance notes, circuit log.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-003-Electrician-Jobsite-Inspection-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-003','Electrician Jobsite Inspection')">Get — $3.99</button>
         </div>
@@ -1505,7 +1502,6 @@
           <div class="trade-desc">Weekly crew planner, service schedule, property condition notes.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-004-Lawn-Care-Weekly-Crew-Planner-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-004','Lawn Care Weekly Crew Planner')">Get — $3.99</button>
         </div>
@@ -1518,7 +1514,6 @@
           <div class="trade-desc">Intake waiver, vehicle condition checklist, service package pricing.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-005-Auto-Detail-Intake-Waiver-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-005','Auto Detail Intake Waiver')">Get — $3.99</button>
         </div>
@@ -1531,7 +1526,6 @@
           <div class="trade-desc">Follow-up cards, treatment log, chemical usage, re-inspection schedule.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-006-Pest-Control-Follow-Up-Cards-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-006','Pest Control Follow-Up Cards')">Get — $3.99</button>
         </div>
@@ -1544,7 +1538,6 @@
           <div class="trade-desc">Change order approval, material list, warranty documentation.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-007-Roofing-Change-Order-Approval-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-007','Roofing Change Order Approval')">Get — $3.99</button>
         </div>
@@ -1557,7 +1550,6 @@
           <div class="trade-desc">Route sheet, surface log, chemical concentrations, before/after notes.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-008-Pressure-Washing-Route-Sheet-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-008','Pressure Washing Route Sheet')">Get — $3.99</button>
         </div>
@@ -1570,7 +1562,6 @@
           <div class="trade-desc">Parts tracker, model/serial log, diagnostic notes, repair authorization.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-009-Appliance-Repair-Parts-Tracker-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-009','Appliance Repair Parts Tracker')">Get — $3.99</button>
         </div>
@@ -1583,7 +1574,6 @@
           <div class="trade-desc">Materials reimbursement, multi-task log, labor hours breakdown.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-010-Handyman-Materials-Reimbursement-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-010','Handyman Materials Reimbursement')">Get — $3.99</button>
         </div>
@@ -1596,7 +1586,6 @@
           <div class="trade-desc">Service summary, on-site repair log, parts sourcing, mileage tracking.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-011-Mobile-Mechanic-Service-Summary-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-011','Mobile Mechanic Service Summary')">Get — $3.99</button>
         </div>
@@ -1609,7 +1598,6 @@
           <div class="trade-desc">Job authorization, key log, security assessment, liability waiver.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-012-Locksmith-Job-Authorization-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-012','Locksmith Job Authorization')">Get — $3.99</button>
         </div>
@@ -1622,7 +1610,6 @@
           <div class="trade-desc">Prep &amp; final punch list, paint spec sheet, surface condition log.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-013-Painting-Prep-Final-Punch-List-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-013','Painting Prep Final Punch List')">Get — $3.99</button>
         </div>
@@ -1635,7 +1622,6 @@
           <div class="trade-desc">Service checklist, de-icing log, property map notes, contract tracker.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-014-Snow-Removal-Service-Checklist-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-014','Snow Removal Service Checklist')">Get — $3.99</button>
         </div>
@@ -1648,7 +1634,6 @@
           <div class="trade-desc">Client packet, window count log, chemical use record, access notes.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-015-Window-Cleaning-Client-Packet-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-015','Window Cleaning Client Packet')">Get — $3.99</button>
         </div>
@@ -1661,7 +1646,6 @@
           <div class="trade-desc">Chemical log, equipment inspection, weekly service record, sign-off.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-016-Pool-Service-Chemical-Log-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-016','Pool Service Chemical Log')">Get — $3.99</button>
         </div>
@@ -1674,7 +1658,6 @@
           <div class="trade-desc">Estimate &amp; scope matrix, material calculation, subfloor condition.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-017-Flooring-Estimate-Scope-Matrix-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-017','Flooring Estimate Scope Matrix')">Get — $3.99</button>
         </div>
@@ -1687,7 +1670,6 @@
           <div class="trade-desc">Daily site report, crew log, safety checklist, progress documentation.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-018-Contractor-Daily-Site-Report-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-018','Contractor Daily Site Report')">Get — $3.99</button>
         </div>
@@ -1700,7 +1682,6 @@
           <div class="trade-desc">Service pump log, tank condition record, regulatory compliance notes.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-019-Septic-Service-Pump-Log-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-019','Septic Service Pump Log')">Get — $3.99</button>
         </div>
@@ -1713,7 +1694,6 @@
           <div class="trade-desc">Transparent fee disclosure, client acknowledgment, add-on authorization.</div>
         </div>
         <div class="trade-footer">
-          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-020-Service-Fee-Transparency-Addendum-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-020','Service Fee Transparency Addendum')">Get — $3.99</button>
         </div>
