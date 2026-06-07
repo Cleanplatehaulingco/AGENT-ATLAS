@@ -235,6 +235,102 @@
     }
     .store-btn:hover { border-color: rgba(255,255,255,0.2) !important; }
 
+    /* ── Upsell card ── */
+    .upsell {
+      margin-top: 28px;
+      background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%);
+      border: 1.5px solid rgba(232,93,4,0.35);
+      border-radius: 14px;
+      padding: 24px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .upsell::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(232,93,4,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .upsell-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(232,93,4,0.15);
+      border: 1px solid rgba(232,93,4,0.3);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+    .upsell h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .upsell h3 span { color: var(--orange); }
+    .upsell p {
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+    .upsell-perks {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 20px;
+    }
+    .upsell-perk {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .82rem;
+      color: rgba(255,255,255,0.8);
+    }
+    .upsell-perk-dot {
+      width: 18px; height: 18px;
+      background: rgba(16,185,129,0.15);
+      border: 1px solid rgba(16,185,129,0.4);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .6rem;
+      color: #10b981;
+      flex-shrink: 0;
+    }
+    .btn-upsell {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--orange);
+      color: var(--white);
+      font-size: .9rem;
+      font-weight: 700;
+      padding: 12px 22px;
+      border-radius: 10px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+      letter-spacing: -.01em;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-upsell:hover { background: var(--orange2); transform: translateY(-1px); }
+    .upsell-note {
+      text-align: center;
+      font-size: .72rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
     /* ── No-token state ── */
     .error-state { text-align: center; padding: 48px 40px; }
     .error-state h2 { font-size: 1.4rem; margin-bottom: 12px; }
@@ -353,6 +449,22 @@
                 <span>Ctrl+P / Cmd+P → Save as PDF. Share with clients or keep in your records.</span>
               </div>
             </div>
+          </div>
+        </div>
+          <div class="upsell">
+            <div class="upsell-badge">🚀 Limited Offer</div>
+            <h3>Want us to set up your<br><span>whole business online?</span></h3>
+            <p>We'll build your Google Business profile, a professional booking page, and connect your AI forms — done for you in 48 hours.</p>
+            <div class="upsell-perks">
+              <div class="upsell-perk"><div class="upsell-perk-dot">✓</div>Professional 1-page contractor website</div>
+              <div class="upsell-perk"><div class="upsell-perk-dot">✓</div>Google Business Profile setup &amp; optimized</div>
+              <div class="upsell-perk"><div class="upsell-perk-dot">✓</div>AI forms connected &amp; ready to use</div>
+              <div class="upsell-perk"><div class="upsell-perk-dot">✓</div>Delivered in 48 hours</div>
+            </div>
+            <a href="mailto:support@tradeopsvault.com?subject=Done-For-You%20Setup%20Inquiry&body=Hi%2C%20I%20just%20purchased%20a%20template%20and%20I'm%20interested%20in%20the%20done-for-you%20setup." class="btn-upsell">
+              Get My Business Set Up — $299
+            </a>
+            <p class="upsell-note">Reply within 24 hrs · 100% done for you · Money-back if not delivered</p>
           </div>
         </div>
         <div class="card-footer">
