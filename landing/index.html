@@ -1254,6 +1254,63 @@
       height: 1px;
       background: var(--navy-border);
     }
+
+    /* ── WHO THIS IS FOR STRIP ── */
+    .for-strip {
+      background: var(--navy-mid);
+      border-bottom: 1px solid var(--navy-border);
+      padding: 2.5rem 0;
+    }
+    .for-label {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .for-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .5rem;
+    }
+    .for-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      min-width: 90px;
+      transition: border-color .15s, transform .15s;
+      cursor: default;
+    }
+    .for-item:hover {
+      border-color: rgba(232,93,4,.4);
+      transform: translateY(-2px);
+    }
+    .for-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .for-name {
+      font-size: .7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .for-item-more .for-icon {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--orange);
+      line-height: 1.5;
+    }
+    .for-item-more .for-name { color: var(--text-dim); }
   </style>
 </head>
 <body>
@@ -1291,9 +1348,9 @@
 <!-- ─────────────── HERO ─────────────── -->
 <section class="hero">
   <div class="container hero-inner">
-    <div class="hero-eyebrow">HVAC · Plumbing · Electrical · Roofing · 16 More Trades</div>
-    <h1 class="hero-headline">Smart trade forms that<br><em>review the job before you leave.</em></h1>
-    <p class="hero-sub">Fill out your form. Click <strong style="color:var(--white);font-weight:600;">Run AI Job Review.</strong> Catch missing details, pricing gaps, and safety flags in seconds — right in your browser, no app needed.</p>
+    <div class="hero-eyebrow">AI-Powered Forms for Contractors</div>
+    <h1 class="hero-headline">Quote faster. Avoid mistakes.<br><em>Look professional.</em></h1>
+    <p class="hero-sub">AI-powered forms and tools built for contractors. Fill out a job, run an instant AI review, catch missing details and pricing gaps — then hand the client a PDF before you leave the driveway.</p>
     <div class="hero-ctas">
       <a href="/landing/store.html#bundle" class="btn btn-orange btn-lg" id="hero-bundle-cta" onclick="fbq&&fbq('track','InitiateCheckout')">Get All 20 Templates — $9.99</a>
       <a href="/landing/store.html" class="btn btn-ghost btn-lg">Browse Templates</a>
@@ -1315,6 +1372,63 @@
       <div class="hero-stat">
         <div class="hero-stat-num"><span>AI</span></div>
         <div class="hero-stat-label">Job Review on Every Form</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────── WHO THIS IS FOR ─────────────── -->
+<section class="for-strip">
+  <div class="container">
+    <div class="for-label">Built for these trades</div>
+    <div class="for-grid">
+      <div class="for-item">
+        <div class="for-icon">🌡️</div>
+        <div class="for-name">HVAC</div>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">🔧</div>
+        <div class="for-name">Plumbing</div>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">⚡</div>
+        <div class="for-name">Electrical</div>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">🏠</div>
+        <div class="for-name">Roofing</div>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">🌿</div>
+        <div class="for-name">Lawn Care</div>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">🚛</div>
+        <div class="for-name">Junk Removal</div>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">💦</div>
+        <div class="for-name">Pressure Washing</div>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">🎨</div>
+        <div class="for-name">Painting</div>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">🧹</div>
+        <div class="for-name">Cleaning</div>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">🛠️</div>
+        <div class="for-name">Handyman</div>
+      </div>
+      <div class="for-item">
+        <div class="for-icon">🐛</div>
+        <div class="for-name">Pest Control</div>
+      </div>
+      <div class="for-item for-item-more">
+        <div class="for-icon">+9</div>
+        <div class="for-name">More Trades</div>
       </div>
     </div>
   </div>
