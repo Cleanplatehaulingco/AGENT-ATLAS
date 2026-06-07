@@ -676,19 +676,21 @@
       border-top: 1px solid var(--navy-border);
       display: flex;
       align-items: center;
-      gap: .5rem;
+      justify-content: space-between;
     }
-    .trade-price { display: none; }
+    .trade-price {
+      font-size: .875rem;
+      font-weight: 700;
+      color: var(--orange);
+    }
     .trade-btn {
-      flex: 1;
       font-size: .75rem;
       font-weight: 600;
       color: var(--text-muted);
-      padding: .4rem 0;
+      padding: .35rem .75rem;
       border: 1px solid var(--navy-border);
       border-radius: var(--radius);
       text-decoration: none;
-      text-align: center;
       transition: border-color .15s, color .15s;
       cursor: pointer;
       background: none;
@@ -696,17 +698,15 @@
     }
     .trade-btn:hover { border-color: var(--orange); color: var(--orange); }
     .trade-btn-buy {
-      flex: 1.4;
       font-size: .75rem;
       font-weight: 700;
       color: #fff;
-      padding: .4rem 0;
+      padding: .35rem .875rem;
       border: none;
       border-radius: var(--radius);
       background: var(--orange);
       cursor: pointer;
       font-family: inherit;
-      text-align: center;
       transition: background .15s;
     }
     .trade-btn-buy:hover { background: var(--orange-h); }
@@ -1037,139 +1037,71 @@
     }
     .crm-input::placeholder { color: var(--text-dim); }
     .crm-input:focus { outline: none; border-color: var(--orange); }
-    /* ── CRM MOCK — Agent Atlas dashboard style ── */
     .crm-mock {
-      background: #0f1623;
-      border: 1px solid rgba(255,255,255,0.07);
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
       border-radius: var(--radius-md);
       overflow: hidden;
-      display: flex;
-      font-size: .75rem;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
     }
-    .crm-sidebar {
-      width: 140px;
-      flex-shrink: 0;
-      background: #0b1120;
-      border-right: 1px solid rgba(255,255,255,0.06);
+    .crm-mock-bar {
+      background: var(--navy-light);
+      border-bottom: 1px solid var(--navy-border);
+      padding: .75rem 1.25rem;
       display: flex;
-      flex-direction: column;
-      padding: 14px 0;
-    }
-    .crm-sidebar-logo {
-      padding: 0 14px 14px;
-      font-size: .7rem;
-      font-weight: 800;
-      letter-spacing: -.01em;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      margin-bottom: 10px;
-    }
-    .crm-sidebar-logo span { color: #e85d04; }
-    .crm-sidebar-item {
-      padding: 7px 14px;
-      color: rgba(255,255,255,0.4);
-      font-size: .65rem;
-      display: flex;
+      gap: .5rem;
       align-items: center;
-      gap: 6px;
-      cursor: default;
     }
-    .crm-sidebar-item.active {
-      background: rgba(232,93,4,0.1);
-      color: #fff;
-      border-left: 2px solid #e85d04;
-      padding-left: 12px;
-    }
-    .crm-sidebar-dot {
-      width: 6px; height: 6px;
+    .crm-mock-dot {
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      flex-shrink: 0;
     }
-    .crm-sidebar-dot.active { background: #e85d04; }
-    .crm-main {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    .crm-topbar {
-      background: #0f1623;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding: 8px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .crm-topbar-title { font-weight: 700; font-size: .7rem; color: #fff; }
-    .crm-topbar-badge {
-      background: rgba(232,93,4,0.15);
-      color: #e85d04;
-      font-size: .55rem;
-      font-weight: 700;
-      padding: 3px 7px;
-      border-radius: 4px;
-      letter-spacing: .04em;
-    }
-    .crm-metrics {
+    .crm-mock-stats {
       display: grid;
-      grid-template-columns: repeat(3,1fr);
+      grid-template-columns: repeat(2,1fr);
       gap: 1px;
-      background: rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: var(--navy-border);
+      border-bottom: 1px solid var(--navy-border);
     }
-    .crm-metric {
-      background: #0f1623;
-      padding: 10px 12px;
+    .crm-mock-stat {
+      background: var(--navy-card);
+      padding: 1.25rem 1.5rem;
     }
-    .crm-metric-lbl {
-      font-size: .55rem;
-      color: rgba(255,255,255,0.35);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      margin-bottom: 4px;
-    }
-    .crm-metric-val {
-      font-size: 1.1rem;
+    .crm-mock-stat-val {
+      font-size: 1.5rem;
       font-weight: 800;
-      color: #fff;
+      color: var(--white);
       letter-spacing: -.02em;
       line-height: 1;
     }
-    .crm-metric-val.orange { color: #e85d04; }
-    .crm-metric-sub { font-size: .55rem; color: rgba(255,255,255,0.3); margin-top: 2px; }
-    .crm-section-label {
-      padding: 10px 14px 4px;
-      font-size: .55rem;
+    .crm-mock-stat-lbl {
+      font-size: .6875rem;
+      color: var(--text-dim);
+      margin-top: .25rem;
+      letter-spacing: .04em;
+    }
+    .crm-mock-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .875rem 1.5rem;
+      border-bottom: 1px solid var(--navy-border);
+      font-size: .8125rem;
+    }
+    .crm-mock-row:last-child { border-bottom: none; }
+    .crm-mock-row-client { color: var(--text); font-weight: 500; }
+    .crm-mock-row-trade { color: var(--text-muted); }
+    .crm-mock-row-amt { color: var(--orange); font-weight: 600; }
+    .crm-mock-row-status {
+      font-size: .625rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .08em;
-      color: rgba(255,255,255,0.3);
+      padding: .2rem .5rem;
+      border-radius: 2px;
     }
-    .crm-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      font-size: .65rem;
-    }
-    .crm-row:last-child { border-bottom: none; }
-    .crm-row-client { color: #fff; font-weight: 600; min-width: 90px; }
-    .crm-row-trade { color: rgba(255,255,255,0.4); min-width: 55px; }
-    .crm-row-amt { color: #e85d04; font-weight: 700; min-width: 40px; text-align: right; }
-    .crm-row-status {
-      font-size: .5rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      padding: 2px 6px;
-      border-radius: 3px;
-      min-width: 46px;
-      text-align: center;
-    }
-    .crm-status-paid { background: rgba(16,185,129,.15); color: #10b981; }
-    .crm-status-pending { background: rgba(232,93,4,.15); color: #e85d04; }
+    .status-paid { background: rgba(16,185,129,.12); color: #10b981; }
+    .status-pending { background: rgba(232,93,4,.12); color: var(--orange); }
     @media (max-width: 900px) {
       .crm-inner { grid-template-columns: 1fr; }
     }
@@ -1287,30 +1219,63 @@
       padding: 14px 18px;
       min-width: 90px;
       transition: border-color .15s, transform .15s;
-      cursor: default;
     }
-    .for-item:hover {
-      border-color: rgba(232,93,4,.4);
-      transform: translateY(-2px);
-    }
-    .for-icon {
-      font-size: 1.5rem;
-      line-height: 1;
-    }
-    .for-name {
-      font-size: .7rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-align: center;
-      white-space: nowrap;
-    }
-    .for-item-more .for-icon {
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--orange);
-      line-height: 1.5;
-    }
+    .for-item:hover { border-color: rgba(232,93,4,.4); transform: translateY(-2px); }
+    .for-icon { font-size: 1.5rem; line-height: 1; }
+    .for-name { font-size: .7rem; font-weight: 600; color: var(--text-muted); text-align: center; white-space: nowrap; }
+    .for-item-more .for-icon { font-size: 1rem; font-weight: 800; color: var(--orange); line-height: 1.5; }
     .for-item-more .for-name { color: var(--text-dim); }
+
+    /* ── LIVE DEMO ── */
+    .live-demo {
+      padding: var(--section-v) 0;
+      background: var(--navy);
+      border-top: 1px solid var(--navy-border);
+      border-bottom: 1px solid var(--navy-border);
+    }
+    .demo-wrap { display: flex; flex-direction: column; gap: 2rem; }
+    .demo-browser {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--navy-border);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+    }
+    .demo-browser-bar {
+      background: #1a2744;
+      border-bottom: 1px solid var(--navy-border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .demo-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+    .demo-url {
+      margin-left: 12px;
+      font-size: .72rem;
+      color: var(--text-dim);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--navy-border);
+      border-radius: 6px;
+      padding: 3px 12px;
+    }
+    .demo-iframe {
+      width: 100%;
+      height: 680px;
+      border: none;
+      display: block;
+      background: #f0f4ff;
+    }
+    .demo-cta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      text-align: center;
+    }
+    .demo-cta-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--orange); }
+    .demo-cta-note { font-size: .8rem; color: var(--text-dim); }
+    @media (max-width: 768px) { .demo-iframe { height: 500px; } }
   </style>
 </head>
 <body>
@@ -1348,9 +1313,9 @@
 <!-- ─────────────── HERO ─────────────── -->
 <section class="hero">
   <div class="container hero-inner">
-    <div class="hero-eyebrow">AI-Powered Forms for Contractors</div>
-    <h1 class="hero-headline">Quote faster. Avoid mistakes.<br><em>Look professional.</em></h1>
-    <p class="hero-sub">AI-powered forms and tools built for contractors. Fill out a job, run an instant AI review, catch missing details and pricing gaps — then hand the client a PDF before you leave the driveway.</p>
+    <div class="hero-eyebrow">HVAC · Plumbing · Electrical · Roofing · 16 More Trades</div>
+    <h1 class="hero-headline">Smart trade forms that<br><em>review the job before you leave.</em></h1>
+    <p class="hero-sub">Fill out your form. Click <strong style="color:var(--white);font-weight:600;">Run AI Job Review.</strong> Catch missing details, pricing gaps, and safety flags in seconds — right in your browser, no app needed.</p>
     <div class="hero-ctas">
       <a href="/landing/store.html#bundle" class="btn btn-orange btn-lg" id="hero-bundle-cta" onclick="fbq&&fbq('track','InitiateCheckout')">Get All 20 Templates — $9.99</a>
       <a href="/landing/store.html" class="btn btn-ghost btn-lg">Browse Templates</a>
@@ -1382,54 +1347,18 @@
   <div class="container">
     <div class="for-label">Built for these trades</div>
     <div class="for-grid">
-      <div class="for-item">
-        <div class="for-icon">🌡️</div>
-        <div class="for-name">HVAC</div>
-      </div>
-      <div class="for-item">
-        <div class="for-icon">🔧</div>
-        <div class="for-name">Plumbing</div>
-      </div>
-      <div class="for-item">
-        <div class="for-icon">⚡</div>
-        <div class="for-name">Electrical</div>
-      </div>
-      <div class="for-item">
-        <div class="for-icon">🏠</div>
-        <div class="for-name">Roofing</div>
-      </div>
-      <div class="for-item">
-        <div class="for-icon">🌿</div>
-        <div class="for-name">Lawn Care</div>
-      </div>
-      <div class="for-item">
-        <div class="for-icon">🚛</div>
-        <div class="for-name">Junk Removal</div>
-      </div>
-      <div class="for-item">
-        <div class="for-icon">💦</div>
-        <div class="for-name">Pressure Washing</div>
-      </div>
-      <div class="for-item">
-        <div class="for-icon">🎨</div>
-        <div class="for-name">Painting</div>
-      </div>
-      <div class="for-item">
-        <div class="for-icon">🧹</div>
-        <div class="for-name">Cleaning</div>
-      </div>
-      <div class="for-item">
-        <div class="for-icon">🛠️</div>
-        <div class="for-name">Handyman</div>
-      </div>
-      <div class="for-item">
-        <div class="for-icon">🐛</div>
-        <div class="for-name">Pest Control</div>
-      </div>
-      <div class="for-item for-item-more">
-        <div class="for-icon">+9</div>
-        <div class="for-name">More Trades</div>
-      </div>
+      <div class="for-item"><div class="for-icon">🌡️</div><div class="for-name">HVAC</div></div>
+      <div class="for-item"><div class="for-icon">🔧</div><div class="for-name">Plumbing</div></div>
+      <div class="for-item"><div class="for-icon">⚡</div><div class="for-name">Electrical</div></div>
+      <div class="for-item"><div class="for-icon">🏠</div><div class="for-name">Roofing</div></div>
+      <div class="for-item"><div class="for-icon">🌿</div><div class="for-name">Lawn Care</div></div>
+      <div class="for-item"><div class="for-icon">🚛</div><div class="for-name">Junk Removal</div></div>
+      <div class="for-item"><div class="for-icon">💦</div><div class="for-name">Pressure Washing</div></div>
+      <div class="for-item"><div class="for-icon">🎨</div><div class="for-name">Painting</div></div>
+      <div class="for-item"><div class="for-icon">🧹</div><div class="for-name">Cleaning</div></div>
+      <div class="for-item"><div class="for-icon">🛠️</div><div class="for-name">Handyman</div></div>
+      <div class="for-item"><div class="for-icon">🐛</div><div class="for-name">Pest Control</div></div>
+      <div class="for-item for-item-more"><div class="for-icon">+9</div><div class="for-name">More Trades</div></div>
     </div>
   </div>
 </section>
@@ -1559,6 +1488,41 @@
   </div>
 </section>
 
+<!-- ─────────────── LIVE DEMO ─────────────── -->
+<section class="live-demo" id="demo">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">Try it live</span>
+      <div class="divider"></div>
+      <h2 class="section-title">This is the actual product — right here.</h2>
+      <p class="section-sub">Fill in any field. Hit <strong style="color:#e85d04;">Run AI Job Review</strong> to see real AI analysis. No download, no account — this is exactly what you get.</p>
+    </div>
+    <div class="demo-wrap">
+      <div class="demo-browser">
+        <div class="demo-browser-bar">
+          <div class="demo-dot" style="background:#ef4444"></div>
+          <div class="demo-dot" style="background:#f59e0b"></div>
+          <div class="demo-dot" style="background:#10b981"></div>
+          <div class="demo-url">tradeopsvault.com — HVAC Service Call Notes</div>
+        </div>
+        <iframe
+          src="../downloads/LS-001-HVAC-Service-Call-Notes-TradeOpsVault.html"
+          class="demo-iframe"
+          title="Live HVAC Template Demo"
+          loading="lazy"
+          scrolling="yes"
+        ></iframe>
+      </div>
+      <div class="demo-cta">
+        <p class="demo-cta-label">Like what you see?</p>
+        <button class="btn btn-orange btn-lg" onclick="buyTemplate(event,'LS-001','HVAC Service Call Notes')">Get HVAC Template — $3.99</button>
+        <a href="/landing/store.html#bundle" class="btn btn-ghost btn-lg" onclick="fbq&&fbq('track','InitiateCheckout')">Get All 20 — $9.99</a>
+        <p class="demo-cta-note">One-time · Instant download · No account needed</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ─────────────── TEMPLATES GRID ─────────────── -->
 <section class="templates" id="templates">
   <div class="container">
@@ -1580,6 +1544,7 @@
           <div class="trade-desc">Service call notes, diagnostic checklist, parts &amp; labor breakdown.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-001-HVAC-Service-Call-Notes-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-001','HVAC Service Call Notes')">Get — $3.99</button>
         </div>
@@ -1592,6 +1557,7 @@
           <div class="trade-desc">Dispatch checklist, repair log, customer sign-off, materials tracker.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-002-Plumbing-Dispatch-Checklist-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-002','Plumbing Dispatch Checklist')">Get — $3.99</button>
         </div>
@@ -1604,6 +1570,7 @@
           <div class="trade-desc">Jobsite inspection, code compliance notes, circuit log.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-003-Electrician-Jobsite-Inspection-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-003','Electrician Jobsite Inspection')">Get — $3.99</button>
         </div>
@@ -1616,6 +1583,7 @@
           <div class="trade-desc">Weekly crew planner, service schedule, property condition notes.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-004-Lawn-Care-Weekly-Crew-Planner-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-004','Lawn Care Weekly Crew Planner')">Get — $3.99</button>
         </div>
@@ -1628,6 +1596,7 @@
           <div class="trade-desc">Intake waiver, vehicle condition checklist, service package pricing.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-005-Auto-Detail-Intake-Waiver-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-005','Auto Detail Intake Waiver')">Get — $3.99</button>
         </div>
@@ -1640,6 +1609,7 @@
           <div class="trade-desc">Follow-up cards, treatment log, chemical usage, re-inspection schedule.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-006-Pest-Control-Follow-Up-Cards-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-006','Pest Control Follow-Up Cards')">Get — $3.99</button>
         </div>
@@ -1652,6 +1622,7 @@
           <div class="trade-desc">Change order approval, material list, warranty documentation.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-007-Roofing-Change-Order-Approval-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-007','Roofing Change Order Approval')">Get — $3.99</button>
         </div>
@@ -1664,6 +1635,7 @@
           <div class="trade-desc">Route sheet, surface log, chemical concentrations, before/after notes.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-008-Pressure-Washing-Route-Sheet-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-008','Pressure Washing Route Sheet')">Get — $3.99</button>
         </div>
@@ -1676,6 +1648,7 @@
           <div class="trade-desc">Parts tracker, model/serial log, diagnostic notes, repair authorization.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-009-Appliance-Repair-Parts-Tracker-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-009','Appliance Repair Parts Tracker')">Get — $3.99</button>
         </div>
@@ -1688,6 +1661,7 @@
           <div class="trade-desc">Materials reimbursement, multi-task log, labor hours breakdown.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-010-Handyman-Materials-Reimbursement-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-010','Handyman Materials Reimbursement')">Get — $3.99</button>
         </div>
@@ -1700,6 +1674,7 @@
           <div class="trade-desc">Service summary, on-site repair log, parts sourcing, mileage tracking.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-011-Mobile-Mechanic-Service-Summary-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-011','Mobile Mechanic Service Summary')">Get — $3.99</button>
         </div>
@@ -1712,6 +1687,7 @@
           <div class="trade-desc">Job authorization, key log, security assessment, liability waiver.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-012-Locksmith-Job-Authorization-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-012','Locksmith Job Authorization')">Get — $3.99</button>
         </div>
@@ -1724,6 +1700,7 @@
           <div class="trade-desc">Prep &amp; final punch list, paint spec sheet, surface condition log.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-013-Painting-Prep-Final-Punch-List-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-013','Painting Prep Final Punch List')">Get — $3.99</button>
         </div>
@@ -1736,6 +1713,7 @@
           <div class="trade-desc">Service checklist, de-icing log, property map notes, contract tracker.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-014-Snow-Removal-Service-Checklist-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-014','Snow Removal Service Checklist')">Get — $3.99</button>
         </div>
@@ -1748,6 +1726,7 @@
           <div class="trade-desc">Client packet, window count log, chemical use record, access notes.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-015-Window-Cleaning-Client-Packet-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-015','Window Cleaning Client Packet')">Get — $3.99</button>
         </div>
@@ -1760,6 +1739,7 @@
           <div class="trade-desc">Chemical log, equipment inspection, weekly service record, sign-off.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-016-Pool-Service-Chemical-Log-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-016','Pool Service Chemical Log')">Get — $3.99</button>
         </div>
@@ -1772,6 +1752,7 @@
           <div class="trade-desc">Estimate &amp; scope matrix, material calculation, subfloor condition.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-017-Flooring-Estimate-Scope-Matrix-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-017','Flooring Estimate Scope Matrix')">Get — $3.99</button>
         </div>
@@ -1784,6 +1765,7 @@
           <div class="trade-desc">Daily site report, crew log, safety checklist, progress documentation.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-018-Contractor-Daily-Site-Report-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-018','Contractor Daily Site Report')">Get — $3.99</button>
         </div>
@@ -1796,6 +1778,7 @@
           <div class="trade-desc">Service pump log, tank condition record, regulatory compliance notes.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-019-Septic-Service-Pump-Log-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-019','Septic Service Pump Log')">Get — $3.99</button>
         </div>
@@ -1808,6 +1791,7 @@
           <div class="trade-desc">Transparent fee disclosure, client acknowledgment, add-on authorization.</div>
         </div>
         <div class="trade-footer">
+          <span class="trade-price">$3.99</span>
           <a href="../downloads/LS-020-Service-Fee-Transparency-Addendum-TradeOpsVault.html" class="trade-btn">Preview</a>
           <button class="trade-btn-buy" onclick="buyTemplate(event,'LS-020','Service Fee Transparency Addendum')">Get — $3.99</button>
         </div>
@@ -1917,7 +1901,7 @@
           <li>Priority email support</li>
         </ul>
         <div class="price-cta">
-          <a href="/landing/crm.html" class="btn btn-ghost" style="width:100%;justify-content:center;">Join Early Access</a>
+          <a href="/landing/crm.html" class="btn btn-ghost" style="width:100%;justify-content:center;">Go Pro</a>
         </div>
       </div>
 
@@ -1945,66 +1929,53 @@
         </form>
       </div>
       <div class="crm-mock">
-        <!-- Sidebar -->
-        <div class="crm-sidebar">
-          <div class="crm-sidebar-logo">Agent<span>Atlas</span></div>
-          <div class="crm-sidebar-item active"><div class="crm-sidebar-dot active"></div>Dashboard</div>
-          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Opportunities</div>
-          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Listings</div>
-          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Revenue</div>
-          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Ads Strategy</div>
-          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Post-Close</div>
-          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Compliance</div>
-          <div class="crm-sidebar-item"><div class="crm-sidebar-dot"></div>Monitor</div>
+        <div class="crm-mock-bar">
+          <div class="crm-mock-dot" style="background:#ef4444"></div>
+          <div class="crm-mock-dot" style="background:#f59e0b"></div>
+          <div class="crm-mock-dot" style="background:#10b981"></div>
+          <span style="font-size:.6875rem;color:var(--text-dim);margin-left:.5rem;letter-spacing:.04em;">TradeOpsVault CRM</span>
         </div>
-        <!-- Main panel -->
-        <div class="crm-main">
-          <div class="crm-topbar">
-            <span class="crm-topbar-title">Autonomous Operator Console</span>
-            <span class="crm-topbar-badge">● 1 pending</span>
+        <div class="crm-mock-stats">
+          <div class="crm-mock-stat">
+            <div class="crm-mock-stat-val">47</div>
+            <div class="crm-mock-stat-lbl">Total Jobs</div>
           </div>
-          <div class="crm-metrics">
-            <div class="crm-metric">
-              <div class="crm-metric-lbl">Revenue Earned</div>
-              <div class="crm-metric-val orange">$133.87</div>
-              <div class="crm-metric-sub">of $500 goal</div>
-            </div>
-            <div class="crm-metric">
-              <div class="crm-metric-lbl">Live Listings</div>
-              <div class="crm-metric-val">4</div>
-              <div class="crm-metric-sub">2 ready to upload</div>
-            </div>
-            <div class="crm-metric">
-              <div class="crm-metric-lbl">Est. Monthly</div>
-              <div class="crm-metric-val">$166</div>
-              <div class="crm-metric-sub">projected run-rate</div>
-            </div>
+          <div class="crm-mock-stat">
+            <div class="crm-mock-stat-val">$8,340</div>
+            <div class="crm-mock-stat-lbl">Revenue MTD</div>
           </div>
-          <div class="crm-section-label">Recent Jobs</div>
-          <div class="crm-row">
-            <span class="crm-row-client">Martinez Heating</span>
-            <span class="crm-row-trade">HVAC</span>
-            <span class="crm-row-amt">$685</span>
-            <span class="crm-row-status crm-status-paid">Paid</span>
+          <div class="crm-mock-stat">
+            <div class="crm-mock-stat-val">$177</div>
+            <div class="crm-mock-stat-lbl">Avg Job Value</div>
           </div>
-          <div class="crm-row">
-            <span class="crm-row-client">Rivera Plumbing Co.</span>
-            <span class="crm-row-trade">Plumbing</span>
-            <span class="crm-row-amt">$310</span>
-            <span class="crm-row-status crm-status-paid">Paid</span>
+          <div class="crm-mock-stat">
+            <div class="crm-mock-stat-val">23</div>
+            <div class="crm-mock-stat-lbl">Active Clients</div>
           </div>
-          <div class="crm-row">
-            <span class="crm-row-client">Green Valley Lawn</span>
-            <span class="crm-row-trade">Lawn Care</span>
-            <span class="crm-row-amt">$195</span>
-            <span class="crm-row-status crm-status-pending">Pending</span>
-          </div>
-          <div class="crm-row">
-            <span class="crm-row-client">Apex Electrical</span>
-            <span class="crm-row-trade">Electrician</span>
-            <span class="crm-row-amt">$520</span>
-            <span class="crm-row-status crm-status-paid">Paid</span>
-          </div>
+        </div>
+        <div class="crm-mock-row">
+          <span class="crm-mock-row-client">Martinez Heating</span>
+          <span class="crm-mock-row-trade">HVAC</span>
+          <span class="crm-mock-row-amt">$685</span>
+          <span class="crm-mock-row-status status-paid">Paid</span>
+        </div>
+        <div class="crm-mock-row">
+          <span class="crm-mock-row-client">Rivera Plumbing Co.</span>
+          <span class="crm-mock-row-trade">Plumbing</span>
+          <span class="crm-mock-row-amt">$310</span>
+          <span class="crm-mock-row-status status-paid">Paid</span>
+        </div>
+        <div class="crm-mock-row">
+          <span class="crm-mock-row-client">Green Valley Lawn</span>
+          <span class="crm-mock-row-trade">Lawn Care</span>
+          <span class="crm-mock-row-amt">$195</span>
+          <span class="crm-mock-row-status status-pending">Pending</span>
+        </div>
+        <div class="crm-mock-row">
+          <span class="crm-mock-row-client">Apex Electrical</span>
+          <span class="crm-mock-row-trade">Electrician</span>
+          <span class="crm-mock-row-amt">$520</span>
+          <span class="crm-mock-row-status status-paid">Paid</span>
         </div>
       </div>
     </div>
@@ -2022,29 +1993,29 @@
       <div>
         <div class="footer-col-title">Product</div>
         <ul class="footer-links">
-          <li><a href="/landing/index.html#features">Features</a></li>
-          <li><a href="/landing/index.html#how">How It Works</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how">How It Works</a></li>
           <li><a href="/landing/store.html">Templates</a></li>
-          <li><a href="/landing/index.html#pricing">Pricing</a></li>
-          <li><a href="/landing/crm.html">CRM — Early Access</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="/landing/crm.html">CRM Dashboard</a></li>
         </ul>
       </div>
       <div>
         <div class="footer-col-title">Languages</div>
         <ul class="footer-links">
-          <li><span style="color:rgba(255,255,255,0.55)">English</span></li>
-          <li><span style="color:rgba(255,255,255,0.55)">Español</span></li>
-          <li><span style="color:rgba(255,255,255,0.55)">Français</span></li>
-          <li><span style="color:rgba(255,255,255,0.55)">Português</span></li>
-          <li style="font-size:.75rem;color:rgba(255,255,255,0.3);margin-top:4px">All templates included</li>
+          <li><a href="#">English</a></li>
+          <li><a href="#">Español</a></li>
+          <li><a href="#">Français</a></li>
+          <li><a href="#">Português</a></li>
         </ul>
       </div>
       <div>
         <div class="footer-col-title">Company</div>
         <ul class="footer-links">
-          <li><a href="mailto:support@tradeopsvault.com">Contact</a></li>
-          <li><a href="/landing/privacy.html">Privacy Policy</a></li>
-          <li><a href="/landing/terms.html">Terms of Service</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
           <li><a href="https://tradeopsvault.com" target="_blank" rel="noopener">tradeopsvault.com</a></li>
         </ul>
       </div>
