@@ -269,7 +269,7 @@ function analyzeForm(){
 // ── Utilities ─────────────────────────────────────────────────────────────────
 function $(sel,root){return Array.from((root||document).querySelectorAll(sel));}
 function parseMoney(str){return parseFloat(String(str||'').replace(/[^0-9.]/g,''))||0;}
-function formatMoney(n){return '+n.toFixed(2);}
+function formatMoney(n){return '$'+n.toFixed(2);}
 function getEditable(cell){return cell&&cell.querySelector('.editable');}
 function thText(th){return th.textContent.trim().toLowerCase();}
 
@@ -388,9 +388,9 @@ function wireQtyPriceTotal(table,qi,pi,ti){
     if(!qtyEl||!priceEl||!lineEl)return;
 
     function calcLine(){
-      var qty=parseMoney(qtyEl.textContent);
+      var qty=parseMoney(qtyEl.textContent)||1;
       var price=parseMoney(priceEl.textContent);
-      if(qty>0&&price>0){lineEl.textContent=formatMoney(qty*price);markAuto(lineEl);}
+      if(price>0){lineEl.textContent=formatMoney(qty*price);markAuto(lineEl);}
       updateTotals();
     }
 
@@ -400,6 +400,7 @@ function wireQtyPriceTotal(table,qi,pi,ti){
       if(v>0){priceEl.textContent=formatMoney(v);markAuto(priceEl);}
       calcLine();
     });
+    lineEl.addEventListener('blur',updateTotals);
   });
 
   // Labor field changes → grand total
@@ -501,7 +502,7 @@ function initCurrencyFormat(){
   $('[data-placeholder]').forEach(function(el){
     if(el.closest('.form-table'))return; // handled by invoice calc
     var ph=el.getAttribute('data-placeholder')||'';
-    if(!ph.startsWith(')&&!ph.endsWith('0.00'))return;
+    if(!ph.startsWith('$')&&!ph.endsWith('0.00'))return;
     el.addEventListener('blur',function(){
       var v=parseMoney(el.textContent);
       if(v>0){el.textContent=formatMoney(v);markAuto(el);}
