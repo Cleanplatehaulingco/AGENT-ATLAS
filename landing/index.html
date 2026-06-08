@@ -1102,6 +1102,14 @@
     }
     .status-paid { background: rgba(16,185,129,.12); color: #10b981; }
     .status-pending { background: rgba(232,93,4,.12); color: var(--orange); }
+    .crm-mock-img {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--navy-border);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+      line-height: 0;
+    }
+    .crm-mock-img img { width: 100%; height: auto; display: block; }
     @media (max-width: 900px) {
       .crm-inner { grid-template-columns: 1fr; }
     }
@@ -1928,55 +1936,8 @@
           <button type="submit" class="btn btn-orange">Join Waitlist</button>
         </form>
       </div>
-      <div class="crm-mock">
-        <div class="crm-mock-bar">
-          <div class="crm-mock-dot" style="background:#ef4444"></div>
-          <div class="crm-mock-dot" style="background:#f59e0b"></div>
-          <div class="crm-mock-dot" style="background:#10b981"></div>
-          <span style="font-size:.6875rem;color:var(--text-dim);margin-left:.5rem;letter-spacing:.04em;">TradeOpsVault CRM</span>
-        </div>
-        <div class="crm-mock-stats">
-          <div class="crm-mock-stat">
-            <div class="crm-mock-stat-val">47</div>
-            <div class="crm-mock-stat-lbl">Total Jobs</div>
-          </div>
-          <div class="crm-mock-stat">
-            <div class="crm-mock-stat-val">$8,340</div>
-            <div class="crm-mock-stat-lbl">Revenue MTD</div>
-          </div>
-          <div class="crm-mock-stat">
-            <div class="crm-mock-stat-val">$177</div>
-            <div class="crm-mock-stat-lbl">Avg Job Value</div>
-          </div>
-          <div class="crm-mock-stat">
-            <div class="crm-mock-stat-val">23</div>
-            <div class="crm-mock-stat-lbl">Active Clients</div>
-          </div>
-        </div>
-        <div class="crm-mock-row">
-          <span class="crm-mock-row-client">Martinez Heating</span>
-          <span class="crm-mock-row-trade">HVAC</span>
-          <span class="crm-mock-row-amt">$685</span>
-          <span class="crm-mock-row-status status-paid">Paid</span>
-        </div>
-        <div class="crm-mock-row">
-          <span class="crm-mock-row-client">Rivera Plumbing Co.</span>
-          <span class="crm-mock-row-trade">Plumbing</span>
-          <span class="crm-mock-row-amt">$310</span>
-          <span class="crm-mock-row-status status-paid">Paid</span>
-        </div>
-        <div class="crm-mock-row">
-          <span class="crm-mock-row-client">Green Valley Lawn</span>
-          <span class="crm-mock-row-trade">Lawn Care</span>
-          <span class="crm-mock-row-amt">$195</span>
-          <span class="crm-mock-row-status status-pending">Pending</span>
-        </div>
-        <div class="crm-mock-row">
-          <span class="crm-mock-row-client">Apex Electrical</span>
-          <span class="crm-mock-row-trade">Electrician</span>
-          <span class="crm-mock-row-amt">$520</span>
-          <span class="crm-mock-row-status status-paid">Paid</span>
-        </div>
+      <div class="crm-mock-img">
+        <img src="/landing/hvac-crm-dashboard.png" alt="TradeOpsVault HVAC CRM dashboard — revenue, jobs, schedule" loading="lazy" />
       </div>
     </div>
   </div>
