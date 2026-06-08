@@ -5,12 +5,12 @@ TRADEOPSVAULT — ETSY LISTING COPY
 LS-001
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 HVAC Service Call Notes | AI-Powered Fillable PDF | HVAC Business Form Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 hvac service form,hvac invoice template,air conditioning repair,hvac technician form,hvac service call,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,auto repair form
 
 DESCRIPTION:
@@ -41,12 +41,12 @@ TradeOpsVault · tradeopsvault.com
 LS-002
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Plumbing Dispatch Checklist | AI-Powered Fillable PDF | Plumbing Business Form Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 plumbing invoice template,plumber dispatch form,plumbing service form,plumber job sheet,plumbing work order,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,plumbing checklist
 
 DESCRIPTION:
@@ -66,12 +66,12 @@ TradeOpsVault · tradeopsvault.com
 LS-003
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Electrician Jobsite Inspection Form | AI-Powered Fillable PDF | Electrician Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 electrician inspection form,electrical contractor form,electrician invoice,electrical jobsite form,electrician template,digital download,fillable pdf form,small business form,contractor template,trades business form,instant download,electrical checklist,electrician paperwork
 
 DESCRIPTION:
@@ -88,12 +88,12 @@ TradeOpsVault · tradeopsvault.com
 LS-004
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Lawn Care Weekly Crew Planner | AI-Powered Fillable PDF | Lawn Business Form Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 lawn care business form,landscaping invoice template,lawn service schedule,crew planner template,landscaping business form,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,lawn route planner
 
 DESCRIPTION:
@@ -110,12 +110,12 @@ TradeOpsVault · tradeopsvault.com
 LS-005
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Auto Detail Intake & Waiver Form | AI-Powered Fillable PDF | Auto Detailing Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 auto detail form,car detailing invoice,detailing waiver template,auto detailing intake form,car wash business form,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,detailing contract
 
 DESCRIPTION:
@@ -132,12 +132,12 @@ TradeOpsVault · tradeopsvault.com
 LS-006
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Pest Control Follow-Up Cards | AI-Powered Fillable PDF | Pest Control Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 pest control form,exterminator invoice template,pest control service form,pest treatment record,exterminator business form,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,pest control invoice
 
 DESCRIPTION:
@@ -154,12 +154,12 @@ TradeOpsVault · tradeopsvault.com
 LS-007
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Roofing Change Order Approval Form | AI-Powered Fillable PDF | Roofing Contractor Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 roofing change order form,roofing contractor template,roofing invoice template,roofing business form,contractor change order,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,roofing paperwork
 
 DESCRIPTION:
@@ -176,12 +176,12 @@ TradeOpsVault · tradeopsvault.com
 LS-008
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Pressure Washing Route Sheet | AI-Powered Fillable PDF | Pressure Washing Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 pressure washing form,power washing invoice,pressure washing business form,power washing route sheet,cleaning contractor form,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,pressure washing invoice
 
 DESCRIPTION:
@@ -198,12 +198,12 @@ TradeOpsVault · tradeopsvault.com
 LS-009
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Appliance Repair Parts Tracker | AI-Powered Fillable PDF | Appliance Repair Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 appliance repair form,appliance technician invoice,appliance repair tracker,parts order form,appliance business template,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,appliance repair invoice
 
 DESCRIPTION:
@@ -220,12 +220,12 @@ TradeOpsVault · tradeopsvault.com
 LS-010
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Handyman Materials Reimbursement Form | AI-Powered Fillable PDF | Handyman Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 handyman invoice template,handyman business form,materials reimbursement form,handyman receipt form,home repair invoice,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,handyman paperwork
 
 DESCRIPTION:
@@ -242,12 +242,12 @@ TradeOpsVault · tradeopsvault.com
 LS-011
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Mobile Mechanic Service Summary | AI-Powered Fillable PDF | Mobile Mechanic Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 mobile mechanic form,mechanic invoice template,auto repair invoice,mobile mechanic invoice,mechanic service form,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,mechanic paperwork
 
 DESCRIPTION:
@@ -264,12 +264,12 @@ TradeOpsVault · tradeopsvault.com
 LS-012
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Locksmith Job Authorization Form | AI-Powered Fillable PDF | Locksmith Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 locksmith invoice template,locksmith job form,locksmith authorization form,locksmith business form,locksmith service record,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,locksmith paperwork
 
 DESCRIPTION:
@@ -286,12 +286,12 @@ TradeOpsVault · tradeopsvault.com
 LS-013
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Painting Prep & Final Punch List | AI-Powered Fillable PDF | Painting Contractor Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 painting contractor form,painter invoice template,painting punch list,paint contractor checklist,painting business form,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,painting paperwork
 
 DESCRIPTION:
@@ -308,12 +308,12 @@ TradeOpsVault · tradeopsvault.com
 LS-014
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Snow Removal Service Checklist | AI-Powered Fillable PDF | Snow Removal Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 snow removal form,snow plowing invoice,snow removal checklist,winter service form,snow plow business template,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,snow removal invoice
 
 DESCRIPTION:
@@ -330,12 +330,12 @@ TradeOpsVault · tradeopsvault.com
 LS-015
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Window Cleaning Client Packet | AI-Powered Fillable PDF | Window Cleaning Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 window cleaning form,window washing invoice,window cleaning business form,window cleaner template,cleaning service invoice,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,window cleaning invoice
 
 DESCRIPTION:
@@ -352,12 +352,12 @@ TradeOpsVault · tradeopsvault.com
 LS-016
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Pool Service Chemical Log | AI-Powered Fillable PDF | Pool Service Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 pool service form,pool maintenance log,pool chemical log,pool technician form,swimming pool service form,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,pool service invoice
 
 DESCRIPTION:
@@ -374,12 +374,12 @@ TradeOpsVault · tradeopsvault.com
 LS-017
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Flooring Estimate Scope Matrix | AI-Powered Fillable PDF | Flooring Contractor Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 flooring estimate template,flooring contractor form,flooring invoice template,flooring business form,floor installation estimate,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,flooring quote
 
 DESCRIPTION:
@@ -396,12 +396,12 @@ TradeOpsVault · tradeopsvault.com
 LS-018
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Contractor Daily Site Report | AI-Powered Fillable PDF | General Contractor Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 contractor daily report,construction site report,contractor form template,daily site log,construction daily report,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,contractor paperwork
 
 DESCRIPTION:
@@ -418,12 +418,12 @@ TradeOpsVault · tradeopsvault.com
 LS-019
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Septic Service Pump Log | AI-Powered Fillable PDF | Septic Service Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 septic service form,septic pump log,septic technician form,septic service invoice,septic business template,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,septic paperwork
 
 DESCRIPTION:
@@ -440,12 +440,12 @@ TradeOpsVault · tradeopsvault.com
 LS-020
 ############################################################
 
-PRICE: $3.99
+PRICE: $6.99
 
 TITLE:
 Service Fee Transparency Addendum | AI-Powered Fillable PDF | Service Business Template
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 service fee form,contractor fee schedule,service pricing form,business fee template,contractor pricing form,digital download,fillable pdf form,small business form,printable template,contractor template,trades business form,instant download,fee disclosure
 
 DESCRIPTION:
@@ -462,12 +462,12 @@ TradeOpsVault · tradeopsvault.com
 LS-BUNDLE  (BUNDLE)
 ############################################################
 
-PRICE: $9.99
+PRICE: $29.00
 
 TITLE:
 All 20 Trades Business Forms – Complete Bundle | AI-Powered Fillable PDF Templates
 
-TAGS (comma-separated, max 13 for Etsy):
+TAGS:
 trades business forms,contractor form bundle,small business templates,digital download bundle,fillable pdf bundle,hvac plumbing forms,electrician forms,contractor templates,trades invoice bundle,business form set,ai powered forms,printable form bundle,instant download
 
 DESCRIPTION:

@@ -849,7 +849,7 @@ document.addEventListener('DOMContentLoaded',function(){
   // ---- checkout ----
   async function checkout(btn){
     if(btn){btn.textContent='Loading...';btn.style.pointerEvents='none';}
-    if(typeof fbq!=='undefined')fbq('track','AddToCart',{value:3.99,currency:'USD'});
+    if(typeof fbq!=='undefined')fbq('track','AddToCart',{value:6.99,currency:'USD'});
     if(!listingId){location.href=STORE;return;}
     try{
       var r=await fetch(BACKEND+'/shop/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({listingId:listingId})});
@@ -868,7 +868,7 @@ document.addEventListener('DOMContentLoaded',function(){
       +'<div style="font-size:34px;margin-bottom:10px;">&#128274;</div>'
       +'<div style="font-size:21px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.5px;">Unlock to Print &amp; Save</div>'
       +'<div style="font-size:14px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:22px;">You can fill it out and run AI Job Review free. Get the full template to print, save as PDF, and remove the watermark.</div>'
-      +'<button id="tov-gate-buy" style="width:100%;background:#e85d04;color:#fff;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;">Get Template &mdash; $3.99</button>'
+      +'<button id="tov-gate-buy" style="width:100%;background:#e85d04;color:#fff;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;">Get Template &mdash; $6.99</button>'
       +'<div id="tov-gate-close" style="margin-top:14px;font-size:13px;color:rgba(255,255,255,0.45);cursor:pointer;">Keep editing</div>'
       +'</div>';
     document.body.appendChild(o);
@@ -893,7 +893,7 @@ document.addEventListener('DOMContentLoaded',function(){
   bar.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:10000;background:linear-gradient(135deg,#0f1628,#1a2744);border-top:2px solid #e85d04;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 -8px 30px rgba(0,0,0,0.45);font-family:Inter,Arial,sans-serif;';
   bar.innerHTML='<a href="'+STORE+'" style="text-decoration:none;color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;">&larr; Browse All Templates</a>'
     +'<div style="display:flex;align-items:center;gap:14px;">'
-    +'<div style="color:#fff;font-weight:800;font-size:18px;"><span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);vertical-align:middle;">ONE-TIME</span> &nbsp;$3.99</div>'
+    +'<div style="color:#fff;font-weight:800;font-size:18px;"><span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);vertical-align:middle;">ONE-TIME</span> &nbsp;$6.99</div>'
     +'<button id="tov-bar-buy" style="background:#e85d04;color:#fff;border:none;border-radius:10px;padding:12px 26px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Get Template &rarr;</button>'
     +'</div>';
   document.body.appendChild(bar);

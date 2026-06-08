@@ -133,6 +133,7 @@ async function composeSlide(browser, { kind, b64, trade, accent, id }) {
     hero:     { eyebrow:`${trade} · Professional Template`, big:`Fill the job.<br>Look elite.`, sub:`Browser-fillable · AI Job Review · Print to PDF` },
     filled:   { eyebrow:`Real Filled Example`, big:`Done in<br>2 minutes.`, sub:`Auto-calculating totals · No software · Works on any device` },
     ai:       { eyebrow:`AI Job Review Built In`, big:`Catch what<br>you missed.`, sub:`Pricing gaps · Safety flags · Revenue opportunities` },
+    tools:    { eyebrow:`Built-In Trade Tools`, big:`Price every<br>job right.`, sub:`Trade calculators + Quote Builder — markup, materials & profit` },
   };
   const h = HEADLINES[kind] || HEADLINES.hero;
 
@@ -181,7 +182,7 @@ async function composeSlide(browser, { kind, b64, trade, accent, id }) {
   .price .lbl{font-size:14px;font-weight:600;letter-spacing:1.5px;color:rgba(255,255,255,0.5);margin-top:12px;text-transform:uppercase;}
   </style></head><body>
     <div class="glow"></div>
-    <div class="price"><div class="tag">One-Time</div><div class="amt"><sup>$</sup>3.99</div><div class="lbl">Instant Download</div></div>
+    <div class="price"><div class="tag">One-Time</div><div class="amt"><sup>$</sup>6.99</div><div class="lbl">Instant Download</div></div>
     <div class="wrap">
       <div class="brand"><div class="brand-logo">TradeOps<span>Vault</span></div></div>
       <div class="eyebrow">${h.eyebrow}</div>
@@ -261,20 +262,33 @@ async function run(listing) {
   await new Promise(r=>setTimeout(r,300));
   const shotAI = (await page.screenshot({ type:'png', clip:{x:0,y:0,width:1180,height:760} })).toString('base64');
 
+  // SHOT 4 — Trade Tools calculator open
+  await page.evaluate(()=>{
+    var ai=document.getElementById('ai-panel'); if(ai) ai.remove();
+    window.scrollTo(0,0);
+    var btn=document.getElementById('tov-tools-btn');
+    if(btn) btn.click();
+    var modal=document.getElementById('tov-tools');
+    if(modal){ modal.style.alignItems='flex-start'; modal.style.paddingTop='30px'; }
+  });
+  await new Promise(r=>setTimeout(r,400));
+  const shotTools = (await page.screenshot({ type:'png', clip:{x:0,y:0,width:1180,height:760} })).toString('base64');
+
   await page.close();
 
-  // Compose 3 elite slides
+  // Compose elite slides
   const slides = [
     { kind:'hero',   b64:shotHero,   name:'1-Hero' },
     { kind:'filled', b64:shotFilled, name:'2-Filled-Example' },
     { kind:'ai',     b64:shotAI,     name:'3-AI-Review' },
+    { kind:'tools',  b64:shotTools,  name:'4-Trade-Tools' },
   ];
   for (const s of slides) {
     const buf = await composeSlide(browser, { kind:s.kind, b64:s.b64, trade:listing.trade, accent:listing.accent, id:listing.id });
     fs.writeFileSync(path.join(outDir, `${listing.id}-ELITE-${s.name}.png`), buf);
   }
   await browser.close();
-  console.log(`✅ ${listing.id} (${listing.trade}) — 3 elite slides`);
+  console.log(`✅ ${listing.id} (${listing.trade}) — 4 elite slides`);
 }
 
 const ONLY = process.argv[2]; // optional single id
