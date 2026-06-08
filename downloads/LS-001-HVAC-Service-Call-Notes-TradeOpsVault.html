@@ -906,7 +906,6 @@ document.addEventListener('DOMContentLoaded',function(){
   var m=location.pathname.match(/LS-\d+/);
   var id=m?m[0]:'';
   var D='$';
-  // Per-trade calculator configs
   var TOOLS={
     'LS-001':{t:'HVAC Sizing',f:[['sqft','Conditioned area (sq ft)',1500]],c:function(v){var tons=v.sqft/600;return[['Recommended size',tons.toFixed(1)+' tons'],['Cooling capacity',Math.round(tons*12000).toLocaleString()+' BTU/hr']];},n:'Rule of thumb (1 ton / 600 sq ft). Confirm with a Manual J load calc.'},
     'LS-002':{t:'Water Heater Sizing',f:[['people','People in home',4],['baths','Bathrooms',2]],c:function(v){var tank=Math.max(30,v.people*12);var gpm=(v.baths*2.5).toFixed(1);return[['Tank size',tank+' gallons'],['Tankless flow',gpm+' GPM']];},n:'General sizing guideline. Adjust for simultaneous use and climate.'},
@@ -922,16 +921,14 @@ document.addEventListener('DOMContentLoaded',function(){
     'LS-017':{t:'Boxes Needed',f:[['sqft','Floor area (sq ft)',500],['cov','Box coverage (sq ft)',20],['waste','Waste %',10]],c:function(v){var b=Math.ceil(v.sqft*(1+v.waste/100)/v.cov);return[['Boxes needed',b+' box(es)']];},n:'10% waste typical; use 15% for diagonal or patterned layouts.'},
     'LS-018':{t:'Concrete Volume',f:[['l','Length (ft)',10],['w','Width (ft)',10],['d','Depth (in)',4]],c:function(v){var cy=(v.l*v.w*(v.d/12)/27);var bags=Math.ceil(cy*45);return[['Concrete',cy.toFixed(2)+' cu yd'],['80 lb bags',bags]];},n:'~45 x 80 lb bags per cubic yard. Order 5-10% extra.'}
   };
-
   var cfg=TOOLS[id];
 
-  // floating button
   var btn=document.createElement('button');btn.className='no-print';btn.id='tov-tools-btn';
   btn.innerHTML='&#129518; Trade Tools';
-  btn.style.cssText='position:fixed;right:22px;bottom:'+ (new URLSearchParams(location.search).get('preview')==='1'?'98px':'24px') +';z-index:9995;background:#0f1628;color:#fff;border:1.5px solid #e85d04;border-radius:30px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,Arial,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,0.4);';
+  btn.style.cssText='position:fixed;right:22px;bottom:'+(new URLSearchParams(location.search).get('preview')==='1'?'98px':'24px')+';z-index:9995;background:#0f1628;color:#fff;border:1.5px solid #e85d04;border-radius:30px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,Arial,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,0.4);';
   document.body.appendChild(btn);
 
-  function row(label,val){return '<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eef;font-size:14px;"><span style="color:#556;">'+label+'</span><b style="color:#0f1628;">'+val+'</b></div>';}
+  function row(label,val,big){return '<div style="display:flex;justify-content:space-between;padding:'+(big?'11px':'8px')+' 0;border-bottom:1px solid #eef;font-size:'+(big?'15px':'14px')+';"><span style="color:#556;'+(big?'font-weight:700;':'')+'">'+label+'</span><b style="color:'+(big?'#e85d04':'#0f1628')+';">'+val+'</b></div>';}
   function field(f){return '<label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#8899bb;margin:10px 0 4px;">'+f[1]+'</label><input type="number" step="any" id="tt-'+f[0]+'" value="'+f[2]+'" style="width:100%;padding:10px;border:1.5px solid #dde2f0;border-radius:8px;font-size:15px;font-family:inherit;">';}
 
   function openModal(){
@@ -941,36 +938,62 @@ document.addEventListener('DOMContentLoaded',function(){
     var tradeHTML='';
     if(cfg){
       tradeHTML='<div style="margin-bottom:22px;"><div style="font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#e85d04;margin-bottom:6px;">'+cfg.t+'</div>'
-        + cfg.f.map(field).join('')
-        + '<div id="tt-trade-out" style="margin-top:14px;background:#f7f8fc;border-radius:8px;padding:6px 14px;"></div>'
-        + '<div style="font-size:11px;color:#94a3b8;margin-top:8px;line-height:1.5;">'+cfg.n+'</div></div><hr style="border:none;border-top:1px solid #eef;margin:18px 0;">';
+        +cfg.f.map(field).join('')
+        +'<div id="tt-trade-out" style="margin-top:14px;background:#f7f8fc;border-radius:8px;padding:6px 14px;"></div>'
+        +'<div style="font-size:11px;color:#94a3b8;margin-top:8px;line-height:1.5;">'+cfg.n+'</div></div><hr style="border:none;border-top:1px solid #eef;margin:18px 0;">';
     }
-    o.innerHTML='<div style="background:#fff;border-radius:18px;max-width:420px;width:100%;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,0.5);max-height:90vh;overflow:auto;">'
+    o.innerHTML='<div style="background:#fff;border-radius:18px;max-width:430px;width:100%;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,0.5);max-height:92vh;overflow:auto;">'
       +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><div style="font-size:19px;font-weight:800;color:#0f1628;">&#129518; Trade Tools</div><div id="tt-close" style="cursor:pointer;font-size:22px;color:#aab;line-height:1;">&times;</div></div>'
       +tradeHTML
-      +'<div style="font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#e85d04;margin-bottom:6px;">Quote Builder</div>'
-      +field(['lh','Labor hours',2])+field(['lr','Labor rate ('+D+'/hr)',95])+field(['mc','Materials cost ('+D+')',120])+field(['mk','Material markup %',30])
+      +'<div style="font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#e85d04;margin-bottom:6px;">Job Quote Builder</div>'
+      +field(['lh','Labor hours',2])+field(['lr','Labor rate ('+D+'/hr)',95])+field(['mc','Materials cost ('+D+')',120])+field(['mk','Material markup %',30])+field(['tx','Sales tax %',8])
       +'<div id="tt-quote-out" style="margin-top:14px;background:#f7f8fc;border-radius:8px;padding:6px 14px;"></div>'
-      +'<div style="font-size:11px;color:#94a3b8;margin-top:8px;">Quote = labor + materials with markup. Profit = quote minus your raw cost.</div>'
+      +'<div style="display:flex;gap:8px;margin-top:14px;">'
+      +'<button id="tt-apply" style="flex:1;background:#e85d04;color:#fff;border:none;border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">&#8595; Apply to Invoice</button>'
+      +'<button id="tt-copy" style="flex:1;background:#0f1628;color:#fff;border:none;border-radius:9px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">&#128203; Copy Quote</button>'
+      +'</div>'
+      +'<div id="tt-msg" style="font-size:12px;color:#16a34a;text-align:center;margin-top:8px;height:14px;"></div>'
+      +'<div style="font-size:11px;color:#94a3b8;margin-top:4px;">Markup = % added to material cost. Margin = profit as % of the total price.</div>'
       +'</div>';
     document.body.appendChild(o);
     document.getElementById('tt-close').addEventListener('click',function(){o.remove();});
     o.addEventListener('click',function(e){if(e.target===o)o.remove();});
 
-    function val(id){var el=document.getElementById('tt-'+id);return el?(parseFloat(el.value)||0):0;}
+    function val(k){var el=document.getElementById('tt-'+k);return el?(parseFloat(el.value)||0):0;}
+    var last={};
     function recalc(){
-      if(cfg){
-        var v={};cfg.f.forEach(function(f){v[f[0]]=val(f[0]);});
-        document.getElementById('tt-trade-out').innerHTML=cfg.c(v).map(function(r){return row(r[0],r[1]);}).join('');
-      }
-      var lh=val('lh'),lr=val('lr'),mc=val('mc'),mk=val('mk');
-      var labor=lh*lr, mat=mc*(1+mk/100), total=labor+mat, profit=total-(lh*lr)-mc+(lh*lr);
-      // profit = markup on materials only here; show material profit + total
-      var matProfit=mc*(mk/100);
-      document.getElementById('tt-quote-out').innerHTML=row('Labor',D+labor.toFixed(2))+row('Materials (w/ markup)',D+mat.toFixed(2))+row('Total quote',D+total.toFixed(2))+row('Markup profit',D+matProfit.toFixed(2));
+      if(cfg){var v={};cfg.f.forEach(function(f){v[f[0]]=val(f[0]);});document.getElementById('tt-trade-out').innerHTML=cfg.c(v).map(function(r){return row(r[0],r[1]);}).join('');}
+      var lh=val('lh'),lr=val('lr'),mc=val('mc'),mk=val('mk'),tx=val('tx');
+      var labor=lh*lr, mat=mc*(1+mk/100), sub=labor+mat, tax=sub*(tx/100), total=sub+tax;
+      var cost=lh*lr+mc; var profit=sub-cost; var margin=total>0?(profit/total*100):0;
+      last={labor:labor,mat:mat,sub:sub,tax:tax,total:total,profit:profit,margin:margin};
+      document.getElementById('tt-quote-out').innerHTML=
+        row('Labor',D+labor.toFixed(2))+row('Materials (w/ markup)',D+mat.toFixed(2))
+        +row('Subtotal',D+sub.toFixed(2))+row('Sales tax',D+tax.toFixed(2))
+        +row('Total quote',D+total.toFixed(2),true)
+        +row('Your profit',D+profit.toFixed(2))+row('Profit margin',margin.toFixed(1)+'%');
     }
     o.querySelectorAll('input').forEach(function(i){i.addEventListener('input',recalc);});
     recalc();
+
+    function flash(t){var el=document.getElementById('tt-msg');el.textContent=t;setTimeout(function(){el.textContent='';},2200);}
+
+    document.getElementById('tt-apply').addEventListener('click',function(){
+      // Find an invoice grand-total cell or a field whose label/placeholder mentions total
+      var target=null;
+      var gr=document.querySelector('.grand-total-row');
+      if(gr){target=gr.cells[gr.cells.length-1].querySelector('.editable')||gr.cells[gr.cells.length-1];}
+      if(!target){
+        var eds=[].slice.call(document.querySelectorAll('.editable'));
+        for(var i=0;i<eds.length;i++){var lab=(eds[i].closest('.field')&&eds[i].closest('.field').querySelector('label'))?eds[i].closest('.field').querySelector('label').textContent.toLowerCase():'';var ph=(eds[i].getAttribute('data-placeholder')||'').toLowerCase();if(/total|amount due|grand/.test(lab+' '+ph)){target=eds[i];break;}}
+      }
+      if(target){target.textContent=D+last.total.toFixed(2);target.style.background='rgba(232,93,4,0.08)';flash('✓ Total applied to your form');}
+      else{flash('No invoice total field on this form');}
+    });
+    document.getElementById('tt-copy').addEventListener('click',function(){
+      var txt='QUOTE\nLabor: '+D+last.labor.toFixed(2)+'\nMaterials: '+D+last.mat.toFixed(2)+'\nSubtotal: '+D+last.sub.toFixed(2)+'\nTax: '+D+last.tax.toFixed(2)+'\nTOTAL: '+D+last.total.toFixed(2)+'\n(Profit '+D+last.profit.toFixed(2)+' / '+last.margin.toFixed(1)+'% margin)';
+      if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){flash('✓ Quote copied');},function(){flash('Copy failed');});}else{flash('Copy not supported');}
+    });
   }
   btn.addEventListener('click',openModal);
 })();
