@@ -7,142 +7,135 @@ const ETSY_COPY = {
   'LS-001': {
     title: 'HVAC Service Call Notes Template – Editable PDF for Technicians | Instant Download',
     tags:  'hvac template,service call form,editable pdf,technician notes,hvac paperwork,field service form,hvac business,service invoice,technician log,hvac tools,small business form,contractor template,work order form',
-    desc:  `Stop losing job details between the truck and the office.\n\nThis professional HVAC service call notes template gives owner-operators and solo techs a clean, repeatable system for every visit — equipment info, readings, parts used, follow-up needed, and customer sign-off all in one place.\n\n✅ Opens in any browser — no software needed\n✅ Print-ready PDF included\n✅ Instant digital download — no waiting\n✅ Works for residential and commercial calls\n✅ Reuse unlimited times\n\nPerfect for: owner-operator HVAC techs, small HVAC companies (1–5 trucks), and anyone tired of scrap paper job notes.\n\n→ Download, customize your logo, and start using today.`,
-    faq:   'Q: Can I add my company logo?\nA: Yes. Open the file in your browser, type your company name in the header, and print.\n\nQ: Is this print-ready?\nA: Yes. Open in Chrome, use File → Print → Save as PDF for crisp results.',
+    desc:  `Stop losing job details between the truck and the office.\n\nThis professional HVAC service call notes template gives owner-operators and solo techs a clean, repeatable system for every visit — equipment info, readings, parts used, follow-up needed, and customer sign-off all in one place.\n\n✅ Fully editable in Canva (free account)\n✅ Print-ready PDF included\n✅ Instant digital download — no waiting\n✅ Works for residential and commercial calls\n✅ Reuse unlimited times\n\nPerfect for: owner-operator HVAC techs, small HVAC companies (1–5 trucks), and anyone tired of scrap paper job notes.\n\n→ Download, customize your logo, and start using today.`,
+    faq:   'Q: Can I add my company logo?\nA: Yes. The Canva template has a logo placeholder — just click and upload.\n\nQ: Is this print-ready?\nA: Yes. Export from Canva as PDF Print for crisp results.',
     imagePrompt: 'Premium dark-desk flatlay: HVAC service call form on clipboard, clean workbench background, warm professional lighting, no text overlay.'
   },
   'LS-002': {
     title: 'Plumbing Dispatch & Diagnosis Checklist – Editable Template for Plumbers | Instant Download',
     tags:  'plumbing checklist,dispatch form,plumbing template,diagnosis checklist,plumbing business,service form,plumber paperwork,work order,field service,small business form,contractor checklist,plumbing tools,job tracker',
-    desc:  `Streamline every call from dispatch to close-out.\n\nDesigned for small plumbing teams and owner-operators, this dispatch and diagnosis checklist captures the information that matters — job type, symptom description, parts checked, repair completed, and follow-up work — in a format your whole team can use consistently.\n\n✅ Opens in any browser — no software needed\n✅ Print-ready and digital-fill versions included\n✅ Instant download, unlimited reprints\n✅ Works for emergency calls, scheduled maintenance, and new installs\n\nStop recreating paperwork from scratch after every job.`,
+    desc:  `Streamline every call from dispatch to close-out.\n\nDesigned for small plumbing teams and owner-operators, this dispatch and diagnosis checklist captures the information that matters — job type, symptom description, parts checked, repair completed, and follow-up work — in a format your whole team can use consistently.\n\n✅ Editable in Canva — free account works\n✅ Print-ready and digital-fill versions included\n✅ Instant download, unlimited reprints\n✅ Works for emergency calls, scheduled maintenance, and new installs\n\nStop recreating paperwork from scratch after every job.`,
     faq:   'Q: Can my dispatcher use this digitally on a tablet?\nA: Yes. The PDF version supports digital form fill on most tablet apps.\n\nQ: Does it include space for parts tracking?\nA: Yes — there\'s a dedicated parts/materials section.',
     imagePrompt: 'Blue-collar office aesthetic: plumbing dispatch checklist on metal clipboard, subtle pipe and tool background elements, cool-toned professional lighting.'
   },
   'LS-003': {
     title: 'Electrician Jobsite Inspection Form – Editable Field Checklist | Instant Download',
     tags:  'electrician form,jobsite inspection,electrical checklist,electrician template,field inspection,electrical paperwork,contractor form,small business,electrician tools,site walkthrough,electrical business,service form,work order',
-    desc:  `A clean, professional jobsite inspection form built for working electricians.\n\nCaptures panel info, circuit checks, hazard flags, code notes, and customer sign-off in a single page. Use it for pre-work walkthroughs, final inspections, or ongoing site documentation.\n\n✅ Opens in any browser — no software needed\n✅ Print-ready PDF\n✅ Works for residential, commercial, and industrial sites\n✅ Instant download\n\nBuilt by an operator who knows you don't have time for complicated paperwork.`,
+    desc:  `A clean, professional jobsite inspection form built for working electricians.\n\nCaptures panel info, circuit checks, hazard flags, code notes, and customer sign-off in a single page. Use it for pre-work walkthroughs, final inspections, or ongoing site documentation.\n\n✅ Editable in Canva (free)\n✅ Print-ready PDF\n✅ Works for residential, commercial, and industrial sites\n✅ Instant download\n\nBuilt by an operator who knows you don't have time for complicated paperwork.`,
     faq:   'Q: Can I use this for residential and commercial?\nA: Yes — the form is niche-generic enough for both.\n\nQ: Is there a digital-fill version?\nA: Yes, the PDF version is form-fillable.',
     imagePrompt: 'Electrician jobsite aesthetic: clean inspection checklist on aluminum clipboard, subtle electrical panel background, crisp overhead lighting.'
   },
   'LS-004': {
     title: 'Lawn Care Weekly Crew Planner – Editable Route Sheet for Lawn Businesses | Instant Download',
     tags:  'lawn care planner,crew route sheet,lawn business template,weekly planner,lawn route,crew schedule,lawn care form,landscaping template,lawn operator,route planner,small business form,lawn crew tracker,weekly schedule',
-    desc:  `Plan your crew's week in 10 minutes flat.\n\nThis weekly crew planner gives lawn route managers a single-page view of all stops, service types, crew assignments, and notes — no more back-and-forth texts or missed stops.\n\n✅ Opens in any browser — no software needed\n✅ Print one page per week, per crew\n✅ Customizable route columns and crew slots\n✅ Instant download\n✅ Scales from 1 to 5 crews\n\nOwner-operators use this Sunday night to set the week. Crew leads take it to the truck Monday morning.`,
-    faq:   'Q: Can I add more stop rows?\nA: Yes — Print multiple sheets or request a custom row count.\n\nQ: Does this work for multiple crews?\nA: Print one sheet per crew. Many customers do this.',
+    desc:  `Plan your crew's week in 10 minutes flat.\n\nThis weekly crew planner gives lawn route managers a single-page view of all stops, service types, crew assignments, and notes — no more back-and-forth texts or missed stops.\n\n✅ Editable in Canva (free)\n✅ Print one page per week, per crew\n✅ Customizable route columns and crew slots\n✅ Instant download\n✅ Scales from 1 to 5 crews\n\nOwner-operators use this Sunday night to set the week. Crew leads take it to the truck Monday morning.`,
+    faq:   'Q: Can I add more stop rows?\nA: Yes — Canva lets you duplicate rows to any length.\n\nQ: Does this work for multiple crews?\nA: Print one sheet per crew. Many customers do this.',
     imagePrompt: 'Lawn care operations: weekly route planner on clipboard, green-toned professional background, clean and modern flatlay composition.'
   },
   'LS-005': {
     title: 'Auto Detail Intake Form + Damage Waiver Kit – Editable Template | Instant Download',
     tags:  'auto detail intake,damage waiver,detailing template,mobile detail form,car detail paperwork,detail business,intake form,auto detailing,waiver template,client intake,mobile detailer,small business form,detailing contract',
-    desc:  `Protect yourself and look professional from the first touchpoint.\n\nThis two-piece kit includes a client intake form (vehicle info, service selections, special requests) and a pre-service damage waiver — the paperwork every mobile detailer needs before touching a car.\n\n✅ Opens in any browser — no software needed\n✅ Print-ready and digital versions\n✅ Legally-flavored waiver language (consult your attorney to finalize)\n✅ Instant download\n✅ Works for mobile and shop-based detailers\n\nLook like a real business. Protect your work. Start using it today.`,
-    faq:   'Q: Is the waiver language legally binding?\nA: It is written to be used as a starting point. We recommend having a local attorney review before use.\n\nQ: Can I add a price list to the intake form?\nA: Yes — open in browser and edit the services section before printing.',
+    desc:  `Protect yourself and look professional from the first touchpoint.\n\nThis two-piece kit includes a client intake form (vehicle info, service selections, special requests) and a pre-service damage waiver — the paperwork every mobile detailer needs before touching a car.\n\n✅ Editable in Canva (free)\n✅ Print-ready and digital versions\n✅ Legally-flavored waiver language (consult your attorney to finalize)\n✅ Instant download\n✅ Works for mobile and shop-based detailers\n\nLook like a real business. Protect your work. Start using it today.`,
+    faq:   'Q: Is the waiver language legally binding?\nA: It is written to be used as a starting point. We recommend having a local attorney review before use.\n\nQ: Can I add a price list to the intake form?\nA: Yes — there is an open section in Canva for service menu customization.',
     imagePrompt: 'Luxury auto detailing: intake form and waiver kit on dark leather surface, subtle high-end car interior background, warm premium lighting.'
-  },
-  'LS-006': {
-    title: 'Pest Control Follow-Up Service Card – Printable Template for Pest Technicians | Instant Download',
-    tags:  'pest control template,follow-up card,pest control business,service record,pest technician form,pest control paperwork,service card,small business form,exterminator template,pest log,field service form,contractor template,treatment record',
-    desc:  `Leave every customer with a professional record of what was done — and when to expect you back.\n\nThis follow-up service card documents the treatment date, pest type targeted, chemicals applied, re-entry wait time, next recommended service, and technician sign-off. Hand one to every customer at the end of the visit.\n\n✅ Opens in any browser — fill in and print immediately\n✅ Builds customer trust and reduces callback calls\n✅ Documents chemical usage for liability protection\n✅ Works for one-time and recurring accounts\n✅ Instant download, unlimited reprints\n\nThe card that makes customers feel taken care of — and keeps them on your schedule.`,
-    faq:   'Q: Can I add my company name and logo?\nA: Yes — open in browser, type your company info in the header, and print.\n\nQ: Does it cover both residential and commercial treatments?\nA: Yes — the fields work for any pest control service type.',
-    imagePrompt: 'Pest control professional aesthetic: service follow-up card on clipboard, clean neutral background, professional outdoor lighting, trustworthy composition.'
-  },
-  'LS-007': {
-    title: 'Roofing Change Order & Approval Form – Printable Template for Roofing Contractors | Instant Download',
-    tags:  'roofing template,change order,roofing contractor,roofing form,change order form,roofing business,contractor change order,scope change,roofing paperwork,small business form,approval form,roofing invoice,contractor template',
-    desc:  `Get paid for every scope change — in writing, every time.\n\nThis change order and approval form documents additional work requested after the original contract: description of change, materials added, labor adjustment, revised total, and customer signature. No more verbal agreements that cost you money.\n\n✅ Opens in any browser — fill in on-site and print or save as PDF\n✅ Protects you from dispute over what was agreed\n✅ Works for insurance, residential, and commercial roofing\n✅ Customer signature line locks in approval before work starts\n✅ Instant download, unlimited reprints\n\nOne signed change order pays for this template a hundred times over.`,
-    faq:   'Q: Can I use this for insurance claim supplements?\nA: Yes — the line-item format works well for supplement documentation.\n\nQ: Does it include a materials breakdown section?\nA: Yes — there are separate lines for materials, labor, and total adjustment.',
-    imagePrompt: 'Roofing contractor aesthetic: change order form on aluminum clipboard, subtle shingle and roof background, professional outdoor lighting, clean composition.'
   },
   'LS-008': {
     title: 'Pressure Washing Route Sheet – Daily Job Tracker for Wash Crews | Instant Download',
     tags:  'pressure washing template,route sheet,wash crew tracker,pressure washing business,job log,daily planner,exterior cleaning form,power washing,service route,small business,contractor form,job tracker,field service form',
-    desc:  `Run tighter routes and never miss a stop.\n\nBuilt for solo pressure washers and small crews, this route sheet tracks every job in one place — address, surface type, PSI settings, chemicals used, time on site, and customer sign-off.\n\n✅ Print one sheet per day or per truck\n✅ Opens in any browser — no software needed\n✅ Works for residential, commercial, and fleet washing\n✅ Instant download\n\nStop running jobs from memory. One sheet handles the whole day.`,
-    faq:   'Q: Can I add my logo?\nA: Yes — open in browser, add your company name to the top, and print.\n\nQ: Does this work for both surface and fleet washing?\nA: Yes — the fields are broad enough for any exterior cleaning job.',
+    desc:  `Run tighter routes and never miss a stop.\n\nBuilt for solo pressure washers and small crews, this route sheet tracks every job in one place — address, surface type, PSI settings, chemicals used, time on site, and customer sign-off.\n\n✅ Print one sheet per day or per truck\n✅ Fully editable in Canva (free)\n✅ Works for residential, commercial, and fleet washing\n✅ Instant download\n\nStop running jobs from memory. One sheet handles the whole day.`,
+    faq:   'Q: Can I add my logo?\nA: Yes — there is a logo placeholder in Canva.\n\nQ: Does this work for both surface and fleet washing?\nA: Yes — the fields are broad enough for any exterior cleaning job.',
     imagePrompt: 'Exterior cleaning operations: route sheet on clipboard, subtle pressure washer background, clean blue-toned professional flatlay.'
   },
   'LS-009': {
     title: 'Appliance Repair Parts Tracker – Editable Log for Repair Technicians | Instant Download',
     tags:  'appliance repair template,parts tracker,repair log,appliance technician,parts inventory,service form,repair business,appliance service,small business form,contractor template,technician log,job tracker,parts order',
-    desc:  `Stop losing track of parts between the shop and the job.\n\nThis parts tracker gives appliance repair techs a clean record of every component ordered, installed, or returned — model numbers, part numbers, costs, and supplier info all in one place.\n\n✅ Opens in any browser — no software needed\n✅ Works for in-shop and in-home repair\n✅ Track parts across multiple jobs simultaneously\n✅ Instant download, unlimited use\n\nRun a tighter operation and stop eating parts costs from poor tracking.`,
+    desc:  `Stop losing track of parts between the shop and the job.\n\nThis parts tracker gives appliance repair techs a clean record of every component ordered, installed, or returned — model numbers, part numbers, costs, and supplier info all in one place.\n\n✅ Editable in Canva (free)\n✅ Works for in-shop and in-home repair\n✅ Track parts across multiple jobs simultaneously\n✅ Instant download, unlimited use\n\nRun a tighter operation and stop eating parts costs from poor tracking.`,
     faq:   'Q: Can I track multiple jobs on one sheet?\nA: Yes — there are rows for up to 10 jobs per page.\n\nQ: Is there a supplier contact section?\nA: Yes — each parts row includes supplier and order number fields.',
     imagePrompt: 'Appliance repair shop aesthetic: parts log on workbench clipboard, subtle tool and parts background, warm professional lighting.'
   },
   'LS-010': {
     title: 'Handyman Materials Reimbursement Sheet – Editable Expense Form | Instant Download',
     tags:  'handyman template,materials reimbursement,expense form,handyman business,job materials log,reimbursement sheet,contractor expense,small business form,handyman paperwork,job cost tracker,materials invoice,field service form,home repair',
-    desc:  `Get reimbursed for every nail, screw, and supply run.\n\nThis simple reimbursement sheet lets handymen document every material purchased for a job — item, quantity, store, receipt amount — so clients pay for what was used, not what you guess at.\n\n✅ Easy to fill out on a phone or printed\n✅ Opens in any browser — no software needed\n✅ Works for any handyman or home repair job\n✅ Instant download\n\nStop leaving material costs on the table. One page pays for itself on the first job.`,
+    desc:  `Get reimbursed for every nail, screw, and supply run.\n\nThis simple reimbursement sheet lets handymen document every material purchased for a job — item, quantity, store, receipt amount — so clients pay for what was used, not what you guess at.\n\n✅ Easy to fill out on a phone or printed\n✅ Editable in Canva (free)\n✅ Works for any handyman or home repair job\n✅ Instant download\n\nStop leaving material costs on the table. One page pays for itself on the first job.`,
     faq:   'Q: Does this work for jobs with multiple supply runs?\nA: Yes — there are rows for up to 20 individual items.\n\nQ: Can clients sign to approve the expenses?\nA: Yes — there is a client sign-off field at the bottom.',
     imagePrompt: 'Handyman workspace: reimbursement form on clipboard with receipts, warm natural light, clean professional composition, no clutter.'
   },
   'LS-011': {
     title: 'Mobile Mechanic Service Summary Form – Editable Template for Mobile Auto Repair | Instant Download',
     tags:  'mobile mechanic template,service summary,auto repair form,mobile mechanic paperwork,mechanic invoice,vehicle service form,auto service,small business,mechanic template,field service,car repair form,service record,job summary',
-    desc:  `Leave every customer with a professional record of what was done.\n\nThis service summary form captures vehicle info, work performed, parts replaced, mileage, labor time, and customer signature — everything you need for a clean job close-out and a repeat-customer relationship.\n\n✅ Opens in any browser — no software needed\n✅ Print-ready PDF\n✅ Works for any mobile or roadside repair\n✅ Instant download\n\nLook like the most professional mechanic at the jobsite. Every. Single. Time.`,
+    desc:  `Leave every customer with a professional record of what was done.\n\nThis service summary form captures vehicle info, work performed, parts replaced, mileage, labor time, and customer signature — everything you need for a clean job close-out and a repeat-customer relationship.\n\n✅ Editable in Canva (free)\n✅ Print-ready PDF\n✅ Works for any mobile or roadside repair\n✅ Instant download\n\nLook like the most professional mechanic at the jobsite. Every. Single. Time.`,
     faq:   'Q: Is there a parts cost section?\nA: Yes — includes parts, labor, and total fields.\n\nQ: Can I use this for roadside assistance calls too?\nA: Yes — the form is general enough for any mobile auto service.',
     imagePrompt: 'Mobile mechanic aesthetic: service summary form on clipboard, tool bag background, warm garage lighting, professional composition.'
   },
   'LS-012': {
     title: 'Locksmith Job Authorization Form – Editable Service Template | Instant Download',
     tags:  'locksmith template,job authorization,locksmith form,locksmith business,service authorization,client authorization,locksmith paperwork,small business form,service form,locksmith invoice,lock service,field service template,contractor form',
-    desc:  `Document authorization before you touch the lock.\n\nEvery locksmith job requires proof the client authorized the work — this form captures ID verification, property address, proof of authorization, service description, and customer signature before any work begins.\n\n✅ Covers residential, commercial, and vehicle lockouts\n✅ Opens in any browser — no software needed\n✅ CYA language built in (not legal advice — have an attorney review)\n✅ Instant download\n\nProtect your license and your business on every call.`,
+    desc:  `Document authorization before you touch the lock.\n\nEvery locksmith job requires proof the client authorized the work — this form captures ID verification, property address, proof of authorization, service description, and customer signature before any work begins.\n\n✅ Covers residential, commercial, and vehicle lockouts\n✅ Editable in Canva (free)\n✅ CYA language built in (not legal advice — have an attorney review)\n✅ Instant download\n\nProtect your license and your business on every call.`,
     faq:   'Q: Does this include ID verification fields?\nA: Yes — there is a section for ID type and number documentation.\n\nQ: Can I use this for auto lockouts?\nA: Yes — the vehicle section covers VIN, plate, and owner documentation.',
     imagePrompt: 'Locksmith professional aesthetic: authorization form on dark clipboard, subtle lock and key background elements, clean low-light composition.'
   },
   'LS-013': {
     title: 'Painting Prep & Final Punch List – Editable Template for Painters | Instant Download',
     tags:  'painting template,prep checklist,punch list,painting business,painter form,painting contractor,surface prep,final walkthrough,painting checklist,small business,contractor template,job checklist,painting paperwork',
-    desc:  `Don't leave money on the table because of a missed punch-list item.\n\nThis two-part template gives painting contractors a structured prep checklist (surface condition, repairs, masking, primer) and a final punch list (missed spots, touch-ups, client walkthrough) so every job closes clean.\n\n✅ Works for interior, exterior, and commercial painting\n✅ Opens in any browser — no software needed\n✅ Instant download\n✅ Reduces callbacks by catching issues before the customer does\n\nClose every job with confidence. Stop re-driving for $20 touch-ups.`,
+    desc:  `Don't leave money on the table because of a missed punch-list item.\n\nThis two-part template gives painting contractors a structured prep checklist (surface condition, repairs, masking, primer) and a final punch list (missed spots, touch-ups, client walkthrough) so every job closes clean.\n\n✅ Works for interior, exterior, and commercial painting\n✅ Editable in Canva (free)\n✅ Instant download\n✅ Reduces callbacks by catching issues before the customer does\n\nClose every job with confidence. Stop re-driving for $20 touch-ups.`,
     faq:   'Q: Does it cover both interior and exterior jobs?\nA: Yes — the checklist fields work for both.\n\nQ: Is there a customer sign-off section?\nA: Yes — both the prep and punch list have signature fields.',
     imagePrompt: 'Painting contractor aesthetic: prep checklist on clipboard, subtle paint swatches and roller background, clean professional flatlay, warm tones.'
   },
   'LS-014': {
     title: 'Snow Removal Service Trigger Checklist – Editable Template for Snow Contractors | Instant Download',
     tags:  'snow removal template,service trigger,snow contractor,snow plowing form,snow removal business,trigger checklist,winter service,snowplowing template,snow plow form,contractor checklist,small business form,seasonal service,snow contract',
-    desc:  `Know exactly when to roll the trucks — every time.\n\nThis trigger checklist documents the service activation criteria for each property: snowfall threshold, ice trigger, client preferences, route order, and materials used. Perfect for multi-property snow accounts.\n\n✅ Set up once per property, use all season\n✅ Opens in any browser — no software needed\n✅ Keeps your crew consistent when conditions change fast\n✅ Instant download\n\nStop making trigger calls by feel. This is what real snow operators use.`,
+    desc:  `Know exactly when to roll the trucks — every time.\n\nThis trigger checklist documents the service activation criteria for each property: snowfall threshold, ice trigger, client preferences, route order, and materials used. Perfect for multi-property snow accounts.\n\n✅ Set up once per property, use all season\n✅ Editable in Canva (free)\n✅ Keeps your crew consistent when conditions change fast\n✅ Instant download\n\nStop making trigger calls by feel. This is what real snow operators use.`,
     faq:   'Q: Does this work for multiple properties?\nA: Yes — print one sheet per property and keep them in a binder or folder.\n\nQ: Is there space for special client instructions?\nA: Yes — there is an open notes section for per-property customization.',
     imagePrompt: 'Snow removal operations: service trigger checklist on clipboard, subtle snow and equipment background, cold blue-white professional tones, clean flatlay.'
   },
   'LS-015': {
     title: 'Window Cleaning Client Packet – Service Checklist & Job Record | Instant Download',
     tags:  'window cleaning template,client packet,window cleaning business,job checklist,window washing form,cleaning contractor,service record,small business form,window cleaning paperwork,job log,cleaning business template,field service,client form',
-    desc:  `Look professional from the first quote to the final wipe.\n\nThis client packet includes a job checklist (access points, glass type, special instructions), a service record (windows cleaned, condition notes, time on site), and a client sign-off — everything to close a window cleaning job professionally.\n\n✅ Works for residential and commercial window cleaning\n✅ Opens in any browser — no software needed\n✅ Instant download\n✅ Helps with recurring client accounts and route scheduling\n\nStop showing up with nothing to hand the customer.`,
+    desc:  `Look professional from the first quote to the final wipe.\n\nThis client packet includes a job checklist (access points, glass type, special instructions), a service record (windows cleaned, condition notes, time on site), and a client sign-off — everything to close a window cleaning job professionally.\n\n✅ Works for residential and commercial window cleaning\n✅ Editable in Canva (free)\n✅ Instant download\n✅ Helps with recurring client accounts and route scheduling\n\nStop showing up with nothing to hand the customer.`,
     faq:   'Q: Does this work for high-rise or commercial jobs?\nA: Yes — the access and safety notes sections cover elevated work too.\n\nQ: Is there a recurring service section?\nA: Yes — includes a next service date and frequency field.',
     imagePrompt: 'Window cleaning professional aesthetic: client packet on clipboard, clean glass background, bright natural light, modern professional flatlay.'
   },
   'LS-016': {
     title: 'Pool Service Chemical Log – Weekly Treatment Tracker for Pool Operators | Instant Download',
     tags:  'pool service template,chemical log,pool treatment tracker,pool operator form,pool maintenance,pool service business,chemical tracker,pool log,swimming pool form,small business,service record,pool tech,water treatment log',
-    desc:  `Track every chemical, every reading, every visit — automatically.\n\nThis weekly chemical log gives pool service technicians a clean record of pH, chlorine, alkalinity, and chemical additions for every pool on their route. Protect yourself and your clients with documented water chemistry.\n\n✅ One page per pool per month\n✅ Opens in any browser — no software needed\n✅ Works for residential and commercial pools\n✅ Instant download\n\nWhen something goes wrong, you have the paper trail. When it goes right, you have the proof.`,
+    desc:  `Track every chemical, every reading, every visit — automatically.\n\nThis weekly chemical log gives pool service technicians a clean record of pH, chlorine, alkalinity, and chemical additions for every pool on their route. Protect yourself and your clients with documented water chemistry.\n\n✅ One page per pool per month\n✅ Editable in Canva (free)\n✅ Works for residential and commercial pools\n✅ Instant download\n\nWhen something goes wrong, you have the paper trail. When it goes right, you have the proof.`,
     faq:   'Q: How many readings fit on one sheet?\nA: Each sheet covers 4 weekly visits with full chemical readings.\n\nQ: Is there space for notes about equipment issues?\nA: Yes — each visit row includes an equipment/notes field.',
     imagePrompt: 'Pool service aesthetic: chemical log on clipboard near pool edge, clear water background, clean outdoor professional lighting, summer tones.'
   },
   'LS-017': {
     title: 'Flooring Estimate Scope Matrix – Editable Quote Template for Flooring Contractors | Instant Download',
     tags:  'flooring estimate template,scope matrix,flooring contractor,flooring quote,flooring business,estimate form,contractor estimate,flooring paperwork,flooring template,scope of work,small business,quote template,contractor form',
-    desc:  `Stop underquoting flooring jobs because of unclear scope.\n\nThis estimate scope matrix breaks every flooring job into clear line items — rooms, square footage, material type, labor rate, subfloor prep, transitions, and totals — so clients understand what they\'re paying for and you protect your margin.\n\n✅ Works for LVP, hardwood, tile, carpet, and mixed jobs\n✅ Opens in any browser — no software needed\n✅ Instant download\n✅ Professional enough to send as a PDF quote\n\nClose bigger jobs with a quote that looks like a contractor, not a handyman.`,
-    faq:   'Q: Can I add my company logo to the quote?\nA: Yes — there is a logo and company info section at the top.\n\nQ: Does it calculate totals automatically?\nA: Fill in your numbers manually — the layout makes entry fast and clear.',
+    desc:  `Stop underquoting flooring jobs because of unclear scope.\n\nThis estimate scope matrix breaks every flooring job into clear line items — rooms, square footage, material type, labor rate, subfloor prep, transitions, and totals — so clients understand what they\'re paying for and you protect your margin.\n\n✅ Works for LVP, hardwood, tile, carpet, and mixed jobs\n✅ Editable in Canva (free)\n✅ Instant download\n✅ Professional enough to send as a PDF quote\n\nClose bigger jobs with a quote that looks like a contractor, not a handyman.`,
+    faq:   'Q: Can I add my company logo to the quote?\nA: Yes — there is a logo and company info section at the top.\n\nQ: Does it calculate totals automatically?\nA: The Canva version does not calculate automatically, but the layout makes manual entry fast.',
     imagePrompt: 'Flooring contractor aesthetic: estimate matrix on clipboard, subtle flooring samples background, warm professional indoor lighting, clean composition.'
   },
   'LS-018': {
     title: 'Contractor Daily Site Report – Editable Field Log for General Contractors | Instant Download',
     tags:  'contractor daily report,site report,general contractor form,daily log,construction template,site documentation,contractor template,field report,job site log,small business,construction form,daily site log,project documentation',
-    desc:  `Document every day on the job — protect yourself and your client.\n\nThis daily site report captures weather, crew on site, work completed, materials delivered, subcontractors present, inspections, delays, and photos reference — everything needed to track job progress and defend against disputes.\n\n✅ One page per day keeps the project record clean\n✅ Opens in any browser — no software needed\n✅ Works for residential remodel, new construction, and commercial\n✅ Instant download\n\nThe job that has documentation wins every dispute. The one that doesn\'t, loses.`,
+    desc:  `Document every day on the job — protect yourself and your client.\n\nThis daily site report captures weather, crew on site, work completed, materials delivered, subcontractors present, inspections, delays, and photos reference — everything needed to track job progress and defend against disputes.\n\n✅ One page per day keeps the project record clean\n✅ Editable in Canva (free)\n✅ Works for residential remodel, new construction, and commercial\n✅ Instant download\n\nThe job that has documentation wins every dispute. The one that doesn\'t, loses.`,
     faq:   'Q: Is there a photo log section?\nA: Yes — there is a section to reference photo file names or timestamps.\n\nQ: Can I use this for subcontractor coordination?\nA: Yes — there is a subcontractor attendance section on the form.',
     imagePrompt: 'General contractor aesthetic: daily site report on aluminum clipboard, construction site background, professional outdoor lighting, clean composition.'
   },
   'LS-019': {
     title: 'Septic Service Pump Log – Maintenance Record for Septic Technicians | Instant Download',
     tags:  'septic service template,pump log,septic maintenance,septic technician form,septic business,service record,pump log template,septic pumping,small business form,field service,maintenance log,contractor template,septic paperwork',
-    desc:  `A clean service record every septic tech should have on their truck.\n\nThis pump log documents tank size, pump date, gallons removed, system condition, access location, recommended next service, and customer sign-off — the complete record for recurring septic accounts.\n\n✅ Opens in any browser — no software needed\n✅ Works for residential and commercial septic systems\n✅ Instant download, unlimited reprints\n✅ Keeps clients on a service schedule automatically\n\nGive every customer a copy. They\'ll call you back every time.`,
+    desc:  `A clean service record every septic tech should have on their truck.\n\nThis pump log documents tank size, pump date, gallons removed, system condition, access location, recommended next service, and customer sign-off — the complete record for recurring septic accounts.\n\n✅ Editable in Canva (free)\n✅ Works for residential and commercial septic systems\n✅ Instant download, unlimited reprints\n✅ Keeps clients on a service schedule automatically\n\nGive every customer a copy. They\'ll call you back every time.`,
     faq:   'Q: Does this cover inspection notes?\nA: Yes — there is a system condition and notes section.\n\nQ: Is there a next service reminder section?\nA: Yes — recommended next service date is a prominent field.',
     imagePrompt: 'Septic service professional aesthetic: pump log on clipboard, clean outdoor setting, earth tones, straightforward professional composition.'
   },
   'LS-020': {
     title: 'Service Business Fee Transparency Addendum – Editable Client Disclosure | Instant Download',
     tags:  'service fee addendum,fee disclosure,contractor addendum,service business template,fee transparency,client disclosure,small business form,contractor form,service agreement,fee schedule,business template,client agreement,service contract',
-    desc:  `Stop getting pushback on your invoices — be transparent upfront.\n\nThis fee transparency addendum works as an add-on to any service agreement — it documents fuel charges, material markups, after-hours rates, cancellation fees, and payment terms so clients know what to expect before the job starts.\n\n✅ Works for any service trade or contractor\n✅ Opens in any browser — no software needed\n✅ Instant download\n✅ Reduces invoice disputes before they start\n\nGet paid what you quoted. Every time.`,
-    faq:   'Q: Can I customize the fee categories?\nA: Yes — open in browser and edit the fee line items to match your business.\n\nQ: Does this work as a standalone document or add-on?\nA: Either — it can be a standalone disclosure or attached to an existing service agreement.',
+    desc:  `Stop getting pushback on your invoices — be transparent upfront.\n\nThis fee transparency addendum works as an add-on to any service agreement — it documents fuel charges, material markups, after-hours rates, cancellation fees, and payment terms so clients know what to expect before the job starts.\n\n✅ Works for any service trade or contractor\n✅ Editable in Canva (free)\n✅ Instant download\n✅ Reduces invoice disputes before they start\n\nGet paid what you quoted. Every time.`,
+    faq:   'Q: Can I customize the fee categories?\nA: Yes — all fee line items are editable in Canva.\n\nQ: Does this work as a standalone document or add-on?\nA: Either — it can be a standalone disclosure or attached to an existing service agreement.',
     imagePrompt: 'Professional service business aesthetic: fee addendum on clean desk, neutral professional tones, modern flatlay, no clutter, slight warm lighting.'
+  },
+  'LS-BUNDLE': {
+    title: 'Complete Trades Business Forms Bundle – All 20 Editable Templates | Instant Download',
+    tags:  'trades bundle,contractor forms,hvac template,plumbing form,electrician template,lawn care,auto detail,roofing form,contractor bundle,small business forms,trade business,editable templates,instant download',
+    desc:  `Every form your trade business needs — in one instant download.\n\n20 professional, browser-fillable HTML templates covering HVAC, plumbing, electrical, lawn care, auto detail, roofing, pressure washing, appliance repair, mobile mechanic, locksmith, painting, snow removal, window cleaning, pool service, flooring, contracting, septic service, and more.\n\n✅ 20 templates — one low price\n✅ Works in any browser — no Canva, no Word, no apps needed\n✅ Click any field and type, then print or save as PDF\n✅ Upload your company logo with one click\n✅ Unlimited reprints for your business\n✅ Instant digital download\n\nBuyers who need multiple forms save 50%+ vs buying individually.\n\n→ Download once. Use forever. Cover every job your business takes.`,
+    faq:   'Q: Do I need any special software?\nA: No. Open the HTML files in any browser (Chrome, Safari, Edge) — no Canva, no Word, no subscriptions required.\n\nQ: Can I use these for my whole crew?\nA: Yes. One purchase covers unlimited reprints for your business.',
+    imagePrompt: 'Premium bundle flatlay: 20 trade forms fanned out on dark desk, TradeOpsVault branding, professional lighting.',
   },
 };
 
@@ -155,8 +148,8 @@ function getEtsyCopy(listingId, listing) {
   return {
     title: `${name} – Editable Template for ${niche} Businesses | Instant Download`,
     tags,
-    desc:  `A professional, ready-to-use template for ${niche} owner-operators and small teams.\n\nDesigned to save you time on paperwork so you can focus on the job.\n\n✅ Opens in any browser — no software needed\n✅ Print-ready PDF included\n✅ Instant digital download\n✅ Unlimited reprints\n\nStart using it today — no design skills needed.`,
-    faq:   'Q: Can I edit this template?\nA: Yes. Opens in any browser — no software needed.\n\nQ: Is this a physical product?\nA: No. This is an instant digital download.',
+    desc:  `A professional, ready-to-use template for ${niche} owner-operators and small teams.\n\nDesigned to save you time on paperwork so you can focus on the job.\n\n✅ Fully editable in Canva (free account)\n✅ Print-ready PDF included\n✅ Instant digital download\n✅ Unlimited reprints\n\nStart using it today — no design skills needed.`,
+    faq:   'Q: Can I edit this template?\nA: Yes. The Canva link is included. No design experience needed.\n\nQ: Is this a physical product?\nA: No. This is an instant digital download.',
     imagePrompt: `Premium ${niche.toLowerCase()} operations template mockup, clean desk flatlay, professional lighting, no text overlay.`,
   };
 }
@@ -231,22 +224,23 @@ const SEED = {
     { id:'LS-002', name:'Plumbing Dispatch & Diagnosis Checklist', price:3.99, buyer:'Small Plumbing Teams',       bundle:'Plumbing Ops Kit',      perf:'Winner', status:'live',            category:'Plumbing',       views:126, cvr:3.2, revenue:47.96 },
     { id:'LS-003', name:'Electrician Jobsite Inspection Form Pack',price:3.99,  buyer:'Solo Electricians',          bundle:'Electrical Admin Bundle',perf:'Stable', status:'live',            category:'Electrical',     views:98,  cvr:2.0, revenue:19.98 },
     { id:'LS-004', name:'Lawn Care Weekly Crew Planner',           price:3.99,  buyer:'Lawn Route Managers',        bundle:'Lawn Backoffice Kit',    perf:'Winner', status:'live',            category:'Lawn Care',      views:171, cvr:4.1, revenue:48.93 },
-    { id:'LS-005', name:'Auto Detail Intake + Waiver Kit',         price:4.99, buyer:'Mobile Detail Owners',       bundle:'Detailing Client Ops',   perf:'Stable', status:'live',            category:'Auto Detailing', views:84,  cvr:2.4, revenue:25.98 },
+    { id:'LS-005', name:'Auto Detail Intake + Waiver Kit',         price:3.99,  buyer:'Mobile Detail Owners',       bundle:'Detailing Client Ops',   perf:'Stable', status:'live',            category:'Auto Detailing', views:84,  cvr:2.4, revenue:25.98 },
     { id:'LS-006', name:'Pest Control Follow-Up Card Templates',    price:3.99,  buyer:'Pest Control Teams',         bundle:'Pest Retention Pack',       perf:'N/A', status:'draft',           category:'Pest Control',    views:0, cvr:0, revenue:0 },
-    { id:'LS-007', name:'Roofing Change Order + Approval Form',    price:4.99, buyer:'Roofing Contractors',        bundle:'Roofing Scope Pack',         perf:'N/A', status:'ready to upload', category:'Roofing',         views:0, cvr:0, revenue:0 },
+    { id:'LS-007', name:'Roofing Change Order + Approval Form',    price:3.99,  buyer:'Roofing Contractors',        bundle:'Roofing Scope Pack',         perf:'N/A', status:'ready to upload', category:'Roofing',         views:0, cvr:0, revenue:0 },
     { id:'LS-008', name:'Pressure Washing Route Sheet',            price:3.99,  buyer:'Pressure Washing Operators', bundle:'Exterior Cleaning Pack',     perf:'N/A', status:'draft',           category:'Exterior Cleaning',views:0, cvr:0, revenue:0 },
     { id:'LS-009', name:'Appliance Repair Parts Tracker',          price:3.99,  buyer:'Appliance Repair Techs',     bundle:'Appliance Service Kit',      perf:'N/A', status:'draft',           category:'Appliance',       views:0, cvr:0, revenue:0 },
     { id:'LS-010', name:'Handyman Materials Reimbursement Sheet',  price:1.99,  buyer:'Solo Handymen',              bundle:'Handyman Back-Office Pack',  perf:'N/A', status:'draft',           category:'Handyman',        views:0, cvr:0, revenue:0 },
     { id:'LS-011', name:'Mobile Mechanic Service Summary Form',    price:3.99,  buyer:'Mobile Auto Repair Techs',   bundle:'Mobile Mechanic Ops Kit',    perf:'N/A', status:'draft',           category:'Mobile Mechanic', views:0, cvr:0, revenue:0 },
     { id:'LS-012', name:'Locksmith Job Authorization Form',        price:3.99,  buyer:'Locksmith Operators',        bundle:'Locksmith Field Pack',       perf:'N/A', status:'draft',           category:'Locksmith',       views:0, cvr:0, revenue:0 },
-    { id:'LS-013', name:'Painting Prep & Final Punch List',        price:4.99,  buyer:'Painting Contractors',       bundle:'Painter Admin Bundle',       perf:'N/A', status:'draft',           category:'Painting',        views:0, cvr:0, revenue:0 },
+    { id:'LS-013', name:'Painting Prep & Final Punch List',        price:3.99,  buyer:'Painting Contractors',       bundle:'Painter Admin Bundle',       perf:'N/A', status:'draft',           category:'Painting',        views:0, cvr:0, revenue:0 },
     { id:'LS-014', name:'Snow Removal Service Trigger Checklist',  price:3.99,  buyer:'Snow Removal Contractors',   bundle:'Snow Ops Starter Pack',      perf:'N/A', status:'draft',           category:'Snow Removal',    views:0, cvr:0, revenue:0 },
-    { id:'LS-015', name:'Window Cleaning Client Packet',           price:4.99,  buyer:'Window Cleaning Operators',  bundle:'Window Cleaning Pro Pack',   perf:'N/A', status:'draft',           category:'Window Cleaning', views:0, cvr:0, revenue:0 },
+    { id:'LS-015', name:'Window Cleaning Client Packet',           price:3.99,  buyer:'Window Cleaning Operators',  bundle:'Window Cleaning Pro Pack',   perf:'N/A', status:'draft',           category:'Window Cleaning', views:0, cvr:0, revenue:0 },
     { id:'LS-016', name:'Pool Service Chemical Log',               price:3.99,  buyer:'Pool Service Technicians',   bundle:'Pool Tech Operations Kit',   perf:'N/A', status:'draft',           category:'Pool Service',    views:0, cvr:0, revenue:0 },
-    { id:'LS-017', name:'Flooring Estimate Scope Matrix',          price:4.99,  buyer:'Flooring Contractors',       bundle:'Flooring Contractor Bundle', perf:'N/A', status:'draft',           category:'Flooring',        views:0, cvr:0, revenue:0 },
+    { id:'LS-017', name:'Flooring Estimate Scope Matrix',          price:3.99,  buyer:'Flooring Contractors',       bundle:'Flooring Contractor Bundle', perf:'N/A', status:'draft',           category:'Flooring',        views:0, cvr:0, revenue:0 },
     { id:'LS-018', name:'Contractor Daily Site Report',            price:3.99,  buyer:'General Contractors',        bundle:'GC Field Documentation Pack',perf:'N/A', status:'draft',           category:'Contracting',     views:0, cvr:0, revenue:0 },
     { id:'LS-019', name:'Septic Service Pump Log',                 price:3.99,  buyer:'Septic Service Techs',       bundle:'Septic Ops Kit',             perf:'N/A', status:'draft',           category:'Septic',          views:0, cvr:0, revenue:0 },
     { id:'LS-020', name:'Service Business Fee Transparency Addendum', price:3.99, buyer:'Any Service Trade Owner',  bundle:'Multi-Trade Admin Vault',    perf:'N/A', status:'draft',           category:'Multi-Trade',     views:0, cvr:0, revenue:0 },
+    { id:'LS-BUNDLE', name:'Complete Trades Business Forms Bundle – All 20 Templates', price:9.99, buyer:'Any Trade Contractor', bundle:'N/A', perf:'N/A', status:'draft', category:'Bundle', views:0, cvr:0, revenue:0 },
   ],
   approvals: [
     { id:'AP-001', type:'Publish Listing', item:'Roofing Change Order + Approval Form', listingId:'LS-007', why:'Strong bundle lift projected at +22%. Confidence based on comparable roofing templates ranking in top 50 Etsy results.', conf:0.84, agent:'Approval Agent', important:true, status:'pending', archived:false, createdAt:'09:10', history:[] },
@@ -399,11 +393,8 @@ const NAV_ITEMS = [
   { id:'listing',     label:'Listings',      icon:'▦' },
   { id:'approval',    label:'Approvals',     icon:'◉' },
   { id:'revenue',     label:'Revenue',       icon:'◎' },
-  { id:'ads',         label:'Ads Strategy',  icon:'◐' },
-  { id:'design',      label:'Design Team',   icon:'✦' },
   { id:'postclose',   label:'Post-Close',    icon:'◆' },
   { id:'compliance',  label:'Compliance',    icon:'◇' },
-  { id:'monitor',     label:'Monitor',       icon:'◑' },
   { id:'settings',    label:'Settings',      icon:'⚙' },
 ];
 
@@ -435,23 +426,16 @@ function switchView(id) {
     id === 'opportunity' ? 'Opportunity Backlog' :
     id === 'listing'     ? 'Listing Pipeline' :
     id === 'approval'    ? 'Approval Queue' :
-    id === 'ads'         ? 'Etsy Ads Strategy Engine' :
-    id === 'design'      ? 'AI Design Team' :
     id === 'postclose'   ? 'Post-Close Conversion Agent' :
     id === 'compliance'  ? 'Compliance & Copyright Center' :
-    id === 'monitor'     ? 'Shop Monitor' :
     id === 'settings'    ? 'System Settings' : 'Revenue Tracker';
   if (id === 'postclose')  renderPostClose();
   if (id === 'compliance') renderComplianceView();
   if (id === 'settings')   renderSettingsView();
-  if (id === 'ads')        renderAdsView();
-  if (id === 'design')     renderDesignView();
-  if (id === 'monitor')    renderMonitorView();
 }
 
 function updateSidebarStatus() {
-  const monitorRev = typeof ShopMonitor !== 'undefined' ? ShopMonitor.bestRevenue() : 0;
-  const rev = monitorRev > 0 ? monitorRev : currentRevenue();
+  const rev = currentRevenue();
   document.getElementById('sidebar-rev').textContent = `$${rev.toFixed(2)} / $500`;
   const bar = document.querySelector('#sidebar-prog > div');
   if (bar) bar.style.width = Math.min(rev / 5, 100) + '%';
@@ -513,24 +497,8 @@ function renderDashboard() {
   const pace      = dailyPaceNeeded();
   const onPace    = isOnPace();
 
-  const adSpent = totalAdSpend();
-  const adCap   = loadAds().budgetCap || 100;
-  const adPct   = adSpent / adCap;
-  const budgetBanner = adPct >= 1.0
-    ? `<div style="background:var(--danger-soft);border:1px solid var(--danger);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <span style="color:var(--danger);font-weight:700;">⛔ Ad budget cap hit — $${adSpent.toFixed(2)} of $${adCap} spent. Turn off Etsy Ads now.</span>
-        <button onclick="switchView('ads')" style="background:var(--danger);color:#fff;border:none;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.8rem;font-weight:700;">View Ads</button>
-       </div>`
-    : adPct >= 0.75
-    ? `<div style="background:var(--warn-soft);border:1px solid var(--warn);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <span style="color:var(--warn);font-weight:700;">⚠ Ad budget ${(adPct*100).toFixed(0)}% used — $${adSpent.toFixed(2)} of $${adCap}. $${(adCap-adSpent).toFixed(2)} remaining.</span>
-        <button onclick="switchView('ads')" style="background:var(--warn);color:#000;border:none;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.8rem;font-weight:700;">View Ads</button>
-       </div>`
-    : '';
-
   const view = document.getElementById('dashboard-view');
   view.innerHTML = `
-    ${budgetBanner}
     <!-- Next Best Action -->
     <div class="nba-card nba-${nba.priority}">
       <div class="nba-left">
@@ -964,8 +932,7 @@ function renderListings() {
                 <td><span class="badge ${l.perf==='Winner'?'live':''}">${l.perf}</span></td>
                 <td><span class="badge ${statusBadgeClass(l.status)}">${l.status}</span></td>
                 <td style="display:flex;gap:5px;flex-wrap:wrap">
-                  <button class="pill preview-template" data-id="${l.id}" title="View form in browser" style="font-size:.68rem;padding:4px 8px">👁 View</button>
-                  <button class="pill pdf-download" data-id="${l.id}" title="Download as PDF" style="font-size:.68rem;padding:4px 8px">⬇ PDF</button>
+                  <button class="pill preview-template" data-id="${l.id}" title="Preview printable form" style="font-size:.68rem;padding:4px 8px">⬡ Form</button>
                   <button class="pill dl-product" data-id="${l.id}" title="Download product bundle" style="font-size:.68rem;padding:4px 8px">↓ Bundle</button>
                   <button class="pill gen-image" data-id="${l.id}" title="Generate mockup image" style="font-size:.68rem;padding:4px 8px">${typeof ImageGen !== 'undefined' && ImageGen.cache[l.id] ? '✓ Img' : '⬡ Image'}</button>
                 </td>
@@ -1011,7 +978,6 @@ ${copy.imagePrompt}</div>
   view.querySelectorAll('.edit-listing').forEach(b => b.onclick = e => { e.stopPropagation(); openListingEditor(b.dataset.id); });
   view.querySelectorAll('.advance-listing').forEach(b => b.onclick = e => { e.stopPropagation(); advanceListing(b.dataset.id); });
   view.querySelectorAll('.preview-template').forEach(b => b.onclick = e => { e.stopPropagation(); if (typeof openTemplate === 'function') openTemplate(b.dataset.id); else toast('Template engine loading…', 'info'); });
-  view.querySelectorAll('.pdf-download').forEach(b => b.onclick = e => { e.stopPropagation(); if (typeof openTemplate === 'function') openTemplate(b.dataset.id, true); else toast('Template engine loading…', 'info'); });
   view.querySelectorAll('.dl-product').forEach(b => b.onclick = e => { e.stopPropagation(); if (typeof Products !== 'undefined') Products.download(b.dataset.id); else toast('Product engine loading…', 'info'); });
   view.querySelectorAll('.gen-image').forEach(b => b.onclick = async e => {
     e.stopPropagation();
@@ -1536,11 +1502,10 @@ function renderComplianceView() {
 
 /* ─── Image settings panel ─────────────────────────────────────────── */
 function openImageSettings() {
-  openPanel('Design Team Settings', `
-    ${typeof DesignTeam !== 'undefined' ? DesignTeam.settingsHTML() : '<p class="text-muted">Design Team loading…</p>'}
+  openPanel('Image Generator Settings', `
+    ${typeof ImageGen !== 'undefined' ? ImageGen.settingsHTML() : '<p class="text-muted">Image engine loading…</p>'}
     <div class="divider mt-8"></div>
-    <p class="text-muted" style="font-size:.76rem">5 shot types × 20 listings = 100 images at $0.04 each ($4 total). Keys stored locally in your browser only.</p>
-    <button onclick="switchView('design');closePanel();" style="margin-top:12px;background:var(--accent);color:#000;border:none;border-radius:7px;padding:9px 16px;cursor:pointer;font-size:.84rem;font-weight:700;width:100%;">Open Design Team →</button>`);
+    <p class="text-muted" style="font-size:.76rem">Requires an OpenAI API key with DALL-E 3 access. Images are generated at $0.04 each (standard quality). Keys are stored locally in your browser only.</p>`);
 }
 
 /* ─── Setup config helpers ─────────────────────────────────────────── */
@@ -1677,7 +1642,7 @@ function renderSettingsView() {
     : `<span style="color:var(--warn);font-weight:600;">⚠ Not set</span>`;
 
   view.innerHTML = `
-    <div style="width:100%;display:flex;flex-direction:column;gap:24px;">
+    <div style="max-width:680px;display:flex;flex-direction:column;gap:24px;">
 
       <div class="card">
         <div class="card-title">Account Setup</div>
@@ -1780,324 +1745,6 @@ function exportConfig() {
   toast('Config exported.', 'success');
 }
 
-/* ─── Design Team view ─────────────────────────────────────────────── */
-function renderDesignView() {
-  const view = document.getElementById('design-view');
-  if (!view) return;
-  if (typeof DesignTeam === 'undefined') {
-    view.innerHTML = '<p class="text-muted">Design Team loading…</p>';
-    return;
-  }
-  const bannerBar = `
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div>
-        <div style="font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:3px;">Shop Banner</div>
-        <div style="font-size:.78rem;color:var(--muted);">Download your 3360×840 Etsy shop banner — upload it in Etsy → Shop Manager → Edit Shop.</div>
-      </div>
-      <button onclick="DesignTeam.generateShopBanner().then(function(){toast('Banner downloaded!','success')})"
-        style="background:var(--accent);color:#000;border:none;border-radius:9px;padding:10px 22px;font-size:.84rem;font-weight:700;cursor:pointer;white-space:nowrap;">
-        ⬇ Download Shop Banner
-      </button>
-    </div>`;
-  view.innerHTML = bannerBar + DesignTeam.designViewHTML();
-}
-
-/* ─── Ads Strategy Engine ──────────────────────────────────────────── */
-const ADS_KEY = 'atlasAds';
-function loadAds() {
-  try { return JSON.parse(localStorage.getItem(ADS_KEY) || '{}'); } catch { return {}; }
-}
-function saveAds(patch) {
-  const d = { ...loadAds(), ...patch };
-  localStorage.setItem(ADS_KEY, JSON.stringify(d));
-  return d;
-}
-
-// Per-listing ad recommendation based on price, category, CVR
-function adsRecommendation(listing) {
-  const price = listing.price || 0;
-  const cvr   = listing.cvr   || 0;
-  const live  = listing.status === 'live';
-  if (!live) return { run: false, reason: 'Not live yet — publish first' };
-  if (cvr >= 3.0) return { run: true,  priority: 'high',   bid: 0.35, reason: `CVR ${cvr}% is above average — strong candidate for ads` };
-  if (cvr >= 1.5) return { run: true,  priority: 'medium', bid: 0.25, reason: `CVR ${cvr}% is acceptable — test at low bid` };
-  if (cvr === 0)  return { run: true,  priority: 'test',   bid: 0.20, reason: 'No data yet — run at minimum bid to gather impressions' };
-  return         { run: false, priority: 'pause', bid: 0,    reason: `CVR ${cvr}% is below break-even — pause and fix title/images first` };
-}
-
-function adsROAS(dailyBudget, avgPrice, cvr) {
-  // Etsy avg CPC ~$0.25-0.40; estimate clicks per dollar
-  const cpc        = 0.30;
-  const clicks     = dailyBudget / cpc;
-  const sales      = clicks * (cvr / 100);
-  const revenue    = sales * avgPrice;
-  const roas       = dailyBudget > 0 ? revenue / dailyBudget : 0;
-  return { clicks: Math.round(clicks), sales: +sales.toFixed(2), revenue: +revenue.toFixed(2), roas: +roas.toFixed(2) };
-}
-
-/* ─── Budget Guard ─────────────────────────────────────────────────── */
-function logAdSpend(amount) {
-  const ads = loadAds();
-  const today = new Date().toISOString().slice(0,10);
-  const log = ads.spendLog || [];
-  const existing = log.find(e => e.date === today);
-  if (existing) existing.amount = +(existing.amount + amount).toFixed(2);
-  else log.push({ date: today, amount: +amount.toFixed(2) });
-  const totalSpent = log.reduce((s,e) => s + e.amount, 0);
-  saveAds({ spendLog: log, totalSpent: +totalSpent.toFixed(2) });
-  checkBudgetCap();
-  if (_currentView === 'ads') renderAdsView();
-  renderDashboard();
-}
-
-function totalAdSpend() {
-  return +(loadAds().totalSpent || 0).toFixed(2);
-}
-
-function checkBudgetCap() {
-  const ads   = loadAds();
-  const cap   = ads.budgetCap || 100;
-  const spent = totalAdSpend();
-  const pct   = spent / cap;
-  if (pct >= 1.0) {
-    toast(`BUDGET CAP HIT — $${spent.toFixed(2)} spent of $${cap} limit. STOP all ads now.`, 'warn');
-    logAction(`Budget Guard: $${cap} cap reached. Ad spend halted.`);
-  } else if (pct >= 0.90) {
-    toast(`Budget warning: $${spent.toFixed(2)} of $${cap} — 90% used. Slow down.`, 'warn');
-    logAction(`Budget Guard: 90% of $${cap} cap used ($${spent.toFixed(2)} spent).`);
-  } else if (pct >= 0.75) {
-    toast(`Budget alert: $${spent.toFixed(2)} of $${cap} spent (75%).`, 'info');
-  }
-}
-
-function budgetGuardHTML() {
-  const ads    = loadAds();
-  const cap    = ads.budgetCap || 100;
-  const spent  = totalAdSpend();
-  const left   = Math.max(0, cap - spent);
-  const pct    = Math.min(100, (spent / cap) * 100);
-  const barColor = pct >= 90 ? 'var(--danger)' : pct >= 75 ? 'var(--warn)' : 'var(--success)';
-  const log    = (ads.spendLog || []).slice().sort((a,b) => b.date.localeCompare(a.date)).slice(0,7);
-  const daysLeft = Math.max(0, 30 - (ads.spendLog||[]).length);
-
-  return `
-    <div class="card" style="${pct >= 90 ? 'border-color:var(--danger);' : pct >= 75 ? 'border-color:var(--warn);' : ''}">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div class="card-title" style="margin:0;">Budget Guard — 30-Day Cap</div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <span style="font-size:.78rem;color:var(--muted);">Cap: $</span>
-          <input id="budget-cap-input" type="number" min="10" max="500" value="${cap}"
-            style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.88rem;padding:5px 8px;width:70px;outline:none;"
-            onchange="saveAds({budgetCap:+this.value});renderAdsView();toast('Budget cap updated to $'+this.value,'success');">
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
-        <div style="background:var(--panel2);border-radius:8px;padding:12px 14px;">
-          <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Spent</div>
-          <div style="font-size:1.5rem;font-weight:800;color:${barColor};">$${spent.toFixed(2)}</div>
-        </div>
-        <div style="background:var(--panel2);border-radius:8px;padding:12px 14px;">
-          <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Remaining</div>
-          <div style="font-size:1.5rem;font-weight:800;color:var(--text);">$${left.toFixed(2)}</div>
-        </div>
-        <div style="background:var(--panel2);border-radius:8px;padding:12px 14px;">
-          <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Safe Daily Budget</div>
-          <div style="font-size:1.5rem;font-weight:800;color:var(--accent2);">$${daysLeft > 0 ? (left/daysLeft).toFixed(2) : '0.00'}</div>
-        </div>
-      </div>
-
-      <div style="background:var(--panel2);border-radius:8px;padding:3px;margin-bottom:16px;">
-        <div style="height:14px;border-radius:6px;background:${barColor};width:${pct.toFixed(1)}%;transition:width .4s;min-width:${pct>0?'4px':'0'};"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:16px;">
-        <span>$0</span>
-        <span style="color:${barColor};font-weight:700;">${pct.toFixed(0)}% used</span>
-        <span>$${cap} cap</span>
-      </div>
-
-      ${pct >= 100 ? `<div style="background:var(--danger-soft);border:1px solid var(--danger);border-radius:8px;padding:12px 14px;color:var(--danger);font-weight:700;font-size:.88rem;margin-bottom:16px;">⛔ CAP REACHED — Turn off Etsy Ads now in your Etsy account to avoid overspend.</div>` :
-        pct >= 90  ? `<div style="background:var(--warn-soft);border:1px solid var(--warn);border-radius:8px;padding:12px 14px;color:var(--warn);font-weight:700;font-size:.88rem;margin-bottom:16px;">⚠ 90% of budget used — consider pausing lower-performing listings.</div>` : ''}
-
-      <div style="margin-bottom:10px;">
-        <div style="font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:8px;">Log Today's Spend</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-          ${[1,2,3,5].map(a => `<button onclick="logAdSpend(${a})" style="background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.82rem;">+$${a}</button>`).join('')}
-          <span style="color:var(--muted);font-size:.8rem;">or</span>
-          <input id="custom-spend" type="number" min="0.01" step="0.01" placeholder="custom $"
-            style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:6px 10px;width:90px;font-size:.82rem;outline:none;">
-          <button onclick="const v=parseFloat(document.getElementById('custom-spend').value);if(v>0){logAdSpend(v);document.getElementById('custom-spend').value='';}" style="background:var(--accent);color:#000;border:none;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.82rem;font-weight:700;">Log</button>
-        </div>
-      </div>
-
-      ${log.length > 0 ? `
-        <div style="margin-top:12px;">
-          <div style="font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:6px;">Recent Spend Log</div>
-          ${log.map(e => `
-            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:.8rem;">
-              <span style="color:var(--muted);">${e.date}</span>
-              <span style="color:var(--text);font-weight:600;">$${e.amount.toFixed(2)}</span>
-            </div>`).join('')}
-        </div>` : `<p style="font-size:.8rem;color:var(--muted);margin:8px 0 0;">No spend logged yet. Log your first day's Etsy ad spend above.</p>`}
-    </div>
-  `;
-}
-
-function renderMonitorView() {
-  const view = document.getElementById('monitor-view');
-  if (!view) return;
-  if (typeof ShopMonitor === 'undefined') {
-    view.innerHTML = '<div class="card"><p class="text-muted">Monitor loading…</p></div>'; return;
-  }
-  view.innerHTML = ShopMonitor.renderView();
-}
-
-function renderAdsView() {
-  const view = document.getElementById('ads-view');
-  if (!view) return;
-  const ads  = loadAds();
-  const daily = ads.dailyBudget || 5;
-  const live  = state.listings.filter(l => l.status === 'live');
-  const avgPrice = live.length ? live.reduce((s,l) => s + l.price, 0) / live.length : 8;
-  const avgCVR   = live.length ? live.reduce((s,l) => s + (l.cvr||0), 0) / live.length : 2.5;
-  const proj     = adsROAS(daily, avgPrice, avgCVR);
-  const proj10   = adsROAS(10,    avgPrice, avgCVR);
-  const proj20   = adsROAS(20,    avgPrice, avgCVR);
-
-  const phaseRows = [
-    { phase:'Week 1–2', budget:'$3–5/day', goal:'Gather impression & click data', action:'Run all live listings at $0.20 min bid. DO NOT optimize yet — just collect data.' },
-    { phase:'Week 3',   budget:'$5–8/day', goal:'Double down on winners',          action:'Raise bids to $0.30–0.35 on listings with CVR ≥ 2%. Pause listings with 0 clicks after 200 impressions.' },
-    { phase:'Week 4+',  budget:'$8–15/day',goal:'Scale what converts',             action:'Increase budget 20% per week on listings with ROAS > 2×. Kill anything below 1× after 2 weeks.' },
-  ];
-
-  const listingRows = state.listings.map(l => {
-    const rec = adsRecommendation(l);
-    const priorityColor = rec.priority === 'high' ? 'var(--success)' : rec.priority === 'medium' ? 'var(--accent2)' : rec.priority === 'test' ? 'var(--warn)' : 'var(--muted)';
-    return `
-      <tr>
-        <td><span style="font-size:.8rem;font-weight:600;">${l.name}</span></td>
-        <td style="text-align:center;">$${l.price}</td>
-        <td style="text-align:center;">${l.cvr || 0}%</td>
-        <td style="text-align:center;"><span style="color:${priorityColor};font-weight:700;font-size:.78rem;">${rec.run ? (rec.priority||'run').toUpperCase() : 'PAUSE'}</span></td>
-        <td style="text-align:center;">${rec.bid ? '$'+rec.bid.toFixed(2) : '—'}</td>
-        <td style="font-size:.76rem;color:var(--muted);">${rec.reason}</td>
-      </tr>`;
-  }).join('');
-
-  view.innerHTML = `
-    <div style="width:100%;display:flex;flex-direction:column;gap:24px;">
-
-      <!-- Budget Guard -->
-      ${budgetGuardHTML()}
-
-      <!-- Budget calculator -->
-      <div class="card">
-        <div class="card-title">Daily Budget Calculator</div>
-        <div style="display:flex;align-items:center;gap:16px;margin:16px 0 8px;flex-wrap:wrap;">
-          <label style="display:flex;flex-direction:column;gap:5px;font-size:.82rem;color:var(--muted);font-weight:500;">
-            Daily Ad Spend
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="color:var(--text);">$</span>
-              <input id="ads-budget-input" type="number" min="1" max="100" value="${daily}"
-                style="background:var(--panel2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:1rem;padding:8px 10px;width:80px;outline:none;"
-                oninput="saveAds({dailyBudget:+this.value});renderAdsView();">
-              <span style="color:var(--muted);font-size:.8rem;">/ day</span>
-            </div>
-          </label>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            ${[3,5,10,20].map(b => `<button onclick="saveAds({dailyBudget:${b}});renderAdsView()" style="background:${daily===b?'var(--accent)':'var(--panel2)'};color:${daily===b?'#000':'var(--text)'};border:1px solid var(--border);border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.82rem;font-weight:600;">$${b}</button>`).join('')}
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;">
-          ${[
-            { label:'Est. Daily Clicks',   val: proj.clicks,             unit:'' },
-            { label:'Est. Daily Sales',    val: proj.sales.toFixed(1),   unit:'' },
-            { label:'Est. Daily Revenue',  val: '$'+proj.revenue.toFixed(2), unit:'' },
-            { label:'ROAS',                val: proj.roas.toFixed(1)+'×', unit:'', color: proj.roas >= 2 ? 'var(--success)' : proj.roas >= 1 ? 'var(--warn)' : 'var(--danger)' },
-          ].map(s => `
-            <div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:14px;">
-              <div style="font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">${s.label}</div>
-              <div style="font-size:1.4rem;font-weight:800;color:${s.color||'var(--text)'};">${s.val}</div>
-            </div>`).join('')}
-        </div>
-        <p style="font-size:.74rem;color:var(--muted);margin:10px 0 0;">Based on avg Etsy CPC $0.30, avg listing price $${avgPrice.toFixed(2)}, avg CVR ${avgCVR.toFixed(1)}%. Estimates only — actual results vary.</p>
-      </div>
-
-      <!-- Budget comparison -->
-      <div class="card">
-        <div class="card-title">Budget Comparison — Monthly Projection</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;">
-          ${[
-            { label:'Starter',  spend:3,  p:adsROAS(3, avgPrice,avgCVR)  },
-            { label:'Growth',   spend:5,  p:adsROAS(5, avgPrice,avgCVR)  },
-            { label:'Aggressive',spend:10, p:adsROAS(10,avgPrice,avgCVR) },
-          ].map(t => {
-            const mo30rev  = t.p.revenue * 30;
-            const mo30cost = t.spend * 30;
-            const profit   = mo30rev - mo30cost;
-            return `
-              <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:18px;">
-                <div style="font-weight:800;font-size:.95rem;color:var(--accent2);margin-bottom:10px;">${t.label}</div>
-                <div style="font-size:.78rem;color:var(--muted);margin-bottom:2px;">$${t.spend}/day spend</div>
-                <div style="font-size:1.1rem;font-weight:700;color:var(--text);">~$${mo30rev.toFixed(0)}/mo revenue</div>
-                <div style="font-size:.82rem;color:${profit>0?'var(--success)':'var(--danger)'};margin-top:4px;">$${profit.toFixed(0)} profit after ad spend</div>
-                <div style="font-size:.76rem;color:var(--muted);margin-top:4px;">${t.p.roas.toFixed(1)}× ROAS</div>
-              </div>`;
-          }).join('')}
-        </div>
-      </div>
-
-      <!-- Phase plan -->
-      <div class="card">
-        <div class="card-title">4-Week Launch Playbook</div>
-        <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
-          ${phaseRows.map((p,i) => `
-            <div style="display:grid;grid-template-columns:90px 90px 1fr;gap:12px;align-items:start;background:var(--panel2);border-radius:8px;padding:14px 16px;">
-              <div>
-                <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Phase</div>
-                <div style="font-weight:700;font-size:.85rem;color:var(--accent2);">${p.phase}</div>
-              </div>
-              <div>
-                <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Budget</div>
-                <div style="font-weight:700;font-size:.85rem;color:var(--text);">${p.budget}</div>
-              </div>
-              <div>
-                <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Action</div>
-                <div style="font-size:.83rem;color:var(--text);line-height:1.5;">${p.action}</div>
-              </div>
-            </div>`).join('')}
-        </div>
-      </div>
-
-      <!-- Per-listing recommendations -->
-      <div class="card">
-        <div class="card-title">Per-Listing Ad Recommendations</div>
-        <div style="overflow-x:auto;margin-top:12px;">
-          <table class="data-table" style="width:100%;">
-            <thead><tr>
-              <th>Listing</th><th>Price</th><th>CVR</th><th>Status</th><th>Bid</th><th>Reason</th>
-            </tr></thead>
-            <tbody>${listingRows}</tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Rules -->
-      <div class="card">
-        <div class="card-title">The 5 Rules of Etsy Ads</div>
-        <ol style="color:var(--muted);font-size:.85rem;line-height:2;padding-left:18px;margin:12px 0;">
-          <li><strong style="color:var(--text);">Never optimize in week 1.</strong> You need at least 500 impressions per listing before any bid changes mean anything.</li>
-          <li><strong style="color:var(--text);">CVR below 1% = fix the listing, not the bid.</strong> Bad photos and weak titles kill CVR — ads amplify the problem, they don't fix it.</li>
-          <li><strong style="color:var(--text);">ROAS below 1.5× = pause and diagnose.</strong> You're burning cash. Fix the listing or kill the ad.</li>
-          <li><strong style="color:var(--text);">Reviews are the real multiplier.</strong> A listing with 10+ reviews converts 2–3× better with the same ad spend. Getting reviews is worth more than doubling your budget.</li>
-          <li><strong style="color:var(--text);">Scale winners only.</strong> When you find a listing with ROAS > 3×, increase budget by 20% every 7 days until it plateaus.</li>
-        </ol>
-      </div>
-
-    </div>
-  `;
-}
-
 function confirmReset() {
   if (!confirm('Reset all listing and revenue data? Credentials will be kept. This cannot be undone.')) return;
   localStorage.removeItem(STORAGE_KEY);
@@ -2133,4 +1780,3 @@ if (state.autoPilot) startAutoPilot();
 rerenderAll();
 persist();
 if (needsSetup()) setTimeout(openSetupWizard, 600);
-if (typeof ShopMonitor !== 'undefined') ShopMonitor.init();

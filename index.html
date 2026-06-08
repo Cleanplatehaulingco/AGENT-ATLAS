@@ -88,11 +88,8 @@
         <section id="listing-view"     class="view"></section>
         <section id="approval-view"    class="view"></section>
         <section id="revenue-view"     class="view"></section>
-        <section id="ads-view"          class="view"></section>
-        <section id="design-view"       class="view"></section>
         <section id="postclose-view"   class="view"></section>
         <section id="compliance-view"  class="view"></section>
-        <section id="monitor-view"     class="view"></section>
         <section id="settings-view"    class="view"></section>
       </main>
     </div>
@@ -109,7 +106,6 @@
     <!-- Overlay -->
     <div id="overlay" class="overlay"></div>
 
-    <script src="monitor.js"></script>
     <script src="etsy.js"></script>
     <script src="templates.js"></script>
     <script src="products.js"></script>
@@ -118,24 +114,6 @@
     <script src="post-close-agent.js"></script>
     <script src="app.js"></script>
     <script>
-      // Auth gate: redirect unauthenticated visitors to landing page
-      (function () {
-        const params = new URLSearchParams(window.location.search);
-        const hasAppParam = params.get('app') === '1';
-        const hasToken = !!localStorage.getItem('etsy_token');
-        if (!hasToken && !hasAppParam) {
-          window.location.replace('landing.html');
-        }
-        // If connect=1 is present, trigger OAuth after app scripts load
-        if (params.get('connect') === '1') {
-          window.addEventListener('load', function () {
-            if (typeof EtsyAPI !== 'undefined' && EtsyAPI.startAuth) {
-              EtsyAPI.startAuth();
-            }
-          });
-        }
-      })();
-
       // Mobile nav drawer
       const ham = document.getElementById('hamburger');
       const sidebar = document.getElementById('sidebar');
