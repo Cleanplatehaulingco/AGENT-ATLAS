@@ -380,7 +380,7 @@
       // Fire Meta Purchase event
       if (typeof fbq !== 'undefined') {
         fbq('track', 'Purchase', {
-          value: isBundle ? 9.99 : 3.99,
+          value: isBundle ? 29 : 6.99,
           currency: 'USD',
           content_name: name,
           content_type: 'product',
@@ -394,7 +394,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           eventName: 'Purchase',
-          eventData: { value: isBundle ? 9.99 : 3.99, contentName: name, url: window.location.href },
+          eventData: { value: isBundle ? 29 : 6.99, contentName: name, url: window.location.href },
         }),
       }).catch(() => {});
 
