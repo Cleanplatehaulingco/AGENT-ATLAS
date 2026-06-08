@@ -168,14 +168,20 @@ async function composeSlide(browser, { kind, b64, trade, accent, id }) {
     border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px 26px;
     font-size:23px;font-weight:700;color:#fff;}
   .badge b{color:${accent};}
-  .price{position:absolute;top:120px;right:130px;z-index:5;text-align:center;
-    background:${accent};color:#fff;border-radius:20px;padding:24px 34px;
-    box-shadow:0 24px 60px ${accent}66;transform:rotate(3deg);}
-  .price .amt{font-size:62px;font-weight:900;line-height:1;letter-spacing:-2px;}
-  .price .lbl{font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-top:6px;opacity:.92;}
+  .price{position:absolute;top:116px;right:130px;z-index:5;text-align:center;
+    background:linear-gradient(160deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03));
+    border:1px solid rgba(255,255,255,0.16);border-radius:22px;padding:30px 42px 26px;
+    box-shadow:0 30px 70px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.20);}
+  .price::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:56px;height:4px;background:${accent};border-radius:0 0 4px 4px;}
+  .price .tag{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:${accent};margin-bottom:10px;}
+  .price .amt{font-size:74px;font-weight:900;line-height:0.9;letter-spacing:-3px;color:#fff;
+    display:flex;align-items:flex-start;justify-content:center;gap:3px;}
+  .price .amt sup{font-size:30px;font-weight:800;margin-top:10px;color:rgba(255,255,255,0.8);}
+  .price .lbl{font-size:14px;font-weight:600;letter-spacing:1.5px;color:rgba(255,255,255,0.5);margin-top:12px;text-transform:uppercase;}
   </style></head><body>
     <div class="glow"></div>
-    <div class="price"><div class="amt">$3.99</div><div class="lbl">Instant Download</div></div>
+    <div class="price"><div class="tag">One-Time</div><div class="amt"><sup>$</sup>3.99</div><div class="lbl">Instant Download</div></div>
     <div class="wrap">
       <div class="brand"><div class="brand-logo">TradeOps<span>Vault</span></div></div>
       <div class="eyebrow">${h.eyebrow}</div>
