@@ -2,6 +2,15 @@
 /* ─── Storage ──────────────────────────────────────────────────────── */
 const STORAGE_KEY = 'agentAtlasV3';
 
+/* ─── Etsy publish wiring ──────────────────────────────────────────────
+   Atlas backend handles the Etsy OAuth token + API calls server-side.
+   Publishing creates a DRAFT on Etsy (state:'draft') so nothing goes live
+   without owner review. Requires the Etsy app to be approved & connected
+   (Connect Etsy → /auth/etsy). Verify ETSY_TAXONOMY_ID matches your
+   listing category in Etsy's taxonomy before first publish. */
+const ATLAS_BACKEND    = 'https://agent-atlas.onrender.com';
+const ETSY_TAXONOMY_ID = 1107; // Paper & Party Supplies > Paper > Design & Templates > Templates
+
 /* ─── Etsy-ready copy library ──────────────────────────────────────── */
 const ETSY_COPY = {
   'LS-001': {
@@ -1033,6 +1042,7 @@ function openListingEditor(id, revisionApprovalId = null) {
     <div class="actions">
       <button class="btn approve" id="save-listing-btn">Save</button>
       <button class="btn sendback" id="submit-rec-btn">Submit for Approval</button>
+      <button class="btn primary" id="publish-etsy-btn">Publish to Etsy</button>
       ${revisionApprovalId ? `<button class="btn primary" id="resubmit-revision-btn">Re-submit Approval</button>` : ''}
     </div>`);
 
@@ -1061,8 +1071,71 @@ function openListingEditor(id, revisionApprovalId = null) {
     toast('Submitted to Approval Queue.', 'info');
   };
 
+  document.getElementById('publish-etsy-btn').onclick = () => publishListingToEtsy(l);
+
   const resubBtn = document.getElementById('resubmit-revision-btn');
   if (resubBtn) resubBtn.onclick = () => resubmitApproval(revisionApprovalId);
+}
+
+/* ─── Publish a listing to Etsy (creates a DRAFT via the Atlas server) ─── */
+async function publishListingToEtsy(l) {
+  const copy = ETSY_COPY[l.id] || getEtsyCopy(l.id, l);
+
+  // 1. Is the Etsy shop connected?
+  toast('Checking Etsy connection…', 'info');
+  let status;
+  try {
+    status = await (await fetch(`${ATLAS_BACKEND}/auth/status`)).json();
+  } catch (e) {
+    toast('Cannot reach the Atlas server — try again in a moment.', 'error');
+    return;
+  }
+  if (!status || !status.authenticated) {
+    toast('Connect your Etsy shop first — opening Etsy authorization…', 'info');
+    window.open(`${ATLAS_BACKEND}/auth/etsy`, '_blank');
+    return;
+  }
+
+  // 2. Build the Etsy draft-listing payload
+  const tags = (copy.tags || '').split(',').map(t => t.trim()).filter(Boolean).slice(0, 13);
+  const description = (copy.desc || '') + (copy.faq ? `\n\n— — —\nFAQ\n${copy.faq}` : '');
+  const payload = {
+    quantity:    999,
+    title:       (copy.title || l.name).slice(0, 140),
+    description,
+    price:       Number(l.price || 6.99),
+    who_made:    'i_did',
+    when_made:   'made_to_order',
+    taxonomy_id: ETSY_TAXONOMY_ID,
+    type:        'download',
+    tags,
+    is_supply:   false,
+    state:       'draft',   // create as DRAFT — review & activate inside Etsy
+  };
+
+  // 3. Publish
+  toast(`Publishing ${l.id} to Etsy as a draft…`, 'info');
+  try {
+    const r = await fetch(`${ATLAS_BACKEND}/api/listings`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+    const data = await r.json();
+    if (data.ok) {
+      const listingId = data.listing?.listing_id || data.listing?.results?.[0]?.listing_id;
+      l.etsyListingId = listingId;
+      l.status = 'ready to upload';   // draft on Etsy, awaiting images + activation
+      logAction(`Published ${l.id} to Etsy as draft${listingId ? ` (listing ${listingId})` : ''}.`);
+      persist(); rerenderAll();
+      toast(`${l.id} published to Etsy as a draft — add images & activate in Etsy.`, 'success');
+    } else {
+      console.error('Etsy publish error:', data);
+      toast(`Etsy error: ${data.error || 'unknown'} — see console, fix, and retry.`, 'error');
+    }
+  } catch (e) {
+    toast(`Publish failed: ${e.message}`, 'error');
+  }
 }
 
 /* ─── Approvals ────────────────────────────────────────────────────── */
