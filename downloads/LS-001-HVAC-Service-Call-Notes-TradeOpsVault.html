@@ -833,16 +833,22 @@ document.addEventListener('DOMContentLoaded',function(){
   var m=location.pathname.match(/LS-\d+/);
   var listingId=m?m[0]:null;
 
+  // ---- top store nav (logo home + browse) ----
+  var nav=document.createElement('div');nav.className='no-print';
+  nav.style.cssText='position:relative;z-index:10000;background:#0d1526;border-bottom:1px solid rgba(255,255,255,0.1);padding:12px 22px;display:flex;align-items:center;justify-content:space-between;font-family:Inter,Arial,sans-serif;';
+  nav.innerHTML='<a href="'+STORE+'" style="text-decoration:none;font-size:17px;font-weight:800;color:#fff;letter-spacing:-0.5px;">TradeOps<span style="color:#e85d04;">Vault</span></a>'
+    +'<a href="'+STORE+'" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.16);border-radius:9px;padding:8px 16px;font-size:13px;font-weight:600;color:#fff;">&larr; Browse All Templates</a>';
+  document.body.insertBefore(nav, document.body.firstChild);
+
   // ---- watermark ----
-  var wm=document.createElement('div');
-  wm.className='no-print';
+  var wm=document.createElement('div');wm.className='no-print';
   wm.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9990;display:flex;align-items:center;justify-content:center;overflow:hidden;';
   wm.innerHTML='<div style="font:900 130px Inter,Arial,sans-serif;color:rgba(232,93,4,0.07);transform:rotate(-30deg);white-space:nowrap;letter-spacing:10px;">PREVIEW &nbsp; PREVIEW &nbsp; PREVIEW</div>';
   document.body.appendChild(wm);
 
   // ---- checkout ----
   async function checkout(btn){
-    if(btn){btn.textContent='Loading…';btn.style.pointerEvents='none';}
+    if(btn){btn.textContent='Loading...';btn.style.pointerEvents='none';}
     if(typeof fbq!=='undefined')fbq('track','AddToCart',{value:3.99,currency:'USD'});
     if(!listingId){location.href=STORE;return;}
     try{
@@ -857,7 +863,7 @@ document.addEventListener('DOMContentLoaded',function(){
   function showGate(){
     if(document.getElementById('tov-gate'))return;
     var o=document.createElement('div');o.id='tov-gate';o.className='no-print';
-    o.style.cssText='position:fixed;inset:0;z-index:10001;background:rgba(7,12,22,0.78);display:flex;align-items:center;justify-content:center;font-family:Inter,Arial,sans-serif;padding:20px;';
+    o.style.cssText='position:fixed;inset:0;z-index:10002;background:rgba(7,12,22,0.78);display:flex;align-items:center;justify-content:center;font-family:Inter,Arial,sans-serif;padding:20px;';
     o.innerHTML='<div style="background:#0f1628;border:1.5px solid rgba(232,93,4,0.4);border-radius:18px;max-width:420px;width:100%;padding:34px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.6);">'
       +'<div style="font-size:34px;margin-bottom:10px;">&#128274;</div>'
       +'<div style="font-size:21px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.5px;">Unlock to Print &amp; Save</div>'
@@ -882,12 +888,12 @@ document.addEventListener('DOMContentLoaded',function(){
     }
   });
 
-  // ---- sticky buy bar ----
+  // ---- sticky bottom buy bar (with browse on left) ----
   var bar=document.createElement('div');bar.className='no-print';
-  bar.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:10000;background:linear-gradient(135deg,#0f1628,#1a2744);border-top:2px solid #e85d04;padding:13px 22px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;box-shadow:0 -8px 30px rgba(0,0,0,0.45);font-family:Inter,Arial,sans-serif;';
-  bar.innerHTML='<div style="color:#fff;font-size:14px;font-weight:600;"><span style="color:#e85d04;font-weight:800;">Preview Mode</span> &nbsp;&middot;&nbsp; Fill it out &amp; try AI free. Buy to print &amp; save.</div>'
+  bar.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:10000;background:linear-gradient(135deg,#0f1628,#1a2744);border-top:2px solid #e85d04;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 -8px 30px rgba(0,0,0,0.45);font-family:Inter,Arial,sans-serif;';
+  bar.innerHTML='<a href="'+STORE+'" style="text-decoration:none;color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;">&larr; Browse All Templates</a>'
     +'<div style="display:flex;align-items:center;gap:14px;">'
-    +'<div style="color:#fff;font-weight:800;font-size:18px;"><span style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);">ONE-TIME</span> &nbsp;$3.99</div>'
+    +'<div style="color:#fff;font-weight:800;font-size:18px;"><span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);vertical-align:middle;">ONE-TIME</span> &nbsp;$3.99</div>'
     +'<button id="tov-bar-buy" style="background:#e85d04;color:#fff;border:none;border-radius:10px;padding:12px 26px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Get Template &rarr;</button>'
     +'</div>';
   document.body.appendChild(bar);
