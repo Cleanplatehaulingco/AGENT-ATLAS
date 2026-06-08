@@ -93,8 +93,7 @@ function collectAllFormData(){
 function exportCSV(){
   var data=collectAllFormData();
   var keys=Object.keys(data);
-  var csv=keys.map(function(k){return '"'+k.replace(/"/g,'""')+'"';}).join(',')+'
-'
+  var csv=keys.map(function(k){return '"'+k.replace(/"/g,'""')+'"';}).join(',')+'\n'
     +keys.map(function(k){return '"'+String(data[k]).replace(/"/g,'""')+'"';}).join(',');
   var blob=new Blob([csv],{type:'text/csv'});
   var a=document.createElement('a');
@@ -130,7 +129,7 @@ function sendToCRM(){
     .then(function(r){return r.json();}).then(function(res){
       if(res.ok){
         var panel=document.getElementById('tov-export-panel');
-        if(panel)panel.innerHTML='<div style="padding:24px;text-align:center"><div style="font-size:36px;margin-bottom:12px">✓</div><div style="font-weight:800;font-size:16px;margin-bottom:8px">Saved to CRM</div><div style="font-size:13px;color:rgba(255,255,255,0.6)">View at tradeopsvault.com/crm</div><button onclick="document.getElementById('tov-export-panel').style.display='none'" style="margin-top:16px;background:none;border:1px solid rgba(255,255,255,0.2);color:#fff;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:12px">Close</button></div>';
+        if(panel)panel.innerHTML='<div style="padding:24px;text-align:center"><div style="font-size:36px;margin-bottom:12px">✓</div><div style="font-weight:800;font-size:16px;margin-bottom:8px">Saved to CRM</div><div style="font-size:13px;color:rgba(255,255,255,0.6)">View at tradeopsvault.com/crm</div><button onclick="document.getElementById(\'tov-export-panel\').style.display=\'none\'" style="margin-top:16px;background:none;border:1px solid rgba(255,255,255,0.2);color:#fff;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:12px">Close</button></div>';
       }
     }).catch(function(){window.open('https://tradeopsvault.com/crm','_blank');});
 }
@@ -151,9 +150,9 @@ function showExportPanel(){
   var html='<div style="padding:20px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">'
     +'<div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:50%;background:#1a2744;border:1.5px solid #e85d04;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">⬇</div><div style="font-weight:800;font-size:15px">Export Job Data</div></div>'
-    +'<button onclick="document.getElementById('tov-export-panel').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:0;line-height:1">×</button></div>'
+    +'<button onclick="document.getElementById(\'tov-export-panel\').style.display=\'none\'" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:0;line-height:1">×</button></div>'
     +'<div style="margin-bottom:14px">'
-    +'<button onclick="exportCSV();document.getElementById('tov-export-panel').style.display='none';" style="width:100%;background:#1a2744;border:1.5px solid rgba(255,255,255,0.15);color:#fff;padding:12px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px">'
+    +'<button onclick="exportCSV();document.getElementById(\'tov-export-panel\').style.display=\'none\';" style="width:100%;background:#1a2744;border:1.5px solid rgba(255,255,255,0.15);color:#fff;padding:12px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px">'
     +'<span style="font-size:18px">📊</span><div><div>Download as CSV</div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px">Opens in Excel, Google Sheets, Numbers</div></div></button></div>'
     +'<div style="margin-bottom:14px;opacity:'+(isPro?'1':'0.6')+'">'
     +'<div style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Zapier / Webhook'+proLock+'</div>'
@@ -190,10 +189,10 @@ function showAiPanel(html){
 function analyzeForm(){
   var formData=collectFormData();
   if(Object.keys(formData).length<2){
-    showAiPanel('<div style="padding:20px"><div style="color:#e85d04;font-weight:800;margin-bottom:8px;">⚠ Fill in more fields first</div><div style="font-size:13px;color:rgba(255,255,255,0.7);">Add your job details before analyzing.</div><div style="text-align:right;margin-top:12px"><button onclick="document.getElementById('tov-ai-panel').style.display='none'" style="background:none;border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px">Close</button></div></div>');
+    showAiPanel('<div style="padding:20px"><div style="color:#e85d04;font-weight:800;margin-bottom:8px;">⚠ Fill in more fields first</div><div style="font-size:13px;color:rgba(255,255,255,0.7);">Add your job details before analyzing.</div><div style="text-align:right;margin-top:12px"><button onclick="document.getElementById(\'tov-ai-panel\').style.display=\'none\'" style="background:none;border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px">Close</button></div></div>');
     return;
   }
-  showAiPanel('<div style="padding:20px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><div style="width:28px;height:28px;border-radius:50%;background:#e85d04;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">✦</div><div style="font-weight:800;font-size:15px">AI Job Review — Red Flags & Opportunities</div></div><div style="font-size:13px;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px"><span style="display:inline-block;width:14px;height:14px;border:2px solid #e85d04;border-top-color:transparent;border-radius:50%;animation:tov-spin 0.8s linear infinite"></span>Analyzing your job data...</div><style>@keyframes tov-spin{to{transform:rotate(360deg)}}</style></div>');
+  showAiPanel('<div style="padding:20px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><div style="width:28px;height:28px;border-radius:50%;background:#e85d04;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">✦</div><div style="font-weight:800;font-size:15px">AI Job Analysis</div></div><div style="font-size:13px;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px"><span style="display:inline-block;width:14px;height:14px;border:2px solid #e85d04;border-top-color:transparent;border-radius:50%;animation:tov-spin 0.8s linear infinite"></span>Analyzing your job data...</div><style>@keyframes tov-spin{to{transform:rotate(360deg)}}</style></div>');
   fetch(AI_API+'/ai/analyze',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -202,35 +201,19 @@ function analyzeForm(){
   .then(function(r){return r.json();})
   .then(function(res){
     if(res.limitReached){
-      showAiPanel('<div style="padding:20px"><div style="color:#e85d04;font-weight:800;font-size:15px;margin-bottom:8px">Monthly limit reached</div><div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:16px">You've used your 5 free AI analyses this month.<br><br>Upgrade for unlimited AI + CRM features.</div><a href="https://tradeopsvault.com" target="_blank" style="display:block;background:#e85d04;color:#fff;text-align:center;padding:12px;border-radius:8px;text-decoration:none;font-weight:800;font-size:14px;margin-bottom:8px">Upgrade at TradeOpsVault.com →</a><button onclick="document.getElementById('tov-ai-panel').style.display='none'" style="width:100%;background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);padding:8px;border-radius:8px;cursor:pointer;font-size:12px">Close</button></div>');
+      showAiPanel('<div style="padding:20px"><div style="color:#e85d04;font-weight:800;font-size:15px;margin-bottom:8px">Monthly limit reached</div><div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:16px">You\'ve used your 5 free AI analyses this month.<br><br>Upgrade for unlimited AI + CRM features.</div><a href="https://tradeopsvault.com" target="_blank" style="display:block;background:#e85d04;color:#fff;text-align:center;padding:12px;border-radius:8px;text-decoration:none;font-weight:800;font-size:14px;margin-bottom:8px">Upgrade at TradeOpsVault.com →</a><button onclick="document.getElementById(\'tov-ai-panel\').style.display=\'none\'" style="width:100%;background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);padding:8px;border-radius:8px;cursor:pointer;font-size:12px">Close</button></div>');
       return;
     }
     if(!res.ok){throw new Error(res.error||'Analysis failed');}
-    var bullets=(function(){
-      var lines=res.analysis.split('\n');
-      var out='';
-      lines.forEach(function(l){
-        var t=l.trim();
-        if(!t)return;
-        if(t.startsWith('**')&&t.endsWith('**')){
-          // Section header
-          out+='<div style="font-size:12px;font-weight:800;color:#e85d04;letter-spacing:0.05em;text-transform:uppercase;margin:14px 0 6px">'+t.replace(/\*\*/g,'')+'</div>';
-        } else if(t.startsWith('⚠')||t.startsWith('AI review')){
-          // Disclaimer line
-          out+='<div style="font-size:11px;color:rgba(255,255,255,0.4);border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;margin-top:8px;line-height:1.5">'+t+'</div>';
-        } else {
-          // Regular bullet
-          out+='<div style="display:flex;gap:10px;margin-bottom:10px;font-size:13px;line-height:1.5"><span style="color:#e85d04;flex-shrink:0;margin-top:1px">▸</span><span style="color:rgba(255,255,255,0.85)">'+t.replace(/^[\-\*•▸]\s*/,'')+'</span></div>';
-        }
-      });
-      return out;
-    })();
+    var bullets=res.analysis.split('\n').filter(function(l){return l.trim();}).map(function(l){
+      return '<div style="display:flex;gap:10px;margin-bottom:12px;font-size:13px;line-height:1.5"><span style="color:#e85d04;flex-shrink:0;margin-top:1px">▸</span><span style="color:rgba(255,255,255,0.88)">'+l.replace(/^[\-\*•▸]\s*/,'')+'</span></div>';
+    }).join('');
     var remaining=res.callsRemaining!==undefined?res.callsRemaining:0;
     var callsUsed=res.callsUsed!==undefined?res.callsUsed:0;
     var upsellBanner='';
     if(callsUsed>=3){
       upsellBanner='<div style="background:linear-gradient(135deg,rgba(232,93,4,0.15),rgba(232,93,4,0.08));border:1px solid rgba(232,93,4,0.3);border-radius:10px;padding:14px 16px;margin-top:14px">'
-        +'<div style="font-size:12px;font-weight:800;color:#e85d04;margin-bottom:6px">✦ You're getting real value from this</div>'
+        +'<div style="font-size:12px;font-weight:800;color:#e85d04;margin-bottom:6px">✦ You\'re getting real value from this</div>'
         +'<div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:1.5;margin-bottom:10px">Upgrade to <strong style="color:#fff">TradeOpsVault Pro</strong> for unlimited AI analyses, job history tracking, and client CRM — <strong style="color:#e85d04">$14.99/mo</strong></div>'
         +'<button onclick="startCheckout()" style="display:block;width:100%;background:#e85d04;color:#fff;text-align:center;padding:9px;border-radius:7px;border:none;cursor:pointer;font-weight:800;font-size:12px;letter-spacing:0.5px;font-family:inherit">Get Unlimited Access — $14.99/mo →</button>'
         +'</div>';
@@ -238,20 +221,14 @@ function analyzeForm(){
     var footerText=remaining<=1
       ?'<span style="font-size:11px;color:#e85d04;font-weight:700">'+remaining+' free '+(remaining===1?'analysis':'analyses')+' left this month</span>'
       :'<span style="font-size:11px;color:rgba(255,255,255,0.3)">'+remaining+' free analyses left this month</span>';
-    showAiPanel('<div style="padding:20px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:50%;background:#e85d04;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">✦</div><div style="font-weight:800;font-size:15px">AI Job Review — Red Flags & Opportunities</div></div><button onclick="document.getElementById('tov-ai-panel').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:0;line-height:1">×</button></div>'+bullets+upsellBanner+'<div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;align-items:center">'+footerText+'<a href="https://tradeopsvault.com" target="_blank" style="font-size:11px;color:#e85d04;text-decoration:none;font-weight:700">tradeopsvault.com</a></div></div>');
+    showAiPanel('<div style="padding:20px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:50%;background:#e85d04;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">✦</div><div style="font-weight:800;font-size:15px">AI Job Analysis</div></div><button onclick="document.getElementById(\'tov-ai-panel\').style.display=\'none\'" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:0;line-height:1">×</button></div>\'+bullets+upsellBanner+\'<div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;align-items:center">\'+footerText+\'<a href="https://tradeopsvault.com" target="_blank" style="font-size:11px;color:#e85d04;text-decoration:none;font-weight:700">tradeopsvault.com</a></div></div>');
   })
   .catch(function(){
-    showAiPanel('<div style="padding:20px"><div style="color:#e85d04;font-weight:800;margin-bottom:8px">Analysis unavailable</div><div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:12px">Could not reach the AI server. Check your internet connection.</div><button onclick="document.getElementById('tov-ai-panel').style.display='none'" style="background:none;border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px">Close</button></div>');
+    showAiPanel('<div style="padding:20px"><div style="color:#e85d04;font-weight:800;margin-bottom:8px">Analysis unavailable</div><div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:12px">Could not reach the AI server. Check your internet connection.</div><button onclick="document.getElementById(\'tov-ai-panel\').style.display=\'none\'" style="background:none;border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px">Close</button></div>');
   });
 }
 </script>
-<style>
-.tov-ai-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#0d1526,#1a2744);color:#fff;border:1.5px solid #e85d04;border-radius:8px;padding:9px 22px;font-size:9pt;font-weight:800;cursor:pointer;letter-spacing:0.5px;transition:all .15s;font-family:inherit;}
-.tov-ai-btn:hover{background:#e85d04;border-color:#e85d04;}
-.tov-ai-btn .ai-dot{width:8px;height:8px;border-radius:50%;background:#e85d04;animation:tov-pulse 1.5s ease-in-out infinite;}
-.tov-ai-btn:hover .ai-dot{background:#fff;}
-@keyframes tov-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
-</style>
+<style>@keyframes tov-spin{to{transform:rotate(360deg)}}</style>
 
 <script>
 (function(){
@@ -890,6 +867,80 @@ document.addEventListener('DOMContentLoaded',function(){
   document.body.appendChild(bar);
   document.body.style.paddingBottom='84px';
   document.getElementById('tov-bar-buy').addEventListener('click',function(){checkout(this);});
+})();
+</script>
+<script>/* TRADE TOOLS INJECT */
+(function(){
+  var m=location.pathname.match(/LS-\d+/);
+  var id=m?m[0]:'';
+  var D='$';
+  // Per-trade calculator configs
+  var TOOLS={
+    'LS-001':{t:'HVAC Sizing',f:[['sqft','Conditioned area (sq ft)',1500]],c:function(v){var tons=v.sqft/600;return[['Recommended size',tons.toFixed(1)+' tons'],['Cooling capacity',Math.round(tons*12000).toLocaleString()+' BTU/hr']];},n:'Rule of thumb (1 ton / 600 sq ft). Confirm with a Manual J load calc.'},
+    'LS-002':{t:'Water Heater Sizing',f:[['people','People in home',4],['baths','Bathrooms',2]],c:function(v){var tank=Math.max(30,v.people*12);var gpm=(v.baths*2.5).toFixed(1);return[['Tank size',tank+' gallons'],['Tankless flow',gpm+' GPM']];},n:'General sizing guideline. Adjust for simultaneous use and climate.'},
+    'LS-003':{t:'Electrical Load & Wire',f:[['volts','Volts',240],['amps','Amps',20]],c:function(v){var w=v.volts*v.amps;var g='14 AWG';if(v.amps>15)g='12 AWG';if(v.amps>20)g='10 AWG';if(v.amps>30)g='8 AWG';if(v.amps>40)g='6 AWG';if(v.amps>55)g='4 AWG';return[['Load',w.toLocaleString()+' watts'],['Min. copper wire',g]];},n:'Copper, 60-75C typical. Always verify against NEC ampacity tables.'},
+    'LS-004':{t:'Fertilizer / Seed Coverage',f:[['sqft','Lawn area (sq ft)',5000],['cov','Bag coverage (sq ft)',5000]],c:function(v){var bags=Math.ceil(v.sqft/v.cov);return[['Bags needed',bags+' bag(s)']];},n:'Round up to whole bags. Check product label for exact coverage.'},
+    'LS-006':{t:'Chemical Mix',f:[['sqft','Treatment area (sq ft)',2000],['rate','Rate (oz / 1000 sq ft)',1.5]],c:function(v){var oz=(v.sqft/1000*v.rate).toFixed(1);var gal=(v.sqft/1000).toFixed(1);return[['Product',oz+' oz'],['Water (approx)',gal+' gal']];},n:'Approximate. Always follow the product label mix ratio.'},
+    'LS-007':{t:'Roofing Squares & Bundles',f:[['sqft','Roof area (sq ft)',2000],['waste','Waste %',10]],c:function(v){var a=v.sqft*(1+v.waste/100);var sq=(a/100).toFixed(1);var b=Math.ceil(a/100*3);return[['Squares',sq],['Bundles (3/sq)',b]];},n:'Architectural shingles = 3 bundles/square. Add ridge/starter separately.'},
+    'LS-008':{t:'Time & Price',f:[['sqft','Area (sq ft)',1500],['rate','Speed (sq ft/hr)',1500],['ppsf','Price per sq ft (cents)',20]],c:function(v){var hrs=(v.sqft/v.rate).toFixed(1);var price=(v.sqft*v.ppsf/100).toFixed(2);return[['Est. time',hrs+' hrs'],['Suggested price',D+price]];},n:'Adjust speed/price for surface type and soiling.'},
+    'LS-013':{t:'Paint Coverage',f:[['sqft','Wall area (sq ft)',1200],['coats','Coats',2],['cov','Coverage (sq ft/gal)',350]],c:function(v){var g=Math.ceil(v.sqft*v.coats/v.cov);return[['Paint needed',g+' gallon(s)']];},n:'350 sq ft/gal typical. Porous/dark surfaces need more.'},
+    'LS-014':{t:'De-Icer / Salt',f:[['sqft','Area (sq ft)',5000],['rate','Rate (lb / 1000 sq ft)',12]],c:function(v){var lb=Math.round(v.sqft/1000*v.rate);var bags=Math.ceil(lb/50);return[['Salt needed',lb+' lbs'],['50 lb bags',bags]];},n:'12 lb/1000 sq ft typical. Use less for light frost.'},
+    'LS-015':{t:'Time & Price',f:[['panes','Number of panes',20],['min','Minutes per pane',3],['pp','Price per pane (dollars)',5]],c:function(v){var hrs=(v.panes*v.min/60).toFixed(1);var price=(v.panes*v.pp).toFixed(2);return[['Est. time',hrs+' hrs'],['Suggested price',D+price]];},n:'Adjust for screens, height, and grime level.'},
+    'LS-016':{t:'Chlorine Dose',f:[['gal','Pool volume (gal)',15000],['cur','Current FC (ppm)',1],['tgt','Target FC (ppm)',3]],c:function(v){var raise=Math.max(0,v.tgt-v.cur);var oz=(raise*(v.gal/10000)*10.7).toFixed(1);return[['Raise FC by',raise+' ppm'],['12.5% liquid chlorine',oz+' oz']];},n:'Approximate. Always test water before and after dosing.'},
+    'LS-017':{t:'Boxes Needed',f:[['sqft','Floor area (sq ft)',500],['cov','Box coverage (sq ft)',20],['waste','Waste %',10]],c:function(v){var b=Math.ceil(v.sqft*(1+v.waste/100)/v.cov);return[['Boxes needed',b+' box(es)']];},n:'10% waste typical; use 15% for diagonal or patterned layouts.'},
+    'LS-018':{t:'Concrete Volume',f:[['l','Length (ft)',10],['w','Width (ft)',10],['d','Depth (in)',4]],c:function(v){var cy=(v.l*v.w*(v.d/12)/27);var bags=Math.ceil(cy*45);return[['Concrete',cy.toFixed(2)+' cu yd'],['80 lb bags',bags]];},n:'~45 x 80 lb bags per cubic yard. Order 5-10% extra.'}
+  };
+
+  var cfg=TOOLS[id];
+
+  // floating button
+  var btn=document.createElement('button');btn.className='no-print';btn.id='tov-tools-btn';
+  btn.innerHTML='&#129518; Trade Tools';
+  btn.style.cssText='position:fixed;right:22px;bottom:'+ (new URLSearchParams(location.search).get('preview')==='1'?'98px':'24px') +';z-index:9995;background:#0f1628;color:#fff;border:1.5px solid #e85d04;border-radius:30px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,Arial,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,0.4);';
+  document.body.appendChild(btn);
+
+  function row(label,val){return '<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eef;font-size:14px;"><span style="color:#556;">'+label+'</span><b style="color:#0f1628;">'+val+'</b></div>';}
+  function field(f){return '<label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#8899bb;margin:10px 0 4px;">'+f[1]+'</label><input type="number" step="any" id="tt-'+f[0]+'" value="'+f[2]+'" style="width:100%;padding:10px;border:1.5px solid #dde2f0;border-radius:8px;font-size:15px;font-family:inherit;">';}
+
+  function openModal(){
+    if(document.getElementById('tov-tools'))return;
+    var o=document.createElement('div');o.id='tov-tools';o.className='no-print';
+    o.style.cssText='position:fixed;inset:0;z-index:10003;background:rgba(7,12,22,0.7);display:flex;align-items:center;justify-content:center;font-family:Inter,Arial,sans-serif;padding:18px;overflow:auto;';
+    var tradeHTML='';
+    if(cfg){
+      tradeHTML='<div style="margin-bottom:22px;"><div style="font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#e85d04;margin-bottom:6px;">'+cfg.t+'</div>'
+        + cfg.f.map(field).join('')
+        + '<div id="tt-trade-out" style="margin-top:14px;background:#f7f8fc;border-radius:8px;padding:6px 14px;"></div>'
+        + '<div style="font-size:11px;color:#94a3b8;margin-top:8px;line-height:1.5;">'+cfg.n+'</div></div><hr style="border:none;border-top:1px solid #eef;margin:18px 0;">';
+    }
+    o.innerHTML='<div style="background:#fff;border-radius:18px;max-width:420px;width:100%;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,0.5);max-height:90vh;overflow:auto;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><div style="font-size:19px;font-weight:800;color:#0f1628;">&#129518; Trade Tools</div><div id="tt-close" style="cursor:pointer;font-size:22px;color:#aab;line-height:1;">&times;</div></div>'
+      +tradeHTML
+      +'<div style="font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#e85d04;margin-bottom:6px;">Quote Builder</div>'
+      +field(['lh','Labor hours',2])+field(['lr','Labor rate ('+D+'/hr)',95])+field(['mc','Materials cost ('+D+')',120])+field(['mk','Material markup %',30])
+      +'<div id="tt-quote-out" style="margin-top:14px;background:#f7f8fc;border-radius:8px;padding:6px 14px;"></div>'
+      +'<div style="font-size:11px;color:#94a3b8;margin-top:8px;">Quote = labor + materials with markup. Profit = quote minus your raw cost.</div>'
+      +'</div>';
+    document.body.appendChild(o);
+    document.getElementById('tt-close').addEventListener('click',function(){o.remove();});
+    o.addEventListener('click',function(e){if(e.target===o)o.remove();});
+
+    function val(id){var el=document.getElementById('tt-'+id);return el?(parseFloat(el.value)||0):0;}
+    function recalc(){
+      if(cfg){
+        var v={};cfg.f.forEach(function(f){v[f[0]]=val(f[0]);});
+        document.getElementById('tt-trade-out').innerHTML=cfg.c(v).map(function(r){return row(r[0],r[1]);}).join('');
+      }
+      var lh=val('lh'),lr=val('lr'),mc=val('mc'),mk=val('mk');
+      var labor=lh*lr, mat=mc*(1+mk/100), total=labor+mat, profit=total-(lh*lr)-mc+(lh*lr);
+      // profit = markup on materials only here; show material profit + total
+      var matProfit=mc*(mk/100);
+      document.getElementById('tt-quote-out').innerHTML=row('Labor',D+labor.toFixed(2))+row('Materials (w/ markup)',D+mat.toFixed(2))+row('Total quote',D+total.toFixed(2))+row('Markup profit',D+matProfit.toFixed(2));
+    }
+    o.querySelectorAll('input').forEach(function(i){i.addEventListener('input',recalc);});
+    recalc();
+  }
+  btn.addEventListener('click',openModal);
 })();
 </script>
 </body></html>
