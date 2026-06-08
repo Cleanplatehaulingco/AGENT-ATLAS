@@ -1,9 +1,14 @@
 TRADEOPSVAULT — ETSY LISTING COPY
-============================================================
+================================================================
+ORDER: today's 7 strongest first (HVAC, Plumbing, Electrical, Roofing,
+Handyman, Lawn Care, Pressure Washing), then the rest, bundle last.
+Folder for images: mockups/<ID>/  — use the 4 *ELITE* png files.
+Digital file to upload: downloads/<ID>-...-TradeOpsVault.html
+================================================================
 
-############################################################
-LS-001
-############################################################
+################################################################
+LS-001   ★ TODAY #1 (HVAC) 
+################################################################
 
 PRICE: $6.99
 
@@ -37,9 +42,9 @@ WHAT YOU GET:
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-002
-############################################################
+################################################################
+LS-002   ★ TODAY #2 (Plumbing) 
+################################################################
 
 PRICE: $6.99
 
@@ -62,9 +67,9 @@ Includes dispatch priority, parts & labor invoice, job history, client sign-off.
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-003
-############################################################
+################################################################
+LS-003   ★ TODAY #3 (Electrical) 
+################################################################
 
 PRICE: $6.99
 
@@ -84,75 +89,9 @@ Includes hazard assessment, panel & circuit inspection, code violations log, sig
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-004
-############################################################
-
-PRICE: $6.99
-
-TITLE:
-Lawn Care Weekly Crew Planner | AI-Powered Fillable PDF | Lawn Business Form Template
-
-TAGS:
-lawn care business form,landscaping invoice template,lawn service schedule,crew planner template,landscaping business form,digital download,fillable pdf form,small business form,job cost calculator,contractor template,trades business form,instant download,lawn route planner
-
-DESCRIPTION:
-Professional Lawn Care crew planner — fillable in browser, print as PDF.
-
-✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES
-
-Includes weekly route planner, crew hour tracker, daily job list, end-of-day summary.
-
-TradeOpsVault · tradeopsvault.com
-
-
-############################################################
-LS-005
-############################################################
-
-PRICE: $6.99
-
-TITLE:
-Auto Detail Intake & Waiver Form | AI-Powered Fillable PDF | Auto Detailing Business Template
-
-TAGS:
-auto detail form,car detailing invoice,detailing waiver template,auto detailing intake form,car wash business form,digital download,fillable pdf form,small business form,job cost calculator,contractor template,trades business form,instant download,detailing contract
-
-DESCRIPTION:
-Professional Auto Detail intake & waiver — fillable in browser, print as PDF.
-
-✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES
-
-Includes vehicle intake checklist, liability waiver, service selections, pre-existing damage log.
-
-TradeOpsVault · tradeopsvault.com
-
-
-############################################################
-LS-006
-############################################################
-
-PRICE: $6.99
-
-TITLE:
-Pest Control Follow-Up Cards | AI-Powered Fillable PDF | Pest Control Business Template
-
-TAGS:
-pest control form,exterminator invoice template,pest control service form,pest treatment record,exterminator business form,digital download,fillable pdf form,small business form,job cost calculator,contractor template,trades business form,instant download,pest control invoice
-
-DESCRIPTION:
-Professional Pest Control follow-up cards — fillable in browser, print as PDF.
-
-✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES
-
-Includes treatment summary, chemical dosage record, follow-up scheduling, service invoice.
-
-TradeOpsVault · tradeopsvault.com
-
-
-############################################################
-LS-007
-############################################################
+################################################################
+LS-007   ★ TODAY #4 (Roofing) 
+################################################################
 
 PRICE: $6.99
 
@@ -172,53 +111,9 @@ Includes scope of change, price adjustment, authorization & signature, contract 
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-008
-############################################################
-
-PRICE: $6.99
-
-TITLE:
-Pressure Washing Route Sheet | AI-Powered Fillable PDF | Pressure Washing Business Template
-
-TAGS:
-pressure washing form,power washing invoice,pressure washing business form,power washing route sheet,cleaning contractor form,digital download,fillable pdf form,small business form,job cost calculator,contractor template,trades business form,instant download,pressure washing invoice
-
-DESCRIPTION:
-Professional Pressure Washing route sheet — fillable in browser, print as PDF.
-
-✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES
-
-Includes daily client route, PSI & detergent log, client sign-off per stop, service invoice.
-
-TradeOpsVault · tradeopsvault.com
-
-
-############################################################
-LS-009
-############################################################
-
-PRICE: $6.99
-
-TITLE:
-Appliance Repair Parts Tracker | AI-Powered Fillable PDF | Appliance Repair Business Template
-
-TAGS:
-appliance repair form,appliance technician invoice,appliance repair tracker,parts order form,appliance business template,digital download,fillable pdf form,small business form,job cost calculator,contractor template,trades business form,instant download,appliance repair invoice
-
-DESCRIPTION:
-Professional Appliance Repair parts tracker — fillable in browser, print as PDF.
-
-✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES
-
-Includes parts order log with ETA, supplier tracking, cost summary, service invoice.
-
-TradeOpsVault · tradeopsvault.com
-
-
-############################################################
-LS-010
-############################################################
+################################################################
+LS-010   ★ TODAY #5 (Handyman) 
+################################################################
 
 PRICE: $6.99
 
@@ -238,9 +133,119 @@ Includes materials purchased log, receipt tracking, auto-calculating totals, cli
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-011
-############################################################
+################################################################
+LS-004   ★ TODAY #6 (Lawn Care) 
+################################################################
+
+PRICE: $6.99
+
+TITLE:
+Lawn Care Weekly Crew Planner | AI-Powered Fillable PDF | Lawn Business Form Template
+
+TAGS:
+lawn care business form,landscaping invoice template,lawn service schedule,crew planner template,landscaping business form,digital download,fillable pdf form,small business form,job cost calculator,contractor template,trades business form,instant download,lawn route planner
+
+DESCRIPTION:
+Professional Lawn Care crew planner — fillable in browser, print as PDF.
+
+✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES
+
+Includes weekly route planner, crew hour tracker, daily job list, end-of-day summary.
+
+TradeOpsVault · tradeopsvault.com
+
+
+################################################################
+LS-008   ★ TODAY #7 (Pressure Washing) 
+################################################################
+
+PRICE: $6.99
+
+TITLE:
+Pressure Washing Route Sheet | AI-Powered Fillable PDF | Pressure Washing Business Template
+
+TAGS:
+pressure washing form,power washing invoice,pressure washing business form,power washing route sheet,cleaning contractor form,digital download,fillable pdf form,small business form,job cost calculator,contractor template,trades business form,instant download,pressure washing invoice
+
+DESCRIPTION:
+Professional Pressure Washing route sheet — fillable in browser, print as PDF.
+
+✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES
+
+Includes daily client route, PSI & detergent log, client sign-off per stop, service invoice.
+
+TradeOpsVault · tradeopsvault.com
+
+
+################################################################
+LS-005   
+################################################################
+
+PRICE: $6.99
+
+TITLE:
+Auto Detail Intake & Waiver Form | AI-Powered Fillable PDF | Auto Detailing Business Template
+
+TAGS:
+auto detail form,car detailing invoice,detailing waiver template,auto detailing intake form,car wash business form,digital download,fillable pdf form,small business form,job cost calculator,contractor template,trades business form,instant download,detailing contract
+
+DESCRIPTION:
+Professional Auto Detail intake & waiver — fillable in browser, print as PDF.
+
+✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES
+
+Includes vehicle intake checklist, liability waiver, service selections, pre-existing damage log.
+
+TradeOpsVault · tradeopsvault.com
+
+
+################################################################
+LS-006   
+################################################################
+
+PRICE: $6.99
+
+TITLE:
+Pest Control Follow-Up Cards | AI-Powered Fillable PDF | Pest Control Business Template
+
+TAGS:
+pest control form,exterminator invoice template,pest control service form,pest treatment record,exterminator business form,digital download,fillable pdf form,small business form,job cost calculator,contractor template,trades business form,instant download,pest control invoice
+
+DESCRIPTION:
+Professional Pest Control follow-up cards — fillable in browser, print as PDF.
+
+✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES
+
+Includes treatment summary, chemical dosage record, follow-up scheduling, service invoice.
+
+TradeOpsVault · tradeopsvault.com
+
+
+################################################################
+LS-009   
+################################################################
+
+PRICE: $6.99
+
+TITLE:
+Appliance Repair Parts Tracker | AI-Powered Fillable PDF | Appliance Repair Business Template
+
+TAGS:
+appliance repair form,appliance technician invoice,appliance repair tracker,parts order form,appliance business template,digital download,fillable pdf form,small business form,job cost calculator,contractor template,trades business form,instant download,appliance repair invoice
+
+DESCRIPTION:
+Professional Appliance Repair parts tracker — fillable in browser, print as PDF.
+
+✦ AI-POWERED · ⚡ SMART CALC · 📊 EXPORT · 🌐 4 LANGUAGES
+
+Includes parts order log with ETA, supplier tracking, cost summary, service invoice.
+
+TradeOpsVault · tradeopsvault.com
+
+
+################################################################
+LS-011   
+################################################################
 
 PRICE: $6.99
 
@@ -260,9 +265,9 @@ Includes vehicle info, parts replaced tracker, OEM vs aftermarket log, labor inv
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-012
-############################################################
+################################################################
+LS-012   
+################################################################
 
 PRICE: $6.99
 
@@ -282,9 +287,9 @@ Includes ID verification, authorization statement, service invoice, client sign-
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-013
-############################################################
+################################################################
+LS-013   
+################################################################
 
 PRICE: $6.99
 
@@ -304,9 +309,9 @@ Includes surface prep checklist, room-by-room punch list, primer notes, final wa
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-014
-############################################################
+################################################################
+LS-014   
+################################################################
 
 PRICE: $6.99
 
@@ -326,9 +331,9 @@ Includes trigger conditions log, client route priority, salt & sand tracker, pre
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-015
-############################################################
+################################################################
+LS-015   
+################################################################
 
 PRICE: $6.99
 
@@ -348,9 +353,9 @@ Includes service packet, visit schedule tracker, service type log, client sign-o
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-016
-############################################################
+################################################################
+LS-016   
+################################################################
 
 PRICE: $6.99
 
@@ -370,9 +375,9 @@ Includes weekly water chemistry log, chemical dosage record, service invoice, eq
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-017
-############################################################
+################################################################
+LS-017   
+################################################################
 
 PRICE: $6.99
 
@@ -392,9 +397,9 @@ Includes room-by-room scope, auto-calculating sq ft totals, material & labor pri
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-018
-############################################################
+################################################################
+LS-018   
+################################################################
 
 PRICE: $6.99
 
@@ -414,9 +419,9 @@ Includes crew roster & hours, materials used log, delays & safety notes, next da
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-019
-############################################################
+################################################################
+LS-019   
+################################################################
 
 PRICE: $6.99
 
@@ -436,9 +441,9 @@ Includes pump log with manifest #, waste disposal tracking, tank details, servic
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-020
-############################################################
+################################################################
+LS-020   
+################################################################
 
 PRICE: $6.99
 
@@ -458,9 +463,9 @@ Includes current fee schedule, payment methods, payment terms, client acknowledg
 TradeOpsVault · tradeopsvault.com
 
 
-############################################################
-LS-BUNDLE  (BUNDLE)
-############################################################
+################################################################
+LS-BUNDLE   BUNDLE — needs a ZIP of all 20 files
+################################################################
 
 PRICE: $29.00
 
