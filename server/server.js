@@ -951,15 +951,15 @@ app.post('/shop/checkout', _aiCors, async (req, res) => {
         },
         quantity: 1,
       }],
-      collect_shipping_address: false,
       metadata: { listingId: id, items: items.join(',') },
       success_url: `${APP_URL}/shop/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `https://tradeopsvault.com/landing/store.html?cancelled=1`,
     });
     res.json({ ok: true, url: session.url });
   } catch (err) {
-    logError('POST /shop/checkout failed', { message: err.message });
-    res.status(500).json({ ok: false, error: 'Could not create checkout session' });
+    logError('POST /shop/checkout failed', { message: err.message, type: err.type, code: err.code });
+    // Surface the real Stripe error so checkout failures are diagnosable
+    res.status(500).json({ ok: false, error: err.message || 'Could not create checkout session' });
   }
 });
 
