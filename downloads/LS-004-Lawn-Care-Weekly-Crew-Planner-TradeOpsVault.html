@@ -814,4 +814,75 @@ document.addEventListener('DOMContentLoaded',function(){
 
 })();
 </script>
+<script>/* PREVIEW MODE INJECT */
+(function(){
+  var params=new URLSearchParams(location.search);
+  if(params.get('preview')!=='1')return;
+  var BACKEND='https://agent-atlas.onrender.com';
+  var STORE='https://tradeopsvault.com/landing/store.html';
+  var m=location.pathname.match(/LS-\d+/);
+  var listingId=m?m[0]:null;
+
+  // ---- watermark ----
+  var wm=document.createElement('div');
+  wm.className='no-print';
+  wm.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9990;display:flex;align-items:center;justify-content:center;overflow:hidden;';
+  wm.innerHTML='<div style="font:900 130px Inter,Arial,sans-serif;color:rgba(232,93,4,0.07);transform:rotate(-30deg);white-space:nowrap;letter-spacing:10px;">PREVIEW &nbsp; PREVIEW &nbsp; PREVIEW</div>';
+  document.body.appendChild(wm);
+
+  // ---- checkout ----
+  async function checkout(btn){
+    if(btn){btn.textContent='Loading…';btn.style.pointerEvents='none';}
+    if(typeof fbq!=='undefined')fbq('track','AddToCart',{value:3.99,currency:'USD'});
+    if(!listingId){location.href=STORE;return;}
+    try{
+      var r=await fetch(BACKEND+'/shop/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({listingId:listingId})});
+      var d=await r.json();
+      if(d&&d.ok&&d.url){location.href=d.url;return;}
+    }catch(e){}
+    location.href=STORE;
+  }
+
+  // ---- gate modal ----
+  function showGate(){
+    if(document.getElementById('tov-gate'))return;
+    var o=document.createElement('div');o.id='tov-gate';o.className='no-print';
+    o.style.cssText='position:fixed;inset:0;z-index:10001;background:rgba(7,12,22,0.78);display:flex;align-items:center;justify-content:center;font-family:Inter,Arial,sans-serif;padding:20px;';
+    o.innerHTML='<div style="background:#0f1628;border:1.5px solid rgba(232,93,4,0.4);border-radius:18px;max-width:420px;width:100%;padding:34px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.6);">'
+      +'<div style="font-size:34px;margin-bottom:10px;">&#128274;</div>'
+      +'<div style="font-size:21px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.5px;">Unlock to Print &amp; Save</div>'
+      +'<div style="font-size:14px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:22px;">You can fill it out and run AI Job Review free. Get the full template to print, save as PDF, and remove the watermark.</div>'
+      +'<button id="tov-gate-buy" style="width:100%;background:#e85d04;color:#fff;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;">Get Template &mdash; $3.99</button>'
+      +'<div id="tov-gate-close" style="margin-top:14px;font-size:13px;color:rgba(255,255,255,0.45);cursor:pointer;">Keep editing</div>'
+      +'</div>';
+    document.body.appendChild(o);
+    document.getElementById('tov-gate-buy').addEventListener('click',function(){checkout(this);});
+    document.getElementById('tov-gate-close').addEventListener('click',function(){o.remove();});
+    o.addEventListener('click',function(e){if(e.target===o)o.remove();});
+  }
+
+  // ---- intercept print + export ----
+  window.print=function(){showGate();};
+  window.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&(e.key==='p'||e.key==='P')){e.preventDefault();showGate();}},true);
+  document.querySelectorAll('[onclick]').forEach(function(el){
+    var oc=el.getAttribute('onclick')||'';
+    if(/window\.print|showExportPanel/.test(oc)){
+      el.setAttribute('onclick','return false;');
+      el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showGate();},true);
+    }
+  });
+
+  // ---- sticky buy bar ----
+  var bar=document.createElement('div');bar.className='no-print';
+  bar.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:10000;background:linear-gradient(135deg,#0f1628,#1a2744);border-top:2px solid #e85d04;padding:13px 22px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;box-shadow:0 -8px 30px rgba(0,0,0,0.45);font-family:Inter,Arial,sans-serif;';
+  bar.innerHTML='<div style="color:#fff;font-size:14px;font-weight:600;"><span style="color:#e85d04;font-weight:800;">Preview Mode</span> &nbsp;&middot;&nbsp; Fill it out &amp; try AI free. Buy to print &amp; save.</div>'
+    +'<div style="display:flex;align-items:center;gap:14px;">'
+    +'<div style="color:#fff;font-weight:800;font-size:18px;"><span style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);">ONE-TIME</span> &nbsp;$3.99</div>'
+    +'<button id="tov-bar-buy" style="background:#e85d04;color:#fff;border:none;border-radius:10px;padding:12px 26px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Get Template &rarr;</button>'
+    +'</div>';
+  document.body.appendChild(bar);
+  document.body.style.paddingBottom='84px';
+  document.getElementById('tov-bar-buy').addEventListener('click',function(){checkout(this);});
+})();
+</script>
 </body></html>
